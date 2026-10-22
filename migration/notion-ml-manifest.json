@@ -1,0 +1,1926 @@
+{
+  "source_url": "https://www.notion.so/ML-2689c9ac32ee8033a03ecae02ca75d65",
+  "export_format": "Markdown & CSV; everything; include subpages; folders for subpages",
+  "archive_sha256": "4a748b2634564720cbdceb93acdd38b696a56aa897f62e2ecd9b98cebcf1b745",
+  "page_count": 103,
+  "image_count": 215,
+  "files": [
+    {
+      "archive_path": "Private & Shared/ML 2689c9ac32ee8033a03ecae02ca75d65.md",
+      "path": "docs/zh/ml/index.md",
+      "bytes": 222,
+      "sha256": "048d8713f765bb881e67d5aa5368089bd4d77c99cf194256d0a5ee7451e6af11",
+      "original_sha256": "aeeb4b4aa94fc6ab146ed3438358efb171005c2b122129efe665f2430a67bf55",
+      "original_bytes": 283,
+      "authorized_change": "Removed only the ECGBYTE page link at user request."
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM 1ca9c9ac32ee807c81a3d61e04e53371.md",
+      "path": "docs/zh/ml/ML/LLM 1ca9c9ac32ee807c81a3d61e04e53371.md",
+      "bytes": 5430,
+      "sha256": "cbd47e3f3e240b5c46de243aa6cf46493587c31f0260744cb649afa05a1e20e5"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE 11d9c9ac32ee80f6835cc84346d863b6.md",
+      "path": "docs/zh/ml/ML/MLE 11d9c9ac32ee80f6835cc84346d863b6.md",
+      "bytes": 2483,
+      "sha256": "d0132b7722718b02a221f9d960ce0aa30af6518394069f3b98470ca19422c60a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/SQL 2889c9ac32ee80d1b24ece270a74d962.md",
+      "path": "docs/zh/ml/ML/SQL 2889c9ac32ee80d1b24ece270a74d962.md",
+      "bytes": 5843,
+      "sha256": "2f5fa170246937f63843248b65e333af81f5fe957766474f3c193985731c1d14"
+    },
+    {
+      "archive_path": "Private & Shared/ML/Pandas 2889c9ac32ee809f8cead4b65c841f91.md",
+      "path": "docs/zh/ml/ML/Pandas 2889c9ac32ee809f8cead4b65c841f91.md",
+      "bytes": 3076,
+      "sha256": "a98e56cf4402885d841b5d712ec2915f5b0c2ff7699762bb29ecf03d803f6ee6"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Advanced NLP 1d19c9ac32ee80f3824efec98ce54143.md",
+      "path": "docs/zh/ml/ML/LLM/Advanced NLP 1d19c9ac32ee80f3824efec98ce54143.md",
+      "bytes": 353,
+      "sha256": "9e2888d331e7dda1decf5ab33f825ab0c545c1a7f970d412154b8908ede74081"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications 1d19c9ac32ee80888c22f98fb1f7c4e1.md",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications 1d19c9ac32ee80888c22f98fb1f7c4e1.md",
+      "bytes": 1134,
+      "sha256": "7f996582a609c45f71b0af09e6611fb0424c8a45cdf83cce866cb20e3735964a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Advanced Topics in MultiModal Machine Learning 2869c9ac32ee801fa6cbeb5168bdc4c3.md",
+      "path": "docs/zh/ml/ML/LLM/Advanced Topics in MultiModal Machine Learning 2869c9ac32ee801fa6cbeb5168bdc4c3.md",
+      "bytes": 126,
+      "sha256": "bc2c5e81c54f8fc3ed5d6c5819310a5191454ba0522ef16e0149b4d0f941f736"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MultiModal Machine Learning 2869c9ac32ee805fa873e8da78a62b91.md",
+      "path": "docs/zh/ml/ML/LLM/MultiModal Machine Learning 2869c9ac32ee805fa873e8da78a62b91.md",
+      "bytes": 99,
+      "sha256": "292f3c4c97255e116de367eea45dbe465a4ff9a99cb5f16ea7634a2a1fc5187d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Basic 1ca9c9ac32ee808985dfeeb70a564419.md",
+      "path": "docs/zh/ml/ML/LLM/Basic 1ca9c9ac32ee808985dfeeb70a564419.md",
+      "bytes": 1596,
+      "sha256": "e3a8e4276420b0377f4bb0f892c09aca4b9dcc37281534d8e09878ca0992f74b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Basic/image.png",
+      "path": "docs/zh/ml/ML/LLM/Basic/image.png",
+      "bytes": 231081,
+      "sha256": "f07617cbf1da30890834c6c93f9aa7c366f89de2f43e7bbb20aacf4095ef055d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Basic/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Basic/image 1.png",
+      "bytes": 98318,
+      "sha256": "0fe6e2db2795fc44683cdf2ca3f505d16c0e80cf7fbeddea791f64f824d2350a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Basic/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Basic/image 2.png",
+      "bytes": 5732,
+      "sha256": "078c668001d4850ebd5e18d19427428951885ce7f64e7b057823e41078b16138"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Basic/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Basic/image 3.png",
+      "bytes": 6784,
+      "sha256": "4f55700a57d487f173df2dd2ccfacec2a6447e89d814b8a663e3f0b00181527f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/whisper 2c09c9ac32ee800088c1ccc154bd2a71.md",
+      "path": "docs/zh/ml/ML/LLM/whisper 2c09c9ac32ee800088c1ccc154bd2a71.md",
+      "bytes": 1079,
+      "sha256": "4f73ca0276058a79099b94ae7ef671edba4df9ec360f670919204157250015e7"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/ALBEF 2c09c9ac32ee80d0a8f3f1cc950f7b77.md",
+      "path": "docs/zh/ml/ML/LLM/ALBEF 2c09c9ac32ee80d0a8f3f1cc950f7b77.md",
+      "bytes": 2548,
+      "sha256": "bbb61ca920b9d41497a88cd6a7533bfce4d97988663ad1ac3151b2ec1aa0b108"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/ALBEF/image.png",
+      "path": "docs/zh/ml/ML/LLM/ALBEF/image.png",
+      "bytes": 300286,
+      "sha256": "dab90591500d4e5c62526f4ab06ddeaea0ba6765f896d078d8006d500d89571c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Flamingo 2c09c9ac32ee8088b62cef5e1e7bc376.md",
+      "path": "docs/zh/ml/ML/LLM/Flamingo 2c09c9ac32ee8088b62cef5e1e7bc376.md",
+      "bytes": 1808,
+      "sha256": "24d6dc23cc9fd1d9524ddae2bf95cf4a55829377a215e53c95c3e19338009b69"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Flamingo/image.png",
+      "path": "docs/zh/ml/ML/LLM/Flamingo/image.png",
+      "bytes": 321646,
+      "sha256": "392e9f846b8989080a23ab5e2ef16bfac08c42105c7f6fe7b02222e6613248f3"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llava 2c09c9ac32ee80f9a747d4132372f136.md",
+      "path": "docs/zh/ml/ML/LLM/Llava 2c09c9ac32ee80f9a747d4132372f136.md",
+      "bytes": 1886,
+      "sha256": "2618ec973e222d6376e2a1d751b26ca30cfb65bd83bc936f109d847272385d16"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Siglip 2c09c9ac32ee8035b60dd41239af567d.md",
+      "path": "docs/zh/ml/ML/LLM/Siglip 2c09c9ac32ee8035b60dd41239af567d.md",
+      "bytes": 1674,
+      "sha256": "83b5444de3e5b65fb8457f77c3c507bfb764eef8081d5e56676b2893098c4444"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama VS GPT 1dc9c9ac32ee80f18c6de3e55d0f4c30.md",
+      "path": "docs/zh/ml/ML/LLM/Llama VS GPT 1dc9c9ac32ee80f18c6de3e55d0f4c30.md",
+      "bytes": 14,
+      "sha256": "98d5c1259313bba15d76da417b724a8945ae4caa44e196c6ae514ae50aa2c107"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer 1ca9c9ac32ee80ba992be4b3a2280b50.md",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer 1ca9c9ac32ee80ba992be4b3a2280b50.md",
+      "bytes": 3046,
+      "sha256": "d213e0404201e04d391efb37146434c028f83bdaa405e9f5ad92fa72b8d75457"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image.png",
+      "bytes": 66860,
+      "sha256": "a18c0d3a8704a377442c99a27042878334875fd640c1553866cc6fd195314cfb"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 1.png",
+      "bytes": 93837,
+      "sha256": "4cf194764b6bf5da885d40fd661e7e8423ae1f1d6d66d98efe46ad5ef615dc98"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 2.png",
+      "bytes": 13916,
+      "sha256": "c6c05b7d3843b70f426e3e2825058638a6319064892707a63723db36f67359cc"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 3.png",
+      "bytes": 12587,
+      "sha256": "efb7a60f0433cfdaa035774b3b1651503b26c5bf75f3a71fa5000aac3461bc58"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 4.png",
+      "bytes": 16317,
+      "sha256": "05922323b90344776c362554feaacfa6474098e0cd98ef028bd52bd36022cfa6"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 5.png",
+      "bytes": 196598,
+      "sha256": "61d9e86ec7b12a3f815110ecd3e6ae7997fbeb5958de122421f2186f20519939"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 6.png",
+      "bytes": 181997,
+      "sha256": "13a8343e42a0296adbc53e62424a3e7fc020317d39c81cc0fe52688539919728"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 7.png",
+      "bytes": 5788,
+      "sha256": "ed5ca3ecdf055f1da366c33c2598220785c7d0275a7fb8eff84572b18a8eca09"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 8.png",
+      "bytes": 52545,
+      "sha256": "e2c2f314c2f29526d17aafbacdabb55f1eb6fdfc52319e8faff3c25a63807ab1"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 9.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 9.png",
+      "bytes": 10723,
+      "sha256": "7a45947b6ec008680f253662e12f7729c0ea6b2086da3a3be17a92d81fc3cc7d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 10.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 10.png",
+      "bytes": 94285,
+      "sha256": "203fc2e606827a33017569be3eb1e866cf912c3552fca952cbf9fef0bf99457a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 11.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 11.png",
+      "bytes": 177678,
+      "sha256": "7d0b5267521da82a18f985f1db9b9b8028e651f4c208d5a7a7571ab7037ddee3"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Word2Vec Seq2Seq transformer/image 12.png",
+      "path": "docs/zh/ml/ML/LLM/Word2Vec Seq2Seq transformer/image 12.png",
+      "bytes": 21881,
+      "sha256": "60b924e5afd5cebe12ebdb40c09b49fc97d1a104d955a36897b026bb55a072df"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/BERT (Bidirectional Encoder Representations from T 1d89c9ac32ee809baca1d88eb146685e.md",
+      "path": "docs/zh/ml/ML/LLM/BERT (Bidirectional Encoder Representations from T 1d89c9ac32ee809baca1d88eb146685e.md",
+      "bytes": 932,
+      "sha256": "92657440d89d1e5cb488d7e38579b4cd842ea6f379adb3f7c0b3a89c8589174e"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/BERT (Bidirectional Encoder Representations from T/image.png",
+      "path": "docs/zh/ml/ML/LLM/BERT (Bidirectional Encoder Representations from T/image.png",
+      "bytes": 76333,
+      "sha256": "d445e8748019bd052eb7d286314b870ca9b0bca2d7f30bcf69fc50e26e29480a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/BERT (Bidirectional Encoder Representations from T/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/BERT (Bidirectional Encoder Representations from T/image 1.png",
+      "bytes": 86943,
+      "sha256": "74ee13d08005b8413c53b4510249b28d72e90f3bbb6f74f242a3cd3fb7e8c078"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/ViT (Vision-Transformer) 1d89c9ac32ee8023a313d94b072646b9.md",
+      "path": "docs/zh/ml/ML/LLM/ViT (Vision-Transformer) 1d89c9ac32ee8023a313d94b072646b9.md",
+      "bytes": 362,
+      "sha256": "ac6451eac5f34ecc0435f02036d61f730224ab67452cb75c7d762054dac2e262"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/ViT (Vision-Transformer)/image.png",
+      "path": "docs/zh/ml/ML/LLM/ViT (Vision-Transformer)/image.png",
+      "bytes": 223486,
+      "sha256": "3b01fd9bfe5fdc3ecf475d60b15a91e4a8c2cc5745145cba0729b0909bc82db3"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/CLIP (Contrastive Language-Image Pre-training) 1d89c9ac32ee805fa50ddfc6c57d2584.md",
+      "path": "docs/zh/ml/ML/LLM/CLIP (Contrastive Language-Image Pre-training) 1d89c9ac32ee805fa50ddfc6c57d2584.md",
+      "bytes": 458,
+      "sha256": "c920ac7709e8c117a14f2f072f2ff7d4e0d5d14c37aae460f3ffc30832102c6d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/CLIP (Contrastive Language-Image Pre-training)/image.png",
+      "path": "docs/zh/ml/ML/LLM/CLIP (Contrastive Language-Image Pre-training)/image.png",
+      "bytes": 231021,
+      "sha256": "76ebf788887dc0d22c0a26f02bb8ef4e609901040d33eb478b81b25a63e33b32"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/CLIP (Contrastive Language-Image Pre-training)/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/CLIP (Contrastive Language-Image Pre-training)/image 1.png",
+      "bytes": 14795,
+      "sha256": "a30bd7c7fa01841c2fe3f12d0e5181ba8d32731960709733f14879fd9d124e99"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training) 1d89c9ac32ee80e4b6a9de3589f465d0.md",
+      "path": "docs/zh/ml/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training) 1d89c9ac32ee80e4b6a9de3589f465d0.md",
+      "bytes": 6628,
+      "sha256": "e449a600a8bbe8dba9dce65b2d910013ed29bbdcd469144517764480094b2262"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training)/image.png",
+      "path": "docs/zh/ml/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training)/image.png",
+      "bytes": 134705,
+      "sha256": "91fba2ecf17016bb5993150f7d0c180732a4afda93d6e5a987474e36e2c661f2"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training)/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training)/image 1.png",
+      "bytes": 96791,
+      "sha256": "8752028d15e377cf08a28fdb7480ce38ff9f506775d2bcbf3d126f8db4b46a21"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training)/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training)/image 2.png",
+      "bytes": 92049,
+      "sha256": "1e0a14311b3bd774e9a09a8f8f602dd604b4b86d52744aef67e11a6aaf365c57"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training)/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training)/image 3.png",
+      "bytes": 104884,
+      "sha256": "f9a53190a88ecd1f3dd14c77adc700788c4f22a9b8c8957eac054ad780be4142"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/GPT (Decoder-Only) 1d89c9ac32ee80069098ea01112077d2.md",
+      "path": "docs/zh/ml/ML/LLM/GPT (Decoder-Only) 1d89c9ac32ee80069098ea01112077d2.md",
+      "bytes": 66,
+      "sha256": "234aee5f769bcee852bd4e54ab548646c70843c2c6da7745b777ea09759557ee"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/GPT (Decoder-Only)/image.png",
+      "path": "docs/zh/ml/ML/LLM/GPT (Decoder-Only)/image.png",
+      "bytes": 258754,
+      "sha256": "3ecdb92a806b0385bbd57abf3d6ebd21a4b36a05c84647e69d2ab1cf09f38449"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/T5 (Text-to-Text Transfer Transformer) BART (Bidir 1d89c9ac32ee8022b1d1c7719aac847d.md",
+      "path": "docs/zh/ml/ML/LLM/T5 (Text-to-Text Transfer Transformer) BART (Bidir 1d89c9ac32ee8022b1d1c7719aac847d.md",
+      "bytes": 924,
+      "sha256": "7d83c129444b39a0160f21dca481238bc36ad39338ce4067a0f250837b997d86"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/T5 (Text-to-Text Transfer Transformer) BART (Bidir/image.png",
+      "path": "docs/zh/ml/ML/LLM/T5 (Text-to-Text Transfer Transformer) BART (Bidir/image.png",
+      "bytes": 126978,
+      "sha256": "6c4926332f5dfa676fae44591ffad215978d9bf0a035a4371ab372d2df2ad429"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/T5 (Text-to-Text Transfer Transformer) BART (Bidir/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/T5 (Text-to-Text Transfer Transformer) BART (Bidir/image 1.png",
+      "bytes": 205767,
+      "sha256": "af16157abd590688b63e35bf0d581c6ed9eff878986e3444afec13a844cf0b14"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/T5 (Text-to-Text Transfer Transformer) BART (Bidir/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/T5 (Text-to-Text Transfer Transformer) BART (Bidir/image 2.png",
+      "bytes": 115531,
+      "sha256": "6e90742ef1bed6241531ffac49ee960004dece7d4de8261424b29e99ea2c2f2f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/RNN 1d89c9ac32ee80f2a485e6f5427c6076.md",
+      "path": "docs/zh/ml/ML/LLM/RNN 1d89c9ac32ee80f2a485e6f5427c6076.md",
+      "bytes": 1038,
+      "sha256": "99d2f97a51066c13eb90bf1e1c802456e26c5bf2342e3a606ddd001c94368e45"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/RNN/image.png",
+      "path": "docs/zh/ml/ML/LLM/RNN/image.png",
+      "bytes": 274057,
+      "sha256": "da4efbf86439c78b8039392238d919b2ba52695d06b3de419078d9bb94040440"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/CNN 2869c9ac32ee804ea94dc6ffd3235eaf.md",
+      "path": "docs/zh/ml/ML/LLM/CNN 2869c9ac32ee804ea94dc6ffd3235eaf.md",
+      "bytes": 498,
+      "sha256": "add84df780bf560d741b89056f42f647c87f30091ca95c18365b4b513828143b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/CNN/image.png",
+      "path": "docs/zh/ml/ML/LLM/CNN/image.png",
+      "bytes": 233998,
+      "sha256": "31ebd795d124283419476d3966a730bcc2b0726a301b382e87681a0af8607826"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/CNN/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/CNN/image 1.png",
+      "bytes": 264531,
+      "sha256": "131ad6afc742bca27dac817ebdbfa767721a8c6568d037daf38b2132c5a70011"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/CNN/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/CNN/image 2.png",
+      "bytes": 64087,
+      "sha256": "44a3ff2189f87cce1e5db5e70e4c70ed97df39073da91cf0a4da0485c06b62da"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/CNN/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/CNN/image 3.png",
+      "bytes": 410295,
+      "sha256": "63c872c60621c8b78886aa4d1d52da8cc560ac4bc77392f9dd867070ba1fca5f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/CNN/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/CNN/image 4.png",
+      "bytes": 419210,
+      "sha256": "ec58ed0801903599e3f6466203a83acd30dbe70cd423297716142a1adb40108b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/ELMO 2869c9ac32ee80abb8bcfccbc687e972.md",
+      "path": "docs/zh/ml/ML/LLM/ELMO 2869c9ac32ee80abb8bcfccbc687e972.md",
+      "bytes": 147,
+      "sha256": "6d23aa198b08b83b2d4a8c4839d1809ef8c8eca529e82831a155d8b0272fd01f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Tree-based RNNs 2869c9ac32ee80d49913f549f14b5fbd.md",
+      "path": "docs/zh/ml/ML/LLM/Tree-based RNNs 2869c9ac32ee80d49913f549f14b5fbd.md",
+      "bytes": 107,
+      "sha256": "7bbb4d46914482ecc01b852d1d45d64bd880cdd0112341a87fdc052a8ee9fcd4"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Tree-based RNNs/image.png",
+      "path": "docs/zh/ml/ML/LLM/Tree-based RNNs/image.png",
+      "bytes": 70935,
+      "sha256": "2a2857bcb26f25f6842b9c5d19f2bfd19ccdc3d6dee405c7c09cbdd4683074e0"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Tree-based RNNs/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Tree-based RNNs/image 1.png",
+      "bytes": 56470,
+      "sha256": "2509c47766edc1d7ab4b32134f84716503af95152b3e001bfc1bca4f5d64f7ee"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama (Decoder-only) 1d89c9ac32ee803db605fbbe4ff6f20c.md",
+      "path": "docs/zh/ml/ML/LLM/Llama (Decoder-only) 1d89c9ac32ee803db605fbbe4ff6f20c.md",
+      "bytes": 1420,
+      "sha256": "82c70c6e1455f17746f54644e8dbc6dd3df24b88792f597a3e05670a51a8b7ce"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama (Decoder-only)/image.png",
+      "path": "docs/zh/ml/ML/LLM/Llama (Decoder-only)/image.png",
+      "bytes": 64578,
+      "sha256": "90c84a050034738dc19ccc22e351adb6049e732b6e57c5511a3c8692e7516ae6"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama (Decoder-only)/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Llama (Decoder-only)/image 1.png",
+      "bytes": 57927,
+      "sha256": "16725c2c5f54cdec42a21a65a7b57998ad6e2d53b8a1764a3ea6b71ad51e44cf"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama (Decoder-only)/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Llama (Decoder-only)/image 2.png",
+      "bytes": 42838,
+      "sha256": "a0a2fce9be669f896e6a2780c59429bd5ab0f876c4dd88dde742cca303f19425"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama 3 1 1db9c9ac32ee80848e0eee2423ba098f.md",
+      "path": "docs/zh/ml/ML/LLM/Llama 3 1 1db9c9ac32ee80848e0eee2423ba098f.md",
+      "bytes": 1624,
+      "sha256": "12b39652318b185ff0486ce963556612ee15dafa7c2d4932816a6a1ac845f1e7"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama 3 1/image.png",
+      "path": "docs/zh/ml/ML/LLM/Llama 3 1/image.png",
+      "bytes": 81743,
+      "sha256": "ecdb5088c6f927aaf726706b95ae97464cbef919a76b96e46013c749726daaa5"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama 3 1/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Llama 3 1/image 1.png",
+      "bytes": 106067,
+      "sha256": "95e3db9e169a1358b31c5029f27c2d4b57bfef6e9cf139e8c185856e0eb8f410"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama 3 1/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Llama 3 1/image 2.png",
+      "bytes": 435581,
+      "sha256": "12b00fbe0ccf9a7b7d188952cb2b5af551cab4467a1d64bb18689a451da5b772"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Llama 3 1/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Llama 3 1/image 3.png",
+      "bytes": 237462,
+      "sha256": "be769cdf5a3bfeff9ec1395c7dc6be1e3868e49e0e07c81adbd2c0fdb387a81e"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DeepseekR1 1db9c9ac32ee8097b7d2e701c0f68fa3.md",
+      "path": "docs/zh/ml/ML/LLM/DeepseekR1 1db9c9ac32ee8097b7d2e701c0f68fa3.md",
+      "bytes": 82,
+      "sha256": "077686366274f6dbb73b0dacc03f09324653e5ec6de9c0b24e4456d2ca3ceeff"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DeepseekV3 1d19c9ac32ee80899619e941676be5d6.md",
+      "path": "docs/zh/ml/ML/LLM/DeepseekV3 1d19c9ac32ee80899619e941676be5d6.md",
+      "bytes": 1006,
+      "sha256": "d0b5a7de75801d4102c4b77e9bb36705bb8bd5e495be8299856c789aea96471a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DeepseekV3/image.png",
+      "path": "docs/zh/ml/ML/LLM/DeepseekV3/image.png",
+      "bytes": 47083,
+      "sha256": "69e1a0a999eb5dbc73e2776bf94caf845633bbba07b83a0b37d66cc170ff3449"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DeepseekV3/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/DeepseekV3/image 1.png",
+      "bytes": 55762,
+      "sha256": "3679093328abcede7fb6d9e4b831d086cd21b2117b9d08dbd48873c81d146908"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DeepseekV3/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/DeepseekV3/image 2.png",
+      "bytes": 24912,
+      "sha256": "92ab6d7972d7ddb29b34ed195301072ddf31b55fe27c1a8d2e21766de24f14c8"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DeepseekV3/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/DeepseekV3/image 3.png",
+      "bytes": 54212,
+      "sha256": "cb0d1b45db110970ac55523923bc84f0b23d161d0ccd7b67803a305cf25337d1"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DeepseekV3/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/DeepseekV3/image 4.png",
+      "bytes": 223045,
+      "sha256": "4e413d7afe2ba019fa1db3b4454be37015609c9d18381e42a671e6398afc8fde"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Qwen2 5 1db9c9ac32ee80d9aeb6e5e089898afd.md",
+      "path": "docs/zh/ml/ML/LLM/Qwen2 5 1db9c9ac32ee80d9aeb6e5e089898afd.md",
+      "bytes": 79,
+      "sha256": "471a3d7f490c485a41b8578ca78aa99fac9b320c6f05b2c95b5474e99e6427aa"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Qwen2 5 VL 1db9c9ac32ee80169f45cff17531fd5c.md",
+      "path": "docs/zh/ml/ML/LLM/Qwen2 5 VL 1db9c9ac32ee80169f45cff17531fd5c.md",
+      "bytes": 4680,
+      "sha256": "aec4f5e67f5fabad9178a4ee34618a45eb655872fa3188c2d1f0b637f596b0e5"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Layer&Page 36b9c9ac32ee801b9ff7d1d940e96317.md",
+      "path": "docs/zh/ml/ML/LLM/Layer&Page 36b9c9ac32ee801b9ff7d1d940e96317.md",
+      "bytes": 2765,
+      "sha256": "c8badc61789fdbf857c70cce83a4b9522a48097f0abe03eb1840f9ecced14408"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Attention Type 3679c9ac32ee80bfafecdf605d78e9f9.md",
+      "path": "docs/zh/ml/ML/LLM/Attention Type 3679c9ac32ee80bfafecdf605d78e9f9.md",
+      "bytes": 4081,
+      "sha256": "7b344787d811d1bee472b30cae491993696e81c56a4d990bcd1c88644bb2a872"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Inference 2939c9ac32ee8019a4cfc385e1ba8b24.md",
+      "path": "docs/zh/ml/ML/LLM/Inference 2939c9ac32ee8019a4cfc385e1ba8b24.md",
+      "bytes": 2223,
+      "sha256": "4793434c16aa839811f4b572a2cba6a697d7d72ad3acc54d45f5ae7e1c213efd"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Inference/image.png",
+      "path": "docs/zh/ml/ML/LLM/Inference/image.png",
+      "bytes": 101395,
+      "sha256": "0d69e1d5f493f7beb0386a4cd83f17e500b2df0876858325600763c95d715227"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Importance Sampling 2939c9ac32ee80c299d6f5d213953a70.md",
+      "path": "docs/zh/ml/ML/LLM/Importance Sampling 2939c9ac32ee80c299d6f5d213953a70.md",
+      "bytes": 21,
+      "sha256": "485ca2d316f4586b7b7cd23f4aa60991bb3cd387f1210e6d3f7c6ccd3dc133f0"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Distillation 1d89c9ac32ee8085991dd67365f0ab4e.md",
+      "path": "docs/zh/ml/ML/LLM/Distillation 1d89c9ac32ee8085991dd67365f0ab4e.md",
+      "bytes": 14,
+      "sha256": "b2cb20b8463cda4ad7045724d026fe60e511ce9e8572a6615634442d171acaf8"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/RAG 1d89c9ac32ee803c8404e675fdcfcfcb.md",
+      "path": "docs/zh/ml/ML/LLM/RAG 1d89c9ac32ee803c8404e675fdcfcfcb.md",
+      "bytes": 6510,
+      "sha256": "30e75255d775843a48a7e185ff0f6e8d57033ef179e10b608a30cc71c1e53483"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Multi Token prediction 27e9c9ac32ee80d7a7e9c7811286c3da.md",
+      "path": "docs/zh/ml/ML/LLM/Multi Token prediction 27e9c9ac32ee80d7a7e9c7811286c3da.md",
+      "bytes": 1294,
+      "sha256": "de3727c3c9c157ae9e71ce5e0d09edcbbf136e074eaf25aead0eb3e66318b3a7"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Multi Token prediction/image.png",
+      "path": "docs/zh/ml/ML/LLM/Multi Token prediction/image.png",
+      "bytes": 9793,
+      "sha256": "b87870e00c5eca5ffd32118abc0dbdc48cf7a7cb4a0c4b8928849e19cc8732a1"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Multi Token prediction/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Multi Token prediction/image 1.png",
+      "bytes": 129672,
+      "sha256": "f40c7a56c66d505c2aeacfe373a3622d57260b36380b6659891eb4705e706356"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Multi Token prediction/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Multi Token prediction/image 2.png",
+      "bytes": 12464,
+      "sha256": "cca50ef1d712c78bea43531dbb96838fb77c2dcd04d86d0c4c2fa27c0300695f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Multi Token prediction/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Multi Token prediction/image 3.png",
+      "bytes": 434451,
+      "sha256": "d8e766e5d69fa0c7ece614324e742b4d4113464d5d6e9878f3cce32e127b62e1"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Cross-Entropy KL Divergence 1d89c9ac32ee8097b7c9f4086f4d7ba7.md",
+      "path": "docs/zh/ml/ML/LLM/Cross-Entropy KL Divergence 1d89c9ac32ee8097b7c9f4086f4d7ba7.md",
+      "bytes": 384,
+      "sha256": "3c5437cc4c0c205b46d51bee7a0e86f1b607e84876c6787e0ace07f05d19d981"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Layer Normalization 1cc9c9ac32ee8082afe9f198a6232645.md",
+      "path": "docs/zh/ml/ML/LLM/Layer Normalization 1cc9c9ac32ee8082afe9f198a6232645.md",
+      "bytes": 441,
+      "sha256": "763cb20454bb019e7d7aac2f607fff3150e8f6e46454b50d5b59722570c3b4a4"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding 1d99c9ac32ee80c28508c3641bcf0ca1.md",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding 1d99c9ac32ee80c28508c3641bcf0ca1.md",
+      "bytes": 929,
+      "sha256": "08018c090549d286fcc4242db78bad2171e048a9a922f3dd37b79246f6ff7b17"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image.png",
+      "bytes": 2630,
+      "sha256": "23bfcaaac37a7dadcdac2728d47e8005f74bbe3d7ef9e500f0c5fc801bed6273"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 1.png",
+      "bytes": 1338,
+      "sha256": "9ebd799d05074fe2b0e5e7afa35b8f0653de3d25b4cf09f3870aee8ae7764595"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 2.png",
+      "bytes": 8613,
+      "sha256": "6d2fc3db99d295c0651ecb7799802b080b64b11b2f207f02e97499737a507433"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 3.png",
+      "bytes": 97279,
+      "sha256": "15edb8405f613e2c3578fa4dfcc66f745b767ec50ed2bda23b94fe355a836b18"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 4.png",
+      "bytes": 7080,
+      "sha256": "245f9ed55f40facab314093094d4873a6a779ac3b5118629af6142ab5905cb1b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 5.png",
+      "bytes": 11453,
+      "sha256": "7ceb08b2aea21a8e520b103c962afad93355b1b10eaaa64e40038802a3bb8838"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 6.png",
+      "bytes": 11389,
+      "sha256": "c9d32a094b67358a6fca44f519a0506c32cdb45cf809f61526575060db0f8d41"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 7.png",
+      "bytes": 13327,
+      "sha256": "bbd466fb1919fa0b5da766182eeba7805c29284f8ec5ecb98ce3660a1d38fec0"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 8.png",
+      "bytes": 16372,
+      "sha256": "65424b4ffef5a3ef38c03b797df760ac10294c1eb9f3146d1181924b252c19f5"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 9.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 9.png",
+      "bytes": 20715,
+      "sha256": "963acb7cc66d9522358348ae0dcc1520c9f81edaa776bad84541457c6d464280"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Positional Encoding/image 10.png",
+      "path": "docs/zh/ml/ML/LLM/Positional Encoding/image 10.png",
+      "bytes": 7264,
+      "sha256": "3aa48ea1babc3c101f15bed78acba38e47a5496bf91a909f8ac9b0c82e4b7c04"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Attention Mask 1da9c9ac32ee80908a80f0158006bcb9.md",
+      "path": "docs/zh/ml/ML/LLM/Attention Mask 1da9c9ac32ee80908a80f0158006bcb9.md",
+      "bytes": 16,
+      "sha256": "5ba24820dbb10198bf8ce71fbd5923a0f51e9caaa70b45002674bc0611509d70"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Attention 1db9c9ac32ee8032b914f5eba3e4b3be.md",
+      "path": "docs/zh/ml/ML/LLM/Attention 1db9c9ac32ee8032b914f5eba3e4b3be.md",
+      "bytes": 196,
+      "sha256": "ad1645ec3facc14e45b2c14093b8425c1ddc925eeb9c8ba225972f815b3a1a56"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/prefix, prompt, p tuning 2c09c9ac32ee80fb8cf1e0b47235430b.md",
+      "path": "docs/zh/ml/ML/LLM/prefix, prompt, p tuning 2c09c9ac32ee80fb8cf1e0b47235430b.md",
+      "bytes": 1874,
+      "sha256": "a41a0c98396e0adba711c7062ec25bb0bb6499cc2a8d609016d341eb3fe19c27"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/SFT 1d89c9ac32ee80b4a80dc9cc9bc30c6a.md",
+      "path": "docs/zh/ml/ML/LLM/SFT 1d89c9ac32ee80b4a80dc9cc9bc30c6a.md",
+      "bytes": 5,
+      "sha256": "40376f67d8dade3799b51f27bb2f5a23752cbd397cd5f9b375dece109e18ccd7"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/LoRA 1db9c9ac32ee801eb0aec2f888118e8f.md",
+      "path": "docs/zh/ml/ML/LLM/LoRA 1db9c9ac32ee801eb0aec2f888118e8f.md",
+      "bytes": 77,
+      "sha256": "8da161b5b4a9070810e8a91bde0c841f80097f57be46458184da00c7f2ed0499"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Adapter 1d89c9ac32ee804eb29dc57658dbcbdf.md",
+      "path": "docs/zh/ml/ML/LLM/Adapter 1d89c9ac32ee804eb29dc57658dbcbdf.md",
+      "bytes": 9,
+      "sha256": "6730bfef5172a6aae63db415af8dbc73c5e5f8e94e6164a98b526d5030fe7fb2"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/KV cache 1da9c9ac32ee8049a230d3bb05bb65d3.md",
+      "path": "docs/zh/ml/ML/LLM/KV cache 1da9c9ac32ee8049a230d3bb05bb65d3.md",
+      "bytes": 1495,
+      "sha256": "10b248dc3fd56df5765c614e9ac8c8f12c2416cd62a158c4664f4d6e83c5369b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Quantization 1d89c9ac32ee80d191bbf9a5bc3fe645.md",
+      "path": "docs/zh/ml/ML/LLM/Quantization 1d89c9ac32ee80d191bbf9a5bc3fe645.md",
+      "bytes": 292,
+      "sha256": "3a64a6453079e4b3dfd25dad4376ad30f5e205b02674ff1814e26d3faf8c5638"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/FLOPs 1db9c9ac32ee80fc860ff12254fbcd81.md",
+      "path": "docs/zh/ml/ML/LLM/FLOPs 1db9c9ac32ee80fc860ff12254fbcd81.md",
+      "bytes": 7,
+      "sha256": "35bf9f548076c192f10123e59cff66e2ed51da387ae1e1515355318a32d0e0dd"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/RLHF 1d89c9ac32ee803599aff89696794bfc.md",
+      "path": "docs/zh/ml/ML/LLM/RLHF 1d89c9ac32ee803599aff89696794bfc.md",
+      "bytes": 2970,
+      "sha256": "4e9b0634e86b275839f4d87a2318ce5b1ee66262c7140f3a838bb7357831d3ed"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/RLHF/image.png",
+      "path": "docs/zh/ml/ML/LLM/RLHF/image.png",
+      "bytes": 126002,
+      "sha256": "526ab2f88f44394b6266497f3daf795547a7fdc0a2fdb2d1f8363285ada66c20"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization) 1d89c9ac32ee802cba79d9185923405f.md",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization) 1d89c9ac32ee802cba79d9185923405f.md",
+      "bytes": 3297,
+      "sha256": "e85a31eda8d6899bcef0217a2a5bab1bd48a44ed7a4e79095605976cc9e92906"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image.png",
+      "bytes": 3928,
+      "sha256": "4dd0686f6744212a5e713d7b683ed01361e785f73f7903c2d4ed2799d5f318a6"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 1.png",
+      "bytes": 5883,
+      "sha256": "95988b1b6118fe695fc90cee0d045f9a6e843a7bf8bb3d3cf9d080ed79aa59ac"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 2.png",
+      "bytes": 244727,
+      "sha256": "bef0339996d71967516563479eeadc6f489adbca606dbb9b97eb853a44beea65"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 3.png",
+      "bytes": 165665,
+      "sha256": "c5bf04bd26a4fc19389efde8b24ae0d0663bf5a6839c03ee9f2ec7ee44d1d380"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 4.png",
+      "bytes": 209968,
+      "sha256": "e9d68a5b7cb56ba57ee3a733f1c1a75f9240e2807f15ede858d16757055e58c7"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 5.png",
+      "bytes": 274334,
+      "sha256": "07bc3102eea1a9bf918c5d338e2f1d55786d3390ceb29e405e7accced5c8ec22"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 6.png",
+      "bytes": 231644,
+      "sha256": "82c01c608c17ffe0f3d66adfb6f5274a2149138d1dc2dc79b45dcebf9aeceb2a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 7.png",
+      "bytes": 237828,
+      "sha256": "43f49284e8ce44a4e8ba805013a49d39d0eb3c277dc7912a8d81a2b887ef929b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 8.png",
+      "bytes": 58026,
+      "sha256": "620148d277739b5d7dece95aa5b99e90a6d17516556461805ed7364eeb149c10"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 9.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 9.png",
+      "bytes": 23226,
+      "sha256": "52fa7395ee36419e377edf07ec47ccc05b94ab6d6ca7cb7f5c6dfe771780056a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/PPO (Proximal Policy Optimization)/image 10.png",
+      "path": "docs/zh/ml/ML/LLM/PPO (Proximal Policy Optimization)/image 10.png",
+      "bytes": 115195,
+      "sha256": "076ec5a673a8973a7b4428870ee23f8c940c91844f1aa5c6d47c6649e63ef16b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/GRPO (Group Relative Policy Optimization) 27e9c9ac32ee8034b82ae72cbddc92a2.md",
+      "path": "docs/zh/ml/ML/LLM/GRPO (Group Relative Policy Optimization) 27e9c9ac32ee8034b82ae72cbddc92a2.md",
+      "bytes": 3240,
+      "sha256": "640c7fb11b72ed210ab5e370e7169b6d05756d599f012a412ec6f9ee01559d4c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/GRPO (Group Relative Policy Optimization)/image.png",
+      "path": "docs/zh/ml/ML/LLM/GRPO (Group Relative Policy Optimization)/image.png",
+      "bytes": 60737,
+      "sha256": "e39abc895ccb68ff60a076da276925f8993f90b9f85c47ff55c5c22f56893868"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/GRPO (Group Relative Policy Optimization)/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/GRPO (Group Relative Policy Optimization)/image 1.png",
+      "bytes": 222131,
+      "sha256": "2a63d6252c3dbce4d58046a5c437f2b85cf8cefc8581166edc742bfaf51278a1"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/GRPO (Group Relative Policy Optimization)/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/GRPO (Group Relative Policy Optimization)/image 2.png",
+      "bytes": 434895,
+      "sha256": "1d0db36aba838e287706b415d4ce8c2c0d0ef5c8da95d570af6fdcea9ce5ca02"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/GRPO (Group Relative Policy Optimization)/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/GRPO (Group Relative Policy Optimization)/image 3.png",
+      "bytes": 39406,
+      "sha256": "1c670f6e3dc52fffa61cba310acf2b03765d7a9921ff8c3dc9f619cbe63bcb80"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DPO (Direct Preference Optimization) 1d89c9ac32ee80f2aea6f1a8459dc442.md",
+      "path": "docs/zh/ml/ML/LLM/DPO (Direct Preference Optimization) 1d89c9ac32ee80f2aea6f1a8459dc442.md",
+      "bytes": 564,
+      "sha256": "357b6033edb2a5f2b1e8696ffc859bcc9c485c3b99b004cc42fe6609f3e6182f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DPO (Direct Preference Optimization)/image.png",
+      "path": "docs/zh/ml/ML/LLM/DPO (Direct Preference Optimization)/image.png",
+      "bytes": 33435,
+      "sha256": "71c2e841c6935ba690eb1c2761f8818adcd486a3a50d59865899f0e78e1fc55c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DPO (Direct Preference Optimization)/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/DPO (Direct Preference Optimization)/image 1.png",
+      "bytes": 552646,
+      "sha256": "ce919bf53088f302d68608eb2925e524a463b638cb1733bd8c39bbe4f4ae2626"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DPO (Direct Preference Optimization)/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/DPO (Direct Preference Optimization)/image 2.png",
+      "bytes": 7277,
+      "sha256": "955c41fa7497bf0612785b4576882a1ff3e1300953e849553646f3b1f3d29ea8"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/DPO (Direct Preference Optimization)/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/DPO (Direct Preference Optimization)/image 3.png",
+      "bytes": 80633,
+      "sha256": "c4a22eddf6f8a17f4b3e1d689d7be4460c421ccc4d5d202f6e1f8721f59a89a7"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Tree of Thought 2939c9ac32ee80d58454d554490427a6.md",
+      "path": "docs/zh/ml/ML/LLM/Tree of Thought 2939c9ac32ee80d58454d554490427a6.md",
+      "bytes": 2824,
+      "sha256": "24c38446158a10bc187fbec1b34699a3316b8f2ff736844f5d376cebeb5ce810"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Tree of Thought/image.png",
+      "path": "docs/zh/ml/ML/LLM/Tree of Thought/image.png",
+      "bytes": 71843,
+      "sha256": "09de3d6a1237b92e32dfeb2fc66a956877f6dad5ad50a5d1869ff28c058ab85e"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MOE (Mixture-of-Experts) 1db9c9ac32ee80f1835ac9a299354d65.md",
+      "path": "docs/zh/ml/ML/LLM/MOE (Mixture-of-Experts) 1db9c9ac32ee80f1835ac9a299354d65.md",
+      "bytes": 2737,
+      "sha256": "976d7efd1ea8c0331fc1c88028d7459ac06208b6a5a396d76260e4e3cd95a3be"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MOE (Mixture-of-Experts)/image.png",
+      "path": "docs/zh/ml/ML/LLM/MOE (Mixture-of-Experts)/image.png",
+      "bytes": 286638,
+      "sha256": "91a3e99df028a9bfc7f1f43e13cdba972cbd421cbbe56d0c8d13d60a6452ec7d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MOE (Mixture-of-Experts)/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/MOE (Mixture-of-Experts)/image 1.png",
+      "bytes": 37719,
+      "sha256": "883fd94f37f9cc39bb56d33ecc929420d5ed0c7519261c4a79fba23e9cf15fe4"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MOE (Mixture-of-Experts)/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/MOE (Mixture-of-Experts)/image 2.png",
+      "bytes": 83713,
+      "sha256": "6947df7e2294517943806715ff2044365ed660b7e916ae610786429892ecc54d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MOE (Mixture-of-Experts)/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/MOE (Mixture-of-Experts)/image 3.png",
+      "bytes": 106580,
+      "sha256": "86e06a6247c6b5d36b5e27f1585047c1645d6d4ab3f7102456a4b09040e68312"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MOE (Mixture-of-Experts)/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/MOE (Mixture-of-Experts)/image 4.png",
+      "bytes": 221984,
+      "sha256": "2cc00af44c01d78552d8a5f62ed3206b674b5e2dfdf7172565914fec45f0ddfa"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MOE (Mixture-of-Experts)/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/MOE (Mixture-of-Experts)/image 5.png",
+      "bytes": 299575,
+      "sha256": "32ed63c0f68ff682453cb32595e1b7c7d14637b54e2750271cc8ac51230ef134"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MOE (Mixture-of-Experts)/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/MOE (Mixture-of-Experts)/image 6.png",
+      "bytes": 217449,
+      "sha256": "3dac44e7a7592533b7c6c842cb2927e1b76d47a91b599061de67f4256a4ae88f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MOE (Mixture-of-Experts)/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/MOE (Mixture-of-Experts)/image 7.png",
+      "bytes": 32894,
+      "sha256": "1571391b7a6cf2877c04587b44eaebb23c99930985032bb67ad58635af59902e"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/MCP 1db9c9ac32ee80bc9d57c1dfba6bec77.md",
+      "path": "docs/zh/ml/ML/LLM/MCP 1db9c9ac32ee80bc9d57c1dfba6bec77.md",
+      "bytes": 5,
+      "sha256": "8624e894f42a27a5dcc703a932c5fc19922110419914ea511cf4d90bbac9a1b0"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/langchain 1d89c9ac32ee80db98eee1e3ded7e3f6.md",
+      "path": "docs/zh/ml/ML/LLM/langchain 1d89c9ac32ee80db98eee1e3ded7e3f6.md",
+      "bytes": 11,
+      "sha256": "7ef6280310603c6d1df1936ff9420b6dea28864adf5fa6df04f9fc0e426799c4"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Deepseed 1da9c9ac32ee80f88c8fc07a67211d30.md",
+      "path": "docs/zh/ml/ML/LLM/Deepseed 1da9c9ac32ee80f88c8fc07a67211d30.md",
+      "bytes": 10,
+      "sha256": "aca02ec63555873d01af2a51a1886ae6b43ed36816fd2fd372bf0f871f0ba111"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Basic 2869c9ac32ee806581edc2693dace27e.md",
+      "path": "docs/zh/ml/ML/LLM/Basic 2869c9ac32ee806581edc2693dace27e.md",
+      "bytes": 50,
+      "sha256": "41219f9422d43ac89c98eaf338cff5ea5a8d16f60f655328d1b1078c8b7a22a7"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Basic 2869-e27e/image.png",
+      "path": "docs/zh/ml/ML/LLM/Basic 2869-e27e/image.png",
+      "bytes": 189760,
+      "sha256": "4b6474ff5147b3b37419e1a0aa2cd1b11cf7d7920ed127aea8d1a629840b6341"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion 2869c9ac32ee80038495c34cb0714271.md",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion 2869c9ac32ee80038495c34cb0714271.md",
+      "bytes": 1823,
+      "sha256": "8e6e1806666e9cce61612bb43fbccb3514b49e85f179813649c4d8e7da11981b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image.png",
+      "bytes": 72136,
+      "sha256": "21eacc73370c085cc62179c7cce4e3188166425b730a8807363f762b761b6377"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 1.png",
+      "bytes": 78642,
+      "sha256": "f248e115e3fa5117af1884ca3380382267990f46da2cd227198c103ee7c208b8"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 2.png",
+      "bytes": 261498,
+      "sha256": "8fe76f649930f5e12b540c09c7485ec44795a23908043fab0ecc87cfe1450614"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 3.png",
+      "bytes": 290101,
+      "sha256": "c9ab9d4c5ac91ccb736bd87a66798dae51b37c92f10f19c7e47e80c0ffdae539"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 4.png",
+      "bytes": 243368,
+      "sha256": "3fbcaf6dbe64787ba681fc51e8a5d2c406eaaec5064ede09a1dd82ae5cc90547"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 5.png",
+      "bytes": 250441,
+      "sha256": "c64e9f86f5757935464c150ce08a37661746eea42c42547ef8dfbff0a6b8fb6a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 6.png",
+      "bytes": 219432,
+      "sha256": "e7146a57cd9ab68ca0807bc3e3f9a606a9b82e92ee9a1163ba50256844963ec6"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 7.png",
+      "bytes": 101637,
+      "sha256": "63c8d3068bc227d722fbe25ec2c26fab900557edecdcaff07b3a3b38c7c5f92d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 8.png",
+      "bytes": 318983,
+      "sha256": "d8af22a3fd8aaecfeb75f5b0409751c0ed80ee20d29a195701c3a8140c739d2e"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 9.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 9.png",
+      "bytes": 52684,
+      "sha256": "3ccead8501ce3d30420be756e3c64c482ebd574d512d35d56be200acd1464449"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 10.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 10.png",
+      "bytes": 48472,
+      "sha256": "44bcc77cd4c1a54fe70e224e3fc8c32fa05506e26ca2c03271c0e6bbe12e8bb1"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 11.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 11.png",
+      "bytes": 156909,
+      "sha256": "2d0e3e76af71297ca97f57a51dd1d4a5c8130777e4df5cd1f5c4f904f79d6cc3"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 12.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 12.png",
+      "bytes": 219967,
+      "sha256": "a78927c83bcf35c9def0fabcf3e6b3c62e89644b5339483be0e8d6b2b94e20c6"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 13.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 13.png",
+      "bytes": 304371,
+      "sha256": "4a9025a9fb62e9f383a04e1224384e1b897ecc084130dacebfb5c98d2d7162c0"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 14.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 14.png",
+      "bytes": 158255,
+      "sha256": "866bff0c288ed79457a7eea4f136a90d9128732e01dfec84bd6b878f71c1ee3c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 15.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 15.png",
+      "bytes": 214293,
+      "sha256": "af03000c4d8504ffa3aa02942bf2ff91d88692292ac9d73f0bd301dd9221ffcf"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 16.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 16.png",
+      "bytes": 167431,
+      "sha256": "799469a2a34cc9153414ea2e868c40297176096653f79853d6ba84f1719e676c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 17.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 17.png",
+      "bytes": 65755,
+      "sha256": "723ffc14e16047fef6b2464932ad61b1aefe2908700d8e120b0d553411d5e24f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 18.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 18.png",
+      "bytes": 87771,
+      "sha256": "a35970f40cdeb9c915c9ce9bd068e1983529bb0210ccaa15dbe8ec9c264e9f2b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Representation Fusion/image 19.png",
+      "path": "docs/zh/ml/ML/LLM/Representation Fusion/image 19.png",
+      "bytes": 117397,
+      "sha256": "9771e915be4aebfe86f6d92b1531c14596c929c77d7ab21a97f4c723084b5955"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/cross-modal alignment 2c09c9ac32ee80d7b862c8797facf694.md",
+      "path": "docs/zh/ml/ML/LLM/cross-modal alignment 2c09c9ac32ee80d7b862c8797facf694.md",
+      "bytes": 3834,
+      "sha256": "90f64e19e5229dc7e6f93de0da2e250f4eabd3bfe71f4d73b60c0e13b9dde897"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/ASR 2c09c9ac32ee8001adaaccb66c04ebd3.md",
+      "path": "docs/zh/ml/ML/LLM/ASR 2c09c9ac32ee8001adaaccb66c04ebd3.md",
+      "bytes": 3457,
+      "sha256": "677864ce253d0133e6490c160bb5fdb175a54de6f87c0c3998050e8adbfd371a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Different Types 11d9c9ac32ee801c91e1c43ca882006c.md",
+      "path": "docs/zh/ml/ML/MLE/Different Types 11d9c9ac32ee801c91e1c43ca882006c.md",
+      "bytes": 181,
+      "sha256": "98fa4e9cfc901f0b9abb3fc882ce75d98c02accb01efe62657cfa11b4363659a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Correlation vs Covariance 11f9c9ac32ee80a0bfc4fdafd5ca5526.md",
+      "path": "docs/zh/ml/ML/MLE/Correlation vs Covariance 11f9c9ac32ee80a0bfc4fdafd5ca5526.md",
+      "bytes": 457,
+      "sha256": "71a5e987a569c9eeb40f81cc5b1e43fd00b036d6b419c270ba4a2bb77d842381"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Overfitting 11d9c9ac32ee801b808efc6373cb5f49.md",
+      "path": "docs/zh/ml/ML/MLE/Overfitting 11d9c9ac32ee801b808efc6373cb5f49.md",
+      "bytes": 1939,
+      "sha256": "96e07d5d095b452e9448eb25e0b5afca0361cf623c3b622b29c33b83e9ceeda9"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Data cleaning 11d9c9ac32ee80eba925dce71bf57448.md",
+      "path": "docs/zh/ml/ML/MLE/Data cleaning 11d9c9ac32ee80eba925dce71bf57448.md",
+      "bytes": 205,
+      "sha256": "239c5137804a0e070289758f2fc0090cb51136cf629f8e1d7ba3fd2a58c45926"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Metrics 2689c9ac32ee807eb695d5fbbec54946.md",
+      "path": "docs/zh/ml/ML/MLE/Metrics 2689c9ac32ee807eb695d5fbbec54946.md",
+      "bytes": 2918,
+      "sha256": "764b442382c06fb3f9907bf5950c972b8fd2a8ba3261eb12a089ecfd7c52d667"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Metrics/image.png",
+      "path": "docs/zh/ml/ML/MLE/Metrics/image.png",
+      "bytes": 153555,
+      "sha256": "9eed23e92bd74803b629a897b6d4cafc1374fcc2139ac3c82dd40946a03ab7f1"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Metrics/image 1.png",
+      "path": "docs/zh/ml/ML/MLE/Metrics/image 1.png",
+      "bytes": 30207,
+      "sha256": "576c168385aecf485d21bb24b6f437697de4fd5add703411b91973a42be2723b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Improve Neural Networks 11f9c9ac32ee80cf8a08dab317893298.md",
+      "path": "docs/zh/ml/ML/MLE/Improve Neural Networks 11f9c9ac32ee80cf8a08dab317893298.md",
+      "bytes": 134,
+      "sha256": "53acf59b19f48cfe497b294fab4f34a2d9cf4c18cd22204583c750747e308e4f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Neural Network Challenges 1219c9ac32ee801bb205c2881dfc1fa5.md",
+      "path": "docs/zh/ml/ML/MLE/Neural Network Challenges 1219c9ac32ee801bb205c2881dfc1fa5.md",
+      "bytes": 481,
+      "sha256": "576efa986395a2c55c7acf611ce3001d94966eb99e40ca918c1e118506bc3f8d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Eigenvector 2889c9ac32ee809bb15de4a2e989496f.md",
+      "path": "docs/zh/ml/ML/MLE/Eigenvector 2889c9ac32ee809bb15de4a2e989496f.md",
+      "bytes": 490,
+      "sha256": "cb9a57edfe9ac6c0c92e55b62727e8c3c05e1d65cf67165990f64552443dd393"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Dropout and BatchNorm 2dd9c9ac32ee80268a69f1ffec1a8a0e.md",
+      "path": "docs/zh/ml/ML/MLE/Dropout and BatchNorm 2dd9c9ac32ee80268a69f1ffec1a8a0e.md",
+      "bytes": 5592,
+      "sha256": "6057901f8b85a930ca75bcffb04b694a34985cd06bac17e474096eaf91ce42d9"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Activation functions 11f9c9ac32ee80c78ad7d6b65534ae31.md",
+      "path": "docs/zh/ml/ML/MLE/Activation functions 11f9c9ac32ee80c78ad7d6b65534ae31.md",
+      "bytes": 1456,
+      "sha256": "a943bd528cc8e06335589951d41256412f555987519fb42861326940028e671d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Activation functions/image.png",
+      "path": "docs/zh/ml/ML/MLE/Activation functions/image.png",
+      "bytes": 50450,
+      "sha256": "d87fdc8bd0c909ba95232a819028ed639d59714441aee3b6c2542f5b0b08ff7f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Activation functions/image 1.png",
+      "path": "docs/zh/ml/ML/MLE/Activation functions/image 1.png",
+      "bytes": 40162,
+      "sha256": "42e6cb999d7dd2eb5c84b8206d5271c5aac28c09f5fb4164a74a72ffbda418f8"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Activation functions/image 2.png",
+      "path": "docs/zh/ml/ML/MLE/Activation functions/image 2.png",
+      "bytes": 4922,
+      "sha256": "e3088969027de744027bdcb309e904b5475a59f0a40028d13ece455c5dcc2b3d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Activation functions/image 3.png",
+      "path": "docs/zh/ml/ML/MLE/Activation functions/image 3.png",
+      "bytes": 55750,
+      "sha256": "8cf277f05b978ceca581785421cc2cff606bf22324328f0148acf6c7e6d4d927"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Activation functions/image 4.png",
+      "path": "docs/zh/ml/ML/MLE/Activation functions/image 4.png",
+      "bytes": 17436,
+      "sha256": "aba1fb28a757c16e1a743a16cdcb4f1b68fb875ba503d1ca068b79d33b5bfc82"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Loss function 1269c9ac32ee80a8a7dfc3e627841522.md",
+      "path": "docs/zh/ml/ML/MLE/Loss function 1269c9ac32ee80a8a7dfc3e627841522.md",
+      "bytes": 4922,
+      "sha256": "33b77269d0b19249a6a14aed72e043e470030d158f1f306b515b66e48c0f7201"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Optimizer 2689c9ac32ee8002aa00cc8dbfa9d267.md",
+      "path": "docs/zh/ml/ML/MLE/Optimizer 2689c9ac32ee8002aa00cc8dbfa9d267.md",
+      "bytes": 3221,
+      "sha256": "270d59aa3740f01065dff444ac6fec687cd7de4936a99352669348d4209177d3"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Naive Bayes Classifier 11d9c9ac32ee80beb73dd7849e03c82a.md",
+      "path": "docs/zh/ml/ML/MLE/Naive Bayes Classifier 11d9c9ac32ee80beb73dd7849e03c82a.md",
+      "bytes": 75,
+      "sha256": "d33f561bd10434f14b807842f65a7660d8d74d7f490e4bd8aeacdc25ce44512a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Support Vectors Machine 11f9c9ac32ee802b9e03c10dd0a149ec.md",
+      "path": "docs/zh/ml/ML/MLE/Support Vectors Machine 11f9c9ac32ee802b9e03c10dd0a149ec.md",
+      "bytes": 1554,
+      "sha256": "216a13a50beebcbcf6c5a9eb83b7d6a81a279c6b138f416c5b3442481468bd74"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Support Vectors Machine/image.png",
+      "path": "docs/zh/ml/ML/MLE/Support Vectors Machine/image.png",
+      "bytes": 58093,
+      "sha256": "0f034970c6c5f61b19af4652e0a048c201dce6de8203a442b0ee68455bf69d2c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Logistic Linear 11d9c9ac32ee80d28f2ceb798a6a212d.md",
+      "path": "docs/zh/ml/ML/MLE/Logistic Linear 11d9c9ac32ee80d28f2ceb798a6a212d.md",
+      "bytes": 419,
+      "sha256": "0f54bdc4d8decf61dd665ff700d2a78b784011abbe97de7aef8536fa4409fdcc"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Hierarchical Clustering 2889c9ac32ee8024a261dde07bd74490.md",
+      "path": "docs/zh/ml/ML/MLE/Hierarchical Clustering 2889c9ac32ee8024a261dde07bd74490.md",
+      "bytes": 913,
+      "sha256": "3f4c633daf2f0d1803cd60946230ffd65d46115de319369c44e4a8b68e9e0ec2"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/DBSCAN 2889c9ac32ee80d0b150fd3ef97d4fce.md",
+      "path": "docs/zh/ml/ML/MLE/DBSCAN 2889c9ac32ee80d0b150fd3ef97d4fce.md",
+      "bytes": 983,
+      "sha256": "66196e7482ccc86024af871b781e9ee498be6691b8dc1a72ce0550e41288eaed"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/KMeans 1269c9ac32ee80d4a847d73b82897be8.md",
+      "path": "docs/zh/ml/ML/MLE/KMeans 1269c9ac32ee80d4a847d73b82897be8.md",
+      "bytes": 1137,
+      "sha256": "11e3c3dc93e68c07fb66457b1bac3121f8d935c33921228660ae7b1adfefe583"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/K Nearest Neighbor Algorithm 11f9c9ac32ee8072a9f4f265744fb5bc.md",
+      "path": "docs/zh/ml/ML/MLE/K Nearest Neighbor Algorithm 11f9c9ac32ee8072a9f4f265744fb5bc.md",
+      "bytes": 986,
+      "sha256": "6e9fb73f4764419e8ab37af173bf45eb2eddb18607fca020ca5a21108d1f0453"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Bagging VS Boosting 2889c9ac32ee80b2bb0ae0d3ce96720e.md",
+      "path": "docs/zh/ml/ML/MLE/Bagging VS Boosting 2889c9ac32ee80b2bb0ae0d3ce96720e.md",
+      "bytes": 264,
+      "sha256": "2bbe72e053870e9793b9443901e3a72ca3050b41d87c2bc6e722a64ded85a64c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Bagging VS Boosting/image.png",
+      "path": "docs/zh/ml/ML/MLE/Bagging VS Boosting/image.png",
+      "bytes": 381801,
+      "sha256": "67c53db7d718238c263139dc2827b7acbd49306b55300d923a29605e2b2515fd"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Decision Tree 2889c9ac32ee805b8695eaf967360c8e.md",
+      "path": "docs/zh/ml/ML/MLE/Decision Tree 2889c9ac32ee805b8695eaf967360c8e.md",
+      "bytes": 732,
+      "sha256": "2818c2ff0ba9848df59bd98d94589b59000c0f7548aedaff5633ba26d801d352"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/XGBoost 2889c9ac32ee808e8b7cdeb65093e52e.md",
+      "path": "docs/zh/ml/ML/MLE/XGBoost 2889c9ac32ee808e8b7cdeb65093e52e.md",
+      "bytes": 502,
+      "sha256": "04bf0a6f8d4715a201c23ac6de1cf3821b50d771e49bae89cd964417d6b396ff"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Random Forest 1279c9ac32ee8072a4f3e8a15f3a3cf4.md",
+      "path": "docs/zh/ml/ML/MLE/Random Forest 1279c9ac32ee8072a4f3e8a15f3a3cf4.md",
+      "bytes": 569,
+      "sha256": "5350c58046641e26bdfbc7c6019f5274961e0e15a93e1e201a3aaa894d4802e3"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/GBDT 2889c9ac32ee8051aea8f31fc7c9ae64.md",
+      "path": "docs/zh/ml/ML/MLE/GBDT 2889c9ac32ee8051aea8f31fc7c9ae64.md",
+      "bytes": 965,
+      "sha256": "e41c7aff58958c4fa9f4d709eedb6d9d4d30c70ec6e88f0100106ff41e16c553"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/LightGBM 2889c9ac32ee80228367c2610c7d39e2.md",
+      "path": "docs/zh/ml/ML/MLE/LightGBM 2889c9ac32ee80228367c2610c7d39e2.md",
+      "bytes": 936,
+      "sha256": "59a87761c7a7b54395378a2c73fb27a0228bca705d8046f3f1ed41d23a8d1da8"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Principal Component Analysis (PCA) 2889c9ac32ee809aa006f3735f271c06.md",
+      "path": "docs/zh/ml/ML/MLE/Principal Component Analysis (PCA) 2889c9ac32ee809aa006f3735f271c06.md",
+      "bytes": 1402,
+      "sha256": "b4e99015f6a417c936ad53a0546f1d6e1e533ca55d17492bbce131b5f9bb1c6b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/Linear Discriminant Analysis (LDA) 2889c9ac32ee80f1b396d85ce0f6ccf6.md",
+      "path": "docs/zh/ml/ML/MLE/Linear Discriminant Analysis (LDA) 2889c9ac32ee80f1b396d85ce0f6ccf6.md",
+      "bytes": 824,
+      "sha256": "e4d7d85982e75c5d6c9e81bc0998510e896d37abd9cc3503355b493bfd1ff1eb"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/tsne 2889c9ac32ee808f8a5bd80c9764905f.md",
+      "path": "docs/zh/ml/ML/MLE/tsne 2889c9ac32ee808f8a5bd80c9764905f.md",
+      "bytes": 308,
+      "sha256": "deaf9724e87c41697e7b5ae28d503c08a76f82100f6d1b2c632d8ec005de59df"
+    },
+    {
+      "archive_path": "Private & Shared/ML/MLE/ISOMAP 2889c9ac32ee8008991fe9edb81bd277.md",
+      "path": "docs/zh/ml/ML/MLE/ISOMAP 2889c9ac32ee8008991fe9edb81bd277.md",
+      "bytes": 1160,
+      "sha256": "02b35cbbac39c006bd7f5558c317f90f5229184393db244ac9a8bfee89b95e77"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Advanced NLP/Intro 1d19c9ac32ee80269803eb018ed4d2a6.md",
+      "path": "docs/zh/ml/ML/LLM/Advanced NLP/Intro 1d19c9ac32ee80269803eb018ed4d2a6.md",
+      "bytes": 158,
+      "sha256": "04e8ed7cdbe723824ae240bac8745a21aa1bb7e8814d7d53e8bcf1ad915ff47e"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Advanced NLP/Intro/image.png",
+      "path": "docs/zh/ml/ML/LLM/Advanced NLP/Intro/image.png",
+      "bytes": 36957,
+      "sha256": "061b2bac145e8f27f17a43975953eaffe43b7e316845053fc5a443e3b5fe8e8d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Advanced NLP/Intro/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Advanced NLP/Intro/image 1.png",
+      "bytes": 90679,
+      "sha256": "a8a342c3791f38de4fe9be776ccea8dc319609c608f67f70aee826cb9fe8d171"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Advanced NLP/Intro/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Advanced NLP/Intro/image 2.png",
+      "bytes": 63573,
+      "sha256": "26c3acb9a74a898587c1a3a4ad9cccab172bf9acd0bc74e721bca9216b5552bf"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Advanced NLP/Word Representation 1d19c9ac32ee806480c7f689b2a2791c.md",
+      "path": "docs/zh/ml/ML/LLM/Advanced NLP/Word Representation 1d19c9ac32ee806480c7f689b2a2791c.md",
+      "bytes": 156,
+      "sha256": "fe38bf012d75f87dbc5297db70f8f62727515284743294ccbb957461368a0043"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Advanced NLP/Word Representation/image.png",
+      "path": "docs/zh/ml/ML/LLM/Advanced NLP/Word Representation/image.png",
+      "bytes": 80131,
+      "sha256": "2487d179e2b6ed9695dfc9de3a1917419ee66abefd5c0c1c920dbba0f3440945"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Advanced NLP/Word Representation/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Advanced NLP/Word Representation/image 1.png",
+      "bytes": 145245,
+      "sha256": "e47349978b2e59423a22b2319ca76b9621d8121220b6f402bc95fd274acf680a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro 1d19c9ac32ee809094a4d820dce62827.md",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro 1d19c9ac32ee809094a4d820dce62827.md",
+      "bytes": 2912,
+      "sha256": "50b443b829d0933944314726d34985a83dd55f497d58626f73f0a516bc42e827"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image.png",
+      "bytes": 22568,
+      "sha256": "1e5e2f2cfdf6955b7b4cef558e620a8abf5a903aaab2de9e84b7cde48ba4370f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 1.png",
+      "bytes": 27351,
+      "sha256": "a5619a0f8fb1ebcee6389bcb6c64d3e14fe5acd0e8fe6d2042d9c4d4f0ca1d38"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 2.png",
+      "bytes": 26428,
+      "sha256": "5dcfcf9989212addc66e6ef8b2c214b40e28eee174e576708dbc94d6c8527dea"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 3.png",
+      "bytes": 40635,
+      "sha256": "74e4e5604b4f3653f8733fee738ac866e84ddff57ae0e96cd5dd8c2936e2ba11"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 4.png",
+      "bytes": 46815,
+      "sha256": "e1c98bac934b5d6d8da54b03a5ec79a08b9ea7660048504d1774f215b4a99d89"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 5.png",
+      "bytes": 39711,
+      "sha256": "c5ebf70a8d9caabd8b26b8b6a42014b93e12eb33de77e5352ed3b4b9ca321abe"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 6.png",
+      "bytes": 48096,
+      "sha256": "18d893c23341bc6b8424400c4e839af214529bf354e32d48b8ea8dde277cc7d2"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 7.png",
+      "bytes": 38460,
+      "sha256": "edfa36c3e81e3077798c09b216a1baa44a545111515d19afb2bafff46357a9c1"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 8.png",
+      "bytes": 21619,
+      "sha256": "d245fa2141a18eae6e569a07d1d89accd352016f6f8454e40d53c0293560d619"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 9.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 9.png",
+      "bytes": 22744,
+      "sha256": "63710f7464d323d4f5f5192d458174f1092d508c372948a633bc960853509984"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 10.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 10.png",
+      "bytes": 26227,
+      "sha256": "4801922a60240637a9aab5153b9fcc400e5c90027cc6611db5b93ab70130cb5b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 11.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 11.png",
+      "bytes": 24907,
+      "sha256": "02186d4ab5a9973e850e8c847102410a9d09a9fd742782e2db1cedada1a2b732"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 12.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 12.png",
+      "bytes": 88569,
+      "sha256": "ee6e3d1c03b4266c797020ed1b32d36938725c624035c6b9d9fe6c191c33d513"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 13.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 13.png",
+      "bytes": 47631,
+      "sha256": "27c310f7c92dc2d6a7b4bb3cc36373f9a5b1432194c95d1e124203af37e1f39c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 14.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 14.png",
+      "bytes": 236961,
+      "sha256": "d10a952489d6e79887be79775457327f6cc4c719f5511157f94400be0900f19b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 15.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 15.png",
+      "bytes": 190081,
+      "sha256": "a3df3d61ac5372ce7cd36fb9713e176704b647c06aa44d9bcc741d0d3f6da0b2"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Intro/image 16.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Intro/image 16.png",
+      "bytes": 221856,
+      "sha256": "10fc4bbd62c19306f9cc5e8a3a48933cd7bf082ce6bbf683fcda0c2a41bb39fc"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures 1d19c9ac32ee80c3b774ed103f749638.md",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures 1d19c9ac32ee80c3b774ed103f749638.md",
+      "bytes": 1103,
+      "sha256": "5e89aff3378da72607e5691dfd2d97e674d043f8cfdd31c8b804209149735fff"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image.png",
+      "bytes": 85437,
+      "sha256": "d5d8f6aa6ac865c1d6cfed053d577f04ac3537a3e05155c71ad3cfd08ad10694"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 1.png",
+      "bytes": 175943,
+      "sha256": "bc60b5b660752b6c45889c93e012d7eeecad23b49152bb30566da3368cb8c265"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 2.png",
+      "bytes": 47091,
+      "sha256": "09a3e8731490d666a1505f6175da721607e88693c2ba4d579b7212071ac93e12"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 3.png",
+      "bytes": 55961,
+      "sha256": "37b79c3db5f2f82f752f4d875ff363228ad9c04062888bd7f482618bb37bbbe3"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 4.png",
+      "bytes": 14267,
+      "sha256": "be630c75b5ccb2657716e0ae064e9f569ca65a823d0150440c7de60a24d79d83"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 5.png",
+      "bytes": 12668,
+      "sha256": "d0c3016d83ea77e4dd0823aecd499a35a181461826709d9f732358d08fb499e4"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 6.png",
+      "bytes": 40013,
+      "sha256": "4adcae6b52cf175232cee581b595d96c93eb2890c16d223dd9b79450314cb8a5"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 7.png",
+      "bytes": 128513,
+      "sha256": "6b626bcce881cb813789cf0b0acfc844f383f4510f8387469f6dc210ac0cd42f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 8.png",
+      "bytes": 207868,
+      "sha256": "abd83d0beded2bf8dfd6f372190d237887a4b6d387e7d508948034922960425f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 9.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures/image 9.png",
+      "bytes": 127102,
+      "sha256": "3795e3e04badb6f1c34e2eabb4446c71d9eafe2ccbd0ed2a2f214d7b4d50da6a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data 1d19c9ac32ee8057acaeeed3dbf261b2.md",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data 1d19c9ac32ee8057acaeeed3dbf261b2.md",
+      "bytes": 1292,
+      "sha256": "17ea30b3009f899c57489d7b9499186de0db553b419da353792f64450817e0e3"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image.png",
+      "bytes": 382213,
+      "sha256": "78f8d5bdc686dbc155f81e72c2b2ae8f7edefdf584a7e2eb280e6a73ab582df4"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 1.png",
+      "bytes": 193148,
+      "sha256": "fb4d2c0ccaf3b9c0d37fd03419805ad450063b6d51d3fe85b0245940bb6b37d0"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 2.png",
+      "bytes": 107843,
+      "sha256": "6d6203f713ac715745b8612f6dff9d2099e1e54fd560c282ab9d6075a5b16fd7"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 3.png",
+      "bytes": 118467,
+      "sha256": "2b0fe7734659e2b6c0b2de8d0212dcae290c4dedc6645439a78e73718b9a5bdd"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 4.png",
+      "bytes": 63388,
+      "sha256": "f0a070eafac55dbbfb1d63ec74ebd0da2aa38d4b906b6f5837e81cdc470e2d13"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data/image 5.png",
+      "bytes": 74530,
+      "sha256": "039e0818ae0f79b572f9a2ee7b980e88caeeb8915c485b96b20a70d96238160f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer 1d19c9ac32ee80acaf1acd9ebb645f79.md",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer 1d19c9ac32ee80acaf1acd9ebb645f79.md",
+      "bytes": 1324,
+      "sha256": "d7483e8ab167884885ddd1befa4b38e8ecf7a3fd17c9ae6219157014ae804f6f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image.png",
+      "bytes": 227873,
+      "sha256": "1a871b083fd30312093906a158bab90e724be2b4777f3d547d3266bd2dff1be9"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 1.png",
+      "bytes": 353559,
+      "sha256": "cbb715fab1f2dcfbe23f22e910e2ef4fb5ce99eb55e64cc26297dc1bb9a3a626"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 2.png",
+      "bytes": 118909,
+      "sha256": "fb85be89adfbf4a18035f1bed5d1e2e3e55e45c1ca65c56af0780ed4a500ff8e"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 3.png",
+      "bytes": 138967,
+      "sha256": "7ca97275b77074721cf672fc835000b27bd4cb4bfa67570d158b6583cacb0f19"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 4.png",
+      "bytes": 45631,
+      "sha256": "1d4eac826e54919ac0a23ba9b746be09b942ae5ad0caf324f6a753bbf275aa19"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 5.png",
+      "bytes": 181335,
+      "sha256": "b2ecc7abd3502d22e50829e0be8701a784bfa098641097c79b5a627870038142"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 6.png",
+      "bytes": 157164,
+      "sha256": "bdce69c9644844ac37ad50b738053d069aed480a6d52fa2d41f54a3d70441c73"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 7.png",
+      "bytes": 219522,
+      "sha256": "f752f21298bd8738bac8f81f8d84d389b153574b393d38e227ce1f7d4bf6c513"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 8.png",
+      "bytes": 296731,
+      "sha256": "8696c1a8026202cf372b67468018c0c5db99667136146aaa676926fc19c7b4fd"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 9.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 9.png",
+      "bytes": 12275,
+      "sha256": "2cd57d5f5328a6be8cc823e70f590da0b8ff47c88a515945575f7805b04608ba"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 10.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 10.png",
+      "bytes": 33133,
+      "sha256": "68512ea0c90d9970fd607a59b70e310f4342f73efdd867b06c6a3ad58d294a47"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 11.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer/image 11.png",
+      "bytes": 194367,
+      "sha256": "1b3651a25e955cfbfb7b29eb3e74646e42f25b0a8f60318484a62ffedf6418e6"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation 1d29c9ac32ee80f1ac3be456fdc22662.md",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation 1d29c9ac32ee80f1ac3be456fdc22662.md",
+      "bytes": 1152,
+      "sha256": "858070c005b6ad6b2439676bbabdc7aa39b16d20c345c82d88d4b09b00f4fffe"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image.png",
+      "bytes": 15642,
+      "sha256": "e94ba9e0746d57c3c393926b1a014ce7830aed5ad1cd173bfe71b8e0ff93d2ee"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 1.png",
+      "bytes": 60824,
+      "sha256": "99440e90b9d05891e5ebb3a2c20071a3c61b6dd80916a5495faa280bc7dff16f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 2.png",
+      "bytes": 12849,
+      "sha256": "4bbd6b4031dd06e0f9546c84c973cd3ce1985d332699e5c669e74a13deb34c3a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 3.png",
+      "bytes": 21282,
+      "sha256": "c387e69d8a54b724dccf875b15cc312dc88294dff37b2c3d064f089deda1337c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 4.png",
+      "bytes": 34577,
+      "sha256": "75e4f1f3fcc23e698b6a5afefd00dfd77b0d28ad80944e928403a18b1e8c743e"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 5.png",
+      "bytes": 150312,
+      "sha256": "ad11e6502236c5ffd352ae593d0dce7bfa7666dd926e1aad5aad2800ddd8854a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 6.png",
+      "bytes": 31547,
+      "sha256": "b51cd89d16a265817869b7b01c0bb625fa7af28ae1e3388a8bcd8306c1d1cc20"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 7.png",
+      "bytes": 83253,
+      "sha256": "0641849e5c2d39972fb6ffed10d00ce42855251afadc75754d79b4d0351365c0"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation/image 8.png",
+      "bytes": 103325,
+      "sha256": "7a37c7b67837555fe2e1b07abd32edf1fd3148f6ca8c7bd84b0bff4e473a8752"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning 1d39c9ac32ee807996fdfc9224c16047.md",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning 1d39c9ac32ee807996fdfc9224c16047.md",
+      "bytes": 2366,
+      "sha256": "3d81697291607b6c35a4d9a3b898924f24cf2febc0660ecf812b89dcf229be5c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image.png",
+      "bytes": 275997,
+      "sha256": "5467205701d19089ff1d706de9451c70a90143fb853ce677e2cfcb17e5fb2334"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 1.png",
+      "bytes": 125810,
+      "sha256": "c9b343ad45f76dc77397dc854a3676343c4ef3a6f1e3702f53b5d163e8b606c1"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 2.png",
+      "bytes": 58027,
+      "sha256": "78e907f427d69e47c1a40c3c5b8761037e11488888cd5eb6dd36c3751911e0c5"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 3.png",
+      "bytes": 57844,
+      "sha256": "2b118d15d8e355bd9198b75f8f72894d641d42366341862ea5ecad3854b43609"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 4.png",
+      "bytes": 27846,
+      "sha256": "9b249c9fc991f8f6718bb227ab1c098786df40514a6902f60b8b00e2f91d688c"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 5.png",
+      "bytes": 65515,
+      "sha256": "d1bc7e2b413df5dbda2e15f1fe61b87e7022fbbc8fce8f1e608738ec66e73dcb"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 6.png",
+      "bytes": 150333,
+      "sha256": "699731a36c8eea4ad48048fe649d91855dcc528b21dc339cad102a54733595e6"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 7.png",
+      "bytes": 80278,
+      "sha256": "d47021bafee7d2f0bc5b5d95ea0353fb814044616dfd8e3b074ba587090e8551"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 8.png",
+      "bytes": 27033,
+      "sha256": "34992e9d7e049257463421a9006e62ff68faacaba243b1c69fdf7ecc741cdb23"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 9.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Finetuning/image 9.png",
+      "bytes": 92544,
+      "sha256": "c88b8ffdaf28397b0a27c307358a9062f017150c6ffab3bb7ffc2083198f3617"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation 1d39c9ac32ee80038fc0f7809a6e3a29.md",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation 1d39c9ac32ee80038fc0f7809a6e3a29.md",
+      "bytes": 2356,
+      "sha256": "8da30358ffdb4547c26de9b22245dd067c5894ad9789dc4df4828d3bc065c085"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image.png",
+      "bytes": 146775,
+      "sha256": "9853a3cd9123ca6be7044ff3dd4a64d42f72ac4ca72b07cfad1647e7ea1d323b"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 1.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 1.png",
+      "bytes": 71713,
+      "sha256": "28e4c9af30903a5485c0d1ec4032ad380c83243d3aaa629dddc1fa58cc7fc54d"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 2.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 2.png",
+      "bytes": 75027,
+      "sha256": "61505f0ade7c6ef7d00f33d339da6a831251e51b3a9d1e13822d47ca3f83fc52"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 3.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 3.png",
+      "bytes": 112397,
+      "sha256": "dc3d6be97e0043dead7e2bb6a7f106ad0aee284e6e628829aad4938653ba2292"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 4.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 4.png",
+      "bytes": 157518,
+      "sha256": "12214320fa6c123f7cd4013461977e559e4129d8c74cbc054d742d0a44a08a4f"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 5.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 5.png",
+      "bytes": 104164,
+      "sha256": "51b69c8ba55a7c69ad7773a4ce6921b8ec1f14d56bd1952a0aec212bf1c7f3a4"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 6.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 6.png",
+      "bytes": 42116,
+      "sha256": "cbd5db6eb20a133b80787aa411a24e187eee654857d902e1847c4363b383a94a"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 7.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 7.png",
+      "bytes": 73846,
+      "sha256": "30bb276f67e86c19d30a71bd7ec6ead3bc36ba8850d784193e2f6a88aa3b37d6"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 8.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 8.png",
+      "bytes": 121767,
+      "sha256": "984f6e5b9eba1f3e43fa827780a0d29e6c64af3367c64b5d2abe334d6a8f3ce7"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 9.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 9.png",
+      "bytes": 161118,
+      "sha256": "c5318df11624af4ee4e986a9a7f725c3d1bb94714b2b0a3de42c065d3cfb3603"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 10.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 10.png",
+      "bytes": 92700,
+      "sha256": "67d9866f5675744a0f780c50200b698659a3081e0f3b240fa7c9ce812115fec5"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 11.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 11.png",
+      "bytes": 65574,
+      "sha256": "d5db4130597ed9e687b894ee62c4801a03048c146969c900222d7910c36806ab"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 12.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 12.png",
+      "bytes": 260988,
+      "sha256": "2da0093b22ce8d13f10cd8f465bd29da85e212a6601ee6ad52f1a5f3d3e322b3"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 13.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 13.png",
+      "bytes": 190114,
+      "sha256": "8948489172fffdf78c1f697cb09d480873a7b348094eae8c1bd9cc3b7256adcc"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 14.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 14.png",
+      "bytes": 190722,
+      "sha256": "c2fb241a73cf0381f88bdef8e3632b1c49570f7747296e703af170add253d845"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 15.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 15.png",
+      "bytes": 150367,
+      "sha256": "efb84127d7eaf747af74a71bd50ada597229cba11678ad1cda9176df9f789326"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 16.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 16.png",
+      "bytes": 434448,
+      "sha256": "240e1e03397ec2d99f7e438e376dd1a3b53151ce0d6aa3dae4d1b17cd5f54aac"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 17.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 17.png",
+      "bytes": 117970,
+      "sha256": "ac3e86e57831f64f509b0bcbbcb65ace7a19f279f3693195aaa1ef959661bb43"
+    },
+    {
+      "archive_path": "Private & Shared/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 18.png",
+      "path": "docs/zh/ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation/image 18.png",
+      "bytes": 168504,
+      "sha256": "3b53a1e162d59d8a31fcd6fbfc58a3e8eef3145954fa88352faae4b79b9f8a7a"
+    }
+  ],
+  "excluded_by_user": [
+    {
+      "archive_path": "Private & Shared/ML/ECGBYTE 2689c9ac32ee8078a881e1b32a5baa59.md",
+      "reason": "User requested removal of ECGBYTE."
+    }
+  ]
+}

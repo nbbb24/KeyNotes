@@ -1,0 +1,11 @@
+/* Show the complete chapter hierarchy alongside the document on wide screens. */
+@media screen and (min-width: 60em) {
+    .md-sidebar--secondary {
+        display: block;
+    }
+}
+
+.md-nav__link--active {
+    color: var(--md-accent-fg-color);
+    font-weight: 600;
+}

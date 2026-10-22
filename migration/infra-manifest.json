@@ -1,0 +1,77 @@
+{
+  "original_commit": "d2236fe1ea43f3fcc5dcaa00261d838466810a1f",
+  "files": [
+    {
+      "original_path": "docs/zh/assets/diagrams/multi-die.svg",
+      "path": "docs/zh/infra/assets/diagrams/multi-die.svg",
+      "bytes": 974,
+      "sha256": "344a664af0d5b24a0f9d43c4e307211d03fb377acd084dfb419e5758ad4c3dde"
+    },
+    {
+      "original_path": "docs/zh/assets/diagrams/single-die.svg",
+      "path": "docs/zh/infra/assets/diagrams/single-die.svg",
+      "bytes": 689,
+      "sha256": "ed017bb87736ed64668fabae633d2810aa07d1d7c321a288f806237073247258"
+    },
+    {
+      "original_path": "docs/zh/assets/stylesheets/extra.css",
+      "path": "docs/zh/infra/assets/stylesheets/extra.css",
+      "bytes": 4570,
+      "sha256": "123e3340cd401863c4a8514c07e6d78204c0acd190da840b37df2aa6919d4d03"
+    },
+    {
+      "original_path": "docs/zh/index.md",
+      "path": "docs/zh/infra/index.md",
+      "bytes": 20306,
+      "sha256": "fd9efd9ce157d0526b4bd9c75dc3fa043789cd2fbc9cf4c15aeaa6e7235e24e2"
+    },
+    {
+      "original_path": "docs/zh/npu/data-movement.md",
+      "path": "docs/zh/infra/npu/data-movement.md",
+      "bytes": 4024,
+      "sha256": "4ad5096c84194861f5c7b3894d352b20874cbb3264eecab6c7186f36ab8ecd85"
+    },
+    {
+      "original_path": "docs/zh/npu/end-to-end-transfer.md",
+      "path": "docs/zh/infra/npu/end-to-end-transfer.md",
+      "bytes": 3239,
+      "sha256": "e82d7ba1c95939604bbc47f9bd87ac9db7579c3e207aa8ad044b504182f7040d"
+    },
+    {
+      "original_path": "docs/zh/npu/glossary.md",
+      "path": "docs/zh/infra/npu/glossary.md",
+      "bytes": 3528,
+      "sha256": "9fbb4b3244962bb1cc2f6617d13268cbb5d1f5c939529cad0687869c47ae6d33"
+    },
+    {
+      "original_path": "docs/zh/npu/interconnects.md",
+      "path": "docs/zh/infra/npu/interconnects.md",
+      "bytes": 3844,
+      "sha256": "d60c70e18de6d417f17560123cd1cf00031e6c40667cd7087c687d4df50e3509"
+    },
+    {
+      "original_path": "docs/zh/npu/memory-addressing.md",
+      "path": "docs/zh/infra/npu/memory-addressing.md",
+      "bytes": 3533,
+      "sha256": "5ca5cf2da5bd997823939cae5a69d32da5a6f5c4f38992fa2b4cb3234276e125"
+    },
+    {
+      "original_path": "docs/zh/npu/mental-model.md",
+      "path": "docs/zh/infra/npu/mental-model.md",
+      "bytes": 4016,
+      "sha256": "515e7f12b84b0fcc04a4f3cf5d71585409d205e509ab3269814706dded37a82b"
+    },
+    {
+      "original_path": "docs/zh/npu/network-planes.md",
+      "path": "docs/zh/infra/npu/network-planes.md",
+      "bytes": 3719,
+      "sha256": "26f8a4063e80668ed4a1eb822c9c75a41ea7979340f204d9e2a5e9bb074ae764"
+    },
+    {
+      "original_path": "docs/zh/npu/performance-tools.md",
+      "path": "docs/zh/infra/npu/performance-tools.md",
+      "bytes": 4178,
+      "sha256": "60cb0b956dc36e27d87caadf0e40ecd20fb31dcfc5dc70a43c0412f1ad4b59ea"
+    }
+  ]
+}
