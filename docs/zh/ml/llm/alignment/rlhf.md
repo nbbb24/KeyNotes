@@ -1,0 +1,156 @@
+!!! info "中文版正在逐篇更新"
+
+    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+
+# RLHF
+
+# Component
+
+**state space**: all the information have
+
+**action space**: all the decision
+
+**reward function**
+
+**constraints**
+
+**policy**: state as input → action as output, max reward
+
+# Steps
+
+1. pre-trained model
+2. Supervised Finetuning
+3. Reward Model Training
+4. policy optimization
+
+---
+
+# Actor Model
+
+generate answer
+
+$$
+y = \pi_\theta(x)
+
+$$
+
+---
+
+# Reward Model
+
+$$
+r = r_\phi(x, y)
+$$
+
+## Training
+
+Humans first **rank** several answers to the same question (instead of giving absolute scores, which are hard to standardize).
+
+e.g A1>A2>A3, then we have A1&A2, A1&A3, A2&A3
+
+Then, a model—based on the **SFT model** but modified to output a single scalar score—is trained to learn these rankings.
+
+During training, the model receives pairs of answers: one **chosen (better)** and one **rejected (worse)**.
+
+The **core loss function** is:
+
+$$
+\text{loss} = -\log(\sigma(r_\theta(x, y_c) - r_\theta(x, y_r)))
+$$
+
+> where $y_c$ is the preferred (chosen) response and $y_r$  is the less preferred (rejected) one.
+>
+
+> **Subtract:**
+>
+>
+> $$
+> r_\theta(x, y_c) - r_\theta(x, y_r)
+> $$
+>
+> This difference shows **how much better** the model thinks the good answer is.
+>
+> The larger this difference, the more confident the model is.
+>
+
+> **Apply sigmoid:**
+>
+>
+> $$
+> \sigma(r_c - r_r)
+> $$
+>
+> The sigmoid converts this difference into a **probability** between 0 and 1
+>
+> “the probability that the model correctly prefers the better answer.”
+>
+
+> **Take log and negate:**
+>
+>
+> $$
+> \log(\sigma(\cdot))
+> $$
+>
+> This is just **cross-entropy loss**, which penalizes the model when that probability is low.
+>
+> → If the model ranks correctly (good ≫ bad), loss ≈ 0
+>
+> → If it ranks wrong (good < bad), loss grows large.
+>
+
+---
+
+# Critic Model
+
+estimate average expectation
+
+update with actor during training
+
+$$
+V = V_\psi(x)
+
+$$
+
+---
+
+# Advantage
+
+$$
+A = r - V
+
+$$
+
+---
+
+# CLIP
+
+prevents overly large policy updates, keeping learning within a “trust region” and improving stability.
+
+---
+
+# Reference
+
+the SFT model
+
+---
+
+![image.png](../../../../assets/notion/065-00.png)
+
+1. **Step 1 – SFT (Supervised Fine-Tuning):**
+
+    The pretrained model is fine-tuned on **human-labeled examples** to learn how to follow instructions and produce coherent, helpful responses.
+
+2. **Step 2 – Reward Model Training (RW):**
+
+    A **reward model** is trained using **human preference data**, where annotators rank good and bad answers.
+
+    The reward model learns to predict how good a response is based on human judgment.
+
+3. **Step 3 – RLHF (Reinforcement Learning):**
+
+    The **actor model** generates answers, which are scored by the reward model.
+
+    A **critic model** estimates value, and a **reference model** keeps the new model close to the original SFT behavior.
+
+    The model is optimized (e.g., using PPO) to maximize rewards — meaning it learns to produce responses that humans prefer.

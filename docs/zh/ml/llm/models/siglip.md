@@ -1,0 +1,81 @@
+!!! info "中文版正在逐篇更新"
+
+    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+
+# Siglip
+
+## **1. What is SigLIP?**
+
+SigLIP (**Sigmoid Loss for Language–Image Pre-training**) is a CLIP-style vision–language model from Google.
+
+It uses **sigmoid + binary cross-entropy** instead of CLIP’s **softmax contrastive loss**.
+
+---
+
+## **2. Why SigLIP?**
+
+CLIP’s softmax loss forces all samples in the batch to compete, which:
+
+- couples samples
+- needs large batch sizes
+- introduces false negatives
+
+SigLIP makes each image–text pair **independent**, improving stability and alignment.
+
+---
+
+## **3. Core Method**
+
+Given image embedding v and text embedding t:
+
+**Similarity:**
+
+$s = v^\top t$
+
+**Sigmoid loss:**
+
+$L = -\left(y\log\sigma(s) + (1-y)\log(1-\sigma(s))\right)$
+
+- y=1: positive pair
+- y=0: negative pair
+
+This replaces the softmax contrastive loss in CLIP.
+
+---
+
+## **4. Architecture**
+
+Same as CLIP:
+
+- **Vision encoder:** ViT
+- **Text encoder:** T5/BERT-style
+- **Embedding alignment:** via dot-product similarity
+
+---
+
+## **5. Advantages**
+
+- More stable training
+- Less batch-size sensitivity
+- Fewer false negatives
+- Simpler loss function
+- Better zero-shot and retrieval performance
+- Strong multilingual results
+
+---
+
+## **6. How SigLIP is used**
+
+- As a **frozen encoder** for classification, retrieval, reranking
+- With a **small classifier head** (MLP, similarity head, cross-attention)
+- With light **fine-tuning** (projection layers, LoRA, temperature)
+
+---
+
+## **7. Key Difference vs CLIP (1 sentence)**
+
+CLIP uses **softmax contrastive loss**; SigLIP uses **sigmoid BCE**, making learning more stable and improving alignment.
+
+---
+
+If you want, I can make an even shorter **5-bullet summary**, or a **slide-ready version**.

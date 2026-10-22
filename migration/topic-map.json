@@ -1,0 +1,1831 @@
+[
+  {
+    "path": "index.md",
+    "title": "KeyNotes",
+    "chars": 58,
+    "images": 0,
+    "headings": [
+      "# KeyNotes"
+    ],
+    "id": 0,
+    "target": "index.md"
+  },
+  {
+    "path": "infra/index.md",
+    "title": "昇腾 NPU 基础知识学习手册",
+    "chars": 11787,
+    "images": 0,
+    "headings": [
+      "# 昇腾 NPU 基础知识学习手册",
+      "## 一、NPU 整体知识地图",
+      "## 二、硬件基础：Die、NPU、HBM、AI Core",
+      "### 2.1 CPU、GPU、NPU 的区别",
+      "### 2.2 Die 是什么？",
+      "### 2.3 AI Core、AICPU、HBM",
+      "## 三、网络基础：参数面、数据面、业务面、出框口",
+      "### 3.1 参数面、业务面、存储面",
+      "### 3.2 控制面和数据面",
+      "### 3.3 出框口是什么？",
+      "## 四、数据搬运：H2D、D2H、D2D、P2P",
+      "### 4.1 四种常见传输方向",
+      "### 4.2 传输方向不等于通信协议",
+      "### 4.3 DMA、SDMA、RDMA、MTE",
+      "## 五、通信技术：PCIe、HCCS、RoCE、RDMA、URMA、UB",
+      "### 5.1 常见互联技术对照",
+      "### 5.2 RDMA 和 URMA 有什么区别？",
+      "### 5.3 HCCL、HCOMM、MemFabric 的关系",
+      "## 六、内存与地址：HBM、DRAM、NUMA、VA、PA",
+      "### 6.1 内存层次",
+      "### 6.2 NUMA 是什么？",
+      "### 6.3 VA、PA、GVA、SVM 等地址概念",
+      "## 七、放到 MemFabric 中，完整理解一次数据传输",
+      "## 八、性能分析必懂术语",
+      "## 九、实操工具与命令",
+      "## 十、NPU 基础知识自测",
+      "### 1. H2D 描述的是什么？",
+      "### 2. 控制面主要负责什么？",
+      "### 3. 跨 Die 是否一定等于跨服务器？",
+      "### 4. 出框口通常指什么？",
+      "### 5. RDMA 和 H2D 是不是同一类概念？",
+      "## 十一、建议的学习顺序",
+      "### 阶段 1：硬件和设备拓扑",
+      "### 阶段 2：数据搬运和地址",
+      "### 阶段 3：网络与通信",
+      "### 阶段 4：系统软件与同步",
+      "### 阶段 5：性能分析与优化",
+      "## 参考资料"
+    ],
+    "id": 1,
+    "target": "infra/index.md"
+  },
+  {
+    "path": "infra/npu/data-movement.md",
+    "title": "数据搬运与 H2D",
+    "chars": 2308,
+    "images": 0,
+    "headings": [
+      "# 数据搬运与 H2D",
+      "## 一个张量的典型旅程",
+      "## 同步与异步",
+      "## 带宽为什么达不到链路标称值",
+      "## 排查 H2D/D2H 的最小清单",
+      "## 方向速查",
+      "## 传输方向不等于通信协议",
+      "## DMA、SDMA、RDMA 和 MTE",
+      "## 参考资料"
+    ],
+    "id": 2,
+    "target": "infra/data-movement.md"
+  },
+  {
+    "path": "infra/npu/end-to-end-transfer.md",
+    "title": "一次端到端数据传输",
+    "chars": 1689,
+    "images": 0,
+    "headings": [
+      "# 一次端到端数据传输",
+      "## 四个阶段",
+      "## 两类常见数据路径",
+      "### Host 中转",
+      "### 设备侧直达",
+      "## 与 MemFabric 的关系",
+      "## 端到端排障顺序"
+    ],
+    "id": 3,
+    "target": "infra/end-to-end-transfer.md"
+  },
+  {
+    "path": "infra/npu/glossary.md",
+    "title": "核心术语",
+    "chars": 1834,
+    "images": 0,
+    "headings": [
+      "# 核心术语",
+      "## 硬件与身份",
+      "## 存储与搬运",
+      "## 互联与通信",
+      "## “面”相关词汇"
+    ],
+    "id": 4,
+    "target": "infra/glossary.md"
+  },
+  {
+    "path": "infra/npu/interconnects.md",
+    "title": "互联、协议与通信软件",
+    "chars": 2086,
+    "images": 0,
+    "headings": [
+      "# 互联、协议与通信软件",
+      "## 三个抽象层次",
+      "## 常见互联与通信技术",
+      "## RDMA 与 URMA",
+      "## HCCL、HCOMM 与 MemFabric",
+      "## 看懂一条通信路径",
+      "## 参考资料"
+    ],
+    "id": 5,
+    "target": "infra/interconnects.md"
+  },
+  {
+    "path": "infra/npu/memory-addressing.md",
+    "title": "内存、NUMA 与地址",
+    "chars": 2065,
+    "images": 0,
+    "headings": [
+      "# 内存、NUMA 与地址",
+      "## 内存层次",
+      "## NUMA 是什么",
+      "## 常见地址概念",
+      "## 映射、注册和导入",
+      "## 常见故障思路"
+    ],
+    "id": 6,
+    "target": "infra/memory-addressing.md"
+  },
+  {
+    "path": "infra/npu/mental-model.md",
+    "title": "NPU 硬件与层级",
+    "chars": 2300,
+    "images": 0,
+    "headings": [
+      "# NPU 硬件与层级",
+      "## CPU、GPU 和 NPU",
+      "## 从硅片到集群",
+      "## 五个容易混淆的层级",
+      "## Host 和 Device",
+      "## AI Core 内部的通用结构",
+      "## AI Core、AICPU 和内存",
+      "## 参考资料"
+    ],
+    "id": 7,
+    "target": "infra/hardware.md"
+  },
+  {
+    "path": "infra/npu/network-planes.md",
+    "title": "网络平面与出框口",
+    "chars": 1779,
+    "images": 0,
+    "headings": [
+      "# 网络平面与出框口",
+      "## 为什么要划分网络平面",
+      "## 控制面与数据面",
+      "## 什么是“出框口”",
+      "## 参数同步路径示例",
+      "## 快速判断瓶颈属于哪一层",
+      "## 参考资料"
+    ],
+    "id": 8,
+    "target": "infra/network-planes.md"
+  },
+  {
+    "path": "infra/npu/performance-tools.md",
+    "title": "性能分析与常用工具",
+    "chars": 2197,
+    "images": 0,
+    "headings": [
+      "# 性能分析与常用工具",
+      "## 核心性能指标",
+      "## 常见误区",
+      "## 分层测量方法",
+      "## 常用系统命令",
+      "## 一份可复用的测试记录",
+      "## 自测问题"
+    ],
+    "id": 9,
+    "target": "infra/performance-tools.md"
+  },
+  {
+    "path": "ml/ML/LLM/ALBEF 2c09c9ac32ee80d0a8f3f1cc950f7b77.md",
+    "title": "ALBEF",
+    "chars": 2503,
+    "images": 1,
+    "headings": [
+      "# ALBEF",
+      "# **🔶**",
+      "# **1. Encoders**",
+      "### **Online Encoders (trainable)**",
+      "### **Momentum Encoders (not trainable)**",
+      "# **🔶**",
+      "# **2. Training Losses**",
+      "### **(1) ITC — Image–Text Contrastive Loss**",
+      "### **(2) ITM — Image–Text Matching Loss**",
+      "### **(3) MLM — Masked Language Modeling (with images)**",
+      "# **🔶**",
+      "# **3. Training Workflow (Step-by-Step)**",
+      "### **Step 1 — Encode image and text**",
+      "### **Step 2 — Compute momentum representations**",
+      "### **Step 3 — Alignment Stage (Align Before Fuse)**",
+      "### **Step 4 — Fusion Stage**",
+      "### **Step 5 — ITM & MLM losses**",
+      "### **Step 6 — Update Encoders**"
+    ],
+    "id": 10,
+    "target": "ml/llm/models/albef.md"
+  },
+  {
+    "path": "ml/ML/LLM/ASR 2c09c9ac32ee8001adaaccb66c04ebd3.md",
+    "title": "ASR",
+    "chars": 3445,
+    "images": 0,
+    "headings": [
+      "# ASR",
+      "# **1. Automatic Speech Recognition (ASR) Metrics**",
+      "## **1.1 Word Error Rate (WER)**",
+      "## **1.2 Character Error Rate (CER)**",
+      "## **1.3 Phone Error Rate (PER) / Token Error Rate (TER)**",
+      "# **2. Spoken Language Understanding (SLU) Metrics**",
+      "### **2.1 Intent Accuracy**",
+      "### **2.2 Slot F1 Score**",
+      "### **2.3 Semantic Error Rate (SemER)**",
+      "# **3. Text-to-Speech (TTS) Metrics**",
+      "## **3.1 Mean Opinion Score (MOS)**",
+      "## **3.2 Comparative MOS (CMOS)**",
+      "## **3.3 Objective TTS Metrics**",
+      "# **4. Multimodal (Audio–Text / Audio–Image) Alignment Metrics**",
+      "## **4.1 Recall@K (R@1, R@5, R@10)**",
+      "## **4.2 Cosine Similarity**",
+      "## **4.3 mAP (mean Average Precision)**",
+      "# **5. Audio Event Detection (AED) Metrics**",
+      "### **5.1 Event-based F1**",
+      "### **5.2 Segment-based F1**",
+      "### **5.3 Error Rate (ER)**",
+      "# **Summary Table**"
+    ],
+    "id": 11,
+    "target": "ml/llm/speech/asr.md"
+  },
+  {
+    "path": "ml/ML/LLM/Adapter 1d89c9ac32ee804eb29dc57658dbcbdf.md",
+    "title": "Adapter",
+    "chars": 9,
+    "images": 0,
+    "headings": [
+      "# Adapter"
+    ],
+    "id": 12,
+    "target": "ml/llm/adaptation/adapters.md"
+  },
+  {
+    "path": "ml/ML/LLM/Advanced NLP/Intro 1d19c9ac32ee80269803eb018ed4d2a6.md",
+    "title": "Intro",
+    "chars": 158,
+    "images": 3,
+    "headings": [
+      "# Intro",
+      "# Bag of Words",
+      "### Missing"
+    ],
+    "id": 13,
+    "target": "ml/llm/courses/advanced-nlp/introduction.md"
+  },
+  {
+    "path": "ml/ML/LLM/Advanced NLP/Word Representation 1d19c9ac32ee806480c7f689b2a2791c.md",
+    "title": "Word Representation",
+    "chars": 156,
+    "images": 2,
+    "headings": [
+      "# Word Representation",
+      "# Continuous Bag of Words",
+      "# Lookup"
+    ],
+    "id": 14,
+    "target": "ml/llm/courses/advanced-nlp/word-representations.md"
+  },
+  {
+    "path": "ml/ML/LLM/Advanced NLP 1d19c9ac32ee80f3824efec98ce54143.md",
+    "title": "Advanced NLP",
+    "chars": 353,
+    "images": 0,
+    "headings": [
+      "# Advanced NLP"
+    ],
+    "id": 15,
+    "target": "ml/llm/courses/advanced-nlp/index.md"
+  },
+  {
+    "path": "ml/ML/LLM/Advanced Topics in MultiModal Machine Learning 2869c9ac32ee801fa6cbeb5168bdc4c3.md",
+    "title": "Advanced Topics in MultiModal Machine Learning",
+    "chars": 122,
+    "images": 0,
+    "headings": [
+      "# Advanced Topics in MultiModal Machine Learning"
+    ],
+    "id": 16,
+    "target": "ml/llm/courses/advanced-multimodal.md"
+  },
+  {
+    "path": "ml/ML/LLM/Attention 1db9c9ac32ee8032b914f5eba3e4b3be.md",
+    "title": "Attention",
+    "chars": 196,
+    "images": 0,
+    "headings": [
+      "# Attention"
+    ],
+    "id": 17,
+    "target": "ml/llm/components/attention.md"
+  },
+  {
+    "path": "ml/ML/LLM/Attention Mask 1da9c9ac32ee80908a80f0158006bcb9.md",
+    "title": "Attention Mask",
+    "chars": 16,
+    "images": 0,
+    "headings": [
+      "# Attention Mask"
+    ],
+    "id": 18,
+    "target": "ml/llm/components/attention-masks.md"
+  },
+  {
+    "path": "ml/ML/LLM/Attention Type 3679c9ac32ee80bfafecdf605d78e9f9.md",
+    "title": "Attention Type",
+    "chars": 2693,
+    "images": 0,
+    "headings": [
+      "# Attention Type",
+      "## Flash Attention",
+      "## PagedAttention",
+      "## RadixAttention"
+    ],
+    "id": 19,
+    "target": "ml/llm/components/attention-variants.md"
+  },
+  {
+    "path": "ml/ML/LLM/BERT (Bidirectional Encoder Representations from T 1d89c9ac32ee809baca1d88eb146685e.md",
+    "title": "BERT (Bidirectional Encoder Representations from Transformer)",
+    "chars": 928,
+    "images": 2,
+    "headings": [
+      "# BERT (Bidirectional Encoder Representations from Transformer)",
+      "# Pre-train",
+      "## Input",
+      "## Masked LM",
+      "## Next Sentence Prediction",
+      "# Fine tuning",
+      "## classification",
+      "## Q&A",
+      "## Named Entity Recognition"
+    ],
+    "id": 20,
+    "target": "ml/llm/models/bert.md"
+  },
+  {
+    "path": "ml/ML/LLM/BLIP (Bootstrapping Language-Image Pre-training) 1d89c9ac32ee80e4b6a9de3589f465d0.md",
+    "title": "BLIP (Bootstrapping Language-Image Pre-training)",
+    "chars": 6616,
+    "images": 4,
+    "headings": [
+      "# BLIP (Bootstrapping Language-Image Pre-training)",
+      "## Unimodal Encoder (ITC)",
+      "## Image-grounded text Encoder (ITM)",
+      "## Image-grounded text Decoder (LM)",
+      "# BLIP2",
+      "## Q-former",
+      "### Query-Image",
+      "### Query-Text",
+      "## Image-text contrastive learning (ITC)",
+      "## Image-grounded Text Generation (ITG)",
+      "## Image-Text Matching (ITM)"
+    ],
+    "id": 21,
+    "target": "ml/llm/models/blip.md"
+  },
+  {
+    "path": "ml/ML/LLM/Basic 1ca9c9ac32ee808985dfeeb70a564419.md",
+    "title": "Basic",
+    "chars": 1590,
+    "images": 4,
+    "headings": [
+      "# Basic",
+      "# **main open-source LLM architectures**",
+      "# **Differences among Prefix Decoder, Causal Decoder, and Encoder-Decoder**",
+      "# Training Objective",
+      "# **Why are most large models “decoder-only”**"
+    ],
+    "id": 22,
+    "target": "ml/llm/foundations.md"
+  },
+  {
+    "path": "ml/ML/LLM/Basic 2869c9ac32ee806581edc2693dace27e.md",
+    "title": "Basic",
+    "chars": 50,
+    "images": 1,
+    "headings": [
+      "# Basic"
+    ],
+    "id": 23,
+    "target": "ml/llm/multimodal/foundations.md"
+  },
+  {
+    "path": "ml/ML/LLM/CLIP (Contrastive Language-Image Pre-training) 1d89c9ac32ee805fa50ddfc6c57d2584.md",
+    "title": "CLIP (Contrastive Language-Image Pre-training)",
+    "chars": 454,
+    "images": 2,
+    "headings": [
+      "# CLIP (Contrastive Language-Image Pre-training)",
+      "## Resnet",
+      "# InfoNCE"
+    ],
+    "id": 24,
+    "target": "ml/llm/models/clip.md"
+  },
+  {
+    "path": "ml/ML/LLM/CNN 2869c9ac32ee804ea94dc6ffd3235eaf.md",
+    "title": "CNN",
+    "chars": 498,
+    "images": 5,
+    "headings": [
+      "# CNN",
+      "### Hierarchical visual representations",
+      "### Same kernel applied to all sliding windows",
+      "### RCNN",
+      "### CAM"
+    ],
+    "id": 25,
+    "target": "ml/llm/models/cnn.md"
+  },
+  {
+    "path": "ml/ML/LLM/Cross-Entropy KL Divergence 1d89c9ac32ee8097b7c9f4086f4d7ba7.md",
+    "title": "Cross-Entropy/ KL Divergence",
+    "chars": 384,
+    "images": 0,
+    "headings": [
+      "# Cross-Entropy/ KL Divergence",
+      "## Cross-Entropy",
+      "## KL-Divergence"
+    ],
+    "id": 26,
+    "target": "ml/llm/components/cross-entropy-kl.md"
+  },
+  {
+    "path": "ml/ML/LLM/DPO (Direct Preference Optimization) 1d89c9ac32ee80f2aea6f1a8459dc442.md",
+    "title": "DPO (Direct Preference Optimization)",
+    "chars": 564,
+    "images": 4,
+    "headings": [
+      "# DPO (Direct Preference Optimization)",
+      "# PPO VS DPO"
+    ],
+    "id": 27,
+    "target": "ml/llm/alignment/dpo.md"
+  },
+  {
+    "path": "ml/ML/LLM/Deepseed 1da9c9ac32ee80f88c8fc07a67211d30.md",
+    "title": "Deepseed",
+    "chars": 10,
+    "images": 0,
+    "headings": [
+      "# Deepseed"
+    ],
+    "id": 28,
+    "target": "ml/llm/tools/deepspeed.md"
+  },
+  {
+    "path": "ml/ML/LLM/DeepseekR1 1db9c9ac32ee8097b7d2e701c0f68fa3.md",
+    "title": "DeepseekR1",
+    "chars": 82,
+    "images": 0,
+    "headings": [
+      "# DeepseekR1"
+    ],
+    "id": 29,
+    "target": "ml/llm/models/deepseek-r1.md"
+  },
+  {
+    "path": "ml/ML/LLM/DeepseekV3 1d19c9ac32ee80899619e941676be5d6.md",
+    "title": "DeepseekV3",
+    "chars": 1004,
+    "images": 5,
+    "headings": [
+      "# DeepseekV3",
+      "### Multi-Head Latent Attention",
+      "### DeepseekMoE",
+      "### Muti-Token Prediction"
+    ],
+    "id": 30,
+    "target": "ml/llm/models/deepseek-v3.md"
+  },
+  {
+    "path": "ml/ML/LLM/Distillation 1d89c9ac32ee8085991dd67365f0ab4e.md",
+    "title": "Distillation",
+    "chars": 14,
+    "images": 0,
+    "headings": [
+      "# Distillation"
+    ],
+    "id": 31,
+    "target": "ml/llm/adaptation/distillation.md"
+  },
+  {
+    "path": "ml/ML/LLM/ELMO 2869c9ac32ee80abb8bcfccbc687e972.md",
+    "title": "ELMO",
+    "chars": 147,
+    "images": 0,
+    "headings": [
+      "# ELMO"
+    ],
+    "id": 32,
+    "target": "ml/llm/models/elmo.md"
+  },
+  {
+    "path": "ml/ML/LLM/FLOPs 1db9c9ac32ee80fc860ff12254fbcd81.md",
+    "title": "FLOPs",
+    "chars": 7,
+    "images": 0,
+    "headings": [
+      "# FLOPs"
+    ],
+    "id": 33,
+    "target": "ml/llm/inference/flops.md"
+  },
+  {
+    "path": "ml/ML/LLM/Flamingo 2c09c9ac32ee8088b62cef5e1e7bc376.md",
+    "title": "Flamingo",
+    "chars": 1802,
+    "images": 1,
+    "headings": [
+      "# Flamingo",
+      "### **✅**",
+      "### **Trainable Components**"
+    ],
+    "id": 34,
+    "target": "ml/llm/models/flamingo.md"
+  },
+  {
+    "path": "ml/ML/LLM/GPT (Decoder-Only) 1d89c9ac32ee80069098ea01112077d2.md",
+    "title": "GPT (Decoder-Only)",
+    "chars": 66,
+    "images": 1,
+    "headings": [
+      "# GPT (Decoder-Only)"
+    ],
+    "id": 35,
+    "target": "ml/llm/models/gpt.md"
+  },
+  {
+    "path": "ml/ML/LLM/GRPO (Group Relative Policy Optimization) 27e9c9ac32ee8034b82ae72cbddc92a2.md",
+    "title": "GRPO (Group Relative Policy Optimization)",
+    "chars": 3222,
+    "images": 4,
+    "headings": [
+      "# GRPO (Group Relative Policy Optimization)",
+      "### Objective Function",
+      "### KL Penalty",
+      "### Outcome Supervision",
+      "### Process Supervision",
+      "### GRPO for Iterative RL",
+      "### Rewarding System"
+    ],
+    "id": 36,
+    "target": "ml/llm/alignment/grpo.md"
+  },
+  {
+    "path": "ml/ML/LLM/Importance Sampling 2939c9ac32ee80c299d6f5d213953a70.md",
+    "title": "Importance Sampling",
+    "chars": 21,
+    "images": 0,
+    "headings": [
+      "# Importance Sampling"
+    ],
+    "id": 37,
+    "target": "ml/llm/alignment/importance-sampling.md"
+  },
+  {
+    "path": "ml/ML/LLM/Inference 2939c9ac32ee8019a4cfc385e1ba8b24.md",
+    "title": "Inference",
+    "chars": 2193,
+    "images": 1,
+    "headings": [
+      "# Inference",
+      "# Greedy Decoding",
+      "# Beam Search",
+      "# Top-k Sampling",
+      "# Top-P Sampling",
+      "# Temperature"
+    ],
+    "id": 38,
+    "target": "ml/llm/inference/decoding.md"
+  },
+  {
+    "path": "ml/ML/LLM/KV cache 1da9c9ac32ee8049a230d3bb05bb65d3.md",
+    "title": "KV cache",
+    "chars": 1493,
+    "images": 0,
+    "headings": [
+      "# KV cache",
+      "### **1. How does the KV cache change the time and memory complexity of autoregressive decoding?**",
+      "### **2. What happens to the KV cache when you use techniques like beam search or top-k sampling?**",
+      "### **3.If a transformer has 32 layers, 40 heads, head dim 128, and sequence length 2048 in float16, how much memory is needed for the KV cache?**",
+      "### **4. How do you manage/truncate KV cache in streaming inference?**",
+      "# During inference",
+      "# Data type"
+    ],
+    "id": 39,
+    "target": "ml/llm/inference/kv-cache.md"
+  },
+  {
+    "path": "ml/ML/LLM/Large Language Models Methods and Applications/Architecture Advancement of Transformer 1d19c9ac32ee80acaf1acd9ebb645f79.md",
+    "title": "Architecture Advancement of Transformer",
+    "chars": 1324,
+    "images": 12,
+    "headings": [
+      "# Architecture Advancement of Transformer",
+      "# FFN",
+      "### Bilinear FFNs",
+      "### Efficient Attention",
+      "# Layer Norm",
+      "# Position Encoding",
+      "## relative position information",
+      "## rotational position embedding"
+    ],
+    "id": 40,
+    "target": "ml/llm/courses/llm/architecture-advances.md"
+  },
+  {
+    "path": "ml/ML/LLM/Large Language Models Methods and Applications/Automatic evaluation 1d29c9ac32ee80f1ac3be456fdc22662.md",
+    "title": "Automatic evaluation",
+    "chars": 1134,
+    "images": 9,
+    "headings": [
+      "# Automatic evaluation",
+      "# Perplexity",
+      "# BLEU (precision)",
+      "# ROUGE (recall)",
+      "# Character n-gram precision (chrP)",
+      "# Character n-gram F-score (chrF)",
+      "# BERT-based similarity",
+      "# BERT-based precision and recall",
+      "# COMET"
+    ],
+    "id": 41,
+    "target": "ml/llm/courses/llm/evaluation.md"
+  },
+  {
+    "path": "ml/ML/LLM/Large Language Models Methods and Applications/Finetuning 1d39c9ac32ee807996fdfc9224c16047.md",
+    "title": "Finetuning",
+    "chars": 2298,
+    "images": 10,
+    "headings": [
+      "# Finetuning",
+      "# BERT",
+      "# Prompt Engineering",
+      "# Parameter Efficient Tuning",
+      "## prompt tuning",
+      "## prefix tuning",
+      "## Adapter",
+      "## BitFit: Bias-terms Fine-tuning",
+      "## DiffPruning",
+      "## Re-parameterizing the model",
+      "## LoRA",
+      "## (IA)3 : Infused Adapter by Inhibiting and Amplifying Inner Activations"
+    ],
+    "id": 42,
+    "target": "ml/llm/courses/llm/finetuning.md"
+  },
+  {
+    "path": "ml/ML/LLM/Large Language Models Methods and Applications/Intro 1d19c9ac32ee809094a4d820dce62827.md",
+    "title": "Intro",
+    "chars": 2832,
+    "images": 17,
+    "headings": [
+      "# Intro",
+      "# Unconditioned VS conditioned",
+      "# Tokenizing Text",
+      "# Turning Discrete Tokens into Continuous Vectors",
+      "# Encoder inputs and outputs",
+      "# Decoder inputs and outputs",
+      "# Loss Function: Negative Log Likelihood",
+      "# How to do the generation?",
+      "# How can we sample from (𝑃 𝑌𝑡 = 𝑖 𝐲1:𝑡−1 )?",
+      "# Decoding Strategy TradeOff",
+      "# Other Parameter",
+      "# RNN"
+    ],
+    "id": 43,
+    "target": "ml/llm/courses/llm/introduction.md"
+  },
+  {
+    "path": "ml/ML/LLM/Large Language Models Methods and Applications/LLM architectures 1d19c9ac32ee80c3b774ed103f749638.md",
+    "title": "LLM architectures",
+    "chars": 1087,
+    "images": 10,
+    "headings": [
+      "# LLM architectures",
+      "# Beam search",
+      "# Attention",
+      "# Problem of RNN",
+      "# Generic Attention Mechanism",
+      "# Encoder",
+      "# Decoder",
+      "# Different Transformer Architectures"
+    ],
+    "id": 44,
+    "target": "ml/llm/courses/llm/architectures.md"
+  },
+  {
+    "path": "ml/ML/LLM/Large Language Models Methods and Applications/Learning objectives and pre-training data 1d19c9ac32ee8057acaeeed3dbf261b2.md",
+    "title": "Learning objectives and pre-training data",
+    "chars": 1292,
+    "images": 6,
+    "headings": [
+      "# Learning objectives and pre-training data",
+      "# Possible objects",
+      "# Preprocessing clean texts",
+      "# Subword Tokenization",
+      "## BPE",
+      "## Pros",
+      "## Further Quandries",
+      "# Batching Data"
+    ],
+    "id": 45,
+    "target": "ml/llm/courses/llm/pretraining.md"
+  },
+  {
+    "path": "ml/ML/LLM/Large Language Models Methods and Applications/Retrieval Augmented Generation 1d39c9ac32ee80038fc0f7809a6e3a29.md",
+    "title": "Retrieval Augmented Generation",
+    "chars": 2350,
+    "images": 19,
+    "headings": [
+      "# Retrieval Augmented Generation",
+      "# REALM",
+      "# RETRO",
+      "# KNNLM",
+      "# TRIME",
+      "# RAG",
+      "## limitations",
+      "# Optimizing LLM for rag: training/controlling LLMs with retrieved context",
+      "# SAIL",
+      "# Self-RAG",
+      "# Optimizing Retriever for RAG: training retrievers for LLM RAG",
+      "# REPLUG",
+      "# RADIT",
+      "# introducing additional modules for reranking or filtering",
+      "# Optimizing Prompts for RAG: advanced prompt techniques",
+      "# DSPy"
+    ],
+    "id": 46,
+    "target": "ml/llm/courses/llm/rag.md"
+  },
+  {
+    "path": "ml/ML/LLM/Large Language Models Methods and Applications 1d19c9ac32ee80888c22f98fb1f7c4e1.md",
+    "title": "Large Language Models: Methods and Applications",
+    "chars": 1134,
+    "images": 0,
+    "headings": [
+      "# Large Language Models: Methods and Applications"
+    ],
+    "id": 47,
+    "target": "ml/llm/courses/llm/index.md"
+  },
+  {
+    "path": "ml/ML/LLM/Layer Normalization 1cc9c9ac32ee8082afe9f198a6232645.md",
+    "title": "Layer Normalization",
+    "chars": 440,
+    "images": 0,
+    "headings": [
+      "# Layer Normalization",
+      "# Layer Norm",
+      "# RMS Normalization"
+    ],
+    "id": 48,
+    "target": "ml/llm/components/normalization.md"
+  },
+  {
+    "path": "ml/ML/LLM/Layer&Page 36b9c9ac32ee801b9ff7d1d940e96317.md",
+    "title": "Layer&Page",
+    "chars": 2307,
+    "images": 0,
+    "headings": [
+      "# Layer&Page",
+      "# 计算Kernel",
+      "# 数据存储",
+      "# 不同Layout",
+      "## layer_first",
+      "## page_first",
+      "## page_first_direct",
+      "## page_first_kv_split"
+    ],
+    "id": 49,
+    "target": "ml/llm/inference/layers-pages.md"
+  },
+  {
+    "path": "ml/ML/LLM/Llama (Decoder-only) 1d89c9ac32ee803db605fbbe4ff6f20c.md",
+    "title": "Llama (Decoder-only)",
+    "chars": 1416,
+    "images": 3,
+    "headings": [
+      "# Llama (Decoder-only)",
+      "# Pre-Normalization",
+      "## RMSNorm",
+      "# SwiGLU (Sigmoid-Weighted Linear Unit)",
+      "### Pros",
+      "# RoPE"
+    ],
+    "id": 50,
+    "target": "ml/llm/models/llama.md"
+  },
+  {
+    "path": "ml/ML/LLM/Llama 3 1 1db9c9ac32ee80848e0eee2423ba098f.md",
+    "title": "Llama 3.1",
+    "chars": 1620,
+    "images": 4,
+    "headings": [
+      "# Llama 3.1",
+      "# Multi-model encoder pre-training",
+      "# Vision adapter training",
+      "# Speech adapter training",
+      "# Model Architecture",
+      "# Post-Training",
+      "## Reward Modeling",
+      "## DPO",
+      "## Rejection sampling",
+      "## Tool usage",
+      "# Inference",
+      "## FP8 Quantization",
+      "# Vision Experiments",
+      "## Model"
+    ],
+    "id": 51,
+    "target": "ml/llm/models/llama-3-1.md"
+  },
+  {
+    "path": "ml/ML/LLM/Llama VS GPT 1dc9c9ac32ee80f18c6de3e55d0f4c30.md",
+    "title": "Llama VS GPT",
+    "chars": 14,
+    "images": 0,
+    "headings": [
+      "# Llama VS GPT"
+    ],
+    "id": 52,
+    "target": "ml/llm/models/llama-vs-gpt.md"
+  },
+  {
+    "path": "ml/ML/LLM/Llava 2c09c9ac32ee80f9a747d4132372f136.md",
+    "title": "Llava",
+    "chars": 1867,
+    "images": 0,
+    "headings": [
+      "# Llava",
+      "### **2. Academic Presentation Version**",
+      "### **3. Technical Documentation Version**"
+    ],
+    "id": 53,
+    "target": "ml/llm/models/llava.md"
+  },
+  {
+    "path": "ml/ML/LLM/LoRA 1db9c9ac32ee801eb0aec2f888118e8f.md",
+    "title": "LoRA",
+    "chars": 77,
+    "images": 0,
+    "headings": [
+      "# LoRA"
+    ],
+    "id": 54,
+    "target": "ml/llm/adaptation/lora.md"
+  },
+  {
+    "path": "ml/ML/LLM/MCP 1db9c9ac32ee80bc9d57c1dfba6bec77.md",
+    "title": "MCP",
+    "chars": 5,
+    "images": 0,
+    "headings": [
+      "# MCP"
+    ],
+    "id": 55,
+    "target": "ml/llm/tools/mcp.md"
+  },
+  {
+    "path": "ml/ML/LLM/MOE (Mixture-of-Experts) 1db9c9ac32ee80f1835ac9a299354d65.md",
+    "title": "MOE (Mixture-of-Experts)",
+    "chars": 2730,
+    "images": 8,
+    "headings": [
+      "# MOE (Mixture-of-Experts)",
+      "# Layers",
+      "### **Sparse MoE Layer**",
+      "### **Gating Network / Router**",
+      "## Deepseek MOE",
+      "### **Fine grained expert segmentation**",
+      "### **Shared expert isolation**",
+      "### Loss-free Load balancing (only for expert selection)",
+      "# Routing algorithms",
+      "# Auxiliary Losses and Expert load Balancing",
+      "## **Importance score**",
+      "## **Load Balancing**",
+      "# Router z-loss",
+      "# Expert Capacity"
+    ],
+    "id": 56,
+    "target": "ml/llm/components/moe.md"
+  },
+  {
+    "path": "ml/ML/LLM/Multi Token prediction 27e9c9ac32ee80d7a7e9c7811286c3da.md",
+    "title": "Multi Token prediction",
+    "chars": 1292,
+    "images": 4,
+    "headings": [
+      "# Multi Token prediction",
+      "### Deepseek V3"
+    ],
+    "id": 57,
+    "target": "ml/llm/inference/multi-token-prediction.md"
+  },
+  {
+    "path": "ml/ML/LLM/MultiModal Machine Learning 2869c9ac32ee805fa873e8da78a62b91.md",
+    "title": "MultiModal Machine Learning",
+    "chars": 97,
+    "images": 0,
+    "headings": [
+      "# MultiModal Machine Learning"
+    ],
+    "id": 58,
+    "target": "ml/llm/courses/multimodal.md"
+  },
+  {
+    "path": "ml/ML/LLM/PPO (Proximal Policy Optimization) 1d89c9ac32ee802cba79d9185923405f.md",
+    "title": "PPO (Proximal Policy Optimization)",
+    "chars": 3273,
+    "images": 11,
+    "headings": [
+      "# PPO (Proximal Policy Optimization)",
+      "# PPO",
+      "### surrogate loss (actor loss)",
+      "### Advantage Function",
+      "### **Probability Ratio in PPO Clip**",
+      "### Clipping",
+      "### Penalty",
+      "### Variants",
+      "### Critic loss",
+      "### Final loss",
+      "# Policy update",
+      "### PPO in LLMs",
+      "# Process",
+      "### PPO"
+    ],
+    "id": 59,
+    "target": "ml/llm/alignment/ppo.md"
+  },
+  {
+    "path": "ml/ML/LLM/Positional Encoding 1d99c9ac32ee80c28508c3641bcf0ca1.md",
+    "title": "Positional Encoding",
+    "chars": 923,
+    "images": 11,
+    "headings": [
+      "# Positional Encoding",
+      "# Absolute positional encoding",
+      "# Transformer (PE)",
+      "# RoPE"
+    ],
+    "id": 60,
+    "target": "ml/llm/components/position.md"
+  },
+  {
+    "path": "ml/ML/LLM/Quantization 1d89c9ac32ee80d191bbf9a5bc3fe645.md",
+    "title": "Quantization",
+    "chars": 289,
+    "images": 0,
+    "headings": [
+      "# Quantization"
+    ],
+    "id": 61,
+    "target": "ml/llm/inference/quantization.md"
+  },
+  {
+    "path": "ml/ML/LLM/Qwen2 5 1db9c9ac32ee80d9aeb6e5e089898afd.md",
+    "title": "Qwen2.5",
+    "chars": 79,
+    "images": 0,
+    "headings": [
+      "# Qwen2.5"
+    ],
+    "id": 62,
+    "target": "ml/llm/models/qwen-2-5.md"
+  },
+  {
+    "path": "ml/ML/LLM/Qwen2 5 VL 1db9c9ac32ee80169f45cff17531fd5c.md",
+    "title": "Qwen2.5 VL",
+    "chars": 4623,
+    "images": 0,
+    "headings": [
+      "# Qwen2.5 VL",
+      "# **⭐**",
+      "# **Qwen2.5-VL: Technical Summary (English Version)**",
+      "# **🔶**",
+      "# **1. Overall Architecture**",
+      "# **🔶**",
+      "# **2. Key Innovation #1: M-RoPE (Multimodal Rotary Position Embedding)**",
+      "# **🔶**",
+      "# **3. Key Innovation #2: Fully Unified Transformer (No Cross-Attention)**",
+      "# **🔶**",
+      "# **3. Key Innovation #3: High-Resolution & Structured Document Understanding**",
+      "# **🔶**",
+      "# **4. Key Innovation #4: Video Understanding with Temporal Modeling**",
+      "# **🔶**",
+      "# **5. Training Strategy**",
+      "# **🔶**",
+      "# **6. Key Strengths**",
+      "# **⭐**",
+      "# **One-Sentence Summary**"
+    ],
+    "id": 63,
+    "target": "ml/llm/models/qwen-2-5-vl.md"
+  },
+  {
+    "path": "ml/ML/LLM/RAG 1d89c9ac32ee803c8404e675fdcfcfcb.md",
+    "title": "RAG",
+    "chars": 3631,
+    "images": 0,
+    "headings": [
+      "# RAG",
+      "## 1. 整体流程总览（E2E）",
+      "## 2. 数据摄取与预处理",
+      "## 3.嵌入（Embedding）",
+      "## 4. 索引（Indexing）",
+      "## 5. 查询理解与改写（Query Understanding）",
+      "## 6. 初始检索（Recall / Retrieve）",
+      "### （1）基于关键词的检索器",
+      "### （2）基于向量的检索器（Dense Retriever）",
+      "### （3）混合检索器（Hybrid Retriever）",
+      "### （4）重排序（Re-ranker）",
+      "## 7. 重排序（Reranking）",
+      "## 8. 上下文组装（Context Assembly）",
+      "## 9. 生成（Generation）",
+      "## 10.评判指标",
+      "### 1. Recall@k（召回率）",
+      "## 2. Precision@k（准确率）",
+      "## 3. MRR（Mean Reciprocal Rank）"
+    ],
+    "id": 64,
+    "target": "ml/llm/rag.md"
+  },
+  {
+    "path": "ml/ML/LLM/RLHF 1d89c9ac32ee803599aff89696794bfc.md",
+    "title": "RLHF",
+    "chars": 2940,
+    "images": 1,
+    "headings": [
+      "# RLHF",
+      "# Component",
+      "# Steps",
+      "# Actor Model",
+      "# Reward Model",
+      "## Training",
+      "# Critic Model",
+      "# Advantage",
+      "# CLIP",
+      "# Reference"
+    ],
+    "id": 65,
+    "target": "ml/llm/alignment/rlhf.md"
+  },
+  {
+    "path": "ml/ML/LLM/RNN 1d89c9ac32ee80f2a485e6f5427c6076.md",
+    "title": "RNN",
+    "chars": 596,
+    "images": 1,
+    "headings": [
+      "# RNN",
+      "## **改进模型**"
+    ],
+    "id": 66,
+    "target": "ml/llm/models/rnn.md"
+  },
+  {
+    "path": "ml/ML/LLM/Representation Fusion 2869c9ac32ee80038495c34cb0714271.md",
+    "title": "Representation Fusion",
+    "chars": 1821,
+    "images": 20,
+    "headings": [
+      "# Representation Fusion",
+      "### Early fusion and Late fusion",
+      "### Linear Regression",
+      "### Additive Fusion",
+      "### Multiplicative Fusion",
+      "### Tensor Fusion",
+      "### Low-Rank Fusion",
+      "### Tensor vs Low-Rank Fusion",
+      "### Gated Fusion",
+      "### Modality Shifting Fusion",
+      "### Non-Additive Interaction",
+      "### Heterogeneity-aware Fusion",
+      "### Improve Optimization"
+    ],
+    "id": 67,
+    "target": "ml/llm/multimodal/fusion.md"
+  },
+  {
+    "path": "ml/ML/LLM/SFT 1d89c9ac32ee80b4a80dc9cc9bc30c6a.md",
+    "title": "SFT",
+    "chars": 5,
+    "images": 0,
+    "headings": [
+      "# SFT"
+    ],
+    "id": 68,
+    "target": "ml/llm/adaptation/sft.md"
+  },
+  {
+    "path": "ml/ML/LLM/Siglip 2c09c9ac32ee8035b60dd41239af567d.md",
+    "title": "Siglip",
+    "chars": 1664,
+    "images": 0,
+    "headings": [
+      "# Siglip",
+      "## **1. What is SigLIP?**",
+      "## **2. Why SigLIP?**",
+      "## **3. Core Method**",
+      "## **4. Architecture**",
+      "## **5. Advantages**",
+      "## **6. How SigLIP is used**",
+      "## **7. Key Difference vs CLIP (1 sentence)**"
+    ],
+    "id": 69,
+    "target": "ml/llm/models/siglip.md"
+  },
+  {
+    "path": "ml/ML/LLM/T5 (Text-to-Text Transfer Transformer) BART (Bidir 1d89c9ac32ee8022b1d1c7719aac847d.md",
+    "title": "T5 (Text-to-Text Transfer Transformer)/BART (Bidirectional and Auto-Regressive Transformers)",
+    "chars": 919,
+    "images": 3,
+    "headings": [
+      "# T5 (Text-to-Text Transfer Transformer)/BART (Bidirectional and Auto-Regressive Transformers)",
+      "# T5",
+      "## prefix",
+      "# BART"
+    ],
+    "id": 70,
+    "target": "ml/llm/models/t5-bart.md"
+  },
+  {
+    "path": "ml/ML/LLM/Tree of Thought 2939c9ac32ee80d58454d554490427a6.md",
+    "title": "Tree of Thought",
+    "chars": 2786,
+    "images": 1,
+    "headings": [
+      "# Tree of Thought",
+      "### **Thought Decomposition — Breaking the problem into steps (Prompt)**",
+      "### **Thought Generation — Creating possible next ideas (temperature)**",
+      "### **State Evaluation — Judging which ideas look promising (Another LLM)**",
+      "### **Search Algorithm — Exploring and backtracking through ideas**",
+      "# ToT VS RLHF"
+    ],
+    "id": 71,
+    "target": "ml/llm/inference/tree-of-thoughts.md"
+  },
+  {
+    "path": "ml/ML/LLM/Tree-based RNNs 2869c9ac32ee80d49913f549f14b5fbd.md",
+    "title": "Tree-based RNNs",
+    "chars": 107,
+    "images": 2,
+    "headings": [
+      "# Tree-based RNNs"
+    ],
+    "id": 72,
+    "target": "ml/llm/models/tree-rnn.md"
+  },
+  {
+    "path": "ml/ML/LLM/ViT (Vision-Transformer) 1d89c9ac32ee8023a313d94b072646b9.md",
+    "title": "ViT (Vision-Transformer)",
+    "chars": 354,
+    "images": 1,
+    "headings": [
+      "# ViT (Vision-Transformer)"
+    ],
+    "id": 73,
+    "target": "ml/llm/models/vit.md"
+  },
+  {
+    "path": "ml/ML/LLM/Word2Vec Seq2Seq transformer 1ca9c9ac32ee80ba992be4b3a2280b50.md",
+    "title": "Word2Vec/Seq2Seq/transformer",
+    "chars": 3016,
+    "images": 13,
+    "headings": [
+      "# Word2Vec/Seq2Seq/transformer",
+      "# Word2Vec",
+      "## skip-gram",
+      "# Seq2Seq",
+      "### Limitation",
+      "### Add attention",
+      "# Transformer",
+      "## Encoder",
+      "### Data preprocessing",
+      "### Input Embedding",
+      "### Positional Encoding",
+      "### Attention",
+      "### Multi-head Attention",
+      "### LayerNorm + Residual Connection",
+      "### Feed-Forward Network",
+      "## Decoder",
+      "### Masked Multi-Head Self-Attention",
+      "### Encoder-Decoder Cross Attention",
+      "### Linear+Softmax→output"
+    ],
+    "id": 74,
+    "target": "ml/llm/word2vec-to-transformer.md"
+  },
+  {
+    "path": "ml/ML/LLM/cross-modal alignment 2c09c9ac32ee80d7b862c8797facf694.md",
+    "title": "cross-modal alignment",
+    "chars": 3812,
+    "images": 0,
+    "headings": [
+      "# cross-modal alignment",
+      "## **1. When Cross-Modal Alignment Is Needed**",
+      "### **(1) When modalities must represent the same semantic concept**",
+      "### **(2) When one modality supervises or constrains another**",
+      "### **(3) When modalities must be interchangeable or jointly used**",
+      "### **(4) When modalities have different abstraction levels**",
+      "## **2. How Cross-Modal Alignment Is Achieved**",
+      "# **A. Representation Alignment (Aligning Feature Spaces)**",
+      "### **1. Contrastive Learning (e.g., InfoNCE, CLIP-style)**",
+      "### **2. Projection-Layer Alignment**",
+      "### **3. Distance-Based Regularization**",
+      "# **B. Interaction Alignment (Aligning Through Model Interactions)**",
+      "### **1. Cross-Attention**",
+      "### **2. Co-Attention (Dual Attention)**",
+      "### **3. Shared/Query Tokens (e.g., Q-Former, Flamingo)**",
+      "# **C. Semantic Alignment (Aligning to Clinical or Linguistic Semantics)**",
+      "### **1. LLM-Guided Alignment**",
+      "### **2. Concept-Level Supervision**",
+      "### **3. Knowledge Distillation**"
+    ],
+    "id": 75,
+    "target": "ml/llm/multimodal/alignment.md"
+  },
+  {
+    "path": "ml/ML/LLM/langchain 1d89c9ac32ee80db98eee1e3ded7e3f6.md",
+    "title": "langchain",
+    "chars": 11,
+    "images": 0,
+    "headings": [
+      "# langchain"
+    ],
+    "id": 76,
+    "target": "ml/llm/tools/langchain.md"
+  },
+  {
+    "path": "ml/ML/LLM/prefix, prompt, p tuning 2c09c9ac32ee80fb8cf1e0b47235430b.md",
+    "title": "prefix, prompt, p tuning",
+    "chars": 1860,
+    "images": 0,
+    "headings": [
+      "# prefix, prompt, p tuning",
+      "## **🔹 Prompt Tuning**",
+      "## **🔹 Prefix Tuning**",
+      "## **🔹 P-Tuning (v1)**",
+      "## **🔹 Summary Table**"
+    ],
+    "id": 77,
+    "target": "ml/llm/adaptation/prompt-tuning.md"
+  },
+  {
+    "path": "ml/ML/LLM/whisper 2c09c9ac32ee800088c1ccc154bd2a71.md",
+    "title": "whisper",
+    "chars": 1077,
+    "images": 0,
+    "headings": [
+      "# whisper",
+      "### **How it works**",
+      "### **Special design**",
+      "### **Why Whisper is strong**",
+      "### **Main capabilities**"
+    ],
+    "id": 78,
+    "target": "ml/llm/speech/whisper.md"
+  },
+  {
+    "path": "ml/ML/LLM 1ca9c9ac32ee807c81a3d61e04e53371.md",
+    "title": "LLM",
+    "chars": 5424,
+    "images": 0,
+    "headings": [
+      "# LLM",
+      "# TODO",
+      "# Course",
+      "# Models",
+      "## Llama",
+      "## Deepseek",
+      "## Qwen",
+      "# Technique",
+      "## Component",
+      "## Fine Tuning",
+      "## Optimization",
+      "## Reinforcement Learning",
+      "## CoT",
+      "## Agent",
+      "# Tool",
+      "# Multimodal",
+      "# Evaluation"
+    ],
+    "id": 79,
+    "target": "ml/llm/index.md"
+  },
+  {
+    "path": "ml/ML/MLE/Activation functions 11f9c9ac32ee80c78ad7d6b65534ae31.md",
+    "title": "Activation functions",
+    "chars": 994,
+    "images": 5,
+    "headings": [
+      "# Activation functions",
+      "## Sigmoid",
+      "## Tanh",
+      "## RELU",
+      "## Softmax",
+      "## SWISS"
+    ],
+    "id": 80,
+    "target": "ml/mle/activation-functions.md"
+  },
+  {
+    "path": "ml/ML/MLE/Bagging VS Boosting 2889c9ac32ee80b2bb0ae0d3ce96720e.md",
+    "title": "Bagging VS Boosting",
+    "chars": 264,
+    "images": 1,
+    "headings": [
+      "# Bagging VS Boosting",
+      "# Bagging vs Boosting",
+      "## Bagging",
+      "## Boosting"
+    ],
+    "id": 81,
+    "target": "ml/mle/bagging-boosting.md"
+  },
+  {
+    "path": "ml/ML/MLE/Correlation vs Covariance 11f9c9ac32ee80a0bfc4fdafd5ca5526.md",
+    "title": "Correlation vs Covariance",
+    "chars": 451,
+    "images": 0,
+    "headings": [
+      "# Correlation vs Covariance",
+      "# Bias vs Variance"
+    ],
+    "id": 82,
+    "target": "ml/mle/covariance-correlation.md"
+  },
+  {
+    "path": "ml/ML/MLE/DBSCAN 2889c9ac32ee80d0b150fd3ef97d4fce.md",
+    "title": "DBSCAN",
+    "chars": 966,
+    "images": 0,
+    "headings": [
+      "# DBSCAN",
+      "### **How DBSCAN Works — Step by Step**"
+    ],
+    "id": 83,
+    "target": "ml/mle/dbscan.md"
+  },
+  {
+    "path": "ml/ML/MLE/Data cleaning 11d9c9ac32ee80eba925dce71bf57448.md",
+    "title": "Data cleaning",
+    "chars": 205,
+    "images": 0,
+    "headings": [
+      "# Data cleaning",
+      "# Missing or Corrupted Data",
+      "# Unbalanced Data"
+    ],
+    "id": 84,
+    "target": "ml/mle/data-cleaning.md"
+  },
+  {
+    "path": "ml/ML/MLE/Decision Tree 2889c9ac32ee805b8695eaf967360c8e.md",
+    "title": "Decision Tree",
+    "chars": 714,
+    "images": 0,
+    "headings": [
+      "# Decision Tree"
+    ],
+    "id": 85,
+    "target": "ml/mle/decision-trees.md"
+  },
+  {
+    "path": "ml/ML/MLE/Different Types 11d9c9ac32ee801c91e1c43ca882006c.md",
+    "title": "Different Types",
+    "chars": 181,
+    "images": 0,
+    "headings": [
+      "# Different Types"
+    ],
+    "id": 86,
+    "target": "ml/mle/learning-paradigms.md"
+  },
+  {
+    "path": "ml/ML/MLE/Dropout and BatchNorm 2dd9c9ac32ee80268a69f1ffec1a8a0e.md",
+    "title": "Dropout and BatchNorm",
+    "chars": 3162,
+    "images": 0,
+    "headings": [
+      "# Dropout and BatchNorm",
+      "## 1️⃣ Dropout 原理",
+      "### ✅ 核心原理",
+      "### 🧠 数学 / 直觉理解",
+      "### 🎯 解决什么问题？",
+      "### ⚠️ 使用注意点（面试加分）",
+      "### ⭐ 面试一句话版",
+      "## 2️⃣ Batch Normalization（BN）作用",
+      "### ✅ 核心做了什么？",
+      "### 🧠 解决的问题",
+      "### ① 内部协变量偏移（Internal Covariate Shift）",
+      "### ② 加速收敛",
+      "### ③ 正则化效果（副作用）",
+      "### 🎯 实际好处总结",
+      "### ⭐ 面试一句话版",
+      "## 3️⃣ BN 放在激活函数前还是后？（🔥必考）",
+      "### ✅ **标准 & 推荐做法**",
+      "### 结构：",
+      "### 🧠 为什么在激活前？",
+      "### 原因 ①：BN 目标是规范“线性输出”",
+      "### 原因 ②：避免 ReLU 饱和",
+      "### ⚠️ 那 BN 在激活后可以吗？",
+      "### ⭐ 面试一句话版（直接背）",
+      "## 4️⃣ Dropout vs BN（高阶追问）",
+      "### 🔥 实战经验",
+      "## 🎯 最终面试速答模板（30 秒）",
+      "## 3️⃣ LN vs BN（🔥面试必考表）",
+      "## 4️⃣ 为什么 Transformer 用 LN，不用 BN？（⭐高频）",
+      "### 原因 ①：batch size 小或变化大",
+      "### 原因 ②：自注意力对分布稳定性要求高",
+      "### 原因 ③：训练 & 推理一致"
+    ],
+    "id": 87,
+    "target": "ml/mle/dropout-batchnorm.md"
+  },
+  {
+    "path": "ml/ML/MLE/Eigenvector 2889c9ac32ee809bb15de4a2e989496f.md",
+    "title": "Eigenvector",
+    "chars": 490,
+    "images": 0,
+    "headings": [
+      "# Eigenvector"
+    ],
+    "id": 88,
+    "target": "ml/mle/eigenvectors.md"
+  },
+  {
+    "path": "ml/ML/MLE/GBDT 2889c9ac32ee8051aea8f31fc7c9ae64.md",
+    "title": "GBDT",
+    "chars": 951,
+    "images": 0,
+    "headings": [
+      "# GBDT",
+      "### Steps",
+      "# FQA"
+    ],
+    "id": 89,
+    "target": "ml/mle/gradient-boosting.md"
+  },
+  {
+    "path": "ml/ML/MLE/Hierarchical Clustering 2889c9ac32ee8024a261dde07bd74490.md",
+    "title": "Hierarchical Clustering",
+    "chars": 899,
+    "images": 0,
+    "headings": [
+      "# Hierarchical Clustering",
+      "### ⚙️**Two Main Types**",
+      "### **Distance (Linkage) Methods**"
+    ],
+    "id": 90,
+    "target": "ml/mle/hierarchical-clustering.md"
+  },
+  {
+    "path": "ml/ML/MLE/ISOMAP 2889c9ac32ee8008991fe9edb81bd277.md",
+    "title": "ISOMAP",
+    "chars": 1147,
+    "images": 0,
+    "headings": [
+      "# ISOMAP",
+      "## Step-by-Step Intuition"
+    ],
+    "id": 91,
+    "target": "ml/mle/isomap.md"
+  },
+  {
+    "path": "ml/ML/MLE/Improve Neural Networks 11f9c9ac32ee80cf8a08dab317893298.md",
+    "title": "Improve Neural Networks",
+    "chars": 134,
+    "images": 0,
+    "headings": [
+      "# Improve Neural Networks"
+    ],
+    "id": 92,
+    "target": "ml/mle/improving-networks.md"
+  },
+  {
+    "path": "ml/ML/MLE/K Nearest Neighbor Algorithm 11f9c9ac32ee8072a9f4f265744fb5bc.md",
+    "title": "K Nearest Neighbor Algorithm",
+    "chars": 972,
+    "images": 0,
+    "headings": [
+      "# K Nearest Neighbor Algorithm",
+      "### **What is k-NN Algorithm?**",
+      "### ⚙️ **How It Works**",
+      "### **What is the role of the k value in the k-NN algorithm?**",
+      "### **Why is the odd value of ‘k’ preferred over an even value in the k-NN algorithm?**",
+      "### **How does the k-NN algorithm make predictions on unseen datasets?**"
+    ],
+    "id": 93,
+    "target": "ml/mle/nearest-neighbors.md"
+  },
+  {
+    "path": "ml/ML/MLE/KMeans 1269c9ac32ee80d4a847d73b82897be8.md",
+    "title": "KMeans",
+    "chars": 1125,
+    "images": 0,
+    "headings": [
+      "# KMeans",
+      "## Choosing K",
+      "### 1.Elbow Method",
+      "### 2.Silhouette Score"
+    ],
+    "id": 94,
+    "target": "ml/mle/kmeans.md"
+  },
+  {
+    "path": "ml/ML/MLE/LightGBM 2889c9ac32ee80228367c2610c7d39e2.md",
+    "title": "LightGBM",
+    "chars": 936,
+    "images": 0,
+    "headings": [
+      "# LightGBM",
+      "### Feature",
+      "### Disadvantage",
+      "### GOSS",
+      "### EFB"
+    ],
+    "id": 95,
+    "target": "ml/mle/lightgbm.md"
+  },
+  {
+    "path": "ml/ML/MLE/Linear Discriminant Analysis (LDA) 2889c9ac32ee80f1b396d85ce0f6ccf6.md",
+    "title": "Linear Discriminant Analysis (LDA)",
+    "chars": 813,
+    "images": 0,
+    "headings": [
+      "# Linear Discriminant Analysis (LDA)",
+      "### Steps of LDA"
+    ],
+    "id": 96,
+    "target": "ml/mle/lda.md"
+  },
+  {
+    "path": "ml/ML/MLE/Logistic Linear 11d9c9ac32ee80d28f2ceb798a6a212d.md",
+    "title": "Logistic Linear",
+    "chars": 276,
+    "images": 0,
+    "headings": [
+      "# Logistic Linear",
+      "### Sigmoid的作用：",
+      "### 损失函数"
+    ],
+    "id": 97,
+    "target": "ml/mle/linear-logistic.md"
+  },
+  {
+    "path": "ml/ML/MLE/Loss function 1269c9ac32ee80a8a7dfc3e627841522.md",
+    "title": "Loss function",
+    "chars": 3360,
+    "images": 0,
+    "headings": [
+      "# Loss function",
+      "## 面试要点：损失函数",
+      "### 定义与作用",
+      "### 常见损失函数",
+      "### 将正则项并入损失",
+      "### 选择准则",
+      "### 面试常见问题与参考回答"
+    ],
+    "id": 98,
+    "target": "ml/mle/loss-functions.md"
+  },
+  {
+    "path": "ml/ML/MLE/Metrics 2689c9ac32ee807eb695d5fbbec54946.md",
+    "title": "Metrics",
+    "chars": 2105,
+    "images": 2,
+    "headings": [
+      "# Metrics",
+      "# Confusion Matrix",
+      "# ROC",
+      "## **特点**",
+      "## **AUC（Area Under the Curve）**",
+      "## **计算方法**",
+      "## 八、ROC / AUC 的优点（面试高频）",
+      "## 九、ROC / AUC 的局限（一定要会说）"
+    ],
+    "id": 99,
+    "target": "ml/mle/metrics.md"
+  },
+  {
+    "path": "ml/ML/MLE/Naive Bayes Classifier 11d9c9ac32ee80beb73dd7849e03c82a.md",
+    "title": "Naive Bayes Classifier",
+    "chars": 75,
+    "images": 0,
+    "headings": [
+      "# Naive Bayes Classifier"
+    ],
+    "id": 100,
+    "target": "ml/mle/naive-bayes.md"
+  },
+  {
+    "path": "ml/ML/MLE/Neural Network Challenges 1219c9ac32ee801bb205c2881dfc1fa5.md",
+    "title": "Neural Network Challenges",
+    "chars": 481,
+    "images": 0,
+    "headings": [
+      "# Neural Network Challenges",
+      "## Overfitting",
+      "## Underfitting",
+      "## Vanishing and Exploding Gradients"
+    ],
+    "id": 101,
+    "target": "ml/mle/training-challenges.md"
+  },
+  {
+    "path": "ml/ML/MLE/Optimizer 2689c9ac32ee8002aa00cc8dbfa9d267.md",
+    "title": "Optimizer",
+    "chars": 1930,
+    "images": 0,
+    "headings": [
+      "# Optimizer",
+      "# Optimizer 面试资料",
+      "## 1. SGD (Stochastic Gradient Descent)",
+      "## RMSProp（解决“不同参数尺度不同”）",
+      "### 核心思想",
+      "### 更新",
+      "### 直觉",
+      "## 2. Adam (Adaptive Moment Estimation)",
+      "## 3. AdamW (Adam with Decoupled Weight Decay)",
+      "## 总结对比"
+    ],
+    "id": 102,
+    "target": "ml/mle/optimizers.md"
+  },
+  {
+    "path": "ml/ML/MLE/Overfitting 11d9c9ac32ee801b808efc6373cb5f49.md",
+    "title": "Overfitting",
+    "chars": 1915,
+    "images": 0,
+    "headings": [
+      "# Overfitting"
+    ],
+    "id": 103,
+    "target": "ml/mle/overfitting.md"
+  },
+  {
+    "path": "ml/ML/MLE/Principal Component Analysis (PCA) 2889c9ac32ee809aa006f3735f271c06.md",
+    "title": "Principal Component Analysis (PCA)",
+    "chars": 1402,
+    "images": 0,
+    "headings": [
+      "# Principal Component Analysis (PCA)",
+      "## **How does PCA work? (Step-by-step)**",
+      "## **Why do we need to standardize before PCA?**"
+    ],
+    "id": 104,
+    "target": "ml/mle/pca.md"
+  },
+  {
+    "path": "ml/ML/MLE/Random Forest 1279c9ac32ee8072a4f3e8a15f3a3cf4.md",
+    "title": "Random Forest",
+    "chars": 569,
+    "images": 0,
+    "headings": [
+      "# Random Forest",
+      "### Each Tree",
+      "### Classification VS Regression"
+    ],
+    "id": 105,
+    "target": "ml/mle/random-forests.md"
+  },
+  {
+    "path": "ml/ML/MLE/Support Vectors Machine 11f9c9ac32ee802b9e03c10dd0a149ec.md",
+    "title": "Support Vectors Machine",
+    "chars": 1024,
+    "images": 1,
+    "headings": [
+      "# Support Vectors Machine",
+      "### 软间隔：",
+      "### 核函数",
+      "### ⭐ 1. 线性核（Linear Kernel）",
+      "### ⭐ 2. 多项式核（Polynomial Kernel）",
+      "### ⭐ 3. 高斯核 / RBF 核（最常用🔥）",
+      "### ⭐ 4. Sigmoid 核（较少用）",
+      "### 📌 面试速记表"
+    ],
+    "id": 106,
+    "target": "ml/mle/svm.md"
+  },
+  {
+    "path": "ml/ML/MLE/XGBoost 2889c9ac32ee808e8b7cdeb65093e52e.md",
+    "title": "XGBoost",
+    "chars": 500,
+    "images": 0,
+    "headings": [
+      "# XGBoost"
+    ],
+    "id": 107,
+    "target": "ml/mle/xgboost.md"
+  },
+  {
+    "path": "ml/ML/MLE/tsne 2889c9ac32ee808f8a5bd80c9764905f.md",
+    "title": "tsne",
+    "chars": 306,
+    "images": 0,
+    "headings": [
+      "# tsne"
+    ],
+    "id": 108,
+    "target": "ml/mle/tsne.md"
+  },
+  {
+    "path": "ml/ML/MLE 11d9c9ac32ee80f6835cc84346d863b6.md",
+    "title": "MLE",
+    "chars": 2483,
+    "images": 0,
+    "headings": [
+      "# MLE",
+      "# Basic",
+      "# Components",
+      "# Models",
+      "## Clustering",
+      "## Tree",
+      "## Dimension reduction",
+      "### Linear",
+      "### Nonlinear"
+    ],
+    "id": 109,
+    "target": "ml/mle/index.md"
+  },
+  {
+    "path": "ml/ML/Pandas 2889c9ac32ee809f8cead4b65c841f91.md",
+    "title": "Pandas",
+    "chars": 3072,
+    "images": 0,
+    "headings": [
+      "# Pandas",
+      "### Q1: What is Pandas?",
+      "### Q2: How do you create a DataFrame?",
+      "### Q3: How to read and write data?",
+      "### Q4: How to check basic info?",
+      "### Q5: How to select data?",
+      "### Q6: How to sort and rank?",
+      "### Q7: How to handle missing data?",
+      "### Q8: How to rename columns?",
+      "### Q9: How to change data types?",
+      "### Q10: How to handle duplicates?",
+      "### Q11: How to use `groupby()`?",
+      "### Q14: What is the difference between merge, join, and concat?",
+      "### Q16: How to detect outliers?",
+      "### Q17: How to use `query()` and `eval()`?",
+      "### Q19: How to handle datetime data?",
+      "### Q20: How to use multi-index?"
+    ],
+    "id": 110,
+    "target": "ml/pandas.md"
+  },
+  {
+    "path": "ml/ML/SQL 2889c9ac32ee80d1b24ece270a74d962.md",
+    "title": "SQL",
+    "chars": 5765,
+    "images": 0,
+    "headings": [
+      "# SQL",
+      "### 🧩 **1. Core SQL Concepts**",
+      "### 📊 **2. Key Interview Topics**",
+      "# FQA",
+      "### Q2: What are the main types of SQL commands?",
+      "### Q3: What is the difference between `WHERE` and `HAVING`?",
+      "### Q4: What is the difference between `INNER JOIN` and `OUTER JOIN`?",
+      "### Q5: What are aggregate functions?",
+      "### Q6: What is the difference between `UNION` and `UNION ALL`?",
+      "### Q7: What is a subquery?",
+      "### Q8: What is a CTE (Common Table Expression)?",
+      "### Q9: What are indexes?",
+      "### Q10: What are primary and foreign keys?",
+      "### Q11: How do you find duplicate records?",
+      "### Q12: How do you find the nth highest salary?",
+      "### Q13: How do you select top N records?",
+      "### Q14: How do you find employees not in a department?",
+      "### Q15: How to find customers who made more than 3 purchases last month?",
+      "### Q16: What are window functions?",
+      "### Q17: Difference between `GROUP BY` and `OVER()`?",
+      "### Q18: What are constraints?",
+      "### Q19: What is normalization?",
+      "### Q20: What is denormalization?",
+      "### Q24: Difference between `DELETE`, `TRUNCATE`, and `DROP`?",
+      "### Q29: What is a self-join?"
+    ],
+    "id": 111,
+    "target": "ml/sql.md"
+  },
+  {
+    "path": "ml/index.md",
+    "title": "ML",
+    "chars": 222,
+    "images": 0,
+    "headings": [
+      "# ML"
+    ],
+    "id": 112,
+    "target": "ml/index.md"
+  }
+]

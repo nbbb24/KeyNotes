@@ -1,9 +1,13 @@
+!!! info "中文版正在逐篇更新"
+
+    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+
 # ML
 
-[LLM](ML/LLM%201ca9c9ac32ee807c81a3d61e04e53371.md)
+[LLM](llm/index.md)
 
-[MLE](ML/MLE%2011d9c9ac32ee80f6835cc84346d863b6.md)
+[MLE](mle/index.md)
 
-[SQL](ML/SQL%202889c9ac32ee80d1b24ece270a74d962.md)
+[SQL](sql.md)
 
-[Pandas](ML/Pandas%202889c9ac32ee809f8cead4b65c841f91.md)
+[Pandas](pandas.md)

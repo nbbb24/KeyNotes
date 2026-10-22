@@ -1,0 +1,25 @@
+!!! info "中文版正在逐篇更新"
+
+    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+
+# ISOMAP
+
+## Step-by-Step Intuition
+
+1. **Build a neighborhood graph**
+    - For each data point xi find its k nearest neighbors (or points within a certain radius ε).
+    - Connect xi and its neighbors with edges weighted by their Euclidean distance.
+    - This creates a **graph** that approximates the local structure of the manifold.
+2. **Compute geodesic distances**
+    - The “real” distance between far-away points isn’t their direct Euclidean distance (since the manifold may curve).
+    - Instead, compute the **shortest path distance** between points along the graph — e.g., using **Dijkstra’s** or **Floyd–Warshall** algorithm.
+    - This approximates the *geodesic distance* between any two points on the manifold.
+3. **Apply MDS (Multidimensional Scaling)**
+    - Now that you have all-pairs geodesic distances, apply **classical MDS** to find a low-dimensional embedding that preserves those distances as much as possible.
+    - MDS essentially tries to minimize:
+
+        $$
+        \sum_{i,j} (D_{ij} - d(y_i, y_j))^2
+        $$
+
+        where $d(y_i, y_j)$ is the distance between embedded points in low-dim space.

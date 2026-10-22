@@ -1,65 +1,51 @@
-<h1 align="center">KeyNotes</h1>
+# KeyNotes
 
-<p align="center">Infra 与 ML 知识笔记</p>
+Machine learning and infrastructure, explained through mechanisms, worked examples, and diagrams.
 
-<p align="center">
-| <a href="docs/zh/index.md">中文文档</a> |
-</p>
+- **[English](docs/en/index.md)** is the default website language.
+- **[简体中文](docs/zh/index.md)** is available through the top-right language icon, which keeps the current topic.
+- **Infra** and **ML** are sibling sections. ML includes LLMs, multimodal learning, MLE foundations, SQL, and Pandas.
 
-文档顶层分为 `Infra` 和 `ML`。已有 NPU 知识点归入 `Infra`；`ML` 按 Notion 原始层级导入。
+The English editorial edition covers 113 pages. The Chinese edition currently retains the migrated notes and is being rewritten to match the English edition; unfinished pages display an explicit notice.
 
-## 本地预览
+## Preview and verify
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements/mkdocs.txt
-mkdocs serve
+mkdocs serve --dev-addr 127.0.0.1:8000
 ```
 
-Windows PowerShell 使用 `.venv\Scripts\Activate.ps1` 激活虚拟环境。服务启动后打开
-`http://127.0.0.1:8000`。
-
-## 构建
+Open <http://127.0.0.1:8000/>. Chinese pages are under `/zh/`. On Windows, activate with `.venv\Scripts\Activate.ps1`.
 
 ```bash
 mkdocs build --strict
 python scripts/verify_migration.py
+python -m pip install pandas
+python scripts/verify_examples.py
 ```
 
-生成的网站位于 `site/`，该目录已加入 Git 忽略列表。
+`site/` is generated output and is not committed. Formula rendering uses MathJax; new explanatory diagrams use Mermaid. Original figures are shared by both languages without recompression or redrawing.
 
-## 部署到 Read the Docs
+## Read the Docs
 
-1. 使用能够访问本仓库的 GitHub 账号登录 Read the Docs。
-2. 选择 **Add project**，导入 `nbbb24/KeyNotes`。
-3. 保持默认分支为 `main`，Read the Docs 会自动读取 `.readthedocs.yaml`。
-4. 触发第一次构建并打开生成的网站地址。
-5. 首次构建成功后，可以在 **Admin → Domains** 中绑定自定义域名。
+Import `nbbb24/KeyNotes` into Read the Docs and select `main`. The repository includes `.readthedocs.yaml` and its MkDocs dependencies. Both languages are built as one site, with English at the root and Chinese under `zh/`; a separate RTD translation project is unnecessary. A successful local build does not by itself provision an RTD project. Once the project and webhook are connected, pushes can trigger builds.
 
-不需要提交生成的 HTML。后续推送到 `main` 分支即可触发文档构建。
+## Editing
 
-## 编写约定
+Keep corresponding pages at identical relative paths in `docs/en/` and `docs/zh/`. Add both to the topic map and update navigation in `mkdocs.yml`. Explain motivation, mechanism, assumptions, a concrete example, and failure modes as appropriate. Link primary references for research or implementation-specific claims. Avoid treating a model family name as a fixed specification or a benchmark score as a universal ranking.
 
-- 中文页面统一放在 `docs/zh/` 下。
-- 新增页面后，需要同步更新 `mkdocs.yml` 中的 `nav`。
-- 缩写首次出现时给出全称，例如 `H2D (Host to Device)`。
-- 非通用结论需要注明硬件型号或架构代际。
-- 优先用拓扑、数据路径和可观测现象解释概念。
+Store shared images in `docs/assets/`. Original screenshots can contain outdated labels or mistakes; retain their bytes and explain the correction in adjacent prose. Preserve meaningful equations, examples, and figure explanations in both languages.
 
-## Notion ML 迁移
+## Migration provenance
 
-ML 内容来自 Notion 页面 `2689c9ac32ee8033a03ecae02ca75d65` 的官方 **Markdown & CSV** 导出，
-包含子页面和所有内容，并保留子页面目录。导出包含 104 个 Markdown 页面、215 张 PNG 图片；按用户要求排除 ECGBYTE 后，站点保留 103 个页面和 215 张图片。
+The original Notion ML export contained 104 Markdown pages and 215 PNG images. ECGBYTE was excluded at the owner's request, leaving 103 ML pages. Together with nine Infra pages and the homepage, this gives 113 topics per language.
 
-- 除按用户要求删除 ECGBYTE 页面及 ML 根页面中的对应链接外，导出的 Markdown 和图片以原始字节保存于 `docs/zh/ml/`，未润色或改写正文，也未压缩或重绘图片。
-- 根页面以 `ml/index.md` 保存；其余导出文件名和相对目录保持原样。
-- 侧边栏按原始页面顺序、父子关系和原有章节标题组织；`Infra` 和 `ML` 为同级入口。
-- `migration/notion-ml-manifest.json` 记录导出来源、文件映射、大小和 SHA-256；
-  `migration/infra-manifest.json` 记录原仓库内容的移动映射和 SHA-256。
-- `scripts/notion_links.py` 仅在构建时编码链接中的括号，修复 Notion 截断文件名导致的图片/页面链接解析问题；
-  不会修改源文件。
-- 公式使用 MathJax 显示；任务列表使用 Markdown 扩展显示。网页字体与排版由 MkDocs 主题提供。
+The initial verbatim migration is preserved in Git commit `614e5ae`. The later editorial rewrite was explicitly requested by the owner. These records distinguish original material from edited explanations:
 
-核验命令会检查迁移清单中的文件和图片哈希（ML 根页面单独记录移除 ECGBYTE 前后的哈希）、构建产物中的原图、每张图片的显示引用以及站内链接。
-修改迁移内容前，请保留原始清单，避免把内容改动误认为无损迁移。
+- `migration/notion-ml-manifest.json` and `migration/infra-manifest.json`: immutable records of the initial migration, not hashes of the rewritten prose.
+- `migration/topic-map.json`: original topic paths mapped to readable current paths.
+- `migration/image-manifest.json`: original-to-current image paths and SHA-256 checksums for all 215 PNG and two Infra SVG files.
+
+The verification script checks both language trees, original image bytes, rendered image references, local links, and same-topic language-switch destinations. The original export's filenames are preserved in provenance records; the live pages use readable URLs.

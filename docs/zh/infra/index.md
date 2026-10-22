@@ -1,3 +1,7 @@
+!!! info "中文版正在逐篇更新"
+
+    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+
 # 昇腾 NPU 基础知识学习手册
 
 面向 Ascend A2 / A3 / A5，重点结合 MemFabric、MemCache、HCCL、HCOMM、RDMA、URMA 和大模型推理场景。
@@ -45,11 +49,11 @@
 
 <div class="diagram-pair">
   <figure class="diagram-card">
-    <img src="assets/diagrams/single-die.svg" alt="单 Die 封装示意">
+    <img src="../../assets/diagrams/single-die.svg" alt="单 Die 封装示意">
     <figcaption>单 Die 示意</figcaption>
   </figure>
   <figure class="diagram-card">
-    <img src="assets/diagrams/multi-die.svg" alt="多 Die 封装示意">
+    <img src="../../assets/diagrams/multi-die.svg" alt="多 Die 封装示意">
     <figcaption>多 Die 示意</figcaption>
   </figure>
 </div>
