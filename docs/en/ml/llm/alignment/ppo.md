@@ -36,27 +36,29 @@ with correct termination/bootstrap handling. The critic is trained toward a retu
 
 Sample responses from the rollout policy, score them, compute values/advantages, then update policy and critic. A fixed-reference KL penalty can regularize behavior toward an SFT model. This is separate from the current/old-policy ratio and from a measured KL used for early stopping or update control.
 
-![Original PPO (Proximal Policy Optimization) figure 1](../../../../assets/notion/059-00.png)
+![PPO: improve a policy while moderating update size, original figure 1](../../../../assets/notion/059-00.png)
 
-![Original PPO (Proximal Policy Optimization) figure 2](../../../../assets/notion/059-01.png)
+![PPO: improve a policy while moderating update size, original figure 2](../../../../assets/notion/059-01.png)
 
-![Original PPO (Proximal Policy Optimization) figure 3](../../../../assets/notion/059-02.png)
+![PPO: improve a policy while moderating update size, original figure 3](../../../../assets/notion/059-02.png)
 
-![Original PPO (Proximal Policy Optimization) figure 4](../../../../assets/notion/059-03.png)
+![PPO: improve a policy while moderating update size, original figure 4](../../../../assets/notion/059-03.png)
 
-![Original PPO (Proximal Policy Optimization) figure 5](../../../../assets/notion/059-04.png)
+![PPO: improve a policy while moderating update size, original figure 5](../../../../assets/notion/059-04.png)
 
-![Original PPO (Proximal Policy Optimization) figure 6](../../../../assets/notion/059-05.png)
+![PPO: improve a policy while moderating update size, original figure 6](../../../../assets/notion/059-05.png)
 
-![Original PPO (Proximal Policy Optimization) figure 7](../../../../assets/notion/059-06.png)
+![PPO: improve a policy while moderating update size, original figure 7](../../../../assets/notion/059-06.png)
 
-![Original PPO (Proximal Policy Optimization) figure 8](../../../../assets/notion/059-07.png)
+![PPO: improve a policy while moderating update size, original figure 8](../../../../assets/notion/059-07.png)
 
-![Original PPO (Proximal Policy Optimization) figure 9](../../../../assets/notion/059-08.png)
+![PPO: improve a policy while moderating update size, original figure 9](../../../../assets/notion/059-08.png)
 
-![Original PPO (Proximal Policy Optimization) figure 10](../../../../assets/notion/059-09.png)
+![PPO: improve a policy while moderating update size, original figure 10](../../../../assets/notion/059-09.png)
 
-![Original PPO (Proximal Policy Optimization) figure 11](../../../../assets/notion/059-10.png)
+![PPO: improve a policy while moderating update size, original figure 11](../../../../assets/notion/059-10.png)
+
+**Figure guide.** Figures 1–2 introduce the new-to-old policy ratio and an advantage estimate. Figures 3–6 expand the clipped surrogate; the clipping interval changes the objective for sampled actions, not every probability in the policy. Figures 7–9 show KL-penalty variants and adaptive penalty strength; distinguish the rollout policy from the fixed reference policy in language-model alignment. Figure 10 compares unclipped, clipped, and KL-penalized objectives. Figure 11 summarizes the sampled policy-update loop. Several slides repeat notation with different subscripts, so track each denominator before transferring a formula.
 
 *Read the original equations by tracking which policy appears in each denominator. The reference model controls drift from a baseline; the old policy identifies how the sampled actions were collected.*
 

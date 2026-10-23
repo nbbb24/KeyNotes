@@ -44,9 +44,13 @@ $$
 
 Equivalently, sort scores in ascending order and assign average ranks to ties. If $R_+$ is the positive-rank sum, then $\mathrm{AUC}=[R_+-n_+(n_++1)/2]/(n_+n_-)$. Integrating the empirical ROC curve with trapezoids gives the same tie-aware result. For positive scores 0.9 and 0.5 and negative scores 0.5 and 0.1, three pairs win and one ties, so AUC is $3.5/4=0.875$. AUC is undefined when an evaluation set contains only one class.
 
-![Original Metrics figure 1](../../../assets/notion/099-00.png)
+![Metrics: connect a score to a decision, original figure 1](../../../assets/notion/099-00.png)
 
-![Original Metrics figure 2](../../../assets/notion/099-01.png)
+The confusion-matrix diagram defines TP, FP, FN, and TN for one chosen positive class. Precision and recall have different denominators; under imbalance, accuracy alone can hide poor positive-class detection.
+
+![Metrics: connect a score to a decision, original figure 2](../../../assets/notion/099-01.png)
+
+The shaded ROC area is the AUC for the illustrated curve, labeled 0.84 in that image. It is separate from the numerical 0.875 worked example below; neither number is a fixed property of a model across datasets.
 
 ## Regression and multiclass evaluation
 

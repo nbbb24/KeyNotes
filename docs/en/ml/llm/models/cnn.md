@@ -14,15 +14,25 @@ A $3\times3$ filter with stride 1 and padding 1 preserves a $32\times32$ spatial
 
 Pooling or strided convolutions reduce resolution and expand effective context. Translation equivariance is approximate in practical pipelines because boundaries, strides, resizing, and padding matter; it should not be confused with complete translation invariance.
 
-![Original CNN figure 1](../../../../assets/notion/025-00.png)
+![CNNs: learning local patterns with shared filters, original figure 1](../../../../assets/notion/025-00.png)
 
-![Original CNN figure 2](../../../../assets/notion/025-01.png)
+The hierarchy picture illustrates a useful tendency: early filters detect local edges or textures, and later features combine broader patterns. Exact units are learned and need not correspond to neat human labels.
 
-![Original CNN figure 3](../../../../assets/notion/025-02.png)
+![CNNs: learning local patterns with shared filters, original figure 2](../../../../assets/notion/025-01.png)
 
-![Original CNN figure 4](../../../../assets/notion/025-03.png)
+The sliding-kernel drawing reuses the same weights at different positions. That sharing, together with local connectivity, uses fewer parameters than an unconstrained dense layer at comparable spatial coverage.
 
-![Original CNN figure 5](../../../../assets/notion/025-04.png)
+![CNNs: learning local patterns with shared filters, original figure 3](../../../../assets/notion/025-02.png)
+
+The Toeplitz-like matrix is an algebraic view of one-dimensional convolution. Repeated colored entries are the shared kernel weights; implementations normally avoid materializing this large matrix.
+
+![CNNs: learning local patterns with shared filters, original figure 4](../../../../assets/notion/025-03.png)
+
+The detection slide distinguishes R-CNN, which applies a CNN to many warped proposals, from Fast R-CNN, which shares image features before pooling regions. Faster R-CNN additionally learns proposals with a region-proposal network.
+
+![CNNs: learning local patterns with shared filters, original figure 5](../../../../assets/notion/025-04.png)
+
+The class activation map combines spatial feature maps using class-specific weights. Bright regions indicate contributions to that class score; they are not a guaranteed causal explanation of the prediction.
 
 ## Detection: distinguish R-CNN generations
 

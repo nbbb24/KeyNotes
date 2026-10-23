@@ -1,41 +1,42 @@
-!!! info "中文版正在逐篇更新"
+# KV 缓存：生成时复用历史键值
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+在因果 Transformer 中，早期的 token 状态在追加未来 token 时不会改变。因此，它们的注意力键和值可以被缓存。下一步计算新 token 的投影并关注存储的历史。
 
-# KV cache
+## 预填充与解码
 
-### **1. How does the KV cache change the time and memory complexity of autoregressive decoding?**
+预填充处理提示并创建其缓存。解码则重复添加新的 token。对于密集注意力，一个新 token 的注意力工作随着上下文长度增长：在历史长度为 n 的每一层大约是 O(n)，忽略固定维度。它 **不是每个 token 都是常数**。在没有固定窗口的情况下，N 步生成的累积注意力工作是 N 的平方。缓存避免了重复计算整个前缀的投影、FFNs 和注意力。
 
-Without caching, autoregressive decoding requires recomputing attention for all n previous tokens at each step, which is O(n^2).
+## 计算字节
 
-With KV caching, each new token only computes attention over already-stored keys/values, making the complexity **linear in sequence length**, O(n), and **constant per token**.
-
-Memory grows linearly with the number of layers and sequence length.
-
-### **2. What happens to the KV cache when you use techniques like beam search or top-k sampling?**
-
-In **beam search**, each beam must maintain its own KV cache since each beam may follow a different generation path.
-
-In **top-k/top-p sampling**, the cache simply grows per token — the only complexity is ensuring that the correct sampled path updates the cache.
-
-### **3.If a transformer has 32 layers, 40 heads, head dim 128, and sequence length 2048 in float16, how much memory is needed for the KV cache?**
+对于标准的 K/V 存储：
 
 $$
-32 \times 40 \times 2048 \times 128 \times 2 \text{ (K+V)} \times 2 \text{ (bytes)} = 1,310,720,000\ \text{bytes} \approx 1.25\ \text{GB}
+M=2BLnH_{KV}d_hs,
 $$
 
-### **4. How do you manage/truncate KV cache in streaming inference?**
+其中 B 是批量大小，L 层，n 缓存的 token 数，$H_{KV}$ 键/值头数，$d_h$ 头宽度，s 每个元素的字节数。使用 KV 头而不是查询头进行分组查询注意力。
 
-Implement a **moving window**: once the cache exceeds a limit (say 2048 tokens), drop the oldest keys/values (e.g., first 512) to make space. This trades off some context for constant memory usage.
+对于 B=1, L=32, n=2048, $H_{KV}=40$, $d_h=128$, 和 FP16：
 
-# During inference
+$$
+M=1{,}342{,}177{,}280\text{ 字节}=1.25\text{ GiB}\approx1.342\text{ GB}.
+$$
 
-Prefill
+```python
+# runnable-example
+memory = 2 * 1 * 32 * 2048 * 40 * 128 * 2
+assert memory == 1_342_177_280
+assert memory / 2**30 == 1.25
+```
 
-Decoding
+FP16 和 BF16 都占用每个元素两个字节，尽管它们的数值范围不同。分配四舍五入、块表、量化缓存的尺度以及运行时缓冲区会增加开销。MLA 使用不同的压缩表示，并需要不同的计算。
 
-# Data type
+## 共享、驱逐和正确性
 
-float 16
+束搜索分支需要逻辑上不同的历史记录，但常见的前缀块可能在分歧之前被共享。分页分配有助于管理不断增长的请求。跨请求的前缀缓存要求兼容的模型状态、token ID、掩码和位置。
 
-Bfloat 16
+滑动窗口限制存储空间，除非它是模型预期注意力设计的一部分，否则不会改变可访问的上下文。任意丢弃旧的缓存条目可能会破坏质量或位置假设。在任何驱逐策略更改后测试长距离任务。
+
+**练习。** 将 40 个 KV 头替换为相同其他维度下的 8 个会减少这个标准缓存多少倍？五倍。查询头的数量本身并不决定缓存大小。
+
+参考文献：[多查询注意力](https://arxiv.org/abs/1911.02150)，[PagedAttention](https://arxiv.org/abs/2309.06180)。继续阅读 [缓存布局](layers-pages.md)。

@@ -1,103 +1,39 @@
-!!! info "中文版正在逐篇更新"
+# ALBEF：先对齐，再融合图像与文本
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+双编码器在全局检索方面效率很高，但可能会错过细粒度的交互。融合编码器可以比较单词和图像区域，但它在每个候选上运行时成本高昂。ALBEF结合了全局对齐与跨模态交互，并使用动量生成的目标从噪声的图像-文本数据中学习。
 
-# ALBEF
+## 读取架构
 
-https://arxiv.org/abs/2107.07651
+![ALBEF：先对齐，再融合图像与文本：原图 1](../../../../assets/notion/010-00.png)
 
-![image.png](../../../../assets/notion/010-00.png)
+图像和文本编码器首先产生单模态特征。多模态编码器添加了交叉注意力，让文本状态能够阅读视觉特征。动量分支提供缓慢变化的目标；虚线硬负样本路径将基于相似性的采样连接到匹配目标。
 
-# **🔶**
+## 三个互补目标
 
-# **1. Encoders**
+| 目标 | 它比较或预测的内容 | 它为什么有帮助 |
+| --- | --- | --- |
+| ITC：图像-文本对比 | 全局图像/文本嵌入 | 建立一个有用的共享检索空间 |
+| ITM：图像-文本匹配 | 一个融合的对表示 | 区分细微的匹配错误 |
+| MLM：掩码语言建模 | 在文本和图像条件下隐藏的单词 | 在视觉证据中进行标记预测 |
 
-### **Online Encoders (trainable)**
+对于一张红色自行车的图片，“一辆蓝色的自行车”是一个有用的硬负样本：它共享了对象类别，但在一个重要的属性上有所不同。随机不相关的负样本可能太容易教出这种区别。硬负样本选择仍然必须考虑到噪声或不完整的标题。
 
-- **Vision encoder**: ViT
-- **Text encoder**: BERT
-- **Multimodal fusion encoder**: Cross-attention Transformer
+## 动量更新
 
-These are updated by backpropagation from all losses.
+在线参数通过梯度进行优化。动量副本使用以下公式更新：
 
-### **Momentum Encoders (not trainable)**
+$$
+\theta_m \leftarrow \alpha \theta_m + (1 - \alpha) \theta.
+$$
 
-- A momentum copy of the vision/text encoders
-- Updated by EMA:
+“无梯度更新”并不意味着“从不改变”。移动平均值平滑了教师轨迹。它的软伪目标可以代表单个噪声配对标题之外的可能替代品。完整的目标结合了对比、匹配和掩码标记损失；它们的贡献应该评估而不是假设冗余。
 
-    \theta_m \leftarrow \alpha \theta_m + (1-\alpha)\theta
+## 训练和检索工作流程
 
-    They provide **stable image/text representations** for contrastive learning.
+编码一对，计算对比相似性和动量目标，采样困难的不匹配项，运行多模态交互，计算损失，更新在线权重，然后更新动量权重。“对齐在先，再融合”描述了架构和目标结构；它并不意味着将整个系统分成两个完全分离的时间阶段进行训练。
 
+在检索时，独立嵌入可以筛选候选项，而融合模型可以重新排名它们。这将广泛搜索与昂贵的细粒度比较分开。
 
----
+**练习。** 为什么不对每张图片在一个包含一百万张图片的数据集中运行多模态编码器？查询依赖的对计算成本高昂。预计算的全局嵌入提供了一个高效的初步阶段。
 
-# **🔶**
-
-# **2. Training Losses**
-
-ALBEF is trained using **three objectives**:
-
-### **(1) ITC — Image–Text Contrastive Loss**
-
-- Uses online encoders as queries
-- Uses momentum encoders as keys/targets
-- Aligns image and text embeddings in a joint space
-- Prevents collapse and improves global alignment
-
-### **(2) ITM — Image–Text Matching Loss**
-
-- Uses the multimodal fusion encoder with cross-attention
-- A binary classifier predicts whether an image–text pair matches
-- Provides fine-grained cross-modal supervision
-
-### **(3) MLM — Masked Language Modeling (with images)**
-
-- Some text tokens are masked
-- The multimodal encoder predicts the missing words conditioned on the image
-- Strengthens grounding of language in visual content
-
-The final loss is a weighted sum:
-
-\mathcal{L} = \lambda_{ITC}\mathcal{L}_{ITC} + \lambda_{ITM}\mathcal{L}_{ITM} + \lambda_{MLM}\mathcal{L}_{MLM}
-
----
-
-# **🔶**
-
-# **3. Training Workflow (Step-by-Step)**
-
-### **Step 1 — Encode image and text**
-
-- Image → online vision encoder → patch embeddings
-- Text → online BERT encoder → token embeddings
-
-### **Step 2 — Compute momentum representations**
-
-- Same image/text passed through momentum encoders
-- These become stable targets for alignment (ITC)
-
-### **Step 3 — Alignment Stage (Align Before Fuse)**
-
-Use **ITC** to force:
-
-- online image embeddings → close to momentum text embeddings
-- online text embeddings → close to momentum image embeddings
-
-This builds a shared semantic embedding space **before fusion**.
-
-### **Step 4 — Fusion Stage**
-
-Text tokens attend to image patches in the multimodal fusion encoder (cross-attention):
-
-h = \text{MMEncoder}(t, v)
-
-### **Step 5 — ITM & MLM losses**
-
-- The multimodal [CLS] token is used for ITM (match / mismatch)
-- The hidden states predict masked tokens for MLM
-
-### **Step 6 — Update Encoders**
-
-- Online encoders updated via backprop
-- Momentum encoders updated via EMA (no gradient)
+参考：[ALBEF](https://arxiv.org/abs/2107.07651)。继续阅读 [BLIP 和 BLIP-2](blip.md)。

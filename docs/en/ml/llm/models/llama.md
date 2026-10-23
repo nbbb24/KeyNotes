@@ -19,11 +19,17 @@ $$
 
 One projection supplies gated nonlinear features; another supplies values to modulate. The down projection restores the hidden width. This differs from ordinary GLU, which uses a sigmoid gate without the extra multiplication by the gate preactivation. The product is a learned feature interaction, not attention over sequence positions.
 
-![Original Llama (Decoder-only) figure 1](../../../../assets/notion/050-00.png)
+![LLaMA: a compact set of Transformer design choices, original figure 1](../../../../assets/notion/050-00.png)
 
-![Original Llama (Decoder-only) figure 2](../../../../assets/notion/050-01.png)
+The first panel illustrates two projected branches of a small SwiGLU example. The displayed two-by-two arrangement is a presentation of branch values, not the shape of the original weight matrix.
 
-![Original Llama (Decoder-only) figure 3](../../../../assets/notion/050-02.png)
+![LLaMA: a compact set of Transformer design choices, original figure 2](../../../../assets/notion/050-01.png)
+
+The second panel applies SiLU/Swish to the gate branch elementwise. It uses the $\beta=1$ form; a general Swish parameter changes the sigmoid argument.
+
+![LLaMA: a compact set of Transformer design choices, original figure 3](../../../../assets/notion/050-02.png)
+
+The third panel multiplies the value and activated gate elementwise. A full transformer feed-forward block then applies an output projection; Llama-family implementations commonly use bias-free projections, unlike the illustrative $Wx+b$.
 
 *Use the original activation diagrams to distinguish sigmoid gating, Swish/SiLU, and the two projected branches of SwiGLU. The final down projection is also part of the FFN.*
 

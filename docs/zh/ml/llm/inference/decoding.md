@@ -1,50 +1,31 @@
-!!! info "中文版正在逐篇更新"
+# 解码：从 Token 概率生成回答
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+语言模型输出 logits（未归一化分数）。解码选择从这些得分中发出什么以及何时停止。同一个模型在不同的解码设置下可以产生不同的输出，因此评估必须记录它们。
 
-# Inference
+## 贪心和束搜索
 
-# Greedy Decoding
+贪心解码选择最高概率的下一个标记。它局部最优，但局部最佳选择的乘积不一定是最高的完整序列的概率。确定性还取决于数值内核、平局和执行环境。
 
-Greedy decoding always selects **the token with the highest probability** at that step and appends it to the sequence.
+束搜索保留几个候选前缀并扩展它们。宽度为四的束搜索保持四个序列，而不仅仅是每个位置的四个独立顶级标记。序列得分通常是对数概率之和；长度惩罚和停止规则会影响结果。束搜索需要更多的内存/计算，并不保证更准确或自然的开放性文本。
 
-The process repeats until the model generates an end-of-sequence token or reaches the maximum length limit.
+![解码：从 Token 概率生成回答：原图 1](../../../../assets/notion/038-00.png)
 
-This method is **fast, deterministic, and easy to implement**, since it doesn’t involve random sampling or exploring multiple possible sequences.
+树图每一步保留并扩展若干候选前缀。束搜索通常按累计对数概率排名，并可能做长度修正；圈出的分支是保留的候选，不是独立采样的最终答案。
 
-However, it can easily get **stuck in local optima** — often produces **repetitive or less diverse outputs** compared to more advanced strategies like beam search or nucleus sampling.
+*分支图表示候选序列。修剪前缀会丢弃其所有未来的延续。*
 
-# Beam Search
+## 温度、top-k 和 top-p
 
-top-k most likely sequences at each step instead of only one.
+温度把 logits 转换为概率：$p_i=\operatorname{softmax}(z_i/T)$，其中 $T>0$。较低的温度集中概率；较高的温度则分散它们。温度控制采样熵，而不是可测量保证的真实性或创造力。
 
-![image.png](../../../../assets/notion/038-00.png)
+Top-k 保留 k 个最高概率的标记并重新归一化。Top-p 或核采样保留累积质量达到 p 的最小最高概率集合。对于概率 `[0.6,0.25,0.1,0.05]` 和 $p=0.8$，前两个标记保持不变并重新归一化为大约 `[0.706,0.294]`。较平坦的分布通常在相同的 p 下保留更多的标记。
 
-# Top-k Sampling
+温度缩放和截断的顺序很重要。库可能结合多个处理器、重复惩罚和约束；报告完整的策略。
 
-the model first keeps only the **top k tokens with the highest probabilities** and **renormalizes** their probabilities so they sum to 1.
+## 实际选择
 
-Then, it **randomly samples** one token from this reduced set according to the adjusted probabilities.
+使用任务准确性和错误分析来选择设置。结构化输出可能需要语法/模式约束解码和后续语义验证。一个有效的 JSON 对象仍然可以包含错误的事实。对于生成实验，当采样方差具有实质性时，比较多个种子。
 
-This makes the output **more diverse** and often **more natural**, since it avoids deterministic repetition like greedy decoding—but it also introduces randomness, so the same prompt can yield different results each time.
+**练习。** top-k 与 $k=1$ 是否仍能产生多样化的采样？不：只保留一个候选者，因此它在实现/平局细节上行为类似于贪心选择。
 
-# Top-P Sampling
-
-Instead of keeping a fixed number of top-k tokens, it dynamically chooses the **smallest set of tokens whose cumulative probability ≥ p** (for example, p = 0.9).
-
-Then it renormalizes those tokens’ probabilities and randomly samples one from this set.
-
-This way, the model adapts the number of candidate tokens to the uncertainty of the prediction — using more options when the distribution is flat and fewer when it’s confident — producing fluent, diverse, and context-aware text.
-
-# Temperature
-
-**Temperature** controls how “creative” or random a model’s output is.
-
-When **temperature < 1**, the probability distribution becomes sharper — the model favors high-probability tokens, producing more focused and deterministic text.
-
-When **temperature > 1**, the distribution flattens — low-probability tokens get more chance, making the output more diverse and unpredictable.
-
-In short:
-
-> Lower temperature → more stable and precise; higher temperature → more random and creative.
->
+参考：[神经文本退化之谜](https://arxiv.org/abs/1904.09751)。继续阅读 [KV 缓存](kv-cache.md)。

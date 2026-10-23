@@ -1,168 +1,47 @@
-!!! info "中文版正在逐篇更新"
+# BLIP 与 BLIP-2：理解和生成图文内容
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+BLIP 和 BLIP-2 是相关但不同的设计。BLIP 结合了视觉理解和文本生成，同时改进了噪声标题。BLIP-2 通过可训练的查询变换器（Q-Former）连接预训练的冻结视觉和语言模型。
 
-# BLIP (Bootstrapping Language-Image Pre-training)
+## BLIP：三种操作模式
 
-[https://arxiv.org/pdf/2201.12086](https://arxiv.org/pdf/2201.12086)
+![BLIP 与 BLIP-2：理解和生成图文内容：原图 1](../../../../assets/notion/021-00.png)
 
-![image.png](../../../../assets/notion/021-00.png)
+*BLIP 的对比编码器、图像导向匹配编码器和因果文本解码器共享一个共同的多模态设计，但使用不同的信息流。*
 
-## Unimodal Encoder (ITC)
+ITC 独立地对图像/文本表示进行编码对齐。ITM 使用交叉注意力来判断一对是否匹配，包括硬负样本。语言建模模式在图像特征上生成文本。CapFilt 数据处理程序生成合成标题并过滤噪声标题，使数据质量成为方法的一部分，而不是仅依赖于架构。
 
-ITC loss aligns global image and text embeddings in a shared semantic space by maximizing similarity for matched pairs and minimizing it for mismatched ones, often using momentum encoders for soft labels to improve alignment precision.
+## BLIP-2 第一阶段：学习视觉表示接口
 
-Contrast learning similar to CLIP
+![BLIP 与 BLIP-2：理解和生成图文内容：原图 2](../../../../assets/notion/021-01.png)
 
-## Image-grounded text Encoder (ITM)
+*两阶段桥梁保持大型图像编码器和语言模型冻结，同时学习接口。*
 
-As a binary classification loss, ITM loss trains the model to make fine-grained judgments of image-text semantic matching via cross-attention, with hard negative sampling strengthening its ability to distinguish subtle semantic discrepancies between pairs.
+一组固定的查询向量（论文设计中为32个）跨注意力到图像特征。它们的输出形成一个紧凑的视觉表示。查询是参数，不是用户提供的单词，每张图像会产生不同的输出查询状态。
 
-use cross attention to identify whether the image-text match
+第一阶段使用图像-文本对比学习、图像-文本匹配和基于图像的文本生成来训练 Q-Former。这些目标使用不同的注意力掩码：
 
-cross attention+linear head
+- ITC 在相似性计算之前将查询和文本流分开。
+- ITM 允许双向查询/文本交互。
+- 基于图像的生成允许文本读取查询和前文，同时防止未来文本泄漏。
 
-## Image-grounded text Decoder (LM)
+![BLIP 与 BLIP-2：理解和生成图文内容：原图 3](../../../../assets/notion/021-02.png)
 
-LM loss (usually autoregressive cross-entropy) optimizes the decoder to generate coherent, image-relevant text by maximizing the likelihood of correct next tokens, which endows the model with cross-modal generative capabilities for tasks like image captioning.
+*遮罩图显示为什么改变目标需要改变允许的查询/文本交互。*
 
-cross-entropy to maximize the likelihood of text in autoregressive manner
+## BLIP-2 第二阶段：连接到冻结的语言模型
 
-Cross attention with image-features
+一个学习的线性投影将查询输出映射到 LLM 的输入宽度。这些视觉前缀嵌入条件一个冻结的仅解码器或编码器-解码器语言模型，并且生成目标训练桥梁。这与第一阶段的三个表示学习目标是分开的；将它们合并成一个不分化的训练阶段会模糊方法。
 
----
+![BLIP 与 BLIP-2：理解和生成图文内容：原图 4](../../../../assets/notion/021-03.png)
 
-# BLIP2
+*上路径条件一个仅解码器LM；下路径连接到一个编码器-解码器LM。两者都使用投影后的视觉查询输出。*
 
-[https://arxiv.org/pdf/2301.12597](https://arxiv.org/pdf/2301.12597)
+## 为什么压缩视觉特征？
 
-![image.png](../../../../assets/notion/021-01.png)
+如果视觉编码器发出数百个补丁状态，固定查询集可以减少接口序列长度。这节省了下游工作，但引入了一个瓶颈：小文本或几个小物体可能需要更多的视觉细节。仅压缩不是知识蒸馏；蒸馏需要一个教师推导的学习目标。
 
-![image.png](../../../../assets/notion/021-02.png)
+视频扩展需要时间信息、帧选择、视觉标记预算和时间任务的训练。仅仅添加帧位置不能保证时间理解。
 
-1. **Frozen Vision Encoder**
+**练习。** 梯度能否通过冻结的LLM训练桥梁？可以。冻结权重防止它们更新；通过LLM进行微分仍然可以将梯度传递给其输入嵌入和桥梁。
 
-    The image is first encoded by a *frozen* ViT, producing visual patch embeddings.
-
-    These embeddings are **not updated during training**.
-
-
----
-
-1. **Learnable Query Tokens**
-
-    A fixed number of learnable query tokens (e.g., 32) are initialized.
-
-    These tokens act as “semantic probes” that will extract high-level information from the image.
-
-
----
-
-1. **Q-Former Transformer**
-
-    The Q-Former consists of Transformer layers with:
-
-    - **Self-attention** among the query tokens (to let them coordinate and specialize).
-    - **Cross-attention** where query tokens attend to the frozen visual features
-
-        (queries = Q, visual patches = K/V), enabling semantic extraction.
-
-
-    The output is a compact set of visual embeddings aligned to language semantics.
-
-
----
-
-1. **Linear Projection to LLM Space**
-
-    The Q-Former outputs are passed through a **trainable linear projection**
-
-    to map them into the embedding space of the frozen LLM.
-
-
----
-
-1. **Training with Three Losses**
-
-    Only the Q-Former (including query tokens + Transformer layers + linear projector) is trained.
-
-    Both the Vision Encoder and the LLM remain frozen.
-
-    The Q-Former is optimized using three objectives:
-
-    - **ITC (Image–Text Contrastive Loss):**
-
-        Aligns visual query embeddings with text embeddings.
-
-    - **ITM (Image–Text Matching Loss):**
-
-        Determines whether an image–text pair is matched.
-
-    - **LM (Language Modeling Loss):**
-
-        The projected query embeddings are used as prefix tokens for the frozen LLM,
-
-        and standard LM loss trains the Q-Former to produce better visual prefix representations.
-
-
-## Q-former
-
-1)image transformer decoder interacts with frozen image encoder for visual feature extraction
-
-2)text transformer both a encoder and decoder
-
-### Query-Image
-
-left transformer interacts with image encoder
-
-Use query embeddings and cross attention to extract features
-
-### Query-Text
-
-right transformer is both encoder and decoder
-
-self-attention between left and right transformer
-
-## Image-text contrastive learning (ITC)
-
-contrastive learning
-
-## Image-grounded Text Generation (ITG)
-
-## Image-Text Matching (ITM)
-
-![image.png](../../../../assets/notion/021-03.png)
-
-**1. What is the purpose of the Q-former in BLIP-2? Why not use image features directly?**
-
-Q-former keeps the image encoder frozen, use learnable queries to extract image features instead of passing all image tokens, just like distillation.
-
-**2. How do learned query tokens in the Q-former differ from standard input tokens in transformers?**
-
-Q-former queries are learned parameters that do not correspond to any specific image or text input. These queries adapt through training and become highly specialized for downstream tasks such as captioning or question answering
-
-**3. What’s the difference between self-attention and cross-attention in the Q-former architecture?**
-
-Self-attention in the Q-former operates over the set of learned query tokens (and optionally over text tokens, depending on the attention mask), allowing them to communicate and refine one another.
-
-Cross-attention, on the other hand, allows these queries to attend to the output of the image encoder. The cross-attention mechanism injects visual information into the queries, while self-attention ensures that these queries are contextually aware and collaborative.
-
-**4. What are the roles of different attention masks used in Q-former during ITC, ITM, and LM tasks?**
-
-In the Image-Text Contrastive (ITC) task, the attention mask prevents interaction between query and text tokens, ensuring that they are processed separately before computing similarity via InfoNCE loss.
-
-In Image-Text Matching (ITM), a bidirectional attention mask is used to allow full multimodal fusion between query tokens and text tokens.
-
-In language modeling (LM), a causal attention mask is applied to text tokens (so they only see previous tokens), while queries can still be attended to by the text decoder, enabling image-conditioned generation.
-
-**5. Compare how Q-former operates in BLIP-2 vs. how CLIP processes image-text pairs. What are the key differences?**
-
-In CLIP, image and text encoders are separate and independent, and their embeddings are aligned through contrastive learning. There is no interaction between modalities during encoding.
-
-In contrast, the Q-former in BLIP-2 allows for direct interaction between image and text tokens, particularly during ITM and generation stages, via cross-attention and multimodal self-attention.
-
-Moreover, CLIP uses full image patch sequences for embedding, while BLIP-2 compresses these into a small number of query embeddings, making it more efficient and generative-capable.
-
-**6. How could you extend the Q-former to handle video frames instead of a single image?**
-
-add positional embedding for each frame.
+参考文献：[BLIP](https://arxiv.org/abs/2201.12086)，[BLIP-2](https://arxiv.org/abs/2301.12597)。比较 [Flamingo](flamingo.md) 和 [LLaVA](llava.md)。

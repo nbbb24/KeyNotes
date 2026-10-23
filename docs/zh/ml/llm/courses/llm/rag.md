@@ -1,97 +1,94 @@
-!!! info "中文版正在逐篇更新"
+# 检索增强语言模型：研究路线与实践
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+检索可以在语言系统中输入、隐藏状态、输出分布或训练目标级别进入。本章按这种设计选择组织原始研究幻灯片。如果你对检索还不熟悉，可以先从[实用的RAG管道](../../rag.md)开始。
 
-# Retrieval Augmented Generation
+## 常见模式和REALM
 
-![image.png](../../../../../assets/notion/046-00.png)
+![检索增强语言模型：研究路线与实践：原图 1](../../../../../assets/notion/046-00.png)
 
-# REALM
+*查询选择外部证据，这会影响预测。不同方法中这种影响的位置有所不同。*
 
-![image.png](../../../../../assets/notion/046-01.png)
+[REALM](https://arxiv.org/abs/2002.08909)通过掩码语言模型信号学习一个潜在的文档检索器。当检索到的段落有助于重建缺失信息时，模型会受益；检索是预训练的一部分，而不是仅在推理时作为提示添加。
 
-KNN research
+![检索增强语言模型：研究路线与实践：原图 2](../../../../../assets/notion/046-01.png)
 
-# RETRO
+*最近邻图显示了在嵌入空间中的候选选择。检索质量仅相对于预测任务和语料库有意义。*
 
-Incorporating context in intermediate layers
+## RETRO：网络内部的检索上下文
 
-![image.png](../../../../../assets/notion/046-02.png)
+[RETRO](https://arxiv.org/abs/2112.04426)为文本块检索邻居，编码它们，并使用分块交叉注意力来条件化解码器。因果对齐很重要：基于完成的块进行检索时，不应将未来的目标信息暴露给更早的位置。
 
-![image.png](../../../../../assets/notion/046-03.png)
+![检索增强语言模型：研究路线与实践：原图 3](../../../../../assets/notion/046-02.png)
+![检索增强语言模型：研究路线与实践：原图 4](../../../../../assets/notion/046-03.png)
+![检索增强语言模型：研究路线与实践：原图 5](../../../../../assets/notion/046-04.png)
 
-![image.png](../../../../../assets/notion/046-04.png)
+*第一组分别分离了检索嵌入、编码邻居标记和解码器块。一个检索编码器和一个邻居编码器扮演不同的角色。*
 
-Given the input sequence, it first retrieves a set of relevant documents (embedding of text)
+![检索增强语言模型：研究路线与实践：原图 6](../../../../../assets/notion/046-05.png)
+![检索增强语言模型：研究路线与实践：原图 7](../../../../../assets/notion/046-06.png)
+![检索增强语言模型：研究路线与实践：原图 8](../../../../../assets/notion/046-07.png)
 
-![image.png](../../../../../assets/notion/046-05.png)
+*这些图扩展了分块交叉注意力。重组的输出保持了解码序列的形状，尽管每个块读取了额外的邻居标记。*
 
-Use cross-attention to generate retrieved context-aware representations
+![检索增强语言模型：研究路线与实践：原图 9](../../../../../assets/notion/046-08.png)
 
-![image.png](../../../../../assets/notion/046-06.png)
+*门控架构幻灯片说明了一个增强检索的变体。其训练/推理门控策略是模型特定的选择，而不是所有RETRO风格系统的通用规则。*
 
-Concatnate all of the CA output (the size of input H and output CCA(H,E) remains the same
+## kNN-LM和TRIME：预测时间和训练中的记忆
 
-![image.png](../../../../../assets/notion/046-07.png)
+[kNN-LM](https://arxiv.org/abs/1911.00172)将上下文表示与其下一个标记目标一起存储。邻居投票为非参数标记分布，该分布与模型分布进行插值：
 
-![image.png](../../../../../assets/notion/046-08.png)
+$$
+p(y\mid x)=(1-\lambda)p_{LM}(y\mid x)+\lambda p_{kNN}(y\mid x).
+$$
 
-# KNNLM
+![检索增强语言模型：研究路线与实践：原图 10](../../../../../assets/notion/046-09.png)
+![检索增强语言模型：研究路线与实践：原图 11](../../../../../assets/notion/046-10.png)
 
-![image.png](../../../../../assets/notion/046-09.png)
+*邻居距离成为权重，相同目标标记的权重被组合，并且结果分布与LM预测混合。*
 
-![image.png](../../../../../assets/notion/046-10.png)
+[TRIME](https://arxiv.org/abs/2205.12674)通过在批处理内存中引入记忆增强来训练模型。这解决了无记忆学习和带记忆部署之间的不匹配。
 
-# TRIME
+![检索增强语言模型：研究路线与实践：原图 12](../../../../../assets/notion/046-11.png)
 
-![image.png](../../../../../assets/notion/046-11.png)
+*目标标记可以从其嵌入和上下文记忆获得支持。正负记忆构建是目标的一部分。*
 
-# RAG
+## 让生成器使用证据
 
-## limitations
+[SAIL](https://arxiv.org/abs/2305.15225)通过搜索结果增强指令数据，并训练模型在干扰材料中使用相关证据。
 
-● In-context retrieval-augmented LMs generate what is not fully supported by their citations
-● They can easily get distracted by unhelpful context
-● Diverse tasks require diffent retrieval needs e.g., content, frequency
+![检索增强语言模型：研究路线与实践：原图 13](../../../../../assets/notion/046-12.png)
 
----
+*示例区分了有信息和无信息的结果。其生成的评估说明了方法，而不是独立权威的事实核查。*
 
-# Optimizing LLM for rag: training/controlling LLMs with retrieved context
+[Self-RAG](https://arxiv.org/abs/2310.11511)通过特殊标记训练检索和反思行为。它可以决定何时检索以及如何评估相关性、支持性和有用性。学习到的自我评估仍需要独立验证。
 
-# SAIL
+![检索增强语言模型：研究路线与实践：原图 14](../../../../../assets/notion/046-13.png)
+![检索增强语言模型：研究路线与实践：原图 15](../../../../../assets/notion/046-14.png)
 
-SAIL augments existing instruction-tuning data to teach the LM how to use retrieved context
+*反思评分指导候选选择。“支持”标记是模型判断，而不是证明引文包含主张的证据。*
 
-![image.png](../../../../../assets/notion/046-12.png)
+## 改善检索器和证据接口
 
-# Self-RAG
+[REPLUG](https://arxiv.org/abs/2301.12652)可以使用来自黑盒语言模型的反馈来适应检索器，同时保持生成器不变。[RA-DIT](https://arxiv.org/abs/2310.01352)同时调整检索和生成以提高它们的兼容性。
 
-Self-RAG teaches LMs to adaptively retrieve and evaluates context & own generation
+![检索增强语言模型：研究路线与实践：原图 16](../../../../../assets/notion/046-15.png)
+![检索增强语言模型：研究路线与实践：原图 17](../../../../../assets/notion/046-16.png)
 
-![image.png](../../../../../assets/notion/046-13.png)
+*分布匹配路径使用生成器的有用信号来训练检索。这与仅在通用语义相似性上进行训练不同。*
 
-![image.png](../../../../../assets/notion/046-14.png)
+![检索增强语言模型：研究路线与实践：原图 18](../../../../../assets/notion/046-17.png)
 
----
+*[RECOMP 论文](https://arxiv.org/abs/2310.04408)研究生成前的压缩与选择性增强。压缩可节省上下文 token，但必须保留关键证据，包括例外条件和数字。*
 
-# Optimizing Retriever for RAG: training retrievers for LLM RAG
+[DSPy](https://arxiv.org/abs/2310.03714)将语言模型管道视为可以针对指标优化提示/示范的程序。优化需要训练/开发示例和未修改的测试集；它不消除定义成功的必要性。
 
-# REPLUG
+![检索增强语言模型：研究路线与实践：原图 19](../../../../../assets/notion/046-18.png)
 
-![image.png](../../../../../assets/notion/046-15.png)
+*程序、示例和指标共同决定了要优化的内容。一个有缺陷的指标可能会奖励一个有缺陷的管道。*
 
-# RADIT
+## 实验室：在选择方法之前定位失败
 
-![image.png](../../../../../assets/notion/046-16.png)
+构建一个小文档问答集，其中包含已知支持段落。比较无检索、检索到的证据和先验证据。如果先验证据失败，请改进生成器/接口。如果先验成功但检索失败，请改进语料库、查询或检索器。如果添加干扰导致失败，请测试过滤或证据感知训练。记录引文支持、正确性、延迟和标记成本。
 
-# introducing additional modules for reranking or filtering
-
-![image.png](../../../../../assets/notion/046-17.png)
-
----
-
-# Optimizing Prompts for RAG: advanced prompt techniques
-
-# DSPy
-
-![image.png](../../../../../assets/notion/046-18.png)
+**练习。** 重新排序器能否修复缺失的源文档？不能。在优化顺序之前，扩展或修复证据收集。

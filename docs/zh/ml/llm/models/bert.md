@@ -1,45 +1,37 @@
-!!! info "中文版正在逐篇更新"
+# BERT：从双向上下文学习
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+BERT是一个训练模型，用于通过左、右上下文构建上下文表示。它在理解分类、实体识别和提取式问答等任务中非常有用。原始2018年的食谱在这里描述；后来的BERT家族模型对其进行了部分修改。
 
-# BERT (Bidirectional Encoder Representations from Transformer)
+## 输入和预训练
 
-e pre-trained BERT model can be finetuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial taskspecific architecture modifications.
+每个输入位置结合了标记、位置和段嵌入。`[CLS]`是一个序列级别的标记，而`[SEP]`用于分隔段落。一个段落嵌入区分句子对的不同部分；它不是一个语法标签。
 
-# Pre-train
+掩码语言建模选择15%的标记位置。在原始食谱中，80%选定的位置变为`[MASK]`，10%变为随机标记，10%保持不变。损失函数应用于选定的位置。看到两边是有效的，因为目标标记被隐藏或以其他方式包含在这个破坏任务中，而不是作为普通因果下一个标记的标签。
 
-## Input
+下一句预测分类两个段落是否连续或随机配对，在原始构造中比例相等。它是一个预训练选择，不是每个双向编码器不可或缺的属性。
 
-[cls] at the start
+![BERT：从双向上下文学习：原图 1](../../../../assets/notion/020-00.png)
 
-[sep] segment
+输入图把 token、句段和位置向量相加。句段向量区分两段输入，本身不提供词序。
 
-![image.png](../../../../assets/notion/020-00.png)
+![BERT：从双向上下文学习：原图 2](../../../../assets/notion/020-01.png)
 
-token + segment + position embedding
+预训练图把掩码词预测接到选定位置，把下一句预测接到序列汇总表征。NSP 属于原始 BERT 方案，并不是后来所有编码器的必要条件。
 
-## Masked LM
+## 调整表示
 
-masked/ replaced by other words/ keep
+| 任务 | 输出 | 示例 |
+| --- | --- | --- |
+| 分类 | `[CLS]`状态上的分类器 | 正面/负面评论 |
+| 实体识别 | 标记级别分类器 | 人和组织跨度 |
+| 提取式问答 | 开始/结束位置得分 | 在段落中定位答案 |
 
-## Next Sentence Prediction
+对于“银行批准了一笔贷款”与“他们在银行旁边坐”的情况，“bank”在上下文中的状态会发生变化。一个静态的Word2Vec查找会在这两个句子中以相同的向量开始。
 
-![image.png](../../../../assets/notion/020-01.png)
+## 实际限制
 
-Turn into classification
+子词标记化使单词级别的标签变得复杂：决定是否对第一个子词、所有子词或进行聚合。提取式问答不能在没有额外机制的情况下，从提供的段落中生成不存在的答案。双向注意力也使得普通的BERT编码器不适合作为插入的因果生成器。
 
-50% of the time they are consecutive sentences
+**练习。** `[CLS]`是否会自动产生一个好的语义相似性嵌入？不一定。池化和适当的句子级别训练目标通常很重要。
 
-50% of the time they are randomly paired
-
-# Fine tuning
-
-## classification
-
-[cls]→ MLP→output
-
-## Q&A
-
-predict probability of start and end of the input
-
-## Named Entity Recognition
+参考：[BERT论文](https://arxiv.org/abs/1810.04805)。比较 [ELMo](elmo.md) 和 [GPT](gpt.md)。

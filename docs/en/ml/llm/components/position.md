@@ -47,27 +47,29 @@ assert abs(dot(rotate(q, 0.7), rotate(k, 1.2)) - dot(q, rotate(k, 0.5))) < 1e-12
 
 ## Read the original diagrams
 
-![Original Positional Encoding figure 1](../../../../assets/notion/060-00.png)
+![Position information: sinusoidal encodings and RoPE, original figure 1](../../../../assets/notion/060-00.png)
 
-![Original Positional Encoding figure 2](../../../../assets/notion/060-01.png)
+![Position information: sinusoidal encodings and RoPE, original figure 2](../../../../assets/notion/060-01.png)
 
-![Original Positional Encoding figure 3](../../../../assets/notion/060-02.png)
+![Position information: sinusoidal encodings and RoPE, original figure 3](../../../../assets/notion/060-02.png)
 
-![Original Positional Encoding figure 4](../../../../assets/notion/060-03.png)
+![Position information: sinusoidal encodings and RoPE, original figure 4](../../../../assets/notion/060-03.png)
 
-![Original Positional Encoding figure 5](../../../../assets/notion/060-04.png)
+![Position information: sinusoidal encodings and RoPE, original figure 5](../../../../assets/notion/060-04.png)
 
-![Original Positional Encoding figure 6](../../../../assets/notion/060-05.png)
+![Position information: sinusoidal encodings and RoPE, original figure 6](../../../../assets/notion/060-05.png)
 
-![Original Positional Encoding figure 7](../../../../assets/notion/060-06.png)
+![Position information: sinusoidal encodings and RoPE, original figure 7](../../../../assets/notion/060-06.png)
 
-![Original Positional Encoding figure 8](../../../../assets/notion/060-07.png)
+![Position information: sinusoidal encodings and RoPE, original figure 8](../../../../assets/notion/060-07.png)
 
-![Original Positional Encoding figure 9](../../../../assets/notion/060-08.png)
+![Position information: sinusoidal encodings and RoPE, original figure 9](../../../../assets/notion/060-08.png)
 
-![Original Positional Encoding figure 10](../../../../assets/notion/060-09.png)
+![Position information: sinusoidal encodings and RoPE, original figure 10](../../../../assets/notion/060-09.png)
 
-![Original Positional Encoding figure 11](../../../../assets/notion/060-10.png)
+![Position information: sinusoidal encodings and RoPE, original figure 11](../../../../assets/notion/060-10.png)
+
+**Figure guide.** Figures 1–4 build sinusoidal absolute position vectors from frequencies; their waves vary with coordinate pair and position. Figures 5–11 restate rotary embedding as complex multiplication and as a real two-dimensional rotation. In both forms, each pair rotates by a position-dependent angle, and the resulting query–key dot product depends on relative displacement. The frequency index and sequence-position index are different quantities; treating them as interchangeable obscures the derivation.
 
 Follow the progression from adding sinusoidal vectors to rotating 2-D coordinate pairs, then to the relative-position dot-product identity. Keep the position index separate from the frequency-pair index when reading the equations.
 

@@ -12,11 +12,17 @@ $$
 
 The word counts themselves are not learned classifier weights. TF–IDF reweights counts using corpus statistics; those statistics should be fitted on training data. A sparse baseline is fast, interpretable, and often competitive on keyword-driven tasks.
 
-![Original Intro figure 1](../../../../../assets/notion/013-00.png)
+![NLP introduction: from text to measurable predictions, original figure 1](../../../../../assets/notion/013-00.png)
 
-![Original Intro figure 2](../../../../../assets/notion/013-01.png)
+The first diagram separates representation $h=f(x)$, task scores, and the final decision. Changing the representation can improve a classifier without changing its decision rule.
 
-![Original Intro figure 3](../../../../../assets/notion/013-02.png)
+![NLP introduction: from text to measurable predictions, original figure 2](../../../../../assets/notion/013-01.png)
+
+The bag-of-words diagram counts word identities before applying learned weights. Its summed features do not retain the order of “not” and “love.”
+
+![NLP introduction: from text to measurable predictions, original figure 3](../../../../../assets/notion/013-02.png)
+
+The limitations slide lists morphology, synonyms, combinations, and sentence structure. Adding n-grams can recover some local combinations, but increases sparsity and does not solve arbitrary long-range structure.
 
 ## What the representation misses
 

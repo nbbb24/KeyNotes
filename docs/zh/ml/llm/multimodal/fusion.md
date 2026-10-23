@@ -1,82 +1,103 @@
-!!! info "中文版正在逐篇更新"
+# 信息融合：学习模态之间的交互
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+融合通过结合不同模态的信息来进行预测。一个有用的设计必须表达任务所需的交互，同时不增加数据无法支持的复杂性。始终要与强大的单模态模型进行比较。
 
-# Representation Fusion
+## 早期和晚期融合
 
-Learn a joint representation that models cross-modal interactions between individual elements of different modalities
+![信息融合：学习模态之间的交互：原图 1](../../../../assets/notion/067-00.png)
 
-![image.png](../../../../assets/notion/067-00.png)
+*融合可以结合已经编码的向量或异构的原始输入。编码选择决定了哪些信息仍然可用。*
 
-### Early fusion and Late fusion
+![信息融合：学习模态之间的交互：原图 2](../../../../assets/notion/067-01.png)
 
-![image.png](../../../../assets/notion/067-01.png)
+*早期融合在预测之前结合特征；晚期融合结合模态特定的预测。这些描述了交互发生的位置，而不是方法的普遍排名。*
 
-### Linear Regression
+连接后跟一个线性层是加性的：$W[x_A;x_B]=W_Ax_A+W_Bx_B$。连接后的非线性网络可以表达交互。因此，“早期融合”并不等同于“乘法”，单个线性层不会自动提供丰富的跨模态推理。
 
-![image.png](../../../../assets/notion/067-02.png)
+## 通过交互工作
 
-![image.png](../../../../assets/notion/067-03.png)
+考虑一个从微笑频率$a$和专业评论家状态的二元指示符$b$预测的评分：
 
-![image.png](../../../../assets/notion/067-04.png)
+$$
+\hat y=w_0+w_1a+w_2b+w_3ab.
+$$
 
-![image.png](../../../../assets/notion/067-05.png)
+当$b=0$时，微笑的影响是$w_1$；当$b=1$时，影响变为$w_1+w_3$。乘积项允许一个输入改变另一个输入的重要性。除非实验设计支持因果解释，否则它只是一个关联。
 
-### Additive Fusion
+![信息融合：学习模态之间的交互：原图 3](../../../../assets/notion/067-02.png)
+![信息融合：学习模态之间的交互：原图 4](../../../../assets/notion/067-03.png)
+![信息融合：学习模态之间的交互：原图 5](../../../../assets/notion/067-04.png)
+![信息融合：学习模态之间的交互：原图 6](../../../../assets/notion/067-05.png)
 
-1-layer neural network can be seen as additive (late fusion)
+*这四张幻灯片添加了截距、个体效应和交互。一种常见的频率主义者95%置信程序在假设下，在重复样本中覆盖固定参数的95%；计算出的区间并不是该参数的字面意义上的95%后验概率。*
 
-![image.png](../../../../assets/notion/067-06.png)
+## 加性、双线性和张量融合
 
-### Multiplicative Fusion
+![信息融合：学习模态之间的交互：原图 7](../../../../assets/notion/067-06.png)
+![信息融合：学习模态之间的交互：原图 8](../../../../assets/notion/067-07.png)
 
-simple and bilinear
+*加性融合对独立贡献求和。双线性融合包括来自不同模态坐标的乘积。*
 
-![image.png](../../../../assets/notion/067-07.png)
+对于向量特征，$x_A^\top Wx_B$捕获了成对的乘积。张量融合形成外积。在每个模态后附加一个常数1可以保留低阶项：
 
-### Tensor Fusion
+$$
+[x_A;1]\otimes[x_B;1]\otimes[x_C;1].
+$$
 
-have unimodal, bimodal, trimodal
+这包含单模态、双模态和三模态项。宽度为$d_A,d_B,d_C$时，其大小为$(d_A+1)(d_B+1)(d_C+1)$，增长迅速。
 
-![image.png](../../../../assets/notion/067-08.png)
+![信息融合：学习模态之间的交互：原图 9](../../../../assets/notion/067-08.png)
 
-### Low-Rank Fusion
+*附加的常数保留了低阶交互而不是只保留三重乘积。*
 
-![image.png](../../../../assets/notion/067-09.png)
+低秩分解通过将融合权重张量近似为更简单的因子之和来逼近。然后可以投影每个模态并乘以较小的中间向量而不形成完整的外积。秩控制表达性/成本权衡。
 
-![image.png](../../../../assets/notion/067-10.png)
+![信息融合：学习模态之间的交互：原图 10](../../../../assets/notion/067-09.png)
+![信息融合：学习模态之间的交互：原图 11](../../../../assets/notion/067-10.png)
+![信息融合：学习模态之间的交互：原图 12](../../../../assets/notion/067-11.png)
 
-### Tensor vs Low-Rank Fusion
+*读这些内容时，将其视为权重张量的分解，随后是计算的重新排列，而不是断言每个完整张量都是精确低秩的。*
 
-![image.png](../../../../assets/notion/067-11.png)
+## 网关和模态条件偏移
 
-### Gated Fusion
+一个网关可以计算$g=\sigma(W[x_A;x_B]+b)$并混合投影特征为$g\odot u_A+(1-g)\odot u_B$。模态偏移设计向主要表示添加来自次要模态的加权修正。例如，语调可以修改文本短语的解释。
 
-![image.png](../../../../assets/notion/067-12.png)
+![信息融合：学习模态之间的交互：原图 13](../../../../assets/notion/067-12.png)
+![信息融合：学习模态之间的交互：原图 14](../../../../assets/notion/067-13.png)
 
-### Modality Shifting Fusion
+*软网关是可微的。硬选择需要适当的梯度估计器或单独的优化策略。*
 
-![image.png](../../../../assets/notion/067-13.png)
+## 非加性交互实际上有用吗？
 
-### Non-Additive Interaction
+一个加性的近似可以揭示复杂模型是否主要使用独立模态效应。在所选乘积分布下的期望下，加性投影的形式为
 
-![image.png](../../../../assets/notion/067-14.png)
+$$
+\tilde f(a,b)=\mathbb E_B[f(a,B)]+\mathbb E_A[f(A,b)]-\mathbb E_{A,B}[f(A,B)].
+$$
 
-![image.png](../../../../assets/notion/067-15.png)
+居中的项避免了双重计算全局均值；原始幻灯片忽略了那个常数。残差方案可以首先学习单模态效应，然后用成对和高阶交互解释剩余的误差。
 
-### Heterogeneity-aware Fusion
+![信息融合：学习模态之间的交互：原图 15](../../../../assets/notion/067-14.png)
+![信息融合：学习模态之间的交互：原图 16](../../../../assets/notion/067-15.png)
 
-![image.png](../../../../assets/notion/067-16.png)
+*使用保留预测来比较完整模型及其加性近似。更大的模型并不意味着交互改善了泛化。*
 
-![image.png](../../../../assets/notion/067-17.png)
+## 异质性和优化
 
-### Improve Optimization
+不同的模态或任务不一定需要相同的参数共享。转移实验可以提供有关要共享的编码器或交互模块的信息。这样的决定需要验证，因为负迁移是可能的。
 
-sometimes multimodal doesn’t help!
+![信息融合：学习模态之间的交互：原图 17](../../../../assets/notion/067-16.png)
+![信息融合：学习模态之间的交互：原图 18](../../../../assets/notion/067-17.png)
 
-1. Multimodal networks are more prone to overfitting due to increased complexity
-2. Different modalities overfit and generalize at different rates
+*这些图表使用转移关系将单模态和跨模态组件分组。*
 
-![image.png](../../../../assets/notion/067-18.png)
+模态以不同的速率过拟合。辅助单模态预测器和训练/验证轨迹有助于识别主导或泛化不良的分支。梯度混合是一种调整贡献的方式，使用估计的泛化行为；它需要一个定义好的估计协议而不是任意的损失权重。
 
-![image.png](../../../../assets/notion/067-19.png)
+![信息融合：学习模态之间的交互：原图 19](../../../../assets/notion/067-18.png)
+![信息融合：学习模态之间的交互：原图 20](../../../../assets/notion/067-19.png)
+
+*最后几张幻灯片激励通过单模态泛化信号平衡优化。更多的模态在复杂性或捷径主导时可能会有害。*
+
+**练习。** 对于标量二进制输入，线性加性模型是否可以精确表达XOR？不可以。需要交互项或非线性融合。然后测试实际任务是否也需要这种交互。
+
+参考文献：[张量融合网络](https://arxiv.org/abs/1707.07250)，[低秩多模态融合](https://arxiv.org/abs/1806.00064)，[为什么训练多模态分类网络很难？](https://arxiv.org/abs/1905.12681)。

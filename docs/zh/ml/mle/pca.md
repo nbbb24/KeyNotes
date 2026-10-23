@@ -1,46 +1,48 @@
-!!! info "中文版正在逐篇更新"
+# 主成分分析：保留最大方差方向
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+主成分分析（PCA）用正交方向替换相关数值坐标，这些方向按方差排序。它在压缩、可视化、噪声减少和调整某些后续模型时非常有用。其目标是几何的；大变异并不自动是有用的预测信息。
 
-# Principal Component Analysis (PCA)
+## 推导第一个成分
 
-transforms a set of **correlated variables** into a smaller set of **uncorrelated variables** called **principal components**, while retaining as much **variance** (information) as possible.
+设 $X \in \mathbb{R}^{n \times d}$ 包含中心化的观测值。沿着单位向量 $w$，投影值为 $Xw$，样本方差为 $w^T \Sigma w$，其中 $\Sigma = X^T X / (n-1)$。在约束条件 $\|w\| = 1$ 下最大化该方差，得到 $\Sigma$ 的最大特征向量。
 
-PCA finds new axes (directions) that maximize the variance of the data.
+后续成分在保持剩余变异的同时与之前的成分正交。设 $W_k$ 包含前 $k$ 个方向，得分是 $Z = X W_k$，而 $k$ 阶重构为 $\hat{X} = Z W_k^T$。重建原始坐标时加上训练均值。
 
-## **How does PCA work? (Step-by-step)**
+## 工作示例
 
-You should always be able to summarize the **PCA pipeline** like this:
+协方差矩阵
 
-1. **Standardize the data**
-    - Subtract mean and divide by standard deviation
-    - Important because PCA is variance-based and sensitive to scale
-2. **Compute the covariance matrix**
+$$
+\Sigma = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}
+$$
 
-    $$
-    \Sigma = \frac{1}{n-1} X^T X
-    $$
+的特征值为 3 和 1。第一个成分沿着 $[1, 1]^T / \sqrt{2}$ 指向，并解释了 $3 / (3 + 1) = 75\%$ 的总变异。仅保留此成分将两个坐标压缩成一个，同时丢弃沿相反方向的变异。
 
-    where X is the standardized data matrix.
+这是一条关于变异的陈述，而不是“75% 的意义”或“75% 的分类准确率”。低变异方向可能包含区分类别的信号。
 
-3. **Find eigenvalues and eigenvectors**
-    - Eigenvectors = principal component directions
-    - Eigenvalues = variance explained by each component
-4. **Sort eigenvalues in descending order**
-    - The first few components capture most of the variance
-5. **Project the data onto top** k **components**
+## 中心化和标准化是不同的选择
 
-    $$
-    X_{reduced} = X W_k
-    $$
+中心化减去特征均值，并且是普通基于协方差的 PCA 的基本组成部分。标准化还除以特征标准差。这在不同单位下可能是合适的，但并不总是必需的：它故意改变了哪些变异重要。
 
-    where W_k are the top k eigenvectors.
+如果一个传感器用伏特测量而另一个用毫伏测量，未缩放的 PCA 可能会被单位差异主导。如果两者都是有意义的物理量且有意有不同的方差，标准化可能会抹去这些信息。在训练数据上记录选择，并对所有统计量进行拟合。
 
+## 进一步探索：奇异值分解（SVD）和白化
 
-## **Why do we need to standardize before PCA?**
+通过奇异值分解计算 PCA，$X = U \Sigma_X V^T$，而不需要形成协方差矩阵。右奇异向量给出成分方向；平方的奇异值除以 $n-1$ 给出解释的变异。形成 $X^T X$ 可能会恶化条件，而截断或随机化 SVD 在只需要少数成分时可以减少工作。
 
-**Answer:**
+白化还重新缩放成分得分使其方差为 1。它移除相对变异信息，并可能放大小的噪声成分。是否有助于取决于后续目标。
 
-Because PCA is based on the covariance matrix, and covariance depends on the **scale** of variables.
+成分符号是任意的。重复或几乎重复的特征值可能导致即使保留的子空间稳定，个别轴也会不稳定。评估重构或后续性能而不是要求每次运行中成分符号相同。
 
-If features have different units or ranges, the feature with the largest variance will dominate the first principal component.
+## 检查你的理解
+
+**问题：** PCA 是否可以在丢弃一些变异的同时提高分类器？**答案：** 是的，如果丢弃的变异主要是干扰或噪声。它也可能因丢弃低变异预测信号而受损。在验证管道中选择维度。
+
+**练习：** 如果特征值为 `[8, 1, 1]`，两个成分解释多少变异？**答案：** 90%，假设它们按降序保留。
+
+继续阅读 [特征向量](eigenvectors.md)、[线性判别分析（LDA）](lda.md) 和 [t-SNE](tsne.md)。
+
+## 参考文献和进一步阅读
+
+- [scikit-learn: PCA](https://scikit-learn.org/stable/modules/decomposition.html#pca) 涵盖了解决方案和白化。
+- [NumPy: SVD](https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html) 指定了矩阵分解。

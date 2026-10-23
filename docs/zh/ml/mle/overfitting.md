@@ -1,61 +1,57 @@
-!!! info "中文版正在逐篇更新"
+# 过拟合、正则化与可信验证
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+当拟合过程捕捉到只属于训练样本、却不能稳定帮助新数据的模式，就发生了过拟合。常见现象是训练表现很好、留出数据表现不佳，但这种差距也可能来自分布变化或实验设计问题。
 
-# Overfitting
+## 看完整个选择过程
 
-- model learn the training set too well
-- impact model’s ability to generalize
+区分训练、验证和最终测试。训练拟合参数，验证选择超参数与 Checkpoint，最终测试估计选定流程的表现。反复查看测试结果，会让测试集变成另一个验证集。
 
-ways avoid overfitting:
+同一用户、设备或文档多次出现时，按组划分。预测未来时，用过去训练、后续观测评价。随机按行划分，可能掩盖对相同实体的记忆或未来信息泄漏。
 
-- **regularization**:
-    - L1 (Lasso) Regression: penalizes high-value coefficients **(large number of features)**
+## 正则化为什么有用
 
-        $$
-        J(θ)=L(θ)+λi∑∣θi∣
-        $$
+正则化在拟合目标之外加入偏好。对参数 $w$ 与数据损失 $L(w)$，常见目标为：
 
-        $$
+$$
+L(w)+\lambda\sum_j|w_j|\qquad\text{以及}\qquad
+L(w)+\lambda\sum_jw_j^2.
+$$
 
-        \frac{\partial \Omega}{\partial w_i}=
-        \begin{cases}
-        \lambda, & w_i > 0 \\
-        -\lambda, & w_i < 0 \\
-        \in[-\lambda, \lambda], & w_i = 0
-        \end{cases}
+它们是**绝对值之和**与**平方之和**，不是“求和后取绝对值”或“求和后平方”。符号相反的系数不应该在惩罚项中抵消。
 
-        $$
+L1 的非光滑几何允许精确零值，因此可以产生稀疏解。但普通小步长梯度下降并不保证精确稀疏，通常需要近端方法或适合的求解器。L2 连续收缩系数，通常仍保留非零值。特征尺度会改变两种惩罚的实际含义。
 
-        - The gradient is constant and does not depend on the magnitude of $w_i$.
-        - Even if $w_i$ is very small, there is still a fixed “force” pushing it toward 0.
-        - As a result, many weights are compressed to **exactly 0**, leading to a **sparse solution** and achieving **feature selection**.
+## 例子：错误抵消会造成什么
 
-        **penalty item**: absolute value of sum of coefficients
+令 $w=[3,-3]$，L1 惩罚为 6，平方 L2 惩罚为 18。但 $|3-3|$ 和 $(3-3)^2$ 都等于零，错误地让两个很大的相反系数不受约束。
 
-        - Feature selection
-        - sparse models
-        - simple model
-    - L2 (Ridge) Regression: reduce coefficient close to zero **(correlated features)**
+```python
+# runnable-example
+w = [3, -3]
+assert sum(abs(v) for v in w) == 6
+assert sum(v * v for v in w) == 18
+assert abs(sum(w)) == 0
+```
 
-        $$
-        J(θ)=L(θ)+λi∑θi^2
-        $$
+这类简单手算很有价值，因为看似很小的公式差异，可以完全改变优化目标。
 
-        $$
-        \frac{\partial \Omega}{\partial w_i} = 2 \lambda w_i
-        $$
+## 增加复杂度前先诊断
 
-        - The gradient is **proportional** to $w_i$.
-        - As $w_i$  approaches 0, the gradient also approaches 0, so updates become slower.
-        - Therefore, the weights are shrunk to very small values but usually not exactly 0 → it **does not perform feature selection**, instead **retains all features**.
+| 现象 | 可能解释 | 下一步实验 |
+| --- | --- | --- |
+| 训练和验证损失都高 | 欠拟合、优化不良、输入错误 | 拟合极小子集，检查目标与梯度 |
+| 训练持续改善，验证变差 | 过拟合或验证分布不匹配 | 早停、加强正则、检查划分 |
+| 验证结果好得不合理 | 泄漏或重复 | 审计预处理、标识符和时间戳 |
+| 离线好、线上差 | 分布变化或指标不匹配 | 评价近期数据与部署子群体 |
 
-        **penalty item**: squared sum of coefficients
+更多数据在提供相关新信息时才有帮助。重复近似样本，不等于采集新条件。数据增强应保留标签语义，例如旋转一个数字可能改变类别。
 
-        - no feature selection (no 0 coefficient)
-        - handle multicollinearity
-- **simple model**: less variable and parameter
-- **cross-validation**:
-    1. split the model into k parts
-    2. train on k-1 folds and test on the remaining fold
-    3. repeat k times
+## 进阶
+
+交叉验证估计的是一整套训练与选择流程。所有需要学习的变换都必须放在折内部。如果在同一组折上尝试大量模型，再报告最优结果，选择偏差仍然存在；嵌套交叉验证或最终未触碰的留出集可以处理这一问题。
+
+早停通过训练轨迹起正则作用，Dropout 增加训练噪声，Weight Decay 修改更新方式。对自适应优化器，Weight Decay 通常不等于损失中加入 L2 项，详见[优化器](optimizers.md)。
+
+**问题：**训练和测试没有差距，就能证明模型有用吗？**回答：**不能。两个分数可能都很差，指标可能不相关，也可能两边都存在泄漏。
+
+资料：[scikit-learn 交叉验证](https://scikit-learn.org/stable/modules/cross_validation.html)涵盖分组和时间评价；[线性模型正则化](https://scikit-learn.org/stable/modules/linear_model.html)介绍 Ridge 与 Lasso 的目标。

@@ -1,46 +1,54 @@
-!!! info "中文版正在逐篇更新"
+# 语言模型基础
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+语言模型对标记序列分配概率。分词器将文本转换为离散ID；模型将这些ID转化为上下文状态并预测分布。一个标记可以是一个单词、单词的一部分、标点符号或与字节相关的单位。标记计数不是单词计数。
 
-# Basic
+## 将序列分解为预测
 
-# **main open-source LLM architectures**
+链式法则给出
 
-- **Prefix Decoder** (e.g., ChatGLM, U-PaLM): Bidirectional attention for input, unidirectional for output.
-- **Causal Decoder** (e.g., LLaMA): Only left-to-right (unidirectional) attention.
-- **Encoder-Decoder** (e.g., T5, BART): Bidirectional input attention, unidirectional output.
+$$
+p(x_1,\ldots,x_T)=\prod_{t=1}^T p(x_t\mid x_{<t}).
+$$
 
-![image.png](../../../assets/notion/022-00.png)
+训练因果语言模型通常最小化负对数似然，这些似然值在可选的目标位置上求和。填充、打包示例和指令调优提示标记可能被排除在外，“每个标记的损失”并不总是正确的。教师强制在训练期间提供真实的前一个标记；生成则反馈模型自身的输出。
 
-# **Differences among Prefix Decoder, Causal Decoder, and Encoder-Decoder**
+## 架构与可见性
 
-- **Encoder-Decoder:**
-    - Strong input understanding via bidirectional attention.
-- **Causal Decoder:**
-    - Purely autoregressive (predict next token based only on previous ones).
-    - look at the whole sentence
-- **Prefix Decoder:**
-    - Only look at the prefix but not output
+| 架构 | 输入可见性 | 通常的目标/应用 |
+| --- | --- | --- |
+| 编码器 | 输入内的双向 | 掩码恢复、分类、嵌入 |
+| 因果解码器 | 更早的/当前输入位置 | 下一个标记生成 |
+| 前缀解码器 | 双向提示，因果响应 | 条件生成 |
+| 编码器-解码器 | 双向源；因果目标带跨注意力 | 翻译、去噪、总结 |
 
-![image.png](../../../assets/notion/022-01.png)
+因果解码器在预测时不会看到整个未来的句子。前缀解码器的输出可以关注提示**和**之前的输出标记。编码器-解码器模型并不必然需要多任务微调才能正常工作；它们的有效性取决于目标、数据、规模和部署约束。
 
-# Training Objective
+![语言模型基础：原图 1](../../../assets/notion/022-00.png)
 
-![image.png](../../../assets/notion/022-02.png)
+三列分别表示编码器—解码器、因果语言模型和前缀语言模型。读图时应追踪每个预测位置能看到哪些 token，而不只是数图中的方框。
 
-- Predict the next token using **maximum likelihood estimation (MLE)**.
-- For causal models, loss is computed on **all tokens**.
-- Prefix models compute loss only on outputs.
-- Some models (e.g., GLM-130B, T5) use **denoising autoencoding** —randomly masking/replacing parts of input to learn recovery.
+![语言模型基础：原图 2](../../../assets/notion/022-01.png)
 
-![image.png](../../../assets/notion/022-03.png)
+注意力掩码图中蓝、绿、黄区域对应不同可见性规则。前缀内部可以双向关注，而生成位置仍不能看到未来输出 token。
 
-# **Why are most large models “decoder-only”**
+![语言模型基础：原图 3](../../../assets/notion/022-02.png)
 
-- **Decoder-only models** (e.g., GPT) work better in **zero-shot** settings without fine-tuning.
-- **Encoder-Decoder models** usually require multitask fine-tuning.
-- Decoder-only is:
-    - More efficient to train
-    - Easier to implement
-    - Avoids theoretical issues like **low-rank limitations** in bidirectional attention
-    - More parameter-efficient for generation tasks
+原图的语言模型公式把对数概率相加，这是待最大化的对数似然；要最小化的训练损失应取负号。
+
+![语言模型基础：原图 4](../../../assets/notion/022-03.png)
+
+去噪原图表示以受损输入为条件重建原文。图中的记号经过简化：模型接收受损序列，预测原序列，训练时通常最小化负对数似然。
+
+通过将架构的注意力模式与训练损失分开阅读每个图表。同一个架构可以支持多种训练食谱。
+
+## 为什么单解码器模型变得常见
+
+一个单一的自回归接口容纳了延续、对话、代码和上下文示例。大规模的下一个标记训练和高效的推理基础设施使其成为一种实用的一般用途选择。这是一条经验性的工程轨迹，而不是定理，表明双向注意力不如单解码器模型更高效。纯注意力排名崩溃结果并不直接为具有残差层和前馈层的完整Transformer建立这样的比较。
+
+## 具体示例及其限制
+
+对于 `巴黎在法国`，模型在连续的标记边界上学习预测。在推理时，`巴黎在` 可以对 `法国` 产生高概率。这个概率是通过数据学到的；它不是数据库查询或事实正确性的证明。检索、工具和评估是独立组件。
+
+**练习。** 流畅生成是否证明了当前的事实知识？不。训练数据可能过时，而合理的延续可能是错误的。
+
+继续阅读 [Word2Vec 到 Transformer](word2vec-to-transformer.md)，[BERT](models/bert.md) 和 [解码](inference/decoding.md)。参考文献：[Transformer](https://arxiv.org/abs/1706.03762)，[T5 架构/目标研究](https://arxiv.org/abs/1910.10683)。

@@ -12,9 +12,9 @@ $$
 
 The heads provide auxiliary learning signals at different horizons. Predictions from a shared prefix are not automatically a coherent autoregressive joint distribution: the second head has not necessarily conditioned on the first head's sampled token.
 
-![Original Multi Token prediction figure 1](../../../../assets/notion/057-00.png)
-![Original Multi Token prediction figure 2](../../../../assets/notion/057-01.png)
-![Original Multi Token prediction figure 3](../../../../assets/notion/057-02.png)
+![Multi-token prediction and speculative decoding, original figure 1](../../../../assets/notion/057-00.png)
+![Multi-token prediction and speculative decoding, original figure 2](../../../../assets/notion/057-01.png)
+![Multi-token prediction and speculative decoding, original figure 3](../../../../assets/notion/057-02.png)
 
 *The original notes contrast a shared trunk with multiple future-token heads and shared output projection. Track the prediction offset attached to each head.*
 
@@ -22,7 +22,7 @@ The heads provide auxiliary learning signals at different horizons. Predictions 
 
 DeepSeek-V3 uses sequential MTP modules. Each depth combines the previous-depth representation with the embedding of a shifted token, normalizes both, projects their concatenation, and applies a Transformer block. Embedding and output-head parameters are shared with the main model. The shifted input is part of teacher-forced training; it must not be mistaken for access to an unknown future token during ordinary generation.
 
-![Original Multi Token prediction figure 4](../../../../assets/notion/057-03.png)
+![Multi-token prediction and speculative decoding, original figure 4](../../../../assets/notion/057-03.png)
 
 *The sequential design conditions deeper predictions through intermediate representations and shifted token embeddings, rather than treating all horizons as independent heads.*
 

@@ -1,231 +1,83 @@
-!!! info "中文版正在逐篇更新"
+# SQL：先明确每行代表什么，再写语法
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+SQL 表达对关系数据的操作。好的查询应该首先定义一行、其键以及预期的输出粒度。一个查询可以语法正确，但在多对多连接后重复计算收入。
 
-# SQL
+## 主要操作
 
-### 🧩 **1. Core SQL Concepts**
+`SELECT` 用于检索数据；`INSERT`、`UPDATE` 和 `DELETE` 用于更改行。`CREATE`、`ALTER` 和 `DROP` 用于定义对象。`GRANT`/`REVOKE` 管理权限，而 `COMMIT`、`ROLLBACK` 和 `SAVEPOINT` 管理事务。DDL/DML/DCL/TCL 是有用的教学类别；命名约定和事务行为因数据库而异。
 
-- **SQL Definition**: Structured Query Language, used to interact with relational databases.
-- **Common Commands (CRUD)**:
-    - `SELECT` – retrieve data
-    - `INSERT` – add data
-    - `UPDATE` – modify data
-    - `DELETE` – remove data
-- **Joins**:
-    - `INNER JOIN` → only matching records
-    - `LEFT JOIN` → all from left, matching from right
-    - `RIGHT JOIN` → all from right, matching from left
-    - `FULL JOIN` → all records from both
+分析查询时，思考 `FROM/JOIN → WHERE → GROUP BY → HAVING → 窗口计算 → SELECT/DISTINCT → ORDER BY → LIMIT`。这是理解查询的逻辑顺序，而不是对优化器物理执行计划的承诺。
 
-### 📊 **2. Key Interview Topics**
-
-- **WHERE vs HAVING**:
-
-    `WHERE` filters rows *before aggregation*, `HAVING` filters *after aggregation*.
-
-- **GROUP BY and Aggregates**:
-
-    `GROUP BY` is used with functions like `COUNT()`, `SUM()`, `AVG()`, `MAX()`, `MIN()`.
-
-- **Subqueries**:
-
-    Queries inside queries — used in `SELECT`, `FROM`, or `WHERE`.
-
-- **Window Functions**:
-
-    `ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`, `OVER(PARTITION BY … ORDER BY …)`
-
-    → useful for ranking, moving averages, cumulative sums.
-
-- **CASE WHEN**: conditional logic within SQL.
-- **NULL Handling**:
-
-    `IS NULL`, `COALESCE()`, `IFNULL()` — replaces nulls with defaults.
-
-
-# FQA
-
-### Q2: What are the main types of SQL commands?
-
-- **DDL (Data Definition Language):** `CREATE`, `ALTER`, `DROP`, `TRUNCATE`
-- **DML (Data Manipulation Language):** `SELECT`, `INSERT`, `UPDATE`, `DELETE`
-- **DCL (Data Control Language):** `GRANT`, `REVOKE`
-- **TCL (Transaction Control Language):** `COMMIT`, `ROLLBACK`, `SAVEPOINT`
-
-### Q3: What is the difference between `WHERE` and `HAVING`?
-
-- `WHERE` filters rows **before aggregation**.
-- `HAVING` filters **after aggregation** (with `GROUP BY`).
+## 过滤、聚合和空值
 
 ```sql
-SELECT department, COUNT(*)
+SELECT department_id, COUNT(*) AS employees, AVG(salary) AS mean_salary
 FROM employees
 WHERE salary > 3000
-GROUP BY department
+GROUP BY department_id
 HAVING COUNT(*) > 5;
 ```
 
-### Q4: What is the difference between `INNER JOIN` and `OUTER JOIN`?
+`WHERE` 在分组之前过滤单行；`HAVING` 过滤组。`COUNT(*)` 计算行数，而 `COUNT(salary)` 计算非空工资值。`SUM`、`AVG`、`MIN` 和 `MAX` 通常忽略空输入。全为空的组和空结果需要显式解释。
 
-- `INNER JOIN`: returns only matching rows.
-- `LEFT JOIN`: all rows from left + matching from right.
-- `RIGHT JOIN`: all rows from right + matching from left.
-- `FULL OUTER JOIN`: all rows from both sides.
+使用 `IS NULL`，而不是 `= NULL`。SQL 比较可以评估为未知，而 `WHERE` 只保留真行。`COALESCE` 选择第一个非空值；将零作为替换是一种业务假设。`CASE WHEN` 表达条件值，例如 `SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END)`。
 
-### Q5: What are aggregate functions?
+## 连接和未匹配记录
 
-`COUNT()`, `SUM()`, `AVG()`, `MAX()`, `MIN()` — perform calculations over groups of rows.
+内连接保留匹配项；左连接保留所有左侧行；右连接和全连接保留相应的未匹配侧。如果一个左侧键匹配三个右侧行，则产生三行输出。在 `WHERE` 中对右侧表列的过滤可以移除左连接中的右侧为空的结果行；当需要保留未匹配的左侧行时，在 `ON` 子句中添加适当的匹配限制。
 
-### Q6: What is the difference between `UNION` and `UNION ALL`?
-
-- `UNION` removes duplicates.
-- `UNION ALL` keeps duplicates and is faster.
-
-### Q7: What is a subquery?
-
-A query nested inside another query.
-
-Used in `SELECT`, `FROM`, or `WHERE`:
+要查找没有匹配部门的员工：
 
 ```sql
-SELECT name
-FROM employee
-WHERE salary > (SELECT AVG(salary) FROM employee);
+SELECT e.*
+FROM employees AS e
+WHERE NOT EXISTS (
+    SELECT 1 FROM departments AS d WHERE d.id = e.department_id
+);
 ```
 
-### Q8: What is a CTE (Common Table Expression)?
+这包括具有空部门 ID 的员工。如果需要排除这些员工，则添加 `e.department_id IS NOT NULL`。`NOT IN` 在其子查询包含空值时可能会产生未知，因此它不是可互换的反连接快捷方式。请参阅 [子查询语义](https://www.postgresql.org/docs/current/functions-subquery.html)。
 
-A temporary named result set that can be referenced within a query.
+自连接使用一个表的两个别名：将 `employees e` 连接到 `employees m` 上 `e.manager_id = m.id`。如果需要保留没有经理的员工，则使用左连接。`UNION` 移除重复的结果行；`UNION ALL` 保留它们并避免去重工作。两者在没有 `ORDER BY` 的情况下不保证顺序。
+
+## 子查询、CTE、排名和平局
+
+标量子查询可以将工资与 `(SELECT AVG(salary) FROM employees)` 进行比较。CTE（公共表表达式）为可读性和在语句内重用命名查询结果；它不是每个引擎中的自动存储表或优化屏障。
 
 ```sql
-WITH high_salary AS (
-  SELECT name, salary FROM employee WHERE salary > 5000
+WITH ranked AS (
+    SELECT employee_id, salary,
+           DENSE_RANK() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employees
+    WHERE salary IS NOT NULL
 )
-SELECT * FROM high_salary WHERE name LIKE 'A%';
+SELECT employee_id, salary FROM ranked WHERE salary_rank = 3;
 ```
 
-### Q9: What are indexes?
+这返回所有具有第三高不同工资的员工。对于工资为 100、100、90、80 的情况，`ROW_NUMBER` 分配不同的位置，`RANK` 给出 1,1,3,4，而 `DENSE_RANK` 给出 1,1,2,3。要选择恰好 N 行，在 `ORDER BY` 中包含确定性的并列值的确定性排序字段，并使用特定于方言的 `LIMIT`、`FETCH` 或 `TOP`。原始相关子查询方法也通过计算不同的大于工资来工作，但在大型表上评估其计划。
 
-Indexes speed up read operations but slow down writes.
+窗口保持行标识符的同时对相关行组成的窗口进行计算。`PARTITION BY department_id` 每个部门重新启动计算。对于运行总计，指定一个框架，如 `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`；默认框架可以包括排序键相同的行。请参阅 [窗口函数](https://www.postgresql.org/docs/current/tutorial-window.html)。
 
-They store references to data like a book’s index for faster lookup.
-
-### Q10: What are primary and foreign keys?
-
-- **Primary key:** uniquely identifies a row in a table.
-- **Foreign key:** links one table to another (enforces referential integrity).
-
-### Q11: How do you find duplicate records?
+## 日期、重复项和完整性
 
 ```sql
-SELECT name, COUNT(*)
-FROM employee
-GROUP BY name
-HAVING COUNT(*) > 1;
-```
-
-### Q12: How do you find the nth highest salary?
-
-```sql
-SELECT DISTINCT salary
-FROM employee e1
-WHERE (SELECT COUNT(DISTINCT salary) FROM employee e2 WHERE e2.salary > e1.salary) = n - 1;
-```
-
-### Q13: How do you select top N records?
-
-```sql
-SELECT * FROM employee ORDER BY salary DESC LIMIT 5;   -- MySQL / PostgreSQL
-```
-
-or
-
-```sql
-SELECT TOP 5 * FROM employee ORDER BY salary DESC;     -- SQL Server
-```
-
-### Q14: How do you find employees not in a department?
-
-```sql
-SELECT *
-FROM employees
-WHERE department_id NOT IN (SELECT id FROM departments);
-```
-
-### Q15: How to find customers who made more than 3 purchases last month?
-
-```sql
-SELECT customer_id, COUNT(*) AS orders
+SELECT customer_id, COUNT(*) AS purchases
 FROM orders
 WHERE order_date >= '2025-09-01' AND order_date < '2025-10-01'
 GROUP BY customer_id
 HAVING COUNT(*) > 3;
 ```
 
-### Q16: What are window functions?
+这是一个固定的 2025 年 9 月示例，而不是永久正确的“上个月”的定义。按业务采用的时区计算月份边界。半开区间避免猜测最后一天可表示的时间戳。
 
-They perform calculations across rows related to the current row.
+使用 `GROUP BY key HAVING COUNT(*) > 1` 找到重复键，然后决定它们是重复项还是合法事件。主键唯一标识行且非空；外键强制支持的引用关系。`NOT NULL`、`UNIQUE` 和 `CHECK` 约束值。默认值提供省略的值；它本身不验证所有提供的值。
 
-```sql
-SELECT
-  employee_id,
-  salary,
-  RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS dept_rank
-FROM employees;
-```
+规范化减少更新异常：1NF 避免在所选的关系表示下重复组；2NF 要求非主属性不对候选键的真子集产生部分依赖；3NF 对非主属性通过其他非键属性形成的传递依赖作进一步约束。严格判断应以函数依赖和候选键的正式定义为准。反规范化通过冗余存储和维护换取选定的读路径。它需要一个更新一致性策略。
 
-**Common window functions:**
+## 性能和事务边界
 
-- `ROW_NUMBER()` – unique rank
-- `RANK()` – allows gaps
-- `DENSE_RANK()` – no gaps
-- `SUM() OVER()` – running total
-- `AVG() OVER()` – moving average
+索引可以加速合适的过滤、连接和排序，但会消耗存储和维护；对于表的一部分扫描可能更优。检查查询计划和实际基数。索引不能修复因多对多匹配而使行数膨胀的连接。
 
-### Q17: Difference between `GROUP BY` and `OVER()`?
+`DELETE` 移除选定行，`TRUNCATE` 清空表，`DROP` 移除对象。锁定、触发器、标识处理和回滚行为取决于引擎。PostgreSQL 支持 `TRUNCATE` 的事务回滚；“TRUNCATE 从不回滚”是错误的。请参阅 [PostgreSQL TRUNCATE](https://www.postgresql.org/docs/current/sql-truncate.html) 和 [事务](https://www.postgresql.org/docs/15/tutorial-transactions.html)。
 
-`GROUP BY` collapses rows into one per group.
-
-`OVER()` keeps original rows and adds aggregated info.
-
-### Q18: What are constraints?
-
-Rules applied to columns:
-
-- `NOT NULL` – must have a value
-- `UNIQUE` – values must be unique
-- `CHECK` – must meet a condition
-- `DEFAULT` – assigns default value
-- `PRIMARY KEY` – unique + not null
-- `FOREIGN KEY` – references another table
-
-### Q19: What is normalization?
-
-The process of structuring data to reduce redundancy and improve integrity.
-
-- **1NF:** no repeating groups
-- **2NF:** all non-key attributes depend on primary key
-- **3NF:** no transitive dependency
-
-### Q20: What is denormalization?
-
-Combining tables to improve read performance (at the cost of redundancy).
-
-### Q24: Difference between `DELETE`, `TRUNCATE`, and `DROP`?
-
-| Command | Removes Data | Removes Table | Rollback | Speed |
-| --- | --- | --- | --- | --- |
-| DELETE | ✅ | ❌ | ✅ | Slow |
-| TRUNCATE | ✅ | ❌ | ❌ | Fast |
-| DROP | ✅ | ✅ | ❌ | Fastest |
-
-### Q29: What is a self-join?
-
-A table joined with itself — useful for hierarchical data (e.g., employees and managers).
-
-```sql
-SELECT e.name, m.name AS manager
-FROM employee e
-JOIN employee m ON e.manager_id = m.id;
-```
+练习：创建一个包含平局、空值、重复连接键和未匹配部门的小数据集。在执行前预测查询结果。这些边缘情况比仅测试干净且唯一的行教得更多。继续使用 [Pandas](pandas.md)。

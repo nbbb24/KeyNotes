@@ -4,8 +4,8 @@ Modern Transformer variants modify FFNs, attention state, normalization, and pos
 
 ## Feed-forward networks
 
-![Original Architecture Advancement of Transformer figure 1](../../../../../assets/notion/040-00.png)
-![Original Architecture Advancement of Transformer figure 2](../../../../../assets/notion/040-01.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 1](../../../../../assets/notion/040-00.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 2](../../../../../assets/notion/040-01.png)
 
 *The first slides compare activations and gated/bilinear FFNs. GELU is $x\Phi(x)$ with the Gaussian cumulative distribution, not $x\phi(x)$ with its density; “Switch” in the activation label should be read as Swish.*
 
@@ -13,10 +13,10 @@ A standard FFN uses two projections around an activation. A gated FFN multiplies
 
 ## Attention heads and cache storage
 
-![Original Architecture Advancement of Transformer figure 3](../../../../../assets/notion/040-02.png)
-![Original Architecture Advancement of Transformer figure 4](../../../../../assets/notion/040-03.png)
-![Original Architecture Advancement of Transformer figure 5](../../../../../assets/notion/040-04.png)
-![Original Architecture Advancement of Transformer figure 6](../../../../../assets/notion/040-05.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 3](../../../../../assets/notion/040-02.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 4](../../../../../assets/notion/040-03.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 5](../../../../../assets/notion/040-04.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 6](../../../../../assets/notion/040-05.png)
 
 *The progression is MHA → shared KV groups → one KV head → latent KV compression. Mean-pooling projection weights is an initialization/conversion strategy, not an exact equivalence to the original multi-head model.*
 
@@ -26,17 +26,17 @@ For 32 query heads and 8 KV heads, four query heads share each KV head. The stan
 
 ## Normalization and residual paths
 
-![Original Architecture Advancement of Transformer figure 7](../../../../../assets/notion/040-06.png)
-![Original Architecture Advancement of Transformer figure 8](../../../../../assets/notion/040-07.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 7](../../../../../assets/notion/040-06.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 8](../../../../../assets/notion/040-07.png)
 
 *Pre-norm and post-norm place normalization on different sides of a residual addition. RMSNorm rescales without centering; the plots reflect particular experiments, not universal convergence guarantees.*
 
 ## Position information
 
-![Original Architecture Advancement of Transformer figure 9](../../../../../assets/notion/040-08.png)
-![Original Architecture Advancement of Transformer figure 10](../../../../../assets/notion/040-09.png)
-![Original Architecture Advancement of Transformer figure 11](../../../../../assets/notion/040-10.png)
-![Original Architecture Advancement of Transformer figure 12](../../../../../assets/notion/040-11.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 9](../../../../../assets/notion/040-08.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 10](../../../../../assets/notion/040-09.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 11](../../../../../assets/notion/040-10.png)
+![Transformer architecture advances: identify the bottleneck first, original figure 12](../../../../../assets/notion/040-11.png)
 
 *The slides move from added absolute sinusoids to relative score biases and rotary Q/K transformations. These are different mechanisms for injecting order.*
 

@@ -1,20 +1,47 @@
-!!! info "中文版正在逐篇更新"
+# 随机森林：平均那些会犯不同错误的树
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+随机森林组合多棵决策树，并在训练数据和候选特征上引入随机性。它能捕获非线性交互，无需人工指定函数形式，因此是很多表格数据任务的有力基线。
 
-# Random Forest
+## 从一棵树到一片森林
 
-1. **Ensemble (Bagging)**: reduce overfitting and learn more generalized predictions
-2. **Reduced Variance**: averaging trees, make it more stable
-3. **Robust to outliers**: multiple trees and bootstrapping
+深树对样本敏感：数据略有变化，就可能选择不同的早期分裂。森林通过组合多棵树减少这种不稳定性。常见配置为每棵树抽取一份 Bootstrap 样本，并在每个节点只考虑随机抽取的部分特征。
 
-### Each Tree
+特征子采样很重要，否则某个特别强的特征可能支配所有树。树的错误相关性越低，平均就越有用。候选特征数量需要在单棵树的能力和树之间的多样性之间权衡。
 
-Each tree is trained on a **bootstrap sample** (random sampling with replacement) and uses a **random subset of features** when splitting nodes.
+回归通常平均各树的预测。分类聚合取决于实现：scikit-learn 先平均各树估计的类别概率，再选择类别。这与对各树的硬标签进行多数投票有关，但不总是相同。
 
-### Classification VS Regression
+## 算例：平均概率
 
-During inference:
+三棵树给出的正类概率为 `[0.51, 0.51, 0.01]`。硬投票会预测正类，因为两棵树超过 0.5。平均概率约为 0.343，在阈值 0.5 下预测负类。因此，手工复现库的输出前，要先确认聚合规则。
 
-- For **classification**, the model takes the **majority vote** across trees.
-- For **regression**, it averages their predictions.
+```python
+# runnable-example
+p = [0.51, 0.51, 0.01]
+assert sum(x > 0.5 for x in p) == 2
+assert sum(p) / len(p) < 0.5
+```
+
+## 袋外评估
+
+一个样本没有出现在某份 Bootstrap 抽样中的概率为 $(1-1/n)^n\approx e^{-1}$。在大样本极限下，对一棵树而言约 36.8% 的样本处于袋外。只使用没训练过该行的树来预测，就能得到内部评估估计。
+
+袋外评估不会自动满足分组或时间约束。如果某用户的相关记录进入了树的训练集，该用户另一条袋外记录仍可能得到过于乐观的评估。必要时还应设置符合部署情境的外部数据划分。
+
+## 调参与失败模式
+
+控制最小叶节点大小、深度、候选特征数和树的数量。增加树通常能稳定集成估计，但也增加内存和推理成本。增大叶节点可以正则化概率估计，降低单个标签的影响。
+
+树不需要像 k-NN 那样处理特征尺度，但并非完全不受异常值影响。极端目标值会影响回归叶节点的均值。标准回归森林也不能像线性模型那样，把趋势外推到叶节点预测范围之外。
+
+## 进阶理解
+
+不纯度重要性偏爱部分高基数特征。相关特征可能互相替代，因此低重要性分数的含义并不唯一。应检查留出集上的置换重要性和具体任务的错误分组，而不是把特征排名当成因果解释。
+
+类别不平衡时，用精确率—召回率或业务成本比较类别权重和决策阈值。如果概率质量很重要，森林的原始概率可能还需要校准。
+
+**练习：**树的数量翻倍，能修复一个始终定义错误的特征吗？**答案：**不能。更多平均无法消除所有树输入中共享的错误。
+
+## 来源与延伸阅读
+
+- [scikit-learn：随机化树森林](https://scikit-learn.org/stable/modules/ensemble.html#forest)：聚合方式与超参数。
+- [Breiman：Random Forests](https://www.stat.berkeley.edu/~breiman/randomforest2001.pdf)：原始方法。

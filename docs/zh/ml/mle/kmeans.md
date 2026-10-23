@@ -1,47 +1,57 @@
-!!! info "中文版正在逐篇更新"
+# K-means：将数据集压缩为代表性中心
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+K-means 通过最小化到其分配中心的平方欧几里得距离来将观察值划分为 $K$ 组。它是一个无监督的几何目标。一个簇不一定是现实世界中的有意义类别。
 
-# KMeans
+## 为什么交替分配和更新？
 
-It’s unsupervised
-
-1. randomly initialize k points
-2. each point to its closest mean and update the center
-3. repeat
-
-It minimizes the **within-cluster sum of squared distances (WCSS)**:
+对于簇 $C_j$ 和中心 $\mu_j$，目标是
 
 $$
-J = \sum_{i=1}^{k}\sum_{x \in C_i} ||x - \mu_i||^2
+J=\sum_{j=1}^{K}\sum_{x_i\in C_j}\|x_i-\mu_j\|^2.
 $$
 
-## Choosing K
+当中心固定时，将每个观察值分配到其最近的中心。当分配固定时，均值在每个簇内最小化平方距离。重复这两个操作不会增加目标，但可能会收敛到局部解。因此初始化很重要；k-means++ 在初始中心上进行均匀分布，并且多次重启可以提高可靠性。
 
-### 1.Elbow Method
+## 工作示例
 
-**Within-Cluster Sum of Squares (WCSS):** the sum of squared distances between each data point and centroid of its cluster
+一维观察值为 `[1, 2, 8, 9]`，初始中心为 1 和 8。分配为 `{1,2}` 和 `{8,9}`。更新后的中心为 1.5 和 8.5。簇内的平方和为 $4\times0.5^2=1$。
 
-the point WCSS starts to **decrease more slowly**
+```python
+# runnable-example
+clusters = [[1, 2], [8, 9]]
+centers = [sum(c) / len(c) for c in clusters]
+sse = sum((x - m) ** 2 for c, m in zip(clusters, centers) for x in c)
+assert centers == [1.5, 8.5]
+assert sse == 1
+```
 
-### 2.Silhouette Score
+与 [k-NN](nearest-neighbors.md) 进行比较：K-means 学习无标签的中心；k-NN 从标记的邻居进行预测。字母 k 并不意味着相同的机器学习问题。
 
-how similar a data point to cluster compared to other
+## 选择 K
 
-The score for each sample iii is:
+增加 $K$ 只能改善或保持最佳可达到的训练目标，因此最低的训练误差不是一个有意义的选择规则。肘部启发式寻找逐步改进，但明显的肘部可能不存在。
+
+一个样本的轮廓通过比较平均簇内距离 $a(i)$ 和到另一个簇的最小平均距离 $b(i)$ 来衡量：
 
 $$
-s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}
+s(i)=\frac{b(i)-a(i)}{\max(a(i),b(i))}.
 $$
 
-where:
+当分离强烈时接近 1，在模糊边界附近接近 0，对于不利的分配可以为负。它需要合适的距离和有意义的非平凡簇。高轮廓并不证明分组回答了一个有用的问题。
 
-- a(i) = average distance from point iii to all other points in the **same cluster** (measures cohesion).
-- b(i) = average distance from point iii to points in the **nearest different cluster** (measures separation).
+## 假设失败的地方
 
-- s(i) ranges from **–1 to +1**:
-    - **Close to +1** → well-clustered (good fit)
-    - **Around 0** → on the boundary between clusters
-    - **Negative** → possibly assigned to the wrong cluster
+平方欧几里得距离倾向于紧凑的群集，并且在处理拉长形状、不均匀密度或重尾异常值时可能会遇到困难。一个大异常值可以拖动均值。缩放会改变目标：标准化一个低方差但有噪声的特征可能会放大噪声，因此应根据语义选择缩放。
 
-The **overall silhouette score** is the average of all points’ scores.
+对于分类数据或混合数据，算术平均数可能不代表有效的观察值。不要像它们的代码定义距离一样将 K-means 应用于任意整数编码的类别。
+
+## 进一步探索
+
+Mini-batch K-means 通过在可扩展的近似更新中交换精确的全数据集更新来权衡。比较不同种子和样本的稳定性，并检查中心和代表性成员。如果后期使用簇标签作为特征，则仅在训练分割上拟合聚类。
+
+**练习：** 两次运行是否可以使用不同的数字簇标签但仍表示相同的分区？**答案：** 是的。簇标识符是任意的；比较分配到置换或使用置换不变度量。
+
+## 参考来源和进一步阅读
+
+- [scikit-learn: K-means](https://scikit-learn.org/stable/modules/clustering.html#k-means) 描述了初始化和限制。
+- [k-means++ 论文](https://theory.stanford.edu/~sergei/papers/kMeansPP-soda.pdf) 分析了仔细的种子选择。

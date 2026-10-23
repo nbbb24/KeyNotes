@@ -15,7 +15,9 @@ For a $224\times224$ RGB image and $16\times16$ patches:
 
 A convolution with kernel size and stride both equal to the patch size can implement this projection. Patches are concatenated along the sequence dimension, not flattened into one giant hidden vector. Learned positional embeddings distinguish patch locations.
 
-![Original ViT (Vision-Transformer) figure 1](../../../../assets/notion/073-00.png)
+![Vision Transformer: turning an image into a sequence, original figure 1](../../../../assets/notion/073-00.png)
+
+**Figure guide.** Read the image from bottom to top: image patches are flattened and projected into tokens, position information and a class token are added, and a transformer encoder exchanges information between patches. The classification head reads the class representation. Patch count controls attention cost, so image resolution is part of the model's systems design.
 
 ## What the encoder learns
 

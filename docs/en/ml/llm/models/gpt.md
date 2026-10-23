@@ -16,7 +16,7 @@ flowchart LR
 
 For tokens $x_1,\ldots,x_T$, training minimizes $-\sum_t\log p_\theta(x_t\mid x_{<t})$ on eligible targets. All target positions can be evaluated in parallel during teacher-forced training. At generation time, the chosen output becomes part of the next input.
 
-![Original GPT (Decoder-Only) figure 1](../../../../assets/notion/035-00.png)
+![GPT: generation with a causal Transformer, original figure 1](../../../../assets/notion/035-00.png)
 
 ## A prediction is a distribution
 

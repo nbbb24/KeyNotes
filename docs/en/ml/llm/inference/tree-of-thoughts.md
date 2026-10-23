@@ -9,7 +9,9 @@ Tree of Thoughts organizes inference as search over intermediate states. Instead
 3. **Evaluation:** score feasibility or progress using a model, a verifier, or both.
 4. **Search:** retain and expand branches using a budgeted strategy such as breadth-first or depth-first search.
 
-![Original Tree of Thought figure 1](../../../../assets/notion/071-00.png)
+![Tree of Thoughts: search over candidate solution steps, original figure 1](../../../../assets/notion/071-00.png)
+
+**Figure guide.** The four panels progress from direct answer, through one reasoning chain, to several independent chains with a vote, then to a search tree that evaluates intermediate states and can backtrack. A branch is a reasoning state, not necessarily a single generated token.
 
 *The tree makes alternatives and backtracking explicit. A node is a task state or meaningful step, not necessarily one token.*
 

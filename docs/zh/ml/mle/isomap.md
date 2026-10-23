@@ -1,25 +1,56 @@
-!!! info "中文版正在逐篇更新"
+# Isomap：用邻域路径展开弯曲空间
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+Isomap寻求一种低维表示，该表示保留了沿流形的距离而不是通过周围空间的直线距离。一个卷起的纸张说明了这种动机：纸张的不同层上的点在三维空间中可能很接近，但在纸上却相距甚远。
 
-# ISOMAP
+## 三个阶段
 
-## Step-by-Step Intuition
+首先，使用固定邻居数量或半径构建一个连接附近观测值的图。根据局部距离加权边。其次，在此图上计算最短路径距离作为测地线距离的近似值。第三，使用经典多维尺度（MDS）嵌入这些距离。
 
-1. **Build a neighborhood graph**
-    - For each data point xi find its k nearest neighbors (or points within a certain radius ε).
-    - Connect xi and its neighbors with edges weighted by their Euclidean distance.
-    - This creates a **graph** that approximates the local structure of the manifold.
-2. **Compute geodesic distances**
-    - The “real” distance between far-away points isn’t their direct Euclidean distance (since the manifold may curve).
-    - Instead, compute the **shortest path distance** between points along the graph — e.g., using **Dijkstra’s** or **Floyd–Warshall** algorithm.
-    - This approximates the *geodesic distance* between any two points on the manifold.
-3. **Apply MDS (Multidimensional Scaling)**
-    - Now that you have all-pairs geodesic distances, apply **classical MDS** to find a low-dimensional embedding that preserves those distances as much as possible.
-    - MDS essentially tries to minimize:
+```mermaid
+flowchart LR
+    A[高维观测值] --> B[局部邻居图]
+    B --> C[最短路径距离]
+    C --> D[经典 MDS]
+    D --> E[低维坐标]
+```
 
-        $$
-        \sum_{i,j} (D_{ij} - d(y_i, y_j))^2
-        $$
+图是关键的近似：它决定了哪些局部运动是有效的。边数太少会断开数据；边数太多会在折痕处创建捷径。
 
-        where $d(y_i, y_j)$ is the distance between embedded points in low-dim space.
+## 工作原理
+
+想象沿U形曲线采样的一些点。两个尖端在开口处很接近，但在沿着U形旅行时却相距甚远。一个精心选择的局部图遵循曲线并保留了长路径。如果邻居半径直接连接两个尖端，则估计的测地线距离会坍缩，展开可能会失败。
+
+这解释了为什么不能仅从数据集大小选择邻居数量。采样密度、噪声和局部曲率都起作用。
+
+## 经典MDS实际上计算的是什么
+
+给定平方图距离 $D^{\circ2}$ 和中心化矩阵 $H=I-\mathbf1\mathbf1^T/n$，经典MDS形成
+
+$$
+B=-\frac12HD^{\circ2}H.
+$$
+
+其前几个正特征值和特征向量给出坐标。这是一种谱构造。简单地将其描述为直接最小化原始成对距离平方误差会将经典MDS与其他基于压力的公式混淆。
+
+大负特征值可能表明提供的距离不能很好地用欧几里得坐标表示。仅保留少数几个正方向是一个近似，而不是完美展开的保证。
+
+## 进一步探索
+
+Isomap假设局部邻域和图路径近似有意义的流形几何。空洞、不连通组件、非均匀采样和噪声都可能复杂化这一假设。一个视觉上合理的嵌入并不证明推断出的流形的存在性。
+
+所有对最短路径和密集距离表示都可以很昂贵。实际成本取决于图稀疏度、样本数量、求解器和实现。一些库提供使用拟合结构进行外样本变换，但这并不能使任意插值可靠。
+
+比较不同邻居选择的结果，并检查局部图连接是否跨越语义边界。如果预期的下游任务是分类，则直接评估该任务；几何保持和标签分离是不同的目标。
+
+## 检查你的理解
+
+**问题：为什么添加图边会使Isomap变差？** **答案：** 一条捷径可能会低估真正的沿流形距离，同时扭曲许多最短路径。
+
+**练习：如果局部图有两个不连通的组件会发生什么？** **答案：** 一些图距离可能是无限大或需要特定实现的修复。检查并解决图而不是盲目信任结果坐标。
+
+继续阅读 [特征向量](eigenvectors.md)，[PCA](pca.md) 和 [t-SNE](tsne.md)。
+
+## 参考文献和进一步阅读
+
+- [Tenenbaum, de Silva, and Langford: Isomap](https://web.mit.edu/cocosci/Papers/sci_reprint.pdf) 介绍测地线距离的保持。
+- [scikit-learn: Isomap](https://scikit-learn.org/stable/modules/manifold.html#isomap) 解释实现阶段和复杂性。

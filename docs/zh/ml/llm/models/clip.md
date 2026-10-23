@@ -1,25 +1,33 @@
-!!! info "中文版正在逐篇更新"
+# CLIP：在嵌入空间中匹配图像和文本
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+CLIP训练一个图像编码器和一个文本编码器，使得匹配的图像-描述对具有较高的相似度。在推理时，任一端都可以独立编码，这使设计适用于带有文本标签的检索和分类。
 
-# CLIP (Contrastive Language-Image Pre-training)
+## 对比矩阵
 
-![image.png](../../../../assets/notion/024-00.png)
+将图像向量 $v_i$ 和文本向量 $t_j$ 归一化。对于一个包含 $N$ 对样本的批次，形成 $s_{ij}=v_i^\top t_j/\tau$，其中 $\tau$ 是一个学习到的温度相关尺度。图像到文本的损失是
 
-2 Encoder turns Image/Text into embedding
+$$
+L_{I\to T}=-\frac1N\sum_i\log\frac{e^{s_{ii}}}{\sum_j e^{s_{ij}}}.
+$$
 
-same length embedding
+文本到图像的损失应用相同的想法，但沿着列进行。它们的平均值训练了两个检索方向。对角线是被指定的匹配；非对角线对提供负样本。对于一个包含三对样本的批次，得分矩阵有九个条目，而不是三个独立的分类输出。
 
-## Resnet
+![CLIP：在嵌入空间中匹配图像和文本：原图 1](../../../../assets/notion/024-00.png)
 
-Extracted Feature → flatten → attention pooling (like attention)
+![CLIP：在嵌入空间中匹配图像和文本：原图 2](../../../../assets/notion/024-01.png)
 
-# InfoNCE
+第一个图表从配对训练过渡到推理时的文本描述类别。第二个图显示了对比目标的一个方向；完整的CLIP损失使用两个方向。
 
-![image.png](../../../../assets/notion/024-01.png)
+## 无监督分类作为检索
 
-compute similarity between image and text
+编码诸如 `一张狗的照片` 和 `一张猫的照片` 这样的提示，然后与图像嵌入进行比较。最高的相似度确定所选类别。提示词的措辞 和候选标签很重要。这些分数的 softmax 给出一个相对分布，而不是一个普遍校准的概率，即图像包含该概念。
 
-compute cross-entropy of 2 direction
+原始工作研究了修改后的 ResNet 和 ViT 图像编码器。其 ResNet 变体使用注意力池化；这与声称每个 CLIP 模型都使用展平的补丁序列作为最终检索嵌入不同。检索表示是一个池化和投影向量。
 
-average 2
+## 限制和有用实验
+
+描述可能只包含图像的一部分。两个非对角线示例实际上可能共享有效的语义，产生假负样本。物体存在比计数或组合关系（如“红色立方体在蓝色球的左边”）更容易。分别评估这些情况。
+
+**练习。** 图像嵌入是否可以预先计算用于检索数据库？是的，因为图像编码器不依赖于查询文本。交叉编码器通常不能提供相同的独立性。
+
+参考：[CLIP论文](https://arxiv.org/abs/2103.00020)。比较 [SigLIP](siglip.md) 和 [ALBEF](albef.md)。

@@ -74,6 +74,106 @@ plugins:
             Clustering: 聚类
             Dimensionality reduction: 降维
             Course overview: 课程导读
+            ALBEF: ALBEF
+            Speech and audio evaluation: 语音与音频评估
+            Adapters: 适配器
+            NLP introduction: NLP 入门
+            Word representations: 词表示
+            Advanced multimodal learning: 高级多模态学习
+            Attention: 注意力
+            Attention masks: 注意力掩码
+            FlashAttention, PagedAttention, and RadixAttention: FlashAttention、PagedAttention
+              和 RadixAttention
+            BERT: BERT
+            BLIP and BLIP-2: BLIP 与 BLIP-2
+            Language-model foundations: 语言模型基础
+            Multimodal learning: 多模态学习
+            CLIP: CLIP
+            CNNs: 卷积神经网络
+            Entropy, cross-entropy, and KL divergence: 熵、交叉熵与 KL 散度
+            Direct Preference Optimization: 直接偏好优化
+            DeepSpeed and ZeRO: DeepSpeed 与 ZeRO
+            DeepSeek-R1: DeepSeek-R1
+            DeepSeek-V3: DeepSeek-V3
+            Knowledge distillation: 知识蒸馏
+            ELMo: ELMo
+            FLOPs, memory traffic, and latency: FLOPs、内存流量与延迟
+            Flamingo: Flamingo
+            GPT: GPT
+            GRPO: GRPO
+            Importance sampling: 重要性采样
+            Decoding: 解码
+            KV cache: KV 缓存
+            Transformer architecture advances: Transformer 架构演进
+            Automatic evaluation: 自动评估
+            Fine-tuning methods: 微调方法
+            LLM course introduction: 大语言模型课程导论
+            LLM architectures: 语言模型架构
+            Learning objectives, tokenization, and pretraining data: 学习目标、分词和预训练数据
+            Retrieval-augmented language models: 检索增强语言模型
+            LayerNorm and RMSNorm: LayerNorm 与 RMSNorm
+            KV-cache layouts: KV 缓存布局
+            LLaMA: LLaMA
+            Llama 3.1 and the Llama 3 technical report: Llama 3.1 和 Llama 3 技术报告
+            Comparing Llama and GPT without confusing family names: 比较 Llama 与 GPT
+            LLaVA: LLaVA
+            LoRA: LoRA
+            MCP: MCP
+            Mixture of Experts: 混合专家模型
+            Multi-token prediction and speculative decoding: 多 Token 预测与推测解码
+            Multimodal machine learning: 多模态机器学习
+            PPO: PPO
+            Position information: 位置信息
+            Quantization: 量化
+            Qwen2.5: Qwen2.5
+            Qwen2.5-VL: Qwen2.5-VL
+            Retrieval-augmented generation: 检索增强生成
+            RLHF: RLHF
+            RNNs, LSTMs, and GRUs: RNN、LSTM 与 GRU
+            Representation fusion: 信息融合
+            Supervised fine-tuning: 监督微调
+            SigLIP: SigLIP
+            T5 and BART: T5 与 BART
+            Tree of Thoughts: 思维树
+            Tree-based RNNs: 树形 RNN
+            Vision Transformer: 视觉 Transformer
+            From Word2Vec to sequence-to-sequence models and Transformers: 从 Word2Vec 到 Seq2Seq
+              与 Transformer
+            Cross-modal alignment: 跨模态对齐
+            LangChain: LangChain
+            Prompt tuning, prefix tuning, and P-tuning: 提示微调、前缀微调与 P-tuning
+            Whisper: Whisper
+            Activation functions: 激活函数
+            Bagging versus boosting: Bagging 与 Boosting
+            Covariance, correlation, bias, and variance: 协方差、相关系数、偏差与方差
+            DBSCAN: DBSCAN
+            Data cleaning: 数据清洗
+            Decision trees: 决策树
+            Learning paradigms: 学习范式
+            Dropout, BatchNorm, and LayerNorm: Dropout、BatchNorm 与 LayerNorm
+            Eigenvectors: 特征向量
+            Gradient boosting: 梯度提升
+            Hierarchical clustering: 层次聚类
+            Isomap: Isomap
+            Improving neural networks: 改进神经网络
+            k-nearest neighbors: k 近邻
+            K-means: K-means
+            LightGBM: LightGBM
+            Linear discriminant analysis: 线性判别分析
+            Linear and logistic regression: 线性回归与逻辑回归
+            Loss functions: 损失函数
+            Metrics: 评估指标
+            Naive Bayes: 朴素贝叶斯
+            Neural-network training challenges: 神经网络训练问题
+            Optimizers: 优化器
+            Overfitting, regularization, and trustworthy validation: 过拟合、正则化与可信验证
+            PCA: 主成分分析
+            Random forests: 随机森林
+            Support vector machines: 支持向量机
+            XGBoost: XGBoost
+            t-SNE: t-SNE
+            Pandas: Pandas
+            SQL: SQL
 extra_css:
   - assets/stylesheets/extra.css
   - assets/stylesheets/navigation.css

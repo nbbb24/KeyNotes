@@ -1,90 +1,44 @@
-!!! info "中文版正在逐篇更新"
+# 互联：链路、内存访问与通信库
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+两个加速器要交换张量，物理路径、受支持的访问机制和软件协议必须相互匹配。“PCIe、RDMA、HCCL”这样的列表混合了三个层次。把它们分开，才能理解为什么启用某个软件选项，并不能创造硬件原本没有的可达性。
 
-# 互联、协议与通信软件
+## 把术语放回对应层次
 
-PCIe、HCCS、RoCE、RDMA、URMA、HCCL 和 MemFabric 经常出现在同一段讨论中，但它们不属于同一层次。
-先分类，再比较。
-
-## 三个抽象层次
-
-| 层次 | 例子 | 回答的问题 |
+| 层次 | 示例 | 职责 |
 | --- | --- | --- |
-| 物理链路与承载 | PCIe、HCCS、Ethernet | 比特通过什么硬件路径传输？ |
-| 访问与传输语义 | DMA、RDMA、URMA | 软件如何描述读、写、发送和完成？ |
-| 通信软件 | HCCL、HCOMM、MemFabric | 谁管理资源、编排通信并向业务提供接口？ |
+| 物理或系统连接 | PCIe、HCCS、Ethernet | 连接设备，承载流量 |
+| 传输与内存访问 | RDMA、RoCE、UB/URMA 相关机制 | 规定如何使用通信资源和远端内存 |
+| 通信软件 | HCCL、HCOMM、MemFabric 后端 | 提供操作，管理资源 |
+| 应用操作 | AllReduce、缓存传输、远程读取 | 表达要完成的有效工作 |
 
-“基于 RoCE 的 RDMA 通信”和“通过 PCIe 完成 H2D”分别组合了不同层次的信息，因此比单说“走 RDMA”更准确。
+PCIe 连接 Host 和 I/O 设备，Root Complex 与 Switch 会影响路径共享。HCCS 是昇腾高速互联的名称，能力取决于具体产品。Ethernet 提供网络承载，RoCE 在以太网上运行 RDMA。受支持的 RDMA 路径可以减少 CPU 逐字节复制，但仍需要初始化、内存准备和完成处理。
 
-## 常见互联与通信技术
+Unified Bus、URMA、UBoE 属于另一套互联与访问体系。URMA 提供远程内存访问资源及操作；UBoE 在以太网基础设施上承载 UB 通信。这些名称不代表所有引擎、协议和内存类型之间都兼容。此处 UB 与 AI Core 的 Unified Buffer 无关。
 
-| 技术 | 简明解释 | 常见用途 |
-| --- | --- | --- |
-| PCIe | 高速外设互联总线 | CPU 与 NPU、NIC 或其他 PCIe 设备互联 |
-| HCCS | 昇腾系统中的高速一致性互联称呼 | 特定产品形态下的 NPU 间高速通信 |
-| Ethernet | 通用以太网 | 服务器、交换机和存储网络互联 |
-| RoCE | RDMA over Converged Ethernet | 在以太网基础设施上承载 RDMA |
-| RDMA | Remote Direct Memory Access | 跨节点直接访问已注册内存 |
-| UB | Unified Bus | 昇腾新一代统一互联体系中的概念 |
-| URMA | UB Remote Memory Access | UB 体系中的远程内存访问机制 |
-| UBoE | UB over Ethernet | 在以太网基础设施上承载 UB 通信 |
+## Scale-up、Scale-out 与拓扑
 
-!!! warning "产品相关"
-
-    HCCS、UB、URMA 和 UBoE 的具体能力与产品型号、软件版本和部署形态相关。不能从名称推断某台机器一定
-    支持某种路径，也不能假设每个通信引擎都支持所有协议。
-
-## RDMA 与 URMA
-
-RDMA 更像一类远程直接内存访问技术和语义的统称。URMA 则是 UB 体系中的远程内存访问机制，涉及专门的
-资源对象、内存注册、远端读写和完成通知。阅读代码或日志时可以重点识别下列对象：
-
-| 概念 | 含义 |
-| --- | --- |
-| Endpoint | 通信端点 |
-| EID | Endpoint Identifier，端点标识 |
-| Memory Region | 注册后允许通信引擎访问的内存区域 |
-| Remote Read | 从远端内存读取数据 |
-| Remote Write | 向远端内存写入数据 |
-| Completion | 一次通信操作的完成状态 |
-| Notify | 用于同步或通知对端的机制 |
-
-## HCCL、HCOMM 与 MemFabric
+Scale-up 强调紧耦合通信域内的扩展，Scale-out 通过更大的网络连接多个系统。紧耦合域可能超过一台服务器，因此不能把“服务器内”作为通用定义。Full Mesh 将端点两两直连，$n$ 个端点需要 $n(n-1)/2$ 条无向连接。交换拓扑减少直接布线，但引入共享链路和路由约束。
 
 ```mermaid
-flowchart TB
-    APP[vLLM / SGLang / 训练框架]
-    HCCL[HCCL：集合通信]
-    MF[MemFabric：内存管理与数据搬运]
-    HCOMM[HCOMM / 通信后端]
-    LINK[PCIe / HCCS / RoCE / UB 等互联]
-
-    APP --> HCCL
-    APP --> MF
-    HCCL --> HCOMM
-    MF --> HCOMM
-    HCOMM --> LINK
+flowchart LR
+    A[设备 A] --> S[共享交换器件或互联网络]
+    B[设备 B] --> S
+    S --> U[上行链路]
+    U --> R[远端设备]
 ```
 
-这是一张职责示意图，不表示所有实现都具有固定的上下级关系。
+即便 A、B 各自的本地链路都很快，同时访问远端时仍可能共享上行链路。因此，仅看端点带宽不足以预测总吞吐。
 
-- **HCCL** 主要提供 AllReduce、AllGather、Broadcast 等多设备集合通信操作。
-- **HCOMM** 提供底层通信资源和通信操作能力，具体边界以版本和接口为准。
-- **MemFabric** 关注内存资源、数据存储位置，以及跨设备和跨节点的数据搬运。
-- 更上层的缓存系统可以继续管理 KV Cache 等对象的生命周期、存取和复用。
+## RDMA 资源与完成语义
 
-## 看懂一条通信路径
+远程操作需要通信端点、准备好的内存、访问权限和传输机制支持。Read 从远端拉取数据，Write 向远端推送数据；许多 API 的 Send/Receive 则要求匹配接收资源。内存 Key 或访问描述不是可以随意解引用的普通指针。
 
-遇到“这次传输走什么协议”时，建议按下面顺序记录：
+本地完成、远端到达、远端可见和应用收到通知，是不同问题。应选择文档规定的同步原语，让消费者正确使用数据。正确传输还依赖生命周期约束：操作尚在途时注销或复用内存，会使访问失效。
 
-1. 源和目标分别是哪台节点、哪个 Device、哪类内存？
-2. 控制面使用哪个地址和接口完成发现、建链与资源交换？
-3. 数据面使用什么读写语义，是否需要内存注册？
-4. 物理路径经过 PCIe、设备互联、NIC 和几级交换机中的哪些部分？
-5. 完成状态由谁产生，业务在何处等待或轮询？
+RoCE 部署通常结合拥塞控制、流量分类和流控配置。PFC 可以暂停特定优先级的流量，但不能替代拥塞控制，也不能保证良好的长尾延迟。修改网络设置前，先检查计数器和拓扑。
 
-## 参考资料
+## 软件职责与实践检查项
 
-- [昇腾文档中心](https://www.hiascend.com/document)：HCCL、HCOMM 和产品通信接口文档。
-- [昇腾 C 文档](https://asc.gitcode.com/)：AI Core 与异构编程模型。
+HCCL 提供集合操作，HCOMM 提供受支持的通信原语和资源，MemFabric 组织内存与搬运。具体依赖关系随后端变化。比较不同实现时，应保持载荷、端点、完成保证和预热条件一致。
+
+对每条路径记录设备代际、运行时和驱动版本、Endpoint 在 Host 还是 Device、协议、注册内存类型、权限与完成机制。[昇腾通信资源文档](https://www.hiascend.com/doc_center/source/en/CANNCommunityEdition/910/commlib/hixlug/llmcrv2_42_25.html)明确区分协议与端点放置，其能力表适用于对应版本。继续阅读[网络平面](network-planes.md)和[端到端传输](end-to-end-transfer.md)。

@@ -6,14 +6,14 @@ A model learns the prediction problem created by its data pipeline. Architecture
 
 Causal language modeling predicts the next token from earlier tokens. Masked modeling reconstructs selected hidden content from visible context. Prefix modeling can use bidirectional input with causal output. Denoising objectives define a corruption and reconstruction target.
 
-![Original Learning objectives and pre-training data figure 1](../../../../../assets/notion/045-00.png)
+![Learning objectives, tokenization, and pretraining data, original figure 1](../../../../../assets/notion/045-00.png)
 
 *The diagram varies architecture, objective, adaptation, and evaluation separately. A result cannot be attributed to architecture if several other factors changed at once.*
 
 ## From clean text to subwords
 
-![Original Learning objectives and pre-training data figure 2](../../../../../assets/notion/045-01.png)
-![Original Learning objectives and pre-training data figure 3](../../../../../assets/notion/045-02.png)
+![Learning objectives, tokenization, and pretraining data, original figure 2](../../../../../assets/notion/045-01.png)
+![Learning objectives, tokenization, and pretraining data, original figure 3](../../../../../assets/notion/045-02.png)
 
 *Tokenization turns text into IDs; BPE learns frequent pair merges. The training vocabulary and merge rules are then fixed for inference.*
 
@@ -23,9 +23,9 @@ Vocabulary size trades sequence length against embedding/output-table size. A to
 
 ## Padding versus packing
 
-![Original Learning objectives and pre-training data figure 4](../../../../../assets/notion/045-03.png)
-![Original Learning objectives and pre-training data figure 5](../../../../../assets/notion/045-04.png)
-![Original Learning objectives and pre-training data figure 6](../../../../../assets/notion/045-05.png)
+![Learning objectives, tokenization, and pretraining data, original figure 4](../../../../../assets/notion/045-03.png)
+![Learning objectives, tokenization, and pretraining data, original figure 5](../../../../../assets/notion/045-04.png)
+![Learning objectives, tokenization, and pretraining data, original figure 6](../../../../../assets/notion/045-05.png)
 
 *The same documents can be padded separately or packed into fixed-size blocks. The packed view saves empty positions but introduces document-boundary decisions.*
 

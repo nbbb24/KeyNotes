@@ -1,39 +1,39 @@
-!!! info "中文版正在逐篇更新"
+# 多 Token 预测与推测解码
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+普通语言模型训练在每个位置上预测下一个令牌。多令牌预测为几个未来的令牌添加监督。它可以提高学习的表示，并可以提供草稿令牌以加快推理速度，但这些是两种不同的用途。
 
-# Multi Token prediction
+## 独立预测头
 
-https://medium.com/yugen-ai-technology-blog/deepseek-v3-advances-in-moe-load-balancing-and-multi-token-prediction-training-f6d68c59749c
+一种设计共享一个骨干网络并使用多个头来预测 $x_{t+1}, x_{t+2}, \ldots$。简化后的损失函数为：
 
-![image.png](../../../../assets/notion/057-00.png)
+$$
+L = \sum_{k=1}^{K}\lambda_k\,[-\log p_k(x_{t+k}\mid x_{\leq t})].
+$$
 
-![image.png](../../../../assets/notion/057-01.png)
+这些头在不同的时间尺度上提供辅助学习信号。共享前缀的预测不一定会自动形成一个连贯的自回归联合分布：第二个头不一定基于第一个头采样的令牌进行了条件。
 
-1. Input x1, x2, …., xt are fed to a shared transformer trunk to produce a hidden representation z
-2. n  independent output heads, each head responsible for predicting a position-specific token
-3. A unembedding matrix that is shared by all prediction heads
+![多 Token 预测与推测解码：原图 1](../../../../assets/notion/057-00.png)
+![多 Token 预测与推测解码：原图 2](../../../../assets/notion/057-01.png)
+![多 Token 预测与推测解码：原图 3](../../../../assets/notion/057-02.png)
 
-![image.png](../../../../assets/notion/057-02.png)
+*原始笔记对比了共享干节点和多个未来令牌头以及共享输出投影。跟踪每个头附带的预测偏移量。*
 
-### Deepseek V3
+## DeepSeek-V3 的顺序模块
 
-sequential prediction
+DeepSeek-V3 使用顺序 MTP 模块。每一层将前一层的表示与一个位移令牌的嵌入结合，对两者进行归一化，投影它们的连接，并应用一个 Transformer 块。嵌入和输出头参数与主模型共享。位移输入是教师强制训练的一部分；它不能被误认为是在普通生成过程中访问未知的未来令牌。
 
-**D sequential MTP modules** are used to **predict D additional tokens**, each have:
+![多 Token 预测与推测解码：原图 4](../../../../assets/notion/057-03.png)
 
-1. A shared embedding layer
-2. A shared output head
-3. A transformer block and,
-4. A projection matrix
+*顺序设计通过中间表示和位移令牌嵌入来条件化更深层次的预测，而不是将所有时间尺度视为独立的头。*
 
-![image.png](../../../../assets/notion/057-03.png)
+MTP 模块可以用于普通下一个令牌推理或与兼容的验证算法一起提出推测令牌。
 
-combine representations of the **current token at the previous depth k-1 and the embedding of the future token.**
+## 验证是关键步骤
 
-1. RMS Norm to both before concatenated
-2. combination is multiplied by projection matrix - specific to the prediction depth k
-3. output is then fed to a transformer block
-4. output is passed on to an output head, calculates prob dis for kth additional token
+推测解码使用一种廉价的草稿机制和目标模型并行验证多个提出的令牌。精确采样算法包括接受和修正步骤，这些步骤在它们的假设下保持目标分布不变。简单地接受所有草稿令牌会改变模型的输出分布。
 
-During inference, MTP modules can be discarded
+速度取决于草稿成本、接受率、验证效率、批量大小和内存压力。预测四个令牌并不保证四倍的速度提升。
+
+**练习。** 一个草稿提出了五个令牌，但目标拒绝了第一个。五次令牌的进步是否实现？没有。验证/修正策略决定了实际提交的令牌数量。
+
+参考文献：[多令牌预测](https://arxiv.org/abs/2404.19737)，[推测解码](https://arxiv.org/abs/2211.17192)，[DeepSeek-V3](https://arxiv.org/abs/2412.19437)。

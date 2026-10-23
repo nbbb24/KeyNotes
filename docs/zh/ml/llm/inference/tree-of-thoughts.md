@@ -1,76 +1,36 @@
-!!! info "中文版正在逐篇更新"
+# 思维树：在候选推理步骤中搜索
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+思维树将推理组织为对中间状态的搜索。与一次性承诺一个延续不同，系统提出几个有意义的下一步，评估它们，并探索有前景的分支。它改变了推理过程；它不会内在地更新模型权重。
 
-# Tree of Thought
+## 四个设计选择
 
-TOT=CoT+Search+Self-Evaluation
+1. **状态/分解：** 选择一个可以评估的单元，例如部分方程或拼图分配。
+2. **提议：** 样本或枚举候选下一步。
+3. **评估：** 使用模型、验证器或两者来评分可行性或进展。
+4. **搜索：** 使用预算策略（如广度优先或深度优先搜索）保留和扩展分支。
 
-https://arxiv.org/abs/2305.10601
+![思维树：在候选推理步骤中搜索：原图 1](../../../../assets/notion/071-00.png)
 
-https://huggingface.co/blog/sadhaklal/tree-of-thoughts
+**图示说明。** 四个面板从直接答案，经过一个推理链，到几个独立的链并进行投票，然后到评估中间状态并可以回溯的搜索树。一条分支是一个推理状态，不一定是单个生成的标记。
 
-![image.png](../../../../assets/notion/071-00.png)
+*思维树使替代和回溯显而易见。一个节点是一个任务状态或有意义的步骤，不一定是一个标记。*
 
-### **Thought Decomposition — Breaking the problem into steps (Prompt)**
+## 一个小的拼图示例
 
-A *thought* is a small but meaningful piece of reasoning — not too long, not too short.
+要从四个数字中制作24，一个状态记录剩余的数字和表达式历史。一条分支可能乘以两个数字；另一条分支可能减去它们。一个确定性的算术检查器可以拒绝无效操作并验证最终表达式。模型生成的信心可以帮助优先考虑分支，但可执行的检查为这个任务提供了更强的证据。
 
-- For a **math problem**, one thought might be a single equation.
-- For a **story task**, one thought might be a paragraph outline.
-- For a **puzzle**, one thought might be one possible word.
+广度优先搜索带有剪枝可以在每个深度保留多个状态。深度优先搜索跟随一条分支并回溯。两者都不是“短”或“创意”问题的普遍最佳选择；分支因子、评估器质量、内存和解决方案分布都起作用。
 
-Make each thought big enough to judge its quality, but small enough to explore several options.
+## 成本和失败模式
 
----
+在分支因子为b和深度为d的情况下，未剪枝的树可以以指数方式增长。限制提议、保留的状态、总调用次数和经过的时间。当可能时去重等效状态。一个弱评估器可以自信地修剪正确的分支，因此更多的搜索可能会放大其偏见而不是改进答案。
 
-### **Thought Generation — Creating possible next ideas (temperature)**
+与多个独立样本和验证器相比，报告在相等的计算预算下的成功，而不仅仅是相等数量的用户提示。
 
-Given what the model has already thought so far, it now generates **k new candidate thoughts** (next steps).
+## 与训练的关系
 
-There are two ways to do this:
+RLHF、PPO和GRPO在训练期间优化模型行为。思维树在推理时选择可能性。它们可以结合使用。既不偏好训练也不搜索不会自动保证连贯、安全或正确的推理，并且两者都没有普遍的多样性优势。
 
-- **Independent sampling:** generate several different ideas separately — good for creative tasks.
-- **Sequential proposal:** ask the model to list several possible next steps in one go — good for structured tasks (like math).
+**练习。** 如果评估器总是倾向于流畅的解释而不是有效的算术，将搜索宽度加倍是否可靠地解决更多拼图？不是。首先改进评估信号。
 
-The model is now “brainstorming” several ways to continue thinking.
-
----
-
-### **State Evaluation — Judging which ideas look promising (Another LLM)**
-
-Now the model **evaluates** the ideas it just made.
-
-It asks itself: *“Which of these looks like a good next move?”*
-
-Two common methods:
-
-- **Value scoring:** rate each idea independently (e.g., 1–10, or “sure / maybe / impossible”).
-- **Voting:** compare ideas and pick the best one by vote.
-
-This lets the model use its own reasoning to decide which direction to keep exploring.
-
----
-
-### **Search Algorithm — Exploring and backtracking through ideas**
-
-Finally, ToT organizes all the thinking into a **search over a tree of thoughts.**
-
-Two main strategies:
-
-- **Breadth-first search (BFS):** explore several ideas at each step, keep only the top few — good for short, clear problems.
-- **Depth-first search (DFS):** follow one promising path deeply, and backtrack if it fails — good for long or creative tasks.
-
-This turns reasoning into a *controlled exploration process* — the model can look ahead, reconsider, or backtrack, just like humans.
-
-# ToT VS RLHF
-
-**Tree of Thoughts (ToT)**
-
-- **Advantages:** Encourages **diverse reasoning** by exploring multiple reasoning branches
-- **Disadvantages:** Computationally expensive; may generate inconsistent or low-quality branches without a strong evaluation strategy.
-
-**RLHF Reasoning (e.g., PPO/GRPO)**
-
-- **Advantages:** Produces coherent, human-aligned, and consistent reasoning; stable outputs and safer for deployment.
-- **Disadvantages:** Reduces reasoning diversity since the model is optimized toward human-preferred or high-reward styles; may overfit to “expected” reasoning patterns.
+参考：[思维树](https://arxiv.org/abs/2305.10601)。可与[树形 RNN](../models/tree-rnn.md) 对照：后者把树结构用于学习表征，而思维树在推理时搜索候选步骤。

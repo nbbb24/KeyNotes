@@ -1,111 +1,57 @@
-!!! info "中文版正在逐篇更新"
+# 大语言模型课程导论：概率、表征与生成
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+本章从文本输入到生成输出，逐个令牌进行。关键在于区分模型定义的分布、用于计算的向量、用于学习的损失以及用于解码的规则。
 
-# Intro
+## 条件与无条件建模
 
-# Unconditioned VS conditioned
+一个无条件序列模型定义为 $p(y)=\prod_t p(y_t\mid y_{<t})$。“无条件”意味着没有额外的外部输入 x；它仍然在每个令牌上依赖于前一个令牌。条件生成定义为 $p(y\mid x)=\prod_t p(y_t\mid x,y_{<t})$，如翻译或总结。
 
-![image.png](../../../../../assets/notion/043-00.png)
+![大语言模型课程导论：概率、表征与生成：原图 1](../../../../../assets/notion/043-00.png)
+![大语言模型课程导论：概率、表征与生成：原图 2](../../../../../assets/notion/043-01.png)
+![大语言模型课程导论：概率、表征与生成：原图 3](../../../../../assets/notion/043-02.png)
+![大语言模型课程导论：概率、表征与生成：原图 4](../../../../../assets/notion/043-03.png)
 
-![image.png](../../../../../assets/notion/043-01.png)
+*编码器-解码器图是实现条件生成的一种方式。一个仅包含解码器的模型也可以在提示前缀上进行条件化.*
 
-![image.png](../../../../../assets/notion/043-02.png)
+## ID 变为隐藏状态，然后是 logit
 
-![image.png](../../../../../assets/notion/043-03.png)
+分词器将文本映射到固定词汇表中的 ID。嵌入查找选择向量，并且编码器或解码器将它们转换为上下文隐藏状态。
 
-# Tokenizing Text
+![大语言模型课程导论：概率、表征与生成：原图 5](../../../../../assets/notion/043-04.png)
+![大语言模型课程导论：概率、表征与生成：原图 6](../../../../../assets/notion/043-05.png)
+![大语言模型课程导论：概率、表征与生成：原图 7](../../../../../assets/notion/043-06.png)
+![大语言模型课程导论：概率、表征与生成：原图 8](../../../../../assets/notion/043-07.png)
+![大语言模型课程导论：概率、表征与生成：原图 9](../../../../../assets/notion/043-08.png)
 
-A vocabulary is the list of all available tokens
+*词汇投影将隐藏向量映射到每个令牌的一个得分。权重绑定可能会重用嵌入矩阵，但训练目标通常不一般地最小化到下一个标记的嵌入的欧几里得距离.*
 
-# Turning Discrete Tokens into Continuous Vectors
+对于隐藏状态 h，logit 是 $z=W_{vocab}h+b$。softmax 给出概率，目标标记 y 的损失是 $-\log\operatorname{softmax}(z)_y$。概率为 0.5 时，损失约为 0.693 nats；概率为 0.1 时，损失约为 2.303 nats。
 
-![image.png](../../../../../assets/notion/043-04.png)
+![大语言模型课程导论：概率、表征与生成：原图 10](../../../../../assets/notion/043-09.png)
+![大语言模型课程导论：概率、表征与生成：原图 11](../../../../../assets/notion/043-10.png)
 
-# Encoder inputs and outputs
+*这两组方程在展开 softmax 之前和之后表达了相同的目标负对数似然。填充和其他排除的位置需要损失掩码。*
 
-![image.png](../../../../../assets/notion/043-05.png)
+## 生成是一个独立的决策
 
-encoder takes vector representations as input
+贪婪选择、随机采样、温度、top-k、top-p 和束搜索都作用于预测分布。Top-p 保留了最小排序候选集，这些候选集的累积概率至少为 p，而不是一个约束在 p 以下的集合。请参阅 [解码](../../inference/decoding.md) 中的工作示例。
 
-![image.png](../../../../../assets/notion/043-06.png)
+![大语言模型课程导论：概率、表征与生成：原图 12](../../../../../assets/notion/043-11.png)
+![大语言模型课程导论：概率、表征与生成：原图 13](../../../../../assets/notion/043-12.png)
+![大语言模型课程导论：概率、表征与生成：原图 14](../../../../../assets/notion/043-13.png)
+![大语言模型课程导论：概率、表征与生成：原图 15](../../../../../assets/notion/043-14.png)
 
-outputs a sequence of embeddings called **hidden states**
+*这些图表显示了集中度与多样性的关系。幻灯片中关于语义错误或可检测性的陈述是说明性的，而不是普遍的保证。温度为零通常作为贪婪特殊情况实现，而不是 softmax 中的除以零.*
 
-# Decoder inputs and outputs
+频率惩罚取决于计数；存在惩罚取决于标记是否出现。确切公式因 API 而异。停止标记和最大输出长度会影响完成质量，并且应在实验中记录。
 
-![image.png](../../../../../assets/notion/043-07.png)
+## 历史上的递归计算
 
-decoder takes **hidden states** from encoder as well as **embeddings** for the tokens seen so far
+![大语言模型课程导论：概率、表征与生成：原图 16](../../../../../assets/notion/043-15.png)
+![大语言模型课程导论：概率、表征与生成：原图 17](../../../../../assets/notion/043-16.png)
 
-decoder output should be close to the embedding of true next token
+*RNN 图表显示状态随时间传递和层。这种顺序依赖性促使了基于注意力的替代方案；递归在某些流式设置中仍然有用.*
 
-![image.png](../../../../../assets/notion/043-08.png)
+**练习。** 如果词汇量为 50,000，隐藏宽度为 768，那么每个位置生成多少个下一个标记的 logit？无论隐藏宽度如何，都是 50,000。
 
-multiply embedding by vocab to get logits (score for each word)
-
-then softmax
-
-# Loss Function: Negative Log Likelihood
-
-![image.png](../../../../../assets/notion/043-09.png)
-
-![image.png](../../../../../assets/notion/043-10.png)
-
-P()=The probability LLM assigns to the true t th word
-
-I*: index of the true t th word
-
-# How to do the generation?
-
-To do generation, we need a sampling algorithm that selects a word given the predicted
-probability distribution 𝑃(𝑌𝑡 = 𝑖|𝑦1:𝑡−1).
-
-# How can we sample from (𝑃 𝑌𝑡 = 𝑖 𝐲1:𝑡−1 )?
-
-**Option 1: Take argmax𝑖 𝑃(𝑌𝑡 = 𝑖|𝐲1:𝑡−1)
-Option 2: Randomly sample from the distribution returned by the model.**
-
-**Option 3: Randomly sample with temperature.**
-
-![image.png](../../../../../assets/notion/043-11.png)
-
-![image.png](../../../../../assets/notion/043-12.png)
-
-**Option 4: Introduce sparsity by reassigning all probability mass to the 𝑘 most likely tokens. This is referred to as top-𝑘 sampling.**
-
-**Option 5: Introduce sparsity by reassigning all probability mass to the kt tokens which form 𝑝% of the probability mass.
-At each step, kt is chosen such that the total probability of the kt most likely tokens is no greater than the desired probability p.This is referred to as nucleus sampling.
-Option 6: Use some version of beam search.**
-
-![image.png](../../../../../assets/notion/043-13.png)
-
-Limitation for **Random sample**:
-most token v P(Yt=v)≤0.01
-
-Larger T, more uniformly distributed
-
-**Beam search** is a search algorithm that approximates finding the overall most likely
-sequence to generate.
-
-# Decoding Strategy TradeOff
-
-![image.png](../../../../../assets/notion/043-14.png)
-
-large T, large k, large p → diversity
-
-# Other Parameter
-
-**Frequency penalty**: Reduce the likelihood the model generates a token based on how often it has occurred already.
-
-**Presence penalty**: Reduce the likelihood the model generates a token based on whether or not it has occurred already.
-
-**Stopping criteria**
-• Stop after generating k tokens.
-• Stop when a certain token is generated (for example, a period or a newline).
-
-# RNN
-
-![image.png](../../../../../assets/notion/043-15.png)
-
-![image.png](../../../../../assets/notion/043-16.png)
+继续阅读 [架构](architectures.md)。课程资源：[CMU 大规模语言模型课程](https://cmu-llms.org/schedule/)；实时日程可能会独立于这些存档笔记进行更改。

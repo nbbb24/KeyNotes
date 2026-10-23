@@ -1,34 +1,46 @@
-!!! info "中文版正在逐篇更新"
+# k 近邻：用相邻样本预测
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+k近邻（k-NN）是一种监督方法：它存储标记的示例，并使用附近观察的标签进行预测。它不是一种聚类算法。其大部分建模假设隐藏在表示、距离度量和邻域规则中。
 
-# K Nearest Neighbor Algorithm
+## 预测过程
 
-### **What is k-NN Algorithm?**
+对于一个查询 $x$，找到最接近的 $k$ 个训练样本。分类通过聚合它们的标签来工作，可能根据距离加权；回归则通过平均它们的目标值。可能几乎没有参数拟合，但预测可能会很昂贵，因为邻居搜索是实际计算。
 
-It stores all the available data and classifies a new data point based on similarity
+欧几里得距离对几何学做出一个特别假设。一个用数千测量的特征可以主导一个用十分之一测量的特征。根据其意义标准化或以其他方式转换特征，并仅在训练数据上拟合这些变换。
 
-It is supervised
+## 实例分析
 
-### ⚙️ **How It Works**
+查询的三个最近邻的距离为 `[0.1, 0.2, 1.0]`，标签为 `[A, B, B]`。均匀投票预测 B。逆距离加权 `[10, 5, 1]` 给 A 分配总权重 10，给 B 分配总权重 6，因此加权投票预测 A。
 
-1. Choose the number of neighbors **k**.
-2. For a new data point, compute its **distance** (e.g., Euclidean) to all training samples.
-3. Select the **k nearest neighbors**.
-4. **Classification:** majority vote among neighbors.
+这两个答案都不是自动正确的：加权规则会改变模型。定义零距离处的行为，在这种情况下，一个简单的逆距离公式会导致除以零。
 
-    **Regression:** average of neighbors’ values.
+对于邻居目标为 `[10, 14, 30]` 的回归，均匀平均值为 18。一个远距离的异常值可以影响这个预测，因此需要仔细选择距离和加权规则。
 
+## 选择邻域大小
 
-### **What is the role of the k value in the k-NN algorithm?**
+小 $k$ 会产生一个灵活的边界，可以跟随噪声。大 $k$ 在更多观察上平滑，但可能会混合真正不同的群体。使用有效的验证拆分选择 $k$，而不是总是认为奇数是最好的规则。奇数 $k$ 可以避免简单的二分类平局投票，但多类平局和距离平局仍然可能发生。
 
-The ‘k’ in k-NN refers to the number of nearest neighbors that are considered for making a prediction for a new data point
+```mermaid
+flowchart LR
+    A[查询在特征空间中] --> B[找到最近的训练示例]
+    B --> C[选择 k 个邻居]
+    C --> D[投票或平均]
+    D --> E[预测]
+```
 
-### **Why is the odd value of ‘k’ preferred over an even value in the k-NN algorithm?**
+## 进一步探索：高维和规模
 
-possibility of having an equal number of neighbors for each class
+随着维度的增长，距离可能会变得不那么有区分性，并且数据相对于空间来说会变得稀疏。无关的维度可以淹没有意义的邻域。特征选择或学习嵌入可能比改变 $k$ 更重要。
 
-### **How does the k-NN algorithm make predictions on unseen datasets?**
+暴力搜索、树索引和近似邻居搜索在内存、预处理和查询成本之间进行权衡。近似搜索可能会改变邻居集，因此需要同时测量对预测质量的影响以及搜索召回率。用于检索的密集嵌入也需要一个明确的相似性选择，例如余弦相似度或归一化内积。
 
-1. k-closest points
-2. assign class label of the majority of k neighbors
+仅存储适当训练数据并考虑更新：保留所有历史示例可能是昂贵的，并且可以保留过时的关系。避免从几乎重复的项目或拆分两边相同实体中泄漏信息。
+
+**练习：**为什么在自己的训练行上评估 1-NN 分类器是误导的？**答案：**每一行都可以在距离为零时检索自身，产生记忆而不是泛化的证据。
+
+继续阅读 [K-means](kmeans.md) 来对比监督邻居和无监督中心。
+
+## 参考来源和进一步阅读
+
+- [scikit-learn: 最近邻](https://scikit-learn.org/stable/modules/neighbors.html) 解释了分类器、回归器和搜索算法。
+- [scikit-learn: 缩放示例](https://scikit-learn.org/stable/auto_examples/preprocessing/plot_scaling_importance.html) 说明了单位的重要性。

@@ -1,60 +1,28 @@
-!!! info "中文版正在逐篇更新"
+# 提示微调、前缀微调与 P-tuning
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+这些方法优化连续参数，这些参数用于条件化一个冻结的语言模型。它们与普通的提示工程不同，在普通提示工程中，一个人会编辑离散文本而不需要基于梯度的训练。
 
-# prefix, prompt, p tuning
+| 方法 | 学习信号进入的位置 | 主要思想 |
+| --- | --- | --- |
+| Prompt 调优 | 输入嵌入序列 | 在前面添加学习到的软标记向量 |
+| 前缀调优 | 层注意力状态，通常为 K/V 前缀 | 为每一层提供学习到的虚拟上下文 |
+| P-调优 v1 | 由编码器生成的输入级别连续提示 | 使用 LSTM/MLP 风格的编码器参数化软提示 |
+| P-调优 v2 | 层间深度提示 | 将提示适应扩展到更深层次的模型状态 |
 
-## **🔹 Prompt Tuning**
+## 计算最简单的情况
 
-**Prompt Tuning** learns a small set of *soft prompt vectors* that are prepended to the input text.
+长度为 $m$ 和隐藏宽度为 $d$ 的输入软提示有 $md$ 个参数。当 $m=20$ 和 $d=4096$ 时，这等于 81,920 个学习值。前缀调优可能需要分层的 K/V 状态，因此它的计数也取决于层数和注意力维度。一个重新参数化网络可以在训练时间改变计数。
 
-Only these prompt embeddings are trainable; the entire pre-trained model is frozen.
+## 虚拟标记为什么有效
 
-- You add **k learnable prompt tokens** before the input.
-- These prompt embeddings guide the model toward the target task.
-- Very parameter-efficient.
+冻结模型对输入是可微的。训练目标调整软向量以引导模型朝有用的行为前进，即使骨干权重保持固定。这些向量不一定对应可读的词汇词。一个学习到的提示与基础模型、分词器/模板约定以及训练期间使用的注入机制相关联。
 
-**Idea:**
+对于分类任务，软提示可以条件化模型输出标签词。在生成中，前缀可以影响每一层解码器。额外的插入点提供了灵活性，但并不保证在每个数据集上都能提供更好的准确性和稳定性。
 
-> Instead of fine-tuning the whole model, only optimize a small prompt that steers the model.
->
+## 成本和陷阱
 
----
+虚拟标记会消耗注意力上下文，并可能增加 KV 缓存存储。参数效率并不意味着零推理开销。初始化、提示长度、模型规模、优化设置和标签词化都影响结果。与 LoRA 和全微调相比，在合理的调优预算下进行比较。
 
-## **🔹 Prefix Tuning**
+**练习。** 一个训练好的软提示是否总是可以复制到文本-only API 提示中？不是的。通常需要访问嵌入或内部注意力状态；它不是一个普通的字符串。
 
-**Prefix Tuning** is similar, but instead of adding prompt tokens only to the input embeddings, it adds **learnable key/value prefixes to every Transformer layer**.
-
-- Injects trainable vectors into the **attention mechanism**.
-- No modification of word embeddings, but modifies internal attention states.
-- More expressive than simple prompt tuning.
-
-**Idea:**
-
-> Learn a set of prefix key/value states that control the model at every layer.
->
-
----
-
-## **🔹 P-Tuning (v1)**
-
-**P-Tuning** replaces manual hard prompts with **continuous embeddings** inserted into the input through a *prompt encoder* (e.g., an LSTM or MLP).
-
-- Learns soft prompts, but uses an extra encoder for stability.
-- Often used in small models where simple prompt tuning is unstable.
-- Treats prompt tokens as trainable continuous parameters.
-
-**Idea:**
-
-> Map learnable virtual tokens through an encoder to generate continuous prompts.
->
-
----
-
-## **🔹 Summary Table**
-
-| **Method** | **Where prompts are inserted?** | **Trainable params** | **Key benefit** |
-| --- | --- | --- | --- |
-| **Prompt Tuning** | Only at input embedding | Very small | Simple and efficient |
-| **Prefix Tuning** | Key/value states at *every layer* | Small–medium | Much stronger control |
-| **P-Tuning** | Soft prompts + encoder at input | Small | More stable, flexible prompts |
+参考文献：[Prompt 调优](https://arxiv.org/abs/2104.08691)，[前缀调优](https://arxiv.org/abs/2101.00190)，[P-调优](https://arxiv.org/abs/2103.10385)，[P-调优 v2](https://arxiv.org/abs/2110.07602)。

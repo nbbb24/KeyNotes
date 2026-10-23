@@ -36,21 +36,23 @@ Fine-grained experts use narrower expert FFNs and more selectable combinations. 
 
 ## Original visual notes
 
-![Original MOE (Mixture-of-Experts) figure 1](../../../../assets/notion/056-00.png)
+![Mixture of Experts: more capacity with sparse computation, original figure 1](../../../../assets/notion/056-00.png)
 
-![Original MOE (Mixture-of-Experts) figure 2](../../../../assets/notion/056-01.png)
+![Mixture of Experts: more capacity with sparse computation, original figure 2](../../../../assets/notion/056-01.png)
 
-![Original MOE (Mixture-of-Experts) figure 3](../../../../assets/notion/056-02.png)
+![Mixture of Experts: more capacity with sparse computation, original figure 3](../../../../assets/notion/056-02.png)
 
-![Original MOE (Mixture-of-Experts) figure 4](../../../../assets/notion/056-03.png)
+![Mixture of Experts: more capacity with sparse computation, original figure 4](../../../../assets/notion/056-03.png)
 
-![Original MOE (Mixture-of-Experts) figure 5](../../../../assets/notion/056-04.png)
+![Mixture of Experts: more capacity with sparse computation, original figure 5](../../../../assets/notion/056-04.png)
 
-![Original MOE (Mixture-of-Experts) figure 6](../../../../assets/notion/056-05.png)
+![Mixture of Experts: more capacity with sparse computation, original figure 6](../../../../assets/notion/056-05.png)
 
-![Original MOE (Mixture-of-Experts) figure 7](../../../../assets/notion/056-06.png)
+![Mixture of Experts: more capacity with sparse computation, original figure 7](../../../../assets/notion/056-06.png)
 
-![Original MOE (Mixture-of-Experts) figure 8](../../../../assets/notion/056-07.png)
+![Mixture of Experts: more capacity with sparse computation, original figure 8](../../../../assets/notion/056-07.png)
+
+**Figure guide.** Figures 1 and 3 show where the router and selected feed-forward experts sit within a transformer layer. Figure 2 is an illustrative affinity-plus-bias ranking: selection scores need not equal the probabilities used to weight expert outputs. Figures 4–7 depict *different* auxiliary terms: total loss, an importance statistic, a load-balance statistic, and router z-loss. Their scales and differentiability differ; do not add them without explicit weights. The eighth preserved source image has no legible detail, so use the equations and surrounding explanation for this step.
 
 Use the figures to distinguish the expert layer, router distribution, balancing objectives, z-loss, and capacity limit. These are separate mechanisms, not interchangeable names for one regularizer.
 

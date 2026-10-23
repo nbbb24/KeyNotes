@@ -4,7 +4,7 @@ BLIP and BLIP-2 are related but distinct designs. BLIP combines visual understan
 
 ## BLIP: three operating modes
 
-![Original BLIP (Bootstrapping Language-Image Pre-training) figure 1](../../../../assets/notion/021-00.png)
+![BLIP and BLIP-2: understanding, generation, and a learned bridge, original figure 1](../../../../assets/notion/021-00.png)
 
 *BLIP's contrastive encoder, image-grounded matching encoder, and causal text decoder share a common multimodal design but use different information flow.*
 
@@ -12,7 +12,7 @@ ITC aligns independently encoded image/text representations. ITM uses cross-atte
 
 ## BLIP-2 stage 1: learn a visual representation interface
 
-![Original BLIP (Bootstrapping Language-Image Pre-training) figure 2](../../../../assets/notion/021-01.png)
+![BLIP and BLIP-2: understanding, generation, and a learned bridge, original figure 2](../../../../assets/notion/021-01.png)
 
 *The two-stage bridge keeps the large image encoder and language model frozen while learning the interface.*
 
@@ -24,7 +24,7 @@ Stage 1 trains Q-Former using image–text contrastive learning, image–text ma
 - ITM permits bidirectional query/text interaction.
 - Image-grounded generation allows text to read queries and previous text, while preventing future-text leakage.
 
-![Original BLIP (Bootstrapping Language-Image Pre-training) figure 3](../../../../assets/notion/021-02.png)
+![BLIP and BLIP-2: understanding, generation, and a learned bridge, original figure 3](../../../../assets/notion/021-02.png)
 
 *The masking diagrams show why changing the objective requires changing permitted query/text interactions.*
 
@@ -32,7 +32,7 @@ Stage 1 trains Q-Former using image–text contrastive learning, image–text ma
 
 A learned linear projection maps query outputs to the LLM's input width. These visual prefix embeddings condition a frozen decoder-only or encoder–decoder language model, and a generative objective trains the bridge. This is separate from the three representation-learning objectives of stage 1; combining them into one undifferentiated training stage obscures the method.
 
-![Original BLIP (Bootstrapping Language-Image Pre-training) figure 4](../../../../assets/notion/021-03.png)
+![BLIP and BLIP-2: understanding, generation, and a learned bridge, original figure 4](../../../../assets/notion/021-03.png)
 
 *The top path conditions a decoder-only LM; the bottom path connects to an encoder–decoder LM. Both use projected visual query outputs.*
 

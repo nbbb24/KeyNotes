@@ -49,8 +49,17 @@ def main():
     errors = []
     topics = json.loads((ROOT / 'migration/topic-map.json').read_text())
     images = json.loads((ROOT / 'migration/image-manifest.json').read_text())
+    original = {}
+    for name in ('notion-ml', 'infra'):
+        baseline = json.loads((ROOT / f'migration/{name}-manifest.json').read_text())
+        original.update({item['path']: item['sha256'] for item in baseline['files']
+                         if item['path'].endswith(('.png', '.svg'))})
+    if len(original) != len(images):
+        errors.append(f'Original manifest count changed: {len(original)} versus {len(images)}')
     expected = set()
     for item in images:
+        if original.get(item['original_path']) != item['sha256']:
+            errors.append(f"Image hash differs from migration baseline: {item['original_path']}")
         source = ROOT / item['path']
         if not source.is_file() or sha256(source.read_bytes()).hexdigest() != item['sha256']:
             errors.append(f"Original image changed: {source}")
@@ -81,6 +90,13 @@ def main():
                 errors.append(f"Unresolved editorial placeholder: {source}")
             parser = References()
             parser.feed(page.read_text())
+            original_figures = {target(page, url) for url in parser.images
+                                if target(page, url) is not None
+                                and '/assets/notion/' in str(target(page, url))}
+            expected_figures = {SITE / f'assets/notion/{item["id"]:03}-{j:02}.png'
+                                for j in range(item['images'])}
+            if original_figures != expected_figures:
+                errors.append(f'Original figures missing or misplaced: {page}')
             if parser.language != lang:
                 errors.append(f"Incorrect page language: {page}")
             other = 'zh' if lang == 'en' else 'en'

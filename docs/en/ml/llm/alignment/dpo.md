@@ -21,13 +21,21 @@ Sequence log probabilities sum eligible response-token log probabilities. The re
 
 Suppose the current chosen/rejected log-probability gap is -2 and the reference gap is -4. Then $\Delta=2$: the current model has improved its relative preference for the chosen answer, even though that answer still has lower absolute sequence probability. With $\beta=0.5$, the modeled preference is $\sigma(1)\approx0.731$ and loss is about 0.313.
 
-![Original DPO (Direct Preference Optimization) figure 1](../../../../assets/notion/027-00.png)
+![Direct Preference Optimization, original figure 1](../../../../assets/notion/027-00.png)
 
-![Original DPO (Direct Preference Optimization) figure 2](../../../../assets/notion/027-01.png)
+The compact formula compares how the current policy changes the preferred and rejected responses relative to a fixed reference policy. The sigmoid turns that margin into a pairwise logistic objective.
 
-![Original DPO (Direct Preference Optimization) figure 3](../../../../assets/notion/027-02.png)
+![Direct Preference Optimization, original figure 2](../../../../assets/notion/027-01.png)
 
-![Original DPO (Direct Preference Optimization) figure 4](../../../../assets/notion/027-03.png)
+The annotated version labels the prompt, chosen response, rejected response, and $\beta$. Read both log-ratios together: raising the chosen probability alone is not the whole objective.
+
+![Direct Preference Optimization, original figure 3](../../../../assets/notion/027-02.png)
+
+This difference of log policy-to-reference ratios is the preference margin. A larger positive value favors the chosen response relative to the rejected one, after accounting for the reference.
+
+![Direct Preference Optimization, original figure 4](../../../../assets/notion/027-03.png)
+
+The comparison table summarizes a common RLHF pipeline, not universal properties of PPO or DPO. PPO can use reward signals without a separately learned reward model; DPO does not guarantee stability, quality, or lower compute in every setting.
 
 *The original figures connect implicit reward, reference-relative probability ratios, and the simpler pairwise training path. The sigmoid maps the preference logit, not a raw answer-quality score.*
 

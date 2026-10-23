@@ -12,11 +12,13 @@ In span-corruption pretraining, selected spans are replaced by distinct sentinel
 
 BART corrupts text and learns to generate the original sequence. The paper studies token masking, token deletion, text infilling, sentence permutation, and document rotation. Infilling replaces a span with a single mask, so the model must infer both missing content and its length. The studied span lengths use a Poisson distribution with mean 3. Different corruption schemes create different reconstruction problems; the list is not a requirement to apply all of them to every sample.
 
-![Original T5 (Text-to-Text Transfer Transformer)/BART (Bidirectional and Auto-Regressive Transformers) figure 1](../../../../assets/notion/070-00.png)
+![T5 and BART: learning to generate from corrupted input, original figure 1](../../../../assets/notion/070-00.png)
 
-![Original T5 (Text-to-Text Transfer Transformer)/BART (Bidirectional and Auto-Regressive Transformers) figure 2](../../../../assets/notion/070-01.png)
+![T5 and BART: learning to generate from corrupted input, original figure 2](../../../../assets/notion/070-01.png)
 
-![Original T5 (Text-to-Text Transfer Transformer)/BART (Bidirectional and Auto-Regressive Transformers) figure 3](../../../../assets/notion/070-02.png)
+![T5 and BART: learning to generate from corrupted input, original figure 3](../../../../assets/notion/070-02.png)
+
+**Figure guide.** The first image contrasts encoder–decoder, causal, and prefix visibility. The second shows BART's corrupted-input encoder and autoregressive decoder beside BERT and GPT. The third shows two fine-tuning routes: classification from a learned representation and sequence generation for translation. These illustrations distinguish architecture from the corruption objective used in pretraining.
 
 ## Compare the learning signals
 

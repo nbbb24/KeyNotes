@@ -6,7 +6,7 @@ Machine learning and infrastructure, explained through mechanisms, worked exampl
 - **[简体中文](docs/zh/index.md)** is available through the top-right language icon, which keeps the current topic.
 - **Infra** and **ML** are sibling sections. ML includes LLMs, multimodal learning, MLE foundations, SQL, and Pandas.
 
-The English editorial edition covers 113 pages. The Chinese edition currently retains the migrated notes and is being rewritten to match the English edition; unfinished pages display an explicit notice.
+The English and Chinese editorial editions each cover 113 complete topic pages. Both include mechanisms, examples, exercises, references, and the preserved original figures.
 
 ## Preview and verify
 

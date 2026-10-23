@@ -12,9 +12,9 @@ $$
 
 The text-to-image loss applies the same idea down columns. Their average trains both retrieval directions. The diagonal is the designated match; off-diagonal pairs supply negatives. For a three-pair batch, the score matrix has nine entries, not three independent classification outputs.
 
-![Original CLIP (Contrastive Language-Image Pre-training) figure 1](../../../../assets/notion/024-00.png)
+![CLIP: match images and text in an embedding space, original figure 1](../../../../assets/notion/024-00.png)
 
-![Original CLIP (Contrastive Language-Image Pre-training) figure 2](../../../../assets/notion/024-01.png)
+![CLIP: match images and text in an embedding space, original figure 2](../../../../assets/notion/024-01.png)
 
 The first diagram moves from paired training to text-described classes at inference. The second shows one direction of the contrastive objective; a full CLIP loss uses both directions.
 

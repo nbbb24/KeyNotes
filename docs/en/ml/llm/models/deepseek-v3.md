@@ -6,7 +6,7 @@ DeepSeek-V3 is a useful case study in designing model architecture and infrastru
 
 MLA compresses key/value information into a lower-dimensional latent state. Learned projections recover the needed attention quantities, with algebraic rearrangements enabling efficient inference. A separate positional component handles the rotary part. This is more specific than simply “down-project then up-project”: the cache representation and how projections are absorbed determine the actual saving.
 
-![Original DeepseekV3 figure 1](../../../../assets/notion/030-00.png)
+![DeepSeek-V3: attention compression, sparse experts, and training systems, original figure 1](../../../../assets/notion/030-00.png)
 
 *Track the latent content path separately from the rotary positional path. Standard full-K/V cache formulas do not directly describe this storage.*
 
@@ -14,20 +14,20 @@ MLA compresses key/value information into a lower-dimensional latent state. Lear
 
 Shared experts process common information while routed experts provide sparse capacity. Selection biases are adjusted according to load: overloaded experts become less attractive and underused experts more attractive. The balancing bias affects expert selection rather than necessarily the final combination weights.
 
-![Original DeepseekV3 figure 2](../../../../assets/notion/030-01.png)
-![Original DeepseekV3 figure 3](../../../../assets/notion/030-02.png)
+![DeepSeek-V3: attention compression, sparse experts, and training systems, original figure 2](../../../../assets/notion/030-01.png)
+![DeepSeek-V3: attention compression, sparse experts, and training systems, original figure 3](../../../../assets/notion/030-02.png)
 
 *The expert diagram and selection-bias equation describe capacity and routing, two different design concerns.*
 
 A complementary sequence-wise auxiliary loss remains in the recipe. Therefore, “auxiliary-loss-free load balancing” should not be expanded into “the model has no auxiliary losses.”
 
-![Original DeepseekV3 figure 4](../../../../assets/notion/030-03.png)
+![DeepSeek-V3: attention compression, sparse experts, and training systems, original figure 4](../../../../assets/notion/030-03.png)
 
 *The sequence-level term discourages severe imbalance within a sequence even when aggregate balancing is handled separately.*
 
 ## Multi-token prediction and systems design
 
-![Original DeepseekV3 figure 5](../../../../assets/notion/030-04.png)
+![DeepSeek-V3: attention compression, sparse experts, and training systems, original figure 5](../../../../assets/notion/030-04.png)
 
 *Sequential MTP modules provide additional future-token learning signals. Their role during training differs from speculative verification at inference.*
 

@@ -36,15 +36,25 @@ assert abs(p[2] - 0.6652409558) < 1e-9
 
 Adding the same constant to every logit leaves the probabilities unchanged. Multiplying logits by a positive constant changes sharpness; it is equivalent to changing temperature.
 
-![Original Activation functions figure 1](../../../assets/notion/080-00.png)
+![Activation functions: why depth needs nonlinearity, original figure 1](../../../assets/notion/080-00.png)
 
-![Original Activation functions figure 2](../../../assets/notion/080-01.png)
+The sigmoid curve becomes nearly flat at both extremes; its middle is the most sensitive region.
 
-![Original Activation functions figure 3](../../../assets/notion/080-02.png)
+![Activation functions: why depth needs nonlinearity, original figure 2](../../../assets/notion/080-01.png)
 
-![Original Activation functions figure 4](../../../assets/notion/080-03.png)
+Tanh is centered at zero but still saturates. A zero-centered output does not prevent vanishing gradients.
 
-![Original Activation functions figure 5](../../../assets/notion/080-04.png)
+![Activation functions: why depth needs nonlinearity, original figure 3](../../../assets/notion/080-02.png)
+
+ReLU preserves the positive half-line and sets the negative half to zero; this explains both its simple gradient and inactive-unit failure mode.
+
+![Activation functions: why depth needs nonlinearity, original figure 4](../../../assets/notion/080-03.png)
+
+This original softmax plot illustrates probabilities for one chosen vector of scores. Softmax is a vector-valued normalization, not a standalone scalar curve: changing any competing logit changes the other probabilities too.
+
+![Activation functions: why depth needs nonlinearity, original figure 5](../../../assets/notion/080-04.png)
+
+The original Swish plot includes its derivative. For SiLU, $f'(x)=\sigma(x)+x\sigma(x)(1-\sigma(x))$. For general $x\sigma(\beta x)$, the second term also contains a factor of $\beta$. Read the parameter convention before copying a derivative.
 
 ## Match the output to the task
 

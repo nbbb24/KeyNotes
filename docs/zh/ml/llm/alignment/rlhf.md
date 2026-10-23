@@ -1,156 +1,45 @@
-!!! info "中文版正在逐篇更新"
+# RLHF：从人类偏好优化策略
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+基于人类反馈的强化学习使用人类判断来塑造模型行为。经典的语言模型管道通常包括监督微调、从偏好中学习奖励模型以及在约束条件下优化策略。
 
-# RLHF
+## 精确命名组件
 
-# Component
+| 组件 | 角色 |
+| --- | --- |
+| Actor/策略 | 在给定对话前缀下生成下一个标记的概率分布 |
+| 奖励模型 | 根据学习到的偏好对完成的响应进行评分 |
+| 价值网络 | 在行动者—评论家方法中，估计前缀的未来回报 |
+| 参考策略 | 固定或单独管理的比较策略，用于正则化 |
+| 旧策略 | 生成当前训练批次的策略 |
 
-**state space**: all the information have
+参考策略和旧策略不必相同。批评为期望回报提供了估计，而不是回答是否客观正确。GRPO可以省略学习到的批评家；这并不意味着每种RLHF方法都需要所有四个模型。
 
-**action space**: all the decision
+## 学习偏好评分
 
-**reward function**
-
-**constraints**
-
-**policy**: state as input → action as output, max reward
-
-# Steps
-
-1. pre-trained model
-2. Supervised Finetuning
-3. Reward Model Training
-4. policy optimization
-
----
-
-# Actor Model
-
-generate answer
+对于提示x、选择的答案$y_c$和被拒绝的答案$y_r$，一种类似于Bradley-Terry的损失函数为：
 
 $$
-y = \pi_\theta(x)
-
+L_{RM}=-\log\sigma(r_\phi(x,y_c)-r_\phi(x,y_r)).
 $$
 
----
+如果评分相差2，模型化的偏好概率约为0.881。这是一个在偏好模型下的概率，而不是选择的答案是正确的保证。排名可以生成多个对，但这些对可能是相关的，并可能反映注释员的分歧。
 
-# Reward Model
+![RLHF：从人类偏好优化策略：原图 1](../../../../assets/notion/065-00.png)
 
-$$
-r = r_\phi(x, y)
-$$
+**图示说明。** 按照人类比较到奖励模型训练，然后从采样的策略响应通过奖励评分到策略更新的箭头前进。这是常见的RLHF 流程之一；其他偏好优化方法可以改变或省略学习到的奖励模型阶段。
 
-## Training
+*原始管道将演示学习、基于比较的奖励学习和策略优化分开。每个阶段都有自己的数据和失败模式。*
 
-Humans first **rank** several answers to the same question (instead of giving absolute scores, which are hard to standardize).
+## 在不失去起始行为的情况下进行优化
 
-e.g A1>A2>A3, then we have A1&A2, A1&A3, A2&A3
+一个常见的目标是奖励高评分的响应，同时惩罚与参考策略的KL散度。否则，策略可能会利用奖励模型的捷径，如冗长或表面风格。PPO添加了一个单独的机制来相对数据收集策略中调节更新。
 
-Then, a model—based on the **SFT model** but modified to output a single scalar score—is trained to learn these rankings.
+对于对话，每个生成的标记都是一个动作。奖励可能在末尾或中间步骤到达。批评为当前前缀的值依赖于，并且优势比较观察到/估计的回报与基线。必须指定回报折扣和优势估计。
 
-During training, the model receives pairs of answers: one **chosen (better)** and one **rejected (worse)**.
+## 需要评估什么
 
-The **core loss function** is:
+保留偏好数据、检查奖励黑客行为并测试任务正确性、校准、冗长性和回归。人类偏好是有用的监督，但并不总是完全一致或与真相相同。单独的奖励评分本身不足以证明改进。
 
-$$
-\text{loss} = -\log(\sigma(r_\theta(x, y_c) - r_\theta(x, y_r)))
-$$
+**练习。** 为什么在奖励模型已经对输出进行评分时还需要保持一个独立的评估集？优化可能会利用评分者的错误。独立评估可以测量预期行为是否有所改善。
 
-> where $y_c$ is the preferred (chosen) response and $y_r$  is the less preferred (rejected) one.
->
-
-> **Subtract:**
->
->
-> $$
-> r_\theta(x, y_c) - r_\theta(x, y_r)
-> $$
->
-> This difference shows **how much better** the model thinks the good answer is.
->
-> The larger this difference, the more confident the model is.
->
-
-> **Apply sigmoid:**
->
->
-> $$
-> \sigma(r_c - r_r)
-> $$
->
-> The sigmoid converts this difference into a **probability** between 0 and 1
->
-> “the probability that the model correctly prefers the better answer.”
->
-
-> **Take log and negate:**
->
->
-> $$
-> \log(\sigma(\cdot))
-> $$
->
-> This is just **cross-entropy loss**, which penalizes the model when that probability is low.
->
-> → If the model ranks correctly (good ≫ bad), loss ≈ 0
->
-> → If it ranks wrong (good < bad), loss grows large.
->
-
----
-
-# Critic Model
-
-estimate average expectation
-
-update with actor during training
-
-$$
-V = V_\psi(x)
-
-$$
-
----
-
-# Advantage
-
-$$
-A = r - V
-
-$$
-
----
-
-# CLIP
-
-prevents overly large policy updates, keeping learning within a “trust region” and improving stability.
-
----
-
-# Reference
-
-the SFT model
-
----
-
-![image.png](../../../../assets/notion/065-00.png)
-
-1. **Step 1 – SFT (Supervised Fine-Tuning):**
-
-    The pretrained model is fine-tuned on **human-labeled examples** to learn how to follow instructions and produce coherent, helpful responses.
-
-2. **Step 2 – Reward Model Training (RW):**
-
-    A **reward model** is trained using **human preference data**, where annotators rank good and bad answers.
-
-    The reward model learns to predict how good a response is based on human judgment.
-
-3. **Step 3 – RLHF (Reinforcement Learning):**
-
-    The **actor model** generates answers, which are scored by the reward model.
-
-    A **critic model** estimates value, and a **reference model** keeps the new model close to the original SFT behavior.
-
-    The model is optimized (e.g., using PPO) to maximize rewards — meaning it learns to produce responses that humans prefer.
+参考：[InstructGPT](https://arxiv.org/abs/2203.02155)。继续阅读 [PPO](ppo.md)，[DPO](dpo.md)，和 [GRPO](grpo.md)。

@@ -4,8 +4,8 @@ Architecture specifies how information moves through a model. Decoding specifies
 
 ## Begin with sequence search
 
-![Original LLM architectures figure 1](../../../../../assets/notion/044-00.png)
-![Original LLM architectures figure 2](../../../../../assets/notion/044-01.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 1](../../../../../assets/notion/044-00.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 2](../../../../../assets/notion/044-01.png)
 
 *Multiply edge probabilities, or equivalently add log probabilities, to score a path. The second diagram prunes to a beam of two prefixes.*
 
@@ -22,10 +22,10 @@ $$
 
 The sum normalizes over source positions for one decoder query. Index conventions differ across slides, so identify the query and key axes before copying an equation.
 
-![Original LLM architectures figure 3](../../../../../assets/notion/044-02.png)
-![Original LLM architectures figure 4](../../../../../assets/notion/044-03.png)
-![Original LLM architectures figure 5](../../../../../assets/notion/044-04.png)
-![Original LLM architectures figure 6](../../../../../assets/notion/044-05.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 3](../../../../../assets/notion/044-02.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 4](../../../../../assets/notion/044-03.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 5](../../../../../assets/notion/044-04.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 6](../../../../../assets/notion/044-05.png)
 
 *The context is a weighted source-state sum; the decoder combines it with its own state. The normalization denominator must range over the available source positions.*
 
@@ -33,18 +33,18 @@ The sum normalizes over source positions for one decoder query. Index convention
 
 In encoder self-attention, all three come from encoder states. In decoder causal self-attention, all three come from decoder states with a causal mask. In encoder–decoder cross-attention, **queries come from the decoder; keys and values come from the encoder**.
 
-![Original LLM architectures figure 7](../../../../../assets/notion/044-06.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 7](../../../../../assets/notion/044-06.png)
 
 *The compact slide shows raw scaled dot products. Standard scaled dot-product attention applies softmax over those scores before weighting values; omitting it changes the operation.*
 
-![Original LLM architectures figure 8](../../../../../assets/notion/044-07.png)
-![Original LLM architectures figure 9](../../../../../assets/notion/044-08.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 8](../../../../../assets/notion/044-07.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 9](../../../../../assets/notion/044-08.png)
 
 *These block diagrams use residual additions, normalization, and FFNs. Function-argument order is notation-dependent; trace the Q/K/V sources instead of assuming the first displayed argument is always Q.*
 
 ## Visibility distinguishes model families
 
-![Original LLM architectures figure 10](../../../../../assets/notion/044-09.png)
+![LLM architectures: from recurrent attention to Transformers, original figure 10](../../../../../assets/notion/044-09.png)
 
 *The patterns contrast causal decoding, encoder–decoder flow, and bidirectional-prefix/causal-output behavior. Read rows as receiving positions and columns as visible positions under the chosen convention.*
 

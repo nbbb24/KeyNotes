@@ -1,159 +1,45 @@
-!!! info "中文版正在逐篇更新"
+# 跨模态对齐：连接对应信息
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+对齐使得来自不同模态的信息以一种在任务中有用的对应方式相互关联。图像-描述检索、将视频帧与语音单词匹配以及从文本描述学习传感器表示是不同的对齐问题。它们不一定使用相同的损失或相同的粒度。
 
-# cross-modal alignment
+## 全局表示对齐
 
-## **1. When Cross-Modal Alignment Is Needed**
+两个编码器和投影头可以将输入映射到可比的向量：
 
-Cross-modal alignment is required whenever different modalities must share or exchange semantic information. Typical scenarios include:
+$$
+z_x=\operatorname{normalize}(W_xf_x(x)),\quad
+z_y=\operatorname{normalize}(W_yf_y(y)).
+$$
 
-### **(1) When modalities must represent the same semantic concept**
+对比性目标通过相对比较配对样本来奖励：
 
-Examples:
+$$
+L_i=-\log\frac{\exp(s(z_i^x,z_i^y)/\tau)}{\sum_j\exp(s(z_i^x,z_j^y)/\tau)}.
+$$
 
-- Image ↔ Text (CLIP, SigLIP)
-- ECG ↔ Clinical Report
-- PPG/ECG ↔ Diagnostic Labels
+仅匹配维度使得点积成为可能；训练信号赋予它意义。L2或余弦损失可以直接匹配特征，但仅使用正样本相似性可能会导致塌缩，除非其他约束保留信息。KL散度比较概率分布，因此任意有符号特征向量不能简单地作为概率传递给它。
 
-The goal is to ensure that semantically corresponding signals—e.g., “atrial fibrillation” and its irregular RR-interval pattern—occupy nearby positions in the embedding space.
+## 交互和时间对齐
 
----
+跨注意力让一种模态查询另一种模态：
 
-### **(2) When one modality supervises or constrains another**
+$$
+\operatorname{Attention}(Q_x,K_y,V_y)=
+\operatorname{softmax}(Q_xK_y^\top/\sqrt{d_k}+M)V_y.
+$$
 
-For example:
+一个问题标记可以检索相关的图像块；音频帧可以在更细的时间尺度上与转录匹配。共注意力在两个方向上传播信息。学习的查询标记将一种模态压缩成另一种模态的接口，如[BLIP-2](../models/blip.md)所示。注意力权重是学习的兼容性模式，而不是自动验证的对齐。
 
-- Text labels guiding vision encoders
-- Clinical diagnosis guiding ECG feature learning
+## 语义监督和迁移
 
-Semantic supervision must propagate across modalities, which requires alignment.
+概念标签、文本嵌入或教师模型可以引导一个标记较少的模态。例如，机器振动段及其维护报告可以提供配对监督。报告可能包含测量间隔中不存在的信息，因此在文档级别进行配对并不能保证每个句子在信号中可观察。
 
----
+并非所有多模态任务都需要一个共享的度量空间。生成器可以使用通过跨注意力连接的模态特定表示。根据检索、分类、定位或生成需求选择接口。
 
-### **(3) When modalities must be interchangeable or jointly used**
+## 评估对应关系，而不仅仅是相似性
 
-Examples:
+使用检索Recall@K来评估全局配对，使用定位/时间指标来评估局部对齐，并使用下游测试来评估语义有用性。包括在属性上不同的硬负样本。检查重复项、多对多匹配以及跨主题或录制会话的泄漏。
 
-- Text-to-Image retrieval
-- Image captioning
-- Multimodal fusion (vision + signal + text)
+**练习。** 两个描述正确地描述了同一张图像。一个是否应该仅仅因为不在批处理对角线上而被视为负样本？不。多正标签或适当的采样可以避免矛盾的监督。
 
-Such tasks require the modalities to lie in a **shared representation space**.
-
----
-
-### **(4) When modalities have different abstraction levels**
-
-Signals provide low-level patterns (e.g., waveform morphology), whereas text encodes high-level semantics.
-
-Alignment ensures that **low-level patterns map coherently to high-level semantic concepts.**
-
----
-
-## **2. How Cross-Modal Alignment Is Achieved**
-
-Cross-modal alignment strategies fall into three broad categories:
-
-**(A) Representation Alignment**, **(B) Interaction Alignment**, and **(C) Semantic Alignment**.
-
----
-
-# **A. Representation Alignment (Aligning Feature Spaces)**
-
-The goal is to map modalities into a shared embedding space.
-
-### **1. Contrastive Learning (e.g., InfoNCE, CLIP-style)**
-
-$\mathcal{L}_{\text{InfoNCE}}
-= -\log \frac{e^{s(z_i^x, z_i^y)/\tau}}
-{\sum_j e^{s(z_i^x, z_j^y)/\tau}}$
-
-Positive pairs (e.g., ECG + its report) are pulled together, while negatives are pushed apart.
-
-This is the most common and scalable alignment method for multimodal systems.
-
----
-
-### **2. Projection-Layer Alignment**
-
-Each encoder is followed by a projection head:
-
-$h_x = W_x f_x,\qquad h_y = W_y f_y.$
-
-Different modalities are projected into a common dimensional and semantic space.
-
----
-
-### **3. Distance-Based Regularization**
-
-Use constraints such as:
-
-- L2 distance
-- Cosine similarity loss
-- KL divergence
-
-These directly force representations to become similar.
-
----
-
-# **B. Interaction Alignment (Aligning Through Model Interactions)**
-
-Here, modalities interact explicitly through attention mechanisms.
-
-### **1. Cross-Attention**
-
-$\text{Attn}(Q_x, K_y, V_y) = \text{softmax}(Q_x K_y^\top) V_y.$
-
-Effect:
-
-- ECG tokens “attend to” textual tokens
-- Image patches “attend to” captions
-
-This creates token-level alignment between modalities.
-
----
-
-### **2. Co-Attention (Dual Attention)**
-
-Two-way attention:
-
-- X attends to Y
-- Y attends to X
-
-Useful for medical images + clinical notes, or ECG + structured EHR.
-
----
-
-### **3. Shared/Query Tokens (e.g., Q-Former, Flamingo)**
-
-Learnable query tokens act as intermediaries that extract and align features across modalities.
-
----
-
-# **C. Semantic Alignment (Aligning to Clinical or Linguistic Semantics)**
-
-Here, the model aligns representations to an external semantic space.
-
-### **1. LLM-Guided Alignment**
-
-Embed text through large language models (e.g., ClinicalBERT, LLaMA) and align signal encoders to this semantic space.
-
----
-
-### **2. Concept-Level Supervision**
-
-Attach supervision from:
-
-- Diagnosis labels (AF, PVC, STEMI, etc.)
-- Clinical concepts (SNOMED, ICD-10)
-
-This anchors biomedical signals to interpretable semantic units.
-
----
-
-### **3. Knowledge Distillation**
-
-Transfer semantic structure from the text encoder to the signal encoder:
-
-h_{\text{signal}} \approx h_{\text{text}}.
+参考文献：[CLIP](https://arxiv.org/abs/2103.00020)，[ALBEF](https://arxiv.org/abs/2107.07651)。继续阅读[fusion](fusion.md)。

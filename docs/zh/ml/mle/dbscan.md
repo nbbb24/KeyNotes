@@ -1,22 +1,40 @@
-!!! info "中文版正在逐篇更新"
+# DBSCAN：用密度连通性发现聚类
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+DBSCAN 通过密度连通性而非到固定数量中心点的距离来对观测点进行分组。它适用于簇形状不规则且某些点应保持未分配的情况。其两个关键参数描述了局部邻域：半径 $\varepsilon$ 和最小邻域计数。
 
-# DBSCAN
+## 核心、边界和噪声
 
-**DBSCAN (Density-Based Spatial Clustering of Applications with Noise)** is an **unsupervised** clustering algorithm that groups together points that are **closely packed (high density)** and marks points in low-density areas as **outliers (noise)**
+核心点在其 $\varepsilon$ 邻域内有足够的观测点。边界点靠近核心点但本身不满足密度阈值。噪声在所选参数下没有被任何簇覆盖。在 scikit-learn 中，`min_samples` 包括该点本身；其他描述可能使用不同的计数约定。
 
-### **How DBSCAN Works — Step by Step**
+从一个核心点开始，并通过相邻的核心点进行扩展。边界点可以包括在内，但除非它们也是核心点，否则不会通过另一条链扩展簇。这种区别防止了稀疏的边界点以与密集链相同的方式连接区域。
 
-1. **Pick an unvisited point.**
-    - Calculate how many points fall within its **ε (epsilon)** radius.
-2. **Classify the point.**
-    - If it has **≥ minPts** neighbors → it’s a **core point** → start a new cluster.
-    - If it has **< minPts** → mark as **noise (temporarily)**.
-3. **Expand the cluster.**
-    - For each neighbor of a core point:
-        - If it’s also a core point, include its neighbors too (density reachable).
-        - Keep adding reachable points until no more can be added.
-4. **Repeat**
-    - Continue with remaining unvisited points.
-    - If a noise point later becomes reachable from a core point, it’s reclassified into that cluster.
+## 数轴上的示例
+
+取点 `[0.0, 0.1, 0.2, 3.0]`、半径 0.15 和最小计数 3（包括该点本身）。点 0.1 的邻域包含这三个相邻点，是核心点。点 0.0 和 0.2 的邻域都只包含两个点，所以它们是边界点。点 3.0 是噪声。结果是一个三点簇和一个未分配的点。
+
+如果半径增长到 3.1，之前分离的观测点可能会加入密集区域。没有独立于特征尺度的普遍正确的半径。
+
+## 选择参数
+
+检查邻近距离分布，并在可能范围内测试稳定性。故意缩放特征并选择反映“接近”含义的度量。地理坐标、稀疏文本向量和标准化传感器值需要不同的处理方式。
+
+单个密度阈值可能难以应对一个真实簇比另一个簇密集得多的情况。半径足够大以连接稀疏组可能会合并密集组或吸收噪声。如 OPTICS 或 HDBSCAN 等方法解决相关变密度问题，它们有自己的假设。
+
+## 进一步探索
+
+噪声是模型结果，而不是一条记录有误的声明。罕见的有效观测点可以被标记为噪声；密集的损坏记录集合可以形成一个簇。检查标签对应用的意义。
+
+相邻于多个核心组件的边界点可以根据常见实现中的遍历顺序进行分配。核心连接性比每个边界分配更稳定。在考虑此细节之前，不要要求在排列中标签完全相等。
+
+邻域搜索占主导地位。在合适的低维空间中，索引可以帮助，但在高维或大半径的情况下，可能会产生非常大的邻域和内存消耗。某些实现具有二次最坏情况的内存行为。以现实密度为基准进行测试，而不仅仅是行数。
+
+DBSCAN 本身并不提供与监督分类器相同的普遍的离群样本预测规则。添加新观测点并重新运行聚类可能会改变密度关系。
+
+**问题：** 初始标记为噪声的点是否可以后来成为边界点？**答案：** 是的，如果从随后发现的核心点扩展到它。它的局部计数不必改变。
+
+继续阅读 [K-means](kmeans.md) 和 [层次聚类](hierarchical-clustering.md)。
+
+## 参考文献和进一步阅读
+
+- [scikit-learn: DBSCAN](https://scikit-learn.org/stable/modules/clustering.html#dbscan) 解释了邻域和内存行为。
+- [原始的 DBSCAN 论文](https://cdn.aaai.org/KDD/1996/KDD96-037.pdf) 定义了密度可达性和连接性。

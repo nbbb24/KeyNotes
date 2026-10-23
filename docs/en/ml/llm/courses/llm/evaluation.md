@@ -8,7 +8,7 @@ $$
 \operatorname{PPL}=\exp\left(-\frac1N\sum_t\log p(y_t\mid y_{<t})\right).
 $$
 
-![Original Automatic evaluation figure 1](../../../../../assets/notion/041-00.png)
+![Automatic evaluation: measure the behavior you need, original figure 1](../../../../../assets/notion/041-00.png)
 
 *Perplexity is the exponentiated mean token negative log likelihood. Compare it under compatible tokenization, masking, and data conditions.*
 
@@ -16,15 +16,15 @@ A uniform model over four choices has perplexity 4. Lower perplexity does not by
 
 ## Lexical overlap
 
-![Original Automatic evaluation figure 2](../../../../../assets/notion/041-01.png)
-![Original Automatic evaluation figure 3](../../../../../assets/notion/041-02.png)
+![Automatic evaluation: measure the behavior you need, original figure 2](../../../../../assets/notion/041-01.png)
+![Automatic evaluation: measure the behavior you need, original figure 3](../../../../../assets/notion/041-02.png)
 
 *BLEU clips n-gram counts to avoid rewarding repeated matches and includes a brevity penalty. ROUGE variants measure overlap or longest common subsequences; many implementations report precision, recall, and F1, so “ROUGE is recall” is incomplete.*
 
 BLEU traditionally aggregates modified n-gram precision geometrically. Corpus and sentence BLEU differ, especially with smoothing. ROUGE-N uses n-gram overlap; ROUGE-L uses longest-common-subsequence structure. Both can penalize valid paraphrases and reward text that shares words but changes meaning.
 
-![Original Automatic evaluation figure 4](../../../../../assets/notion/041-03.png)
-![Original Automatic evaluation figure 5](../../../../../assets/notion/041-04.png)
+![Automatic evaluation: measure the behavior you need, original figure 4](../../../../../assets/notion/041-03.png)
+![Automatic evaluation: measure the behavior you need, original figure 5](../../../../../assets/notion/041-04.png)
 
 *Character overlap can capture morphology. The original chrF screenshot has a sign typo: the factor is $1+\beta^2$, not $1-\beta^2$.*
 
@@ -36,13 +36,13 @@ For P=R=0.8, F is 0.8 for any positive beta. This simple check exposes the scree
 
 ## Contextual and learned metrics
 
-![Original Automatic evaluation figure 6](../../../../../assets/notion/041-05.png)
-![Original Automatic evaluation figure 7](../../../../../assets/notion/041-06.png)
+![Automatic evaluation: measure the behavior you need, original figure 6](../../../../../assets/notion/041-05.png)
+![Automatic evaluation: measure the behavior you need, original figure 7](../../../../../assets/notion/041-06.png)
 
 *BERTScore matches contextual token embeddings using cosine similarity, then aggregates precision/recall-like scores. It can recognize some paraphrases but can miss subtle negation or numerical errors.*
 
-![Original Automatic evaluation figure 8](../../../../../assets/notion/041-07.png)
-![Original Automatic evaluation figure 9](../../../../../assets/notion/041-08.png)
+![Automatic evaluation: measure the behavior you need, original figure 8](../../../../../assets/notion/041-07.png)
+![Automatic evaluation: measure the behavior you need, original figure 9](../../../../../assets/notion/041-08.png)
 
 *COMET-style diagrams use learned representations and human-quality supervision; regression and ranking variants have different objectives. Specify the exact metric checkpoint and input requirements.*
 

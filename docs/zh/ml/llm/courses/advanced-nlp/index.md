@@ -1,13 +1,23 @@
-!!! info "中文版正在逐篇更新"
+# 高级 NLP 学习路线
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+本课程轨迹将实际文本建模与现代语言模型使用的表示连接起来。从可测量的基线开始，逐步添加上下文和架构复杂性。
 
-# Advanced NLP
+## 建议的学习顺序
 
-[https://github.com/neubig/anlp-code](https://github.com/neubig/anlp-code)
+1. [NLP介绍](introduction.md): 定义任务，构建词袋特征，并识别无序表示所遗漏的内容。
+2. [词表示](word-representations.md): 理解查找表、CBOW、skip-gram和分布相似性。
+3. [RNNs](../../models/rnn.md) 和 [ELMo](../../models/elmo.md): 学习序列上下文如何改变一个词的表示。
+4. [注意力机制](../../components/attention.md) 和 [Transformer模型](../../word2vec-to-transformer.md): 跟踪信息流动和张量形状。
+5. [BERT](../../models/bert.md), [GPT](../../models/gpt.md), 和 [T5/BART](../../models/t5-bart.md): 区分架构与预训练目标。
 
-Advanced NLPhttps://phontron.com/class/anlp2024/lectures/#introduction-overview-of-nlp-jan-16
+## 连接章节的项目
 
-[Intro](introduction.md)
+选择一个文本分类数据集。保持其训练/验证/测试分割固定。构建稀疏线性基线，然后使用学习到的嵌入构建模型，最后使用预训练上下文模型。记录参数数量、训练成本、推理延迟、类别级错误以及对否定或罕见术语的行为。每次只改变一个主要因素，以便改进的原因具有可解释性。
 
-[Word Representation](word-representations.md)
+对于高级读者，测试显现出的收益是否在领域或时间转移后仍然存在。在将所有错误归因于模型容量之前，检查标签歧义。成本较低且表现相似的基线可能是受限应用中更好的系统。
+
+## 完成检查
+
+你应该能够解释为什么one-hot查找和嵌入索引是等价的，CBOW如何失去上下文顺序，因果和双向掩码分别服务于什么目标，以及基准得分取决于分割和度量。如果任何答案不清楚，请在扩展模型之前回访相应的章节。
+
+原课程资料：[CMU Advanced NLP 2024 讲义](https://phontron.com/class/anlp2024/lectures/)和[课程代码](https://github.com/neubig/anlp-code)。本笔记是辅助学习材料，并不声称覆盖整门课程的全部内容。

@@ -1,34 +1,54 @@
-!!! info "中文版正在逐篇更新"
+# 协方差、相关系数、偏差与方差
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+这些术语描述不同类型的变化。**协方差和相关系数**描述变量怎样共同变化；**偏差和方差**描述同一预测方法在不同训练样本下的性质。混淆它们，会让模型诊断变得困难。
 
-# Correlation vs Covariance
+## 从共同变化到无量纲指标
 
-correlation: -1,1 (linear relation)
+配对观测 $(x_i,y_i)$ 的样本协方差为：
 
-covariance: -infinite, infinite (linear relation direction)
+$$
+s_{xy}=\frac{1}{n-1}\sum_i(x_i-\bar x)(y_i-\bar y).
+$$
 
-# Bias vs Variance
+如果较大的 $x$ 往往对应较大的 $y$，乘积通常为正。协方差的单位是两个变量单位的乘积。把米换成厘米，会使协方差扩大 100 倍，但变量之间的实际关系没有变化。
 
-- Bias: how well a model fit to the training set
-- Variance: risk of making poor prediction
+Pearson 相关系数除以两个样本标准差：
 
-**high bias - low variance**
+$$
+r=\frac{s_{xy}}{s_xs_y}.
+$$
 
-<aside>
-💡
+两个变量方差都大于零时，它位于 −1 到 1 之间。若某个变量恒定，分母为零，此时相关系数是未定义，而不是零。
 
-**1.high bias, low variance: underfit**
+## 手算两个例子
 
-**2.low bias, high variance: overfit**
+令 $x=[1,2,3]$、$y=[2,4,6]$，均值分别为 2 和 4。协方差为 $(2+0+2)/2=2$，标准差分别为 1 和 2，因此相关系数为 1。若把 $y$ 的单位放大 100 倍，协方差和 $s_y$ 同时放大 100 倍，相关系数仍为 1。
 
-</aside>
+再令 $x=[-1,0,1]$、$y=x^2=[1,0,1]$。正负贡献抵消，协方差为零。但知道 $x$ 就能完全确定 $y$。因此，线性相关系数为零不代表统计独立。
 
-<aside>
-💡
+## 怎样帮助建模
 
-**small sample size: 1model**
+相关矩阵可以发现冗余数值特征、单位错误和明显的数据采集异常，但不能建立因果方向。共同原因可能同时驱动两个变量，选择特定子群体也可能制造误导性的相关性。因此应将散点图、领域背景和相关系数结合起来看。
 
-**big sample size: 2model**
+对于非线性但单调的关系，Spearman 等秩相关指标回答的是另一类问题。它们都不能代替真实预测任务的评价。在全量数据上计算特征与目标的相关性、筛选特征后再划分数据，同样会泄漏。
 
-</aside>
+## 偏差与方差：另一个实验
+
+想象反复抽取新的训练集，再使用同一方法拟合。在固定输入 $x$ 上，通常的回归假设下，平方误差风险可分解为：
+
+$$
+E[(Y-\hat f(x))^2]=\operatorname{Bias}[\hat f(x)]^2+
+\operatorname{Var}[\hat f(x)]+\sigma^2(x).
+$$
+
+偏差是该方法的平均预测与真实回归函数之间的差；方差描述训练数据变化时预测如何变化；最后一项是不可约的条件噪声。因此，偏差**并不定义为训练误差**，方差也不是简单的“预测出错风险”。
+
+很浅的树可能始终无法描述弯曲关系；很深的树可能在不同样本中追逐不同噪声。更多数据、正则化和集成学习对这种平衡的影响不同，不能只根据样本量决定模型类别。
+
+## 检查理解
+
+**问题：**为什么训练分数很高，仍可能存在较高偏差？**回答：**有限样本拟合程度不是统计偏差的定义，需要看估计器跨数据集的行为及真实目标函数。实际学习曲线是诊断证据，并非直接测量理论分解。
+
+继续阅读 [PCA](pca.md)、[随机森林](random-forests.md)和[过拟合](overfitting.md)。
+
+资料：[NumPy 协方差](https://numpy.org/doc/stable/reference/generated/numpy.cov.html)给出归一化约定；[scikit-learn 偏差—方差示例](https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html)比较单棵树与 Bagging。

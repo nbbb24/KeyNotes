@@ -14,9 +14,11 @@ Here $h_l$ and $h_r$ summarize the left and right children. The same composition
 
 Tree-LSTMs extend the LSTM cell to multiple children. A child-sum variant aggregates child hidden states and uses a separate forget gate per child. An N-ary variant can distinguish ordered child positions. The distinction matters: summing children is insensitive to their order unless order is encoded elsewhere.
 
-![Original Tree-based RNNs figure 1](../../../../assets/notion/072-00.png)
+![Tree-based RNNs: compose meaning along structure, original figure 1](../../../../assets/notion/072-00.png)
 
-![Original Tree-based RNNs figure 2](../../../../assets/notion/072-01.png)
+![Tree-based RNNs: compose meaning along structure, original figure 2](../../../../assets/notion/072-01.png)
+
+**Figure guide.** The first image maps a syntactic parse into a tree computation; the second composes two child vectors into their parent. Parameters may be shared across nodes, while the tree structure changes with the input. The dimension labels in the source drawing are illustrative rather than a required Tree-RNN size.
 
 ## Example: negation scope
 

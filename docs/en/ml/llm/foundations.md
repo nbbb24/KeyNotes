@@ -23,13 +23,21 @@ Training a causal language model usually minimizes negative log likelihood, summ
 
 A causal decoder does not see the whole future sentence during prediction. A prefix decoder's output can attend to the prompt **and** previous output tokens. Encoder–decoder models do not inherently require multitask fine-tuning to function; their usefulness depends on objective, data, scale, and deployment constraints.
 
-![Original Basic figure 1](../../../assets/notion/022-00.png)
+![Language-model foundations, original figure 1](../../../assets/notion/022-00.png)
 
-![Original Basic figure 2](../../../assets/notion/022-01.png)
+The three columns contrast an encoder–decoder, causal language model, and prefix language model. Trace which tokens each predicted position can inspect, not merely how many boxes the drawing contains.
 
-![Original Basic figure 3](../../../assets/notion/022-02.png)
+![Language-model foundations, original figure 2](../../../assets/notion/022-01.png)
 
-![Original Basic figure 4](../../../assets/notion/022-03.png)
+Blue, green, and yellow regions in the attention-mask diagram represent different visibility rules. A prefix may attend bidirectionally within itself while generated positions still cannot inspect future output tokens.
+
+![Language-model foundations, original figure 3](../../../assets/notion/022-02.png)
+
+The language-model formula in the source image sums log probabilities. That quantity is a log-likelihood to maximize; a training loss to minimize uses its negative.
+
+![Language-model foundations, original figure 4](../../../assets/notion/022-03.png)
+
+The denoising-image formula expresses reconstruction conditioned on a corrupted input. Its notation is abbreviated: the model receives the corrupted sequence and predicts the original sequence, usually by minimizing negative log-likelihood.
 
 Read each diagram by separating the architecture's attention pattern from its training loss. The same architecture can support several training recipes.
 

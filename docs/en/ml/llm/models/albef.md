@@ -4,7 +4,7 @@ A dual encoder is efficient at global retrieval but may miss fine-grained intera
 
 ## Read the architecture
 
-![Original ALBEF figure 1](../../../../assets/notion/010-00.png)
+![ALBEF: align before fusing image and text, original figure 1](../../../../assets/notion/010-00.png)
 
 The image and text encoders first produce unimodal features. The multimodal encoder adds cross-attention, letting text states read visual features. The momentum branch supplies slowly changing targets; dashed hard-negative paths connect similarity-based sampling to the matching objective.
 

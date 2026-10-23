@@ -1,9 +1,48 @@
-!!! info "中文版正在逐篇更新"
+# t-SNE：查看局部邻域，谨慎解读全局地图
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+t分布随机邻域嵌入（t-SNE）创建了一个低维可视化，强调局部区域。其输出对于探索表示是有用的，但它并不是所有高维距离的忠实地理地图。
 
-# tsne
+## 将距离转换为邻域概率
 
-t-SNE tries to **preserve local structure** — points that are close in the high-dimensional space should also be close after projection.
+在原始空间中，t-SNE使用本地缩放的高斯邻域来赋予相邻观察值高的相似性。困惑度参数控制一个有效的邻域尺度；它与每个条件分布的熵相关，而不是固定数量的簇。
 
-Unlike PCA or LDA (which produce linear projections), t-SNE captures **non-linear relationships**, making clusters visible even when they are curved or complex.
+在低维空间中，相似性使用重尾的学生-t形式。这为分离点提供了更多的空间，并有助于解决拥挤问题。优化过程最小化
+
+$$
+D_{KL}(P\|Q)=\sum_{i\ne j}p_{ij}\log\frac{p_{ij}}{q_{ij}}.
+$$
+
+由于这种方向的KL散度对具有大$p_{ij}$值的分离对惩罚非常严重，因此保留局部邻居是核心。它并不对所有远距离关系施加相同的准确性。
+
+## 具体解释示例
+
+假设一个数字表示法为几种书写风格生成了分开的岛屿。两个岛屿之间的距离很远，并不意味着它们在源空间中的距离是两个较近岛屿的两倍。一个大岛屿不一定包含比一个小岛屿更多的方差，因为局部缩放和嵌入目标会扭曲密度和面积。
+
+如果类别标签在图上着色，问这个表示是否已经使用了这些标签进行训练。然后，视觉上的清晰分离就不是独立证据，表明无监督方法发现了类别。
+
+## 负责任的工作流程
+
+1. 根据需要清理和缩放特征；考虑PCA来减少噪声和计算。
+2. 运行几个可能的困惑度和随机种子。
+3. 比较局部邻居保留和稳定性，而不仅仅是最漂亮的图片。
+4. 检查原始数据中的模糊或令人惊讶的点。
+5. 使用独立分析或下游任务验证任何声称的群体。
+
+困惑度必须与样本数量兼容。学习率、初始化、早期夸大、迭代预算和近似方法也会影响结果。将这些设置与图形一起保留。
+
+## 进一步探索
+
+目标是非凸的，因此不同的布局可以表示相似的局部结构。旋转、反射和平移整个地图不会改变其邻域意义。在不同数据集上的运行不能自动通过坐标位置进行比较。
+
+标准t-SNE主要是归纳性的：它为提供的观察值优化坐标。添加新点或更改样本会改变布局。一些实现提供了扩展，但一个拟合的t-SNE图不应被假设为与PCA一样展示出简单的变换。
+
+近似算法减少了排斥相互作用的成本，但对于大型数据集仍然需要仔细的资源规划。下采样可以帮助探索，但可能会隐藏稀有群体。始终记录哪些观察值被绘制。
+
+**练习：** 在更改随机种子后出现一个小、紧凑的岛屿。它是否建立了一个新的类别？**答案：** 不。在解释之前，请检查稳定性、源空间邻居和实际示例。
+
+继续阅读 [PCA](pca.md)，[Isomap](isomap.md) 和 [聚类](kmeans.md)。
+
+## 参考文献和进一步阅读
+
+- [van der Maaten and Hinton: t-SNE](https://www.jmlr.org/papers/v9/vandermaaten08a.html) 引入了目标。
+- [scikit-learn: manifold learning](https://scikit-learn.org/stable/modules/manifold.html#t-distributed-stochastic-neighbor-embedding-t-sne) 文档了实用参数和注意事项。

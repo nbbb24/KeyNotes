@@ -1,89 +1,44 @@
-!!! info "中文版正在逐篇更新"
+# 内存与地址：字节在哪里，谁可以访问
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+一个数值地址，只有放进具体地址空间才有意义。两个进程可以用相同的虚拟地址表示不同存储；设备访问 Host 内存之前，也可能需要映射或注册。这就是为什么复制指针值并不等于共享缓冲区。
 
-# 内存、NUMA 与地址
+## 容量、局部性与持久性
 
-数据搬运能否成功，不只取决于网络是否连通。内存类型、地址空间、映射关系、NUMA 位置和注册状态都可能
-决定一条路径是否可达以及性能如何。
-
-## 内存层次
-
-| 名称 | 常见位置 | 特点 |
+| 存储 | 典型用途 | 主要问题 |
 | --- | --- | --- |
-| L0 / L1 / UB | AI Core 内部或附近 | 容量小、延迟低、带宽高，保存计算分块 |
-| HBM / Device Memory | NPU 设备侧 | 保存权重、激活、KV Cache 和计算结果 |
-| Host DRAM | CPU Host 侧 | 容量通常更大，可作为加载、卸载或中转空间 |
-| Remote DRAM | 其他服务器 | 通过网络和通信协议访问 |
-| SSD / 存储系统 | 本地或远端存储 | 持久化、容量大、访问延迟更高 |
+| AI Core 局部缓冲区，L0/L1/UB | 计算块及中间结果 | 工作集能否放进支持的存储层级？ |
+| 设备全局内存，常见为 HBM | 权重、激活、KV Cache | 限制来自容量还是带宽？ |
+| Host DRAM | 输入暂存、Offload、大容量内存池 | 内存是否靠近设备的 I/O 路径？ |
+| 远端内存 | 共享或解耦容量 | 访问延迟与故障语义是什么？ |
+| SSD 与存储系统 | 持久化数据、Checkpoint | 访问是顺序、随机，还是命中缓存？ |
 
-!!! note "同名概念"
+AI Core 的 L1 是硬件缓冲区；分层 KV Cache 中的“L1 缓存”是软件抽象。类似地，片上 Unified Buffer 与 Unified Bus 的缩写相同，功能并不相同。
 
-    AI Core 的 L1 Buffer 是硬件存储层次；推理框架或缓存系统中的 L1 Cache 通常是软件定义的缓存层级。
-    两者不能因为名称相同就视为同一资源。
+## 地址转换与访问准备
 
-## NUMA 是什么
-
-NUMA (Non-Uniform Memory Access) 表示不同 CPU 访问不同内存节点的成本不完全一致。在多路服务器中，
-NPU 通常更靠近某一个 CPU Socket 或 NUMA Node。
+CPU 的 MMU 将进程虚拟地址 VA 转换到物理存储 PA，并实施权限保护。设备可能使用由 IOMMU 转换的 I/O 虚拟地址 IOVA。在受支持的系统上，Shared Virtual Memory 可以简化寻址，但不会消除数据迁移、一致性、权限和顺序要求。“GVA”取决于实现，不能未经确认就理解成任何地方都能解引用的地址。
 
 ```mermaid
 flowchart LR
-    subgraph N0[NUMA Node 0]
-        CPU0[CPU 0]
-        RAM0[Local DRAM 0]
-        NPU0[NPU]
-        CPU0 <--> RAM0
-        CPU0 <--> NPU0
-    end
-    subgraph N1[NUMA Node 1]
-        CPU1[CPU 1]
-        RAM1[Local DRAM 1]
-        CPU1 <--> RAM1
-    end
-    CPU0 <-->|Socket Interconnect| CPU1
+    A[分配存储] --> B[映射到地址空间]
+    B --> C[为通信引擎注册]
+    C --> D[导出或交换受支持的描述]
+    D --> E[导入并通过受支持的 API 使用]
+    E --> F[所有使用者完成后再释放]
 ```
 
-如果 NPU 挂在 NUMA Node 0 附近，使用 Node 1 的 Host Memory 可能多经过一跳 CPU 互联。实际影响需要通过
-拓扑和基准测试确认，不能只凭编号推断。
+这是概念上的生命周期，不是所有后端都必须遵守的具体调用顺序。分配创建资源，映射建立地址关系，注册准备访问，导出和导入传递授权句柄。完成其中一步，不代表其他步骤已经自动完成。
 
-## 常见地址概念
+## NUMA 让内存放置影响性能
 
-| 术语 | 全称 | 含义 |
-| --- | --- | --- |
-| VA | Virtual Address | 进程或设备看到的虚拟地址 |
-| PA | Physical Address | 物理内存地址 |
-| IOVA | I/O Virtual Address | I/O 设备进行 DMA 时使用的虚拟地址 |
-| MMU | Memory Management Unit | 完成处理器侧地址转换与权限检查 |
-| IOMMU | I/O Memory Management Unit | 完成 I/O 地址转换、隔离与权限控制 |
-| SVM | Shared Virtual Memory | Host 与 Device 共享或协调虚拟地址空间的机制 |
-| GVA | 依实现而定 | 某些系统中表示 Global Virtual Address，必须结合上下文 |
-| MR | Memory Region | 向通信引擎注册并授权访问的一段内存 |
+多 Socket 系统中，CPU 访问本地和远端 DRAM 的代价可能不同。靠近 NUMA 0 的设备，访问 NUMA 0 缓冲区可能比访问 NUMA 1 更高效。CPU 亲和性本身不保证内存放置：分配策略和首次触碰行为也有影响。
 
-## 映射、注册和导入
+测试 Host Offload 时，记录提交线程所在 CPU、缓冲区实际放置、设备 PCIe 位置和网卡位置。在其他条件一致的情况下比较本地、远端放置。带宽下降可能来自 Socket 互联，而不是加速器链路。
 
-```mermaid
-flowchart LR
-    VA[用户可见 VA] --> MAP[地址映射]
-    MAP --> MEM[实际内存资源]
-    MEM --> REG[注册 Memory Region]
-    REG --> KEY[访问句柄 / Key]
-    KEY --> IO[DMA / RDMA / URMA 操作]
-```
+## 按证据诊断无效地址
 
-- **分配**决定内存资源是否存在以及位于哪里。
-- **映射**决定当前进程或设备如何通过地址访问资源。
-- **注册**把内存范围和权限交给通信引擎，并产生访问所需的句柄或 Key。
-- **导入**让另一个进程、设备或节点使用已导出的内存描述。
+看到 `TransformVa no mapping`，先确认当前上下文中是否建立了预期映射。注册失败时，检查内存类型、地址、长度、对齐、权限、后端支持和资源限制。导入失败时，检查句柄来源、内存类型和导出方生命周期。即使指针落在有效分配内，`offset + length` 越界仍然会失败。
 
-## 常见故障思路
+明确谁负责分配、注册、提交、等待和释放资源。超时后，先确定操作已取消还是仅仅尚未观察到完成，再决定能否释放内存。结合[异步复制](data-movement.md)与[传输流程](end-to-end-transfer.md)理解这些约束。
 
-日志出现 `no mapping`、`RegisterMemory failed` 或 `invalid memory type` 时，应先检查：
-
-1. 地址属于 Host、Device 还是统一虚拟地址空间？
-2. 内存是否已经分配、映射并保持有效？
-3. 注册长度、边界和访问权限是否与实际操作一致？
-4. 当前设备或通信引擎是否支持这种内存类型？
-5. 远端使用的句柄、Key 和地址是否来自同一条连接和同一次注册？
-
-这类错误不一定是物理网络故障。先确认地址与内存生命周期，再检查链路和远端状态。
+来源：[Linux DMA API 指南](https://docs.kernel.org/core-api/dma-api-howto.html)和 [MemFabric Hybrid](https://gitcode.com/Ascend/memfabric_hybrid)。Linux 指南解释地址类别，设备运行时还可能增加额外规则。

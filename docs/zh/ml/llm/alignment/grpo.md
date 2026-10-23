@@ -1,80 +1,49 @@
-!!! info "中文版正在逐篇更新"
+# GRPO：比较同一提示组内的响应
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+组相对策略优化（GRPO）从同一提示的多个回答中估计相对优势，无需另行训练价值模型。该方法在 DeepSeekMath 中引入，并后来在 DeepSeek 的推理训练中使用。省去价值网络能降低一部分训练成本，但生成采样回答和评估奖励仍然需要计算。
 
-# GRPO (Group Relative Policy Optimization)
+## 组相对优势
 
-![image.png](../../../../assets/notion/036-00.png)
+对于 G 个具有奖励 $ r_i $ 的响应，一个结果监督版本使用
 
-- **Eliminates the Value Model** to reduce memory consumption & computational burden
-in PPO, advantage At is computed using a GAE, which is based on expected future rewards (`r>=t`) and a learned value function `Vψ`
-- **Uses a Group-based Reward comparison** instead of a learned value function.
-Multiple outputs, sampled from the old policy for a given question, are fed to a reward model and the reward across all sampled outputs are averaged to calculate the baseline reward.
+$$
+\hat A_i=\frac{r_i-\operatorname{mean}(r)}{\operatorname{std}(r)+\epsilon}.
+$$
 
----
+对于奖励 `[8,6]`，总体均值为 7，总体标准差为 1，在考虑 $\epsilon$ 的影响之前，优势为 `[1,-1]`。如果所有奖励都相等，则组内没有偏好信号。奖励缩放和零方差处理必须是显式的。
 
-| **Mechanism** | **Effect on Diversity** |
-| --- | --- |
-| Group-based relative rewards | Allows multiple reasoning paths to succeed |
-| No critic model | Removes global bias and template overfitting |
-| Per-group normalization | Encourages local exploration |
+逐 Token 的策略比率比较当前策略与采样时旧策略的概率。类似 PPO 的裁剪代理目标会在 Token 和回答上取平均，通常带有参考策略的 KL 惩罚。在原始序列归一化公式中，每个响应对其标记贡献一个平均值；后来的变体更改归一化以解决不同的偏差。
 
-| **Method** | **Analogy** | **Outcome** |
-| --- | --- | --- |
-| PPO | One teacher grading by a fixed answer key | All students learn the same solution pattern |
-| **GRPO** | Group competitions — best performers in each group are rewarded | Different groups find different valid ways to solve the problem |
+![GRPO：比较同一提示组内的响应：原图 1](../../../../assets/notion/036-00.png)
 
----
+分组图展示同一个提示的多个回答、各自奖励，以及如何归一化为组内相对优势。参考模型提供正则化目标，它不是 GRPO 所省去的 critic。
 
-<aside>
+![GRPO：比较同一提示组内的响应：原图 2](../../../../assets/notion/036-01.png)
 
-Question: q
+期望图把抽取提示与使用旧策略生成一组回答区分开。这组回答只是局部比较集合，不是答案质量的绝对刻度。
 
-Output” o1 (score 8), o2 (score 6)
+![GRPO：比较同一提示组内的响应：原图 3](../../../../assets/notion/036-02.png)
 
-Average reward (R): 7
+代理目标图先在单个回答内平均 token 贡献，再在组内平均。裁剪约束采样比率项，并不保证整个策略在全局都接近旧策略。
 
-Advantage: o1 (8-7)=1 o2 (6-7)=-1
+![GRPO：比较同一提示组内的响应：原图 4](../../../../assets/notion/036-03.png)
 
-</aside>
+末图是含参考策略与当前策略概率比的采样估计式，不是某一个 token 的完整 KL 散度。在指定采样分布下，其期望才有与 KL 相关的解释；旧策略与参考策略承担不同角色。
 
-### Objective Function
+*这些图表对比了学习得到的价值基线与组内奖励统计，并展示裁剪目标和 KL 的采样估计式。请保持参考策略和旧策略的区别。*
 
-![image.png](../../../../assets/notion/036-01.png)
+## 结果监督与过程监督
 
-![image.png](../../../../assets/notion/036-02.png)
+结果监督对完成的响应分配一个分数，并可以使用相同的归一化结果优势为其标记。过程监督对中间步骤进行评分，并定义从适当未来的步骤奖励中获得的标记优势。它需要一个可信的步骤评估器；合理的措辞不能证明一个有效的步骤。
 
-First average the surrogate loss across all tokens in a sampled output. Then average across all sampled outputs, so every output contributes equally regardless of length.
+对于可验证的数学或代码，基于规则的检查可以提供奖励。将奖励检查的呈现与正确性分开。即使有自动验证器，它也可能不完整或可利用，因此请检查高奖励失败的情况。
 
-### KL Penalty
+## 避免误导类比
 
-![image.png](../../../../assets/notion/036-03.png)
+PPO 不会强制所有响应进入一个解决方案模式，而 GRPO 并不内在地消除偏差或保证多样性。组大小、采样、奖励、KL 强度和优化决定了行为。“无价值网络”意味着在该公式中没有学习的价值基线，而不是“无基于模型的判断”。
 
-### Outcome Supervision
+迭代奖励模型重新训练是可能的训练流程选择之一；经验重放比例不是 GRPO 的固有属性。R1-Zero 的基于规则的奖励也是一种特定的具体训练方案，而不是算法的要求。
 
-- **When reward is given:** Only **once at the end** of the full output.
-- **Reward signal:** A single score per output (e.g., factual accuracy + style).
-- **Advantage calculation:** Every token in that output gets the same advantage (normalized reward).
-- **Focus:** Encourages the model to produce correct **final answers**, regardless of how it reasons.
+**练习。** 如果每个响应都错误并获得零奖励，相对归一化是否能识别出最好的一个？不可以。组没有区分信号；改进采样、任务或反馈。
 
-### Process Supervision
-
-- **When reward is given:** At the end of **each reasoning step**.
-- **Reward signal:** A sequence of scores per output (one per step).
-- **Advantage calculation:** For each token, the advantage is the sum (or accumulation) of normalized step-level rewards.
-- **Focus:** Encourages the model to generate **correct and logical reasoning chains**, not just the final result.
-
-### GRPO for Iterative RL
-
-During reinforcement learning, the original reward model can become outdated as the policy improves.
-
-To address this, new outputs are sampled and scored to create fresh training data.
-
-The reward model is then retrained on this new data, while mixing in about 10% of past data to prevent catastrophic forgetting.
-
-### Rewarding System
-
-rule based reward system is employed to train deepseek r1 zero
-
-- **Accuracy rewards** — This model evaluates whether or not the response is correct. These rewards in some cases are rule-based.
-- **Format rewards** — A format reward enforces the model to put its thinking process between `<think>` and `</think>` tags
+参考：[DeepSeekMath](https://arxiv.org/abs/2402.03300)。继续阅读 [DeepSeek-R1](../models/deepseek-r1.md)。

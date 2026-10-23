@@ -6,9 +6,13 @@ Words must become numeric inputs before a neural model can process them. An embe
 
 Let $E$ have shape $V\times d$. A one-hot vector for token ID $i$ multiplied by $E$ selects row $E_i$. An embedding lookup performs this selection directly, avoiding a length-$V$ dense vector. Gradients update the selected rows, subject to the optimizer's behavior.
 
-![Original Word Representation figure 1](../../../../../assets/notion/014-00.png)
+![Word representations: lookup tables, CBOW, and context, original figure 1](../../../../../assets/notion/014-00.png)
 
-![Original Word Representation figure 2](../../../../../assets/notion/014-01.png)
+The CBOW diagram looks up context-word vectors, combines them, and predicts a center word. In practical CBOW, the context vectors are commonly averaged rather than simply summed, so context length does not change scale in the same way.
+
+![Word representations: lookup tables, CBOW, and context, original figure 2](../../../../../assets/notion/014-01.png)
+
+The lookup diagram shows that selecting an embedding row is mathematically equivalent to multiplying by a one-hot vector, but direct indexing avoids the waste of a huge sparse multiplication.
 
 ## Continuous bag of words
 

@@ -4,9 +4,9 @@ Fine-tuning adapts a pretrained model using task data. Separate the training obj
 
 ## A map of adaptation
 
-![Original Finetuning figure 1](../../../../../assets/notion/042-00.png)
-![Original Finetuning figure 2](../../../../../assets/notion/042-01.png)
-![Original Finetuning figure 3](../../../../../assets/notion/042-02.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 1](../../../../../assets/notion/042-00.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 2](../../../../../assets/notion/042-01.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 3](../../../../../assets/notion/042-02.png)
 
 *The overview contrasts adding parameters, selecting existing parameters, and reparameterizing updates. The BERT example adds a task-specific readout to a pretrained encoder.*
 
@@ -14,10 +14,10 @@ A hard prompt is discrete text. A template wraps an input into a task format; a 
 
 ## Prompt and prefix tuning
 
-![Original Finetuning figure 4](../../../../../assets/notion/042-03.png)
-![Original Finetuning figure 5](../../../../../assets/notion/042-04.png)
-![Original Finetuning figure 6](../../../../../assets/notion/042-05.png)
-![Original Finetuning figure 7](../../../../../assets/notion/042-06.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 4](../../../../../assets/notion/042-03.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 5](../../../../../assets/notion/042-04.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 6](../../../../../assets/notion/042-05.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 7](../../../../../assets/notion/042-06.png)
 
 *Input soft prompts learn embedding vectors. Prefix tuning injects learned context into internal layer states. Frozen backbone weights still participate in computation and gradient propagation to the trainable inputs.*
 
@@ -25,17 +25,17 @@ See [prompt methods](../../adaptation/prompt-tuning.md) for counts and deploymen
 
 ## Adapters, sparse choices, and low-rank updates
 
-![Original Finetuning figure 8](../../../../../assets/notion/042-07.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 8](../../../../../assets/notion/042-07.png)
 
 *The adapter's down projection, nonlinearity, up projection, and residual route form a small trainable module.*
 
-![Original Finetuning figure 9](../../../../../assets/notion/042-08.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 9](../../../../../assets/notion/042-08.png)
 
 *BitFit selects bias parameters rather than adding a bottleneck network. A task head may also be trained; bias-free architectures limit where this strategy applies.*
 
 DiffPruning learns sparse parameter deltas using a sparsity-inducing objective/relaxation. The storage advantage depends on how sparse updates are represented and executed. LoRA factorizes an update as BA. IA³ instead learns vectors that rescale selected internal activations, including attention and FFN pathways.
 
-![Original Finetuning figure 10](../../../../../assets/notion/042-09.png)
+![Fine-tuning methods: choose what is allowed to change, original figure 10](../../../../../assets/notion/042-09.png)
 
 *Low-rank branches add a learned update while retaining the frozen main matrix. The low rank constrains the update, not the total adapted matrix.*
 

@@ -1,57 +1,47 @@
-!!! info "中文版正在逐篇更新"
+# Transformer 架构演进：先识别瓶颈
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+现代Transformer变体修改了FFN、注意力状态、归一化和位置。这些变化针对不同的资源或学习动态。尽可能在匹配参数预算、计算量、数据量和上下文预算的情况下进行比较。
 
-# Architecture Advancement of Transformer
+## 前馈网络
 
-# FFN
+![Transformer 架构演进：先识别瓶颈：原图 1](../../../../../assets/notion/040-00.png)
+![Transformer 架构演进：先识别瓶颈：原图 2](../../../../../assets/notion/040-01.png)
 
-![image.png](../../../../../assets/notion/040-00.png)
+*第一张幻灯片比较了激活和门控/双线性FFN。GELU是$x\Phi(x)$，其中$\Phi(x)$是高斯累积分布函数，而不是$x\phi(x)$，其中$\phi(x)$是密度；激活标签中的“Switch”应读作Swish.*
 
-### Bilinear FFNs
+标准的FFN使用两个投影围绕一个激活。门控的FFN在下投影之前将两个投影分支相乘，其中一个是非线性的。由于这会增加一个矩阵，在寻求匹配参数预算时，应减少中间宽度。请参阅[LLaMA的SwiGLU](../../models/llama.md)。
 
-![image.png](../../../../../assets/notion/040-01.png)
+## 注意力头部和缓存存储
 
-### Efficient Attention
+![Transformer 架构演进：先识别瓶颈：原图 3](../../../../../assets/notion/040-02.png)
+![Transformer 架构演进：先识别瓶颈：原图 4](../../../../../assets/notion/040-03.png)
+![Transformer 架构演进：先识别瓶颈：原图 5](../../../../../assets/notion/040-04.png)
+![Transformer 架构演进：先识别瓶颈：原图 6](../../../../../assets/notion/040-05.png)
 
-**Grouped-Query Attention:**
+*进展是MHA → 共享KV组 → 一个KV头部 → 隐式KV压缩。均值池化投影权重是一种初始化/转换策略，而不是原始多头模型的精确等价物。*
 
-Divide Q in G groups,
+MHA为每个查询头部使用单独的KV头部。GQA在查询组之间共享KV头部。MQA在所有查询头部之间共享一个KV头部。MLA通过隐式状态和位置组件更改缓存表示。减少KV头部或隐式宽度可以节省解码带宽和容量，质量取决于训练和配置。
 
-and share K, V in the same group
+对于32个查询头部和8个KV头部，四个查询头部共享每个KV头部。标准缓存是对应于32-KV头部缓存的四分之一，在其他维度相等的情况下。注意力内核仍然计算不同的查询头部输出。
 
-![image.png](../../../../../assets/notion/040-02.png)
+## 归一化和残差路径
 
-**Multi-Query Attention:**
+![Transformer 架构演进：先识别瓶颈：原图 7](../../../../../assets/notion/040-06.png)
+![Transformer 架构演进：先识别瓶颈：原图 8](../../../../../assets/notion/040-07.png)
 
-Single K, V for all Q heads
+*前归一化和后归一化将归一化放在残差加法的不同侧。RMSNorm在不居中的情况下进行缩放；图表反映特定实验，而不是普遍的收敛保证。*
 
-![image.png](../../../../../assets/notion/040-03.png)
+## 位置信息
 
-![image.png](../../../../../assets/notion/040-04.png)
+![Transformer 架构演进：先识别瓶颈：原图 9](../../../../../assets/notion/040-08.png)
+![Transformer 架构演进：先识别瓶颈：原图 10](../../../../../assets/notion/040-09.png)
+![Transformer 架构演进：先识别瓶颈：原图 11](../../../../../assets/notion/040-10.png)
+![Transformer 架构演进：先识别瓶颈：原图 12](../../../../../assets/notion/040-11.png)
 
-**Multi-Head Latent Attention:**
+*幻灯片从添加绝对正弦波到相对分数偏差和旋转Q/K变换。这些是注入顺序的不同机制。*
 
- Project K, V into a lower dimension latent vector
+同一个模型可能结合位置选择与长上下文适应，但扩展位置公式并不能证明长上下文能力。在不同距离和位置上评估检索和推理。
 
-![image.png](../../../../../assets/notion/040-05.png)
+**练习。** 哪个变化直接减少了存储的KV头部数量：FlashAttention或GQA？GQA。FlashAttention主要改变了注意力计算的内存流量；这两种优化可以共存。
 
-# Layer Norm
-
-![image.png](../../../../../assets/notion/040-06.png)
-
-![image.png](../../../../../assets/notion/040-07.png)
-
-# Position Encoding
-
-## relative position information
-
-![image.png](../../../../../assets/notion/040-08.png)
-
-## rotational position embedding
-
-![image.png](../../../../../assets/notion/040-09.png)
-
-![image.png](../../../../../assets/notion/040-10.png)
-
-![image.png](../../../../../assets/notion/040-11.png)
+参考文献：[GQA](https://arxiv.org/abs/2305.13245)，[GLU变体](https://arxiv.org/abs/2002.05202)，[RoFormer](https://arxiv.org/abs/2104.09864)。继续进行[评估](evaluation.md)。

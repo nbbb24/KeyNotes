@@ -6,19 +6,19 @@ The Llama 3 report covers text models and additional multimodal experiments. Rel
 
 The reported text models use a decoder-only Transformer with grouped-query attention. Sharing KV heads among query heads reduces cache storage; the published configurations use eight KV heads. Model size changes layer count and hidden dimensions, so compute cache size from the exact checkpoint configuration.
 
-![Original Llama 3.1 figure 1](../../../../assets/notion/051-00.png)
+![Llama 3.1 and the Llama 3 technical report, original figure 1](../../../../assets/notion/051-00.png)
 
 *The architecture table separates model size, attention heads, and KV heads. They are different inputs to memory and compute estimates.*
 
 Post-training iterates data collection, reward modeling, rejection sampling, SFT, and DPO. Rejection sampling generates candidates and selects high-scoring responses for training. The report's DPO recipe masks special formatting tokens and adds chosen-response NLL with coefficient 0.2; these are recipe-specific modifications, not universal DPO requirements.
 
-![Original Llama 3.1 figure 2](../../../../assets/notion/051-01.png)
+![Llama 3.1 and the Llama 3 technical report, original figure 2](../../../../assets/notion/051-01.png)
 
 *The post-training diagram is a data-and-model iteration loop, not a single pass through one dataset.*
 
 ## Tool use and deployment
 
-![Original Llama 3.1 figure 3](../../../../assets/notion/051-02.png)
+![Llama 3.1 and the Llama 3 technical report, original figure 3](../../../../assets/notion/051-02.png)
 
 *Tool-use examples include a structured call, a tool result, and a final response. A model-generated call still needs host-side validation and execution.*
 
@@ -26,7 +26,7 @@ The report also describes selective FP8 inference choices, including leaving fir
 
 ## Multimodal experiments are separate scope
 
-![Original Llama 3.1 figure 4](../../../../assets/notion/051-03.png)
+![Llama 3.1 and the Llama 3 technical report, original figure 4](../../../../assets/notion/051-03.png)
 
 *The vision experiment connects an image encoder to language through an adapter. It should be read as an experimental extension rather than a property of every text checkpoint.*
 

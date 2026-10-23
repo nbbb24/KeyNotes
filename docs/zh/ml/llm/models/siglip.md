@@ -1,81 +1,37 @@
-!!! info "中文版正在逐篇更新"
+# SigLIP：用 Sigmoid 损失对齐图像与文本
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+SigLIP 保持了 CLIP 的双编码器思想，但改变了损失函数。与 CLIP 中使用 softmax 对每个图像和所有文本候选进行归一化不同，SigLIP 将选定的图像-文本对视为二元匹配示例。
 
-# Siglip
+## 从相似度到成对目标
 
-## **1. What is SigLIP?**
+设 $v_i$ 和 $t_j$ 是归一化的嵌入向量，$s_{ij}=a\,v_i^\top t_j+b$ 是缩放和偏移后的相似度。带有标签 $y_{ij}\in\{-1,+1\}$ 的一对贡献
 
-SigLIP (**Sigmoid Loss for Language–Image Pre-training**) is a CLIP-style vision–language model from Google.
+$$
+\ell_{ij}=\log(1+e^{-y_{ij}s_{ij}}).
+$$
 
-It uses **sigmoid + binary cross-entropy** instead of CLIP’s **softmax contrastive loss**.
+这是二元逻辑损失，等价于在 sigmoid 上的二元交叉熵。缩放和偏移量很重要，特别是因为负对可能远远多于正对。实现时应使用数值稳定的 logits 形式损失。
 
----
+## 小比较
 
-## **2. Why SigLIP?**
+对于一个得分为 2 的正对，损失为 $\log(1+e^{-2})\approx0.127$。对于得分相同的负对，损失为 $\log(1+e^2)\approx2.127$。因此，目标函数奖励匹配的正分数和不匹配的负分数。
 
-CLIP’s softmax loss forces all samples in the batch to compete, which:
+```python
+# runnable-example
+import math
+positive = math.log1p(math.exp(-2.0))
+negative = math.log1p(math.exp(2.0))
+assert positive < 0.13 and negative > 2.12
+```
 
-- couples samples
-- needs large batch sizes
-- introduces false negatives
+与 CLIP 的 softmax 不同，成对损失不需要全局归一化分母。这支持灵活的成对采样和分布式训练。虽然损失是成对的，但学习过程中示例 **不是统计独立的**：所有对共享编码器参数。
 
-SigLIP makes each image–text pair **independent**, improving stability and alignment.
+## 变化的限制
 
----
+一个 sigmoid 目标不会自动修复假负例。如果一个有效的图像-文本匹配被错误地标记为负例，模型仍然会收到矛盾的监督。批量大小、负样本采样、数据质量、架构和计算预算都会影响结果。特定模型报告的改进并不意味着 sigmoid 总是更稳定、多语言或多准确。
 
-## **3. Core Method**
+SigLIP 表征可用于检索、零样本分类或多模态生成器的视觉编码器。生成器仍然需要与语言接口并进行适当的训练。
 
-Given image embedding v and text embedding t:
+**练习。** 如果在不改变权重的情况下双倍采样负例，优化问题是否不变？不是。除非减少或权重补偿，否则正负贡献的相对关系会发生变化。
 
-**Similarity:**
-
-$s = v^\top t$
-
-**Sigmoid loss:**
-
-$L = -\left(y\log\sigma(s) + (1-y)\log(1-\sigma(s))\right)$
-
-- y=1: positive pair
-- y=0: negative pair
-
-This replaces the softmax contrastive loss in CLIP.
-
----
-
-## **4. Architecture**
-
-Same as CLIP:
-
-- **Vision encoder:** ViT
-- **Text encoder:** T5/BERT-style
-- **Embedding alignment:** via dot-product similarity
-
----
-
-## **5. Advantages**
-
-- More stable training
-- Less batch-size sensitivity
-- Fewer false negatives
-- Simpler loss function
-- Better zero-shot and retrieval performance
-- Strong multilingual results
-
----
-
-## **6. How SigLIP is used**
-
-- As a **frozen encoder** for classification, retrieval, reranking
-- With a **small classifier head** (MLP, similarity head, cross-attention)
-- With light **fine-tuning** (projection layers, LoRA, temperature)
-
----
-
-## **7. Key Difference vs CLIP (1 sentence)**
-
-CLIP uses **softmax contrastive loss**; SigLIP uses **sigmoid BCE**, making learning more stable and improving alignment.
-
----
-
-If you want, I can make an even shorter **5-bullet summary**, or a **slide-ready version**.
+参考：[Sigmoid Loss for Language Image Pre-Training](https://arxiv.org/abs/2303.15343)。请参阅 [CLIP](clip.md)。

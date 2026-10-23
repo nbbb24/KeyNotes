@@ -24,7 +24,9 @@ $$
 
 If scores differ by 2, the modeled preference probability is about 0.881. It is a probability under the preference model, not a guarantee that the chosen answer is correct. Rankings can generate multiple pairs, but those pairs are correlated and may reflect annotator disagreement.
 
-![Original RLHF figure 1](../../../../assets/notion/065-00.png)
+![RLHF: learn from preferences, then optimize a policy, original figure 1](../../../../assets/notion/065-00.png)
+
+**Figure guide.** Follow the arrows from human comparisons to reward-model training, then from sampled policy responses through reward scoring to policy updates. This is one common RLHF pipeline; alternative preference-optimization methods can change or omit the learned reward-model stage.
 
 *The original pipeline separates demonstration learning, comparison-based reward learning, and policy optimization. Each stage has its own data and failure modes.*
 

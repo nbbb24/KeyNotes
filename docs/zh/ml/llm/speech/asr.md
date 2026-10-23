@@ -1,160 +1,37 @@
-!!! info "中文版正在逐篇更新"
+# 语音与音频评估：选对误差单位
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+语音识别、口语理解、合成、检索和事件检测解决不同的问题。它们的指标不应简单地因为所有输入都涉及音频而互相替代。
 
-# ASR
+## 转录：WER、CER及相关率
 
-# **1. Automatic Speech Recognition (ASR) Metrics**
+$$
+WER=\frac{S+D+I}{N},
+$$
 
-## **1.1 Word Error Rate (WER)**
+其中，替换、删除和插入来自编辑对齐，N是参考词的数量。CER使用字符；音素/标记错误率使用其指定的单位。定义标准化、标点符号、大小写、分段以及如何处理空引用。当插入很多时，WER可能会超过100%。
 
-WER is the most widely used metric for ASR quality. It measures the difference between the predicted transcript and the reference transcript.
+参考 `the cat sat` 和假设 `the cat sits here` 有一个替换和一个插入，给出 WER $2/3$。一个关键名称或否定的单词错误可能比几个无害的格式差异更重要，因此应添加任务特定的检查。
 
-$WER = \frac{S + D + I}{N}$
+## 口语理解
 
-- **S** = substitutions
-- **D** = deletions
-- **I** = insertions
-- **N** = number of words in the reference
+意图准确性衡量所选意图。槽 F1 测量提取的实体/值；指定匹配是否需要精确的跨度和标签。标记级别和实体级别的 F1 不同。语义错误率可以结合意图和槽错误，但分母和插入/替换规则因基准而异。应陈述确切定义，而不是将一个公式视为通用。
 
-A lower WER means better recognition accuracy.
+## 语音合成
 
----
+MOS 在定义的协议下收集人类评分，通常在五点量表上。比较性 MOS 使用配对相对判断。评估者说明、听觉条件、样本选择和置信区间会影响解释。自然度、可理解性、说话人相似性和偏好是独立维度。
 
-## **1.2 Character Error Rate (CER)**
+梅尔倒谱失真、F0 RMSE/相关性和持续时间误差提供客观诊断，但需要对齐和清音与浊音的判定约定。它们不完全替代人类听觉评估的每个方面。
 
-Similar to WER but computed at the **character level** rather than word level.
+## 检索和声音事件
 
-$CER = \frac{S + D + I}{N}$
+单个已知配对匹配的召回率@K 通常是查询中匹配出现在前 K 的分数。当有多个相关项目时，区分 Hit@K 和文档级别召回。余弦相似度是一种用于排名的评分，而不是检索正确性的评估。平均精度均值（mAP）总结了在指定的相关集中下的相关性排名。
 
-Used mainly in languages without explicit word boundaries (Chinese, Japanese, Korean).
+基于事件的 F1 需要匹配标签和定义容差内的时间边界，通常有起始与结束时间容差。基于段的指标评估固定窗口中的活动。在一个常见的段错误率分解中，替换是 $\min(FN,FP)$，删除是 $\max(0,FN-FP)$，插入是 $\max(0,FP-FN)$；对原始 FN+FP+替换求和会重复计数错误。
 
----
+## 报告足够的信息以重现评分
 
-## **1.3 Phone Error Rate (PER) / Token Error Rate (TER)**
+包括数据集/分割、单位、预处理、匹配容差、微宏平均以及不确定性。没有这些约定的评分很难比较。
 
-- **PER**: error rate at the phoneme level
-- **TER**: error rate at BPE/subword/token level
+**练习。** 一个系统可以有低 WER 但意图准确性差吗？是的。少量语义重要错误可能会改变用户的意图。
 
-Useful for phoneme-based ASR or multilingual systems.
-
----
-
-# **2. Spoken Language Understanding (SLU) Metrics**
-
-SLU includes intent classification, slot filling, and semantic parsing.
-
-### **2.1 Intent Accuracy**
-
-Percentage of correctly predicted intents.
-
-### **2.2 Slot F1 Score**
-
-F1 score for token-level slot predictions (similar to NER):
-
-$F1 = 2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}$
-
-### **2.3 Semantic Error Rate (SemER)**
-
-Measures semantic parsing errors:
-
-$SemER = \frac{\text{Intent errors + Slot errors}}{\text{Total slots + 1}}$
-
----
-
-# **3. Text-to-Speech (TTS) Metrics**
-
-## **3.1 Mean Opinion Score (MOS)**
-
-Human raters score naturalness on a **1–5 scale**:
-
-5 = completely natural
-
-1 = very unnatural
-
-Still the most trusted evaluation metric for TTS.
-
----
-
-## **3.2 Comparative MOS (CMOS)**
-
-Measures preference between two systems (A vs B).
-
-Useful for detecting small improvements.
-
----
-
-## **3.3 Objective TTS Metrics**
-
-Although they do not fully replace subjective evaluations, they help compare systems.
-
-- **MCD (Mel-Cepstral Distortion):** spectral distortion
-- **F0 RMSE:** pitch error
-- **Duration RMSE:** rhythm/length error
-- **F0 correlation:** how well pitch contours match
-
----
-
-# **4. Multimodal (Audio–Text / Audio–Image) Alignment Metrics**
-
-Used in models like **CLAP, Whisper-LM, Speech-LLaMA, Qwen-Audio, GPT-4o**.
-
-## **4.1 Recall@K (R@1, R@5, R@10)**
-
-Evaluates retrieval performance:
-
-- Audio → Text retrieval
-- Text → Audio retrieval
-- Audio → Image retrieval
-
-$R@K = \frac{\text{Correct matches found in top K}}{\text{Total samples}}$
-
----
-
-## **4.2 Cosine Similarity**
-
-Used for audio-text or audio-image embedding alignment:
-
-$\text{sim}(a,b) = \frac{a \cdot b}{\|a\| \|b\|}$
-
-Forms the basis of contrastive learning (e.g., InfoNCE).
-
----
-
-## **4.3 mAP (mean Average Precision)**
-
-Common in keyword spotting or audio event retrieval.
-
----
-
-# **5. Audio Event Detection (AED) Metrics**
-
-Used for tasks such as detecting sirens, dog barks, coughing, etc.
-
-### **5.1 Event-based F1**
-
-Counts an event as correct only if **class and time boundaries match**.
-
-### **5.2 Segment-based F1**
-
-Evaluates predictions in fixed time windows (e.g., 1 second).
-
-### **5.3 Error Rate (ER)**
-
-Used in DCASE challenges:
-
-ER = $\frac{FN + FP + Sub}{N}$
-
----
-
-# **Summary Table**
-
-| **Task** | **Common Metrics** |
-| --- | --- |
-| ASR | **WER, CER, TER, PER** |
-| SLU | **Intent Accuracy, Slot F1, SemER** |
-| TTS | **MOS, CMOS, MCD, F0 RMSE** |
-| Multimodal Alignment | **Recall@K, Cosine Similarity, mAP** |
-| Audio Event Detection | **Event-F1, Segment-F1, ER** |
-
----
+参考：[Whisper 评估](https://arxiv.org/abs/2212.04356)，[sed_eval 事件和段定义](https://tut-arg.github.io/sed_eval/sound_event.html)。

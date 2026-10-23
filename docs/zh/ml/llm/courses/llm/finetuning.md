@@ -1,97 +1,48 @@
-!!! info "中文版正在逐篇更新"
+# 微调方法：选择需要更新的参数
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+微调使用任务数据对预训练模型进行调整。将训练目标与参数化分离：SFT 或 DPO 定义了要优化的内容；全量微调、LoRA、适配器或提示定义了哪些自由度可以变化。
 
-# Finetuning
+## 微调的映射
 
-![image.png](../../../../../assets/notion/042-00.png)
+![微调方法：选择需要更新的参数：原图 1](../../../../../assets/notion/042-00.png)
+![微调方法：选择需要更新的参数：原图 2](../../../../../assets/notion/042-01.png)
+![微调方法：选择需要更新的参数：原图 3](../../../../../assets/notion/042-02.png)
 
-# BERT
+*概览图对比了添加参数、选择现有参数和重新参数化更新。BERT 示例向预训练编码器添加了一个任务特定的读出层。*
 
-![image.png](../../../../../assets/notion/042-01.png)
+硬提示是离散文本。模板将输入包装成任务格式；** verbalizer 将类别标签映射到输出词/标记**。这些术语相关但不互换。对于情感分析，模板可能是 `Review: ... Sentiment:`，而 verbalizer 可能将标签映射为 `positive` 和 `negative`。
 
-# Prompt Engineering
+## 提示和前缀微调
 
-Verbalizer: The template we wrap an example in in order to perform the task.
+![微调方法：选择需要更新的参数：原图 4](../../../../../assets/notion/042-03.png)
+![微调方法：选择需要更新的参数：原图 5](../../../../../assets/notion/042-04.png)
+![微调方法：选择需要更新的参数：原图 6](../../../../../assets/notion/042-05.png)
+![微调方法：选择需要更新的参数：原图 7](../../../../../assets/notion/042-06.png)
 
-# Parameter Efficient Tuning
+*输入软提示学习嵌入向量。前缀微调将学到的上下文注入到内部层状态中。冻结的骨干权重仍然参与计算和梯度传播到可训练输入。*
 
-![image.png](../../../../../assets/notion/042-02.png)
+有关提示方法的详细信息，请参阅 [提示方法](../../adaptation/prompt-tuning.md)。更多的注入点可以增加表达能力，但并不保证更好的优化。
 
-1. Addition: What if we introduce additional trainable parameters to the neural network and just train those?
-2. Specification: What if we pick a small subset of the parameters of the neural network and just tune those?
-3. Reparameterization: What if we re-parameterize the model into something that is more efficient to train?
+## 适配器、稀疏选择和低秩更新
 
-## prompt tuning
+![微调方法：选择需要更新的参数：原图 8](../../../../../assets/notion/042-07.png)
 
-prompt+query, ONLY in input
+*适配器的下投影、非线性、上投影和残差路径形成一个小型可训练模块。*
 
-Create a new learnable embedding matrix 𝐏 ∈ ℝ𝑘×𝑑
-○ Set the first k input embeddings to be learnable.
-○ k is a hyperparameter up to the choice of the implementer.
+![微调方法：选择需要更新的参数：原图 9](../../../../../assets/notion/042-08.png)
 
-![image.png](../../../../../assets/notion/042-03.png)
+*BitFit 选择偏置参数而不是添加瓶颈网络。任务头也可能进行训练；无偏架构限制了这种策略的应用范围。*
 
-![image.png](../../../../../assets/notion/042-04.png)
+DiffPruning 使用稀疏性诱导的目标/松弛来学习稀疏参数增量。存储优势取决于稀疏更新如何表示和执行。LoRA 将更新分解为 BA，而 IA³ 则学习重新缩放选定内部激活的向量，包括注意力和 FFN 路径。
 
-## prefix tuning
+![微调方法：选择需要更新的参数：原图 10](../../../../../assets/notion/042-09.png)
 
-at each layer of the Transformer
+*低秩分支添加一个学到的更新，同时保留冻结的主要矩阵。低秩约束了更新，而不是整个适应矩阵。*
 
-![image.png](../../../../../assets/notion/042-05.png)
+## 设计有用的比较
 
-![image.png](../../../../../assets/notion/042-06.png)
+使用一个固定的训练/验证/测试分割，并比较任务质量、可训练参数数量、峰值内存、训练时间、检查点大小和推理延迟。公平地调整每种方法的学习率。小的可训练参数数量并不意味着成比例的速度提升，因为冻结的骨干仍然在执行。
 
-## Adapter
+**练习。** 两个具有相同可训练参数数量的方法是否可能有不同的服务成本？是的。添加非线性模块、虚拟标记和可合并的权重更新具有不同的执行路径。
 
-new NN modules that are added between layers of a pre-trained network
-
-![image.png](../../../../../assets/notion/042-07.png)
-
-linear project → low dimension → non-linear → high dimension
-
-$$
-𝑦 = 𝑾_𝟐 GELU (𝑾_𝟏𝒙 + 𝒃_1)+ 𝒃_2
-$$
-
-Pros:
-
-● Faster to converge
-
-● Have been shown to be quite effective in multi-task settings
-
-Cons:
-
-● Adding in new layers means
-
-● It also makes the model bigger
-
-## BitFit: Bias-terms Fine-tuning
-
-Only tune the bias terms and final classification layer
-
-![image.png](../../../../../assets/notion/042-08.png)
-
-## DiffPruning
-
-○ For each parameter, finetune a learnable “delta” which gets added to the original parameter value.
-○ Use an L0-norm penalty to encourage sparsity in the deltas.
-
-## Re-parameterizing the model
-
-reparameterize a subset of the original model parameters with low-dimensional proxy parameters, and just optimize the proxy.
-
-## LoRA
-
-injects trainable rank decomposition matrices into each layer.
-
-![image.png](../../../../../assets/notion/042-09.png)
-
-## (IA)3 : Infused Adapter by Inhibiting and Amplifying Inner Activations
-
-Rescale inner activations with lower-dimensional learned vectors, which are injected into the attention and feedforward modules
-
-**VS LoRA:**
-
-○ LoRA learns low-rank updates to the attention weights
-○ (IA)3 learns injectable vectors.
+参考文献：[BitFit](https://arxiv.org/abs/2106.10199)，[DiffPruning](https://arxiv.org/abs/2012.07463)，[IA³](https://arxiv.org/abs/2205.05638)。继续阅读 [SFT](../../adaptation/sft.md) 和 [LoRA](../../adaptation/lora.md)。

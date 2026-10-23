@@ -1,47 +1,82 @@
-!!! info "中文版正在逐篇更新"
+# 位置信息：正弦编码和RoPE
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+没有位置信号，自注意力通常无法像语言那样区分一组标记的排列。例如，“狗咬人”和“人咬狗”包含相同的单词但不同的关系。
 
-# Positional Encoding
+## 绝对位置
 
-# Absolute positional encoding
+学习的位置嵌入将一个向量附加到每个位置索引上。索引是一个查找键；较大的索引**不**意味着更大的嵌入权重。固定查找表有一个最大支持的位置，除非扩展或适应。
 
-1 2 3 4 ….
+原始的Transformer相反添加了正弦特征：
 
-problems: Long sequence→ larger index → larger weights
+$$
+PE(p,2i)=\sin\left(p/10000^{2i/d}\right),\quad
+PE(p,2i+1)=\cos\left(p/10000^{2i/d}\right).
+$$
 
-# Transformer (PE)
+每个维度对都有一个角频率。随着$i$的增加，频率降低且波长增加。多个尺度编码了近处和远处的变化。能够在任何整数上评估公式并不保证训练模型在任意长度上可靠地外推。
 
-![image.png](../../../../assets/notion/060-00.png)
+## 旋转位置嵌入
 
-![image.png](../../../../assets/notion/060-01.png)
+RoPE旋转查询/键坐标对。对于一对和角度$p\theta$：
 
-![image.png](../../../../assets/notion/060-02.png)
+$$
+R(p\theta)=\begin{bmatrix}\cos(p\theta)&-\sin(p\theta)\\
+\sin(p\theta)&\cos(p\theta)\end{bmatrix},\qquad
+q'_p=R(p\theta)q_p,\quad k'_s=R(s\theta)k_s.
+$$
 
-the i is the dimension of embedding
+因为旋转保持长度并按角度加法组合，
 
-larger i, smaller angular frequency, larger frequency
+$$
+(q'_p)^\top k'_s=q_p^\top R((s-p)\theta)k_s.
+$$
 
-![image.png](../../../../assets/notion/060-03.png)
+因此，分数依赖于通过旋转的相对位移，同时仍然取决于标记内容。不同的坐标对使用不同的频率。标准RoPE应用于查询和键，而不是通常的值。
 
-# RoPE
+```python
+# runnable-example
+import math
+def rotate(x, angle):
+    a, b = x
+    return (a * math.cos(angle) - b * math.sin(angle),
+            a * math.sin(angle) + b * math.cos(angle))
+q, k = (1.0, 2.0), (3.0, -1.0)
+dot = lambda a, b: sum(x * y for x, y in zip(a, b))
+assert abs(dot(rotate(q, 0.7), rotate(k, 1.2)) - dot(q, rotate(k, 0.5))) < 1e-12
+```
 
-turn each 2 dim into a pair
+## 阅读原始图表
 
-define a position rotation
+![位置信息：正弦编码和RoPE：原图 1](../../../../assets/notion/060-00.png)
 
-![image.png](../../../../assets/notion/060-04.png)
+![位置信息：正弦编码和RoPE：原图 2](../../../../assets/notion/060-01.png)
 
-![image.png](../../../../assets/notion/060-05.png)
+![位置信息：正弦编码和RoPE：原图 3](../../../../assets/notion/060-02.png)
 
-![image.png](../../../../assets/notion/060-06.png)
+![位置信息：正弦编码和RoPE：原图 4](../../../../assets/notion/060-03.png)
 
-![image.png](../../../../assets/notion/060-07.png)
+![位置信息：正弦编码和RoPE：原图 5](../../../../assets/notion/060-04.png)
 
-![image.png](../../../../assets/notion/060-08.png)
+![位置信息：正弦编码和RoPE：原图 6](../../../../assets/notion/060-05.png)
 
-![image.png](../../../../assets/notion/060-09.png)
+![位置信息：正弦编码和RoPE：原图 7](../../../../assets/notion/060-06.png)
 
-![image.png](../../../../assets/notion/060-10.png)
+![位置信息：正弦编码和RoPE：原图 8](../../../../assets/notion/060-07.png)
 
-The inner product becomes sensitive to **relative position** p-q.
+![位置信息：正弦编码和RoPE：原图 9](../../../../assets/notion/060-08.png)
+
+![位置信息：正弦编码和RoPE：原图 10](../../../../assets/notion/060-09.png)
+
+![位置信息：正弦编码和RoPE：原图 11](../../../../assets/notion/060-10.png)
+
+**图例说明。** 图1–4从频率构建正弦绝对位置向量；它们的波形随着坐标对和位置而变化。图5–11将旋转嵌入重新表述为复数乘法和实二维旋转。在两种形式中，每对都按位置依赖的角度旋转，并且结果查询-键点积取决于相对位移。频率索引和序列位置索引是不同的量；将它们视为可互换的会掩盖推导。
+
+按照从添加正弦向量到旋转2-D坐标对，再到相对位置点积恒等式的顺序阅读。在读取方程时，保持位置索引与频率对索引分开。
+
+## 长上下文影响
+
+RoPE缩放方案调整位置/频率关系以扩展可用的上下文。它们需要模型特定的选择和评估；仅扩展配置限制并不建立长上下文质量。当使用KV缓存时，即使只处理一个新标记，也必须保持一致的绝对位置。具有错误位置偏移的缓存可能有有效的形状并静默地产生错误预测。
+
+**练习。** 如果两个位置都增加10，旋转因子在它们的点积中是否改变？不：它们的相对位移保持不变，假设相同的频率调度。
+
+参考：[RoFormer](https://arxiv.org/abs/2104.09864)。继续阅读 [注意力掩码](attention-masks.md)。

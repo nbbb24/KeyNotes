@@ -14,13 +14,21 @@ For rewards `[8,6]`, the population mean is 7 and population standard deviation 
 
 A token-level policy ratio compares current and rollout-policy probabilities. A clipped surrogate resembling PPO is averaged over tokens and responses, often with a reference-policy KL penalty. In the original sequence-normalized formulation, each response contributes an average over its tokens; later variants change normalization to address different biases.
 
-![Original GRPO (Group Relative Policy Optimization) figure 1](../../../../assets/notion/036-00.png)
+![GRPO: compare responses within a prompt group, original figure 1](../../../../assets/notion/036-00.png)
 
-![Original GRPO (Group Relative Policy Optimization) figure 2](../../../../assets/notion/036-01.png)
+The group diagram shows multiple responses to one prompt, their rewards, and normalization into relative advantages. The reference model supplies a regularization target; it is not the critic removed by GRPO.
 
-![Original GRPO (Group Relative Policy Optimization) figure 3](../../../../assets/notion/036-02.png)
+![GRPO: compare responses within a prompt group, original figure 2](../../../../assets/notion/036-01.png)
 
-![Original GRPO (Group Relative Policy Optimization) figure 4](../../../../assets/notion/036-03.png)
+The expectation diagram distinguishes sampling prompts from generating a group with the old policy. The group is a local comparison set, not an absolute measure of answer quality.
+
+![GRPO: compare responses within a prompt group, original figure 3](../../../../assets/notion/036-02.png)
+
+The annotated surrogate averages token contributions within each response and then across the group. Clipping restrains each sampled probability-ratio term; it is not a global guarantee that the entire policy stays near its predecessor.
+
+![GRPO: compare responses within a prompt group, original figure 4](../../../../assets/notion/036-03.png)
+
+The last expression is a sampled estimator involving a reference-to-current probability ratio, not the full KL divergence for one token. Its expectation has a KL-related interpretation under the stated sampling distribution; keep old-policy and reference-policy roles distinct.
 
 *The diagrams contrast a learned value baseline with group reward statistics, then show the clipped objective and a sampled KL estimator. Keep the reference and old policies distinct.*
 

@@ -1,21 +1,52 @@
-!!! info "中文版正在逐篇更新"
+# XGBoost：带正则化的树与二阶优化
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+XGBoost 实现梯度提升模型，显式使用正则化，并通过工程设计提升训练效率。先理解[梯度提升](gradient-boosting.md)：每棵新树都给当前分数增加一次修正。
 
-# XGBoost
+## 为什么同时使用梯度和曲率
 
-- **Regularization (L1 & L2):**
+在某个提升阶段，增加 $f(x_i)$ 后的单个样本损失近似为
 
-    Adds penalties to leaf weights to prevent overfitting — a major improvement over classic GBDT.
+$$
+\ell_i(F+f)\approx\ell_i(F)+g_if(x_i)+\frac12h_if(x_i)^2,
+$$
 
-    $$
-    \Omega(f) = \gamma T + \frac{1}{2} \lambda \sum_j w_j^2
-    $$
+其中 $g_i,h_i$ 是损失对当前分数的一阶和二阶导数。二阶导数描述局部曲率。这是当前模型附近的近似，并不保证任意大的更新都会改善精确损失。
 
-- **Second-order optimization:**
+对有 $T$ 个叶节点、叶值为 $w_j$ 的树，常见正则项为 $\gamma T+\frac12\lambda\sum_jw_j^2$，也支持额外的 L1 正则化。叶节点数量与叶权重惩罚用于抑制不必要的复杂结构和极端修正。
 
-    Uses both **first and second derivatives** of the loss function (gradients & Hessians) for more accurate updates.
+## 推导叶节点数值
 
-- **Parallelized tree construction:**
+令 $G_j=\sum_{i\in j}g_i$，$H_j=\sum_{i\in j}h_i$。不含 L1 项时，固定叶节点的近似最优值为
 
-    Splits are computed in parallel, making training much faster.
+$$
+w_j^*=-\frac{G_j}{H_j+\lambda}.
+$$
+
+若 $G_j=-6$、$H_j=3$、$\lambda=1$，未施加学习率的叶更新为 1.5。学习率为 0.1 时，它对加法分数的贡献为 0.15。增大 $\lambda$ 会缩小更新，即使梯度方向不变。
+
+候选分裂会比较子节点与父节点的正则化收益，再减去新增复杂度的成本。这解释了为什么原始不纯度略有改善的划分仍可能被拒绝。
+
+## 实用控制项
+
+| 控制项 | 主要作用 | 常见误解 |
+| --- | --- | --- |
+| 学习率与迭代轮数 | 修正的大小和次数 | 只调其中一个 |
+| 深度与叶节点限制 | 交互复杂度 | 越深越好 |
+| 最小子节点权重 | Hessian 相关统计量的下限 | 总等于原始行数 |
+| 行与特征采样 | 随机正则化与成本控制 | 采样能修复数据泄漏 |
+| L1/L2 与分裂惩罚 | 约束叶值和结构 | 所有惩罚含义相同 |
+
+直方图方法将连续特征分箱，减少分裂搜索成本。缺失值可以沿学习到的默认方向流动。具体行为取决于所选 booster 和 tree method；实验记录中应保留配置和库版本。
+
+## 进阶理解
+
+“XGBoost 永远按层生长”过于绝对。生长策略与支持选项随配置而变，也包括按损失引导的生长。比较 XGBoost 和 LightGBM 时，应统一验证方式与资源预算，不能用一句算法口号给出普遍排名。
+
+内置缺失值处理不意味着所有缺失机制都安全。数据采集方式变化可能改变默认分支的表现。同样，支持类别特征也不能省略对编码方式和未见类别的理解。
+
+**练习：**如果 $G_j=0$ 且 $H_j+\lambda>0$，这个近似下的最优叶值是多少？**答案：**零，因为一阶项没有推动该叶预测变化的动力。
+
+## 来源与延伸阅读
+
+- [XGBoost：提升树入门](https://xgboost.readthedocs.io/en/stable/tutorials/model.html)：正则化目标推导。
+- [XGBoost 参数参考](https://xgboost.readthedocs.io/en/stable/parameter.html)：生长策略和参数含义。

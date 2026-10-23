@@ -4,7 +4,7 @@ A modality is a form of observation: text, images, audio, video, or sensor signa
 
 ## A map of the problems
 
-![Original Basic figure 1](../../../../assets/notion/023-00.png)
+![Multimodal learning: what changes when inputs differ, original figure 1](../../../../assets/notion/023-00.png)
 
 The original map separates representation, alignment, reasoning, generation, transfer, and quantification. These are related questions, not a mandatory linear pipeline.
 

@@ -1,172 +1,34 @@
-!!! info "中文版正在逐篇更新"
+# Qwen2.5-VL：动态视觉输入和时间感知位置
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+Qwen2.5-VL 连接了一个视觉编码器、一个视觉-语言融合模块和一个基于 Qwen2.5 的语言解码器。它通过视觉标记和多模态训练支持图像/文档和视频任务，而不仅仅是直接在原始像素和文本上操作的单一未区分的 Transformer。
 
-# Qwen2.5 VL
+## 图像路径和标记预算
 
-# **⭐**
+视觉编码器使用分块处理、大多数层中的窗口注意力以及选定的全注意力层。基于 MLP 的融合模块在进入语言模型之前将相邻的视觉特征进行分组，从而减少序列长度。动态分辨率根据输入和配置的预算调整视觉标记的数量；固定“最高 1K 分辨率”规则并不准确地描述了设计。
 
-# **Qwen2.5-VL: Technical Summary (English Version)**
-
-**Qwen2.5-VL** is a next-generation unified vision–language model that integrates images, text, documents, and video into a single Transformer architecture. It significantly improves multimodal alignment, spatial–temporal modeling, and OCR-free document understanding.
-
----
-
-# **🔶**
-
-# **1. Overall Architecture**
-
-Qwen2.5-VL consists of four main components:
-
-1. **Vision Encoder**
-    - A ViT-style backbone that converts images or video frames into visual tokens.
-2. **Projection Layer**
-    - Maps visual token embeddings into the same hidden dimension as the LLM.
-3. **M-RoPE (Multimodal Rotary Position Embedding)**
-    - A unified positional encoding across text, images, and videos.
-    - Maintains spatial/temporal structure for visual tokens.
-4. **Unified Transformer (Qwen2.5 LLM)**
-    - A single Transformer processes both visual and textual tokens jointly.
-    - No cross-attention module is used.
-
-This creates a fully unified multimodal architecture:
-
-```
-image/video → vision encoder → projection → visual tokens
-text → tokenizer → text tokens
-
-[visual tokens + text tokens] → Transformer → output text
+```mermaid
+flowchart LR
+    I[图像或采样视频帧] --> V[动态分辨率视觉编码器]
+    V --> M[空间特征融合模块]
+    M --> L[具有多模态位置的语言解码器]
+    T[文本标记] --> L
+    L --> O[文本、坐标或结构化输出]
 ```
 
----
+对于密集文档，更高的分辨率可能保留小字符但消耗更多视觉标记。而对于简单的照片，相同的预算可能是不必要的。根据测量的任务质量和延迟选择预处理。
 
-# **🔶**
+## 多模态旋转位置
 
-# **2. Key Innovation #1: M-RoPE (Multimodal Rotary Position Embedding)**
+MRoPE 将位置信息分为时间、高度和宽度组件。文本在各个组件中使用匹配的位置 ID；图像在保持时间位置固定的同时变化空间 ID。视频使用与帧相关的时序位置。Qwen2.5-VL 将时间 ID 与绝对时间对齐，因此不同的帧采样率可以保留有意义的时间关系。
 
-Traditional RoPE is 1-dimensional and works only for text sequences.
+每秒两帧的片段和每秒四帧的片段应该不会因为帧索引不同而暗示事件以不同的物理速度展开。
 
-Qwen2.5-VL generalizes it:
+## 融合与训练
 
-- **2D RoPE for images** (horizontal + vertical rotations)
-- **3D RoPE for videos** (time + height + width rotations)
-- All modalities share the same rotary framework.
+投影视觉标记和文本在语言解码器内相互作用。这并不使其与其他如 LLaVA 的模型相比具有唯一“统一”的特性，后者也注入了视觉标记。BLIP-2、Flamingo 和 LLaVA 使用不同的接口；它们不应该被归类为一个单一的不准确的跨注意力描述。
 
-**Why it matters:**
+报告结合了视觉、文档、定位、视频和指令数据。能够在没有外部 OCR 引擎的情况下解析文档并不意味着 OCR 类似的识别是不存在或无误的。分别评估转录、布局、表格、坐标和推理。
 
-- Spatial structure (x, y) is preserved.
-- Temporal structure (t) is preserved.
-- Visual and textual tokens coexist in a shared positional space.
-- Enables stronger multimodal reasoning and document/video understanding.
+**练习。** 如果模型生成有效的表格 JSON 但交换了两个数字列，结构化输出验证是否建立了成功？不是。模式有效性和基于证据的提取是不同的检查。
 
-This is one of the major reasons Qwen2.5-VL outperforms LLaVA, BLIP-2, etc.
-
----
-
-# **🔶**
-
-# **3. Key Innovation #2: Fully Unified Transformer (No Cross-Attention)**
-
-Unlike BLIP-2, Flamingo, or LLaVA:
-
-- There is **no separate visual-language fusion module**.
-- Visual and textual tokens are concatenated and processed by **one unified Transformer**.
-
-**Advantages:**
-
-- Natural multimodal fusion via self-attention
-- Better parameter sharing
-- Stronger multimodal reasoning
-- More scalable to additional modalities
-- Simpler and more elegant than cross-attention designs
-
-This architecture resembles the design philosophy behind Gemini, PaLI-3, and other top-tier VL models.
-
----
-
-# **🔶**
-
-# **3. Key Innovation #3: High-Resolution & Structured Document Understanding**
-
-Qwen2.5-VL excels at **OCR-free document interpretation**, due to:
-
-- High-resolution visual encoder (up to 1K resolution)
-- Layout-aware multimodal attention
-- Strong table/figure/form representation learning
-- Training with large-scale document datasets (PDFs, scans, forms)
-
-It can output:
-
-- structured text
-- tables
-- formulas
-- markdown
-- captioned visual summaries
-
-without needing an external OCR engine.
-
----
-
-# **🔶**
-
-# **4. Key Innovation #4: Video Understanding with Temporal Modeling**
-
-Videos are processed via:
-
-1. Frame sampling
-2. Visual encoder
-3. **3D M-RoPE to encode time**
-4. Unified Transformer for temporal–spatial reasoning
-
-This enables:
-
-- action recognition
-- temporal event localization
-- multi-frame reasoning
-- video question answering
-
----
-
-# **🔶**
-
-# **5. Training Strategy**
-
-Qwen2.5-VL is trained with:
-
-- **Large-scale image–text pairs** (billions)
-- **Extensive document datasets** (scanned documents, tables, PDFs)
-- **Video–text datasets** (temporal QA, multi-step reasoning)
-- **Multimodal instruction tuning** for conversational capability
-
-The training pipeline ensures the model is strong across:
-
-- perception
-- structured understanding
-- reasoning
-- multi-turn vision–language dialogue
-
----
-
-# **🔶**
-
-# **6. Key Strengths**
-
-Qwen2.5-VL demonstrates state-of-the-art performance on:
-
-| **Task** | **Why Qwen2.5-VL excels** |
-| --- | --- |
-| OCR-free document understanding | Layout modeling + high-res vision + M-RoPE |
-| VQA & reasoning | Unified Transformer → natural multimodal fusion |
-| Table/form understanding | Strong spatial modeling |
-| Video QA | Temporal RoPE + unified cross-frame attention |
-| Multi-turn visual conversation | Instruction tuning + unified architecture |
-
----
-
-# **⭐**
-
-# **One-Sentence Summary**
-
-**Qwen2.5-VL is a fully unified vision–language Transformer with M-RoPE positional encoding, capable of high-resolution image understanding, OCR-free document parsing, and temporal video reasoning — making it one of the strongest open-source multimodal models available.**
-
----
+参考：[Qwen2.5-VL 技术报告](https://arxiv.org/abs/2502.13923)。请参阅 [ViT](vit.md) 和 [多模态基础](../multimodal/foundations.md)。

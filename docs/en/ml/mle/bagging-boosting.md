@@ -20,7 +20,9 @@ An additive model has the form $F_M(x)=F_0(x)+\sum_{m=1}^M\eta h_m(x)$. Gradient
 
 AdaBoost emphasizes misclassified examples through weight updates. That description should not be used as the definition of all boosting: squared-error gradient boosting fits residuals, and other losses have other gradient targets.
 
-![Original Bagging VS Boosting figure 1](../../../assets/notion/081-00.png)
+![Bagging versus boosting: two reasons to combine models, original figure 1](../../../assets/notion/081-00.png)
+
+The arrows distinguish independently trained bootstrap models from sequential corrections. “Parallel” describes training dependence; actual runtime still depends on hardware, tree count, and implementation.
 
 ## Worked comparison
 

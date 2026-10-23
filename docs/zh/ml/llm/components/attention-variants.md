@@ -1,138 +1,44 @@
-!!! info "中文版正在逐篇更新"
+# FlashAttention、PagedAttention 和 RadixAttention
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+这些名称涉及不同的瓶颈。理解每个技术管理的资源比将它们记忆为可互换的注意力变体更有用。
 
-# Attention Type
+| 技术 | 主要资源 | 主要思想 |
+| --- | --- | --- |
+| FlashAttention | HBM 流量和中间张量 | 平铺注意力并在在线计算 softmax 时累加 |
+| PagedAttention | KV 缓存分配 | 将逻辑标记块映射到非连续的物理块 |
+| RadixAttention | 重复前缀计算 | 使用基数树查找并重用缓存的标记前缀 |
 
-## Flash Attention
+## FlashAttention：避免生成评分矩阵
 
-**FlashAttention 的核心思想是：不要把完整 attention matrix 存下来。**
+一个简单的实现会将 $n \times n$ 的评分/概率矩阵写入高带宽内存。平铺计算则将小块保留在更快的芯片内存中。对于运行行最大值 $m$、分母 $l$ 和未归一化的值和 $o$，一个新的评分平铺 $s$ 更新如下：
 
-它把 Q/K/V 分块搬到 GPU 片上 SRAM 里，一块一块算，同时用 online softmax 维护中间结果。这样可以显著减少 HBM ↔ SRAM 的读写量。原论文把它定义为一种 **IO-aware exact attention algorithm**，也就是说它不是近似 attention，而是结果等价，只是计算顺序和内存访问方式更聪明。
+$$
+m' = \max(m, \max s),\quad
+l' = e^{m - m'} l + \sum_j e^{s_j - m'},
+$$
 
-你可以理解成：
+$$
+o' = e^{m - m'} o + \sum_j e^{s_j - m'} v_j.
+$$
 
-```
-普通 attention:
-QK^T 全量算出来 -> 存到 HBM -> softmax -> 再读写 -> 乘 V
+最终输出是 $o/l$。重新缩放使得在线累加稳定。这通过数学上计算注意力来实现，与操作顺序的正常浮点差异相同。它减少了中间存储和内存读写；密集注意力的二次算术保持不变。
 
-FlashAttention:
-分块读 Q/K/V -> 在 SRAM 中局部计算 -> online softmax -> 直接累积输出
-```
+## PagedAttention：将逻辑序列与物理内存分离
 
-所以 FlashAttention 主要解决：
+假设一个请求需要 33 个标记，而块大小为 16。它使用三个块，在最后一个块中留有 15 个未使用的槽位，而不是预留整个最大长度的连续分配。一个块表可以将逻辑块 0、1、2 映射到物理块 17、3、25。注意力内核遵循这种映射。
 
-```
-attention 计算过程中的 HBM 读写太多
-```
+共享提示块可以为几个采样延续服务。引用计数和写时复制保护共享内容，当分支分歧时。分页提高了分配和共享；它并不意味着设备内存是无限的或所有缓存都自动移动到主机 RAM。
 
-它不主要解决 KV cache 的管理，也不负责判断两个请求有没有共享前缀。
+## RadixAttention：重用相同前缀的计算
 
-## PagedAttention
+具有相同系统指令和少量示例请求通常会重复昂贵的预填充。基数树索引标记前缀及其 KV 张量。一个新请求查找最长可重用的前缀，然后仅计算其不匹配的后缀。驱逐在容量有限时恢复内存。
 
-LLM 推理时，每个请求都会产生 KV cache。问题是每个请求长度不同，而且 decode 过程中还会不断增长。
+文本相似性本身是不够的：标记 ID、模型权重、适配器状态、位置和其他与计算相关的设置必须匹配。一个共享段出现在不同的前缀之后通常不能重用相同的因果 KV 状态，因为它的隐藏表示依赖于更早的上下文。
 
-传统方式如果给每个 request 分配一大块连续显存，会有很多浪费：
+## 选择和测量
 
-```
-Request A: 需要 300 tokens，但分了 512 tokens 空间
-Request B: 需要 700 tokens，但分了 1024 tokens 空间
-Request C: 还在增长，需要重新扩容
-```
+这些技术可以共存。分别测量第一个标记的时间、生成延迟、吞吐量、缓存命中率、峰值内存和队列延迟。高前缀重用可能减少预填充时间，同时解码仍受内存带宽限制。
 
-PagedAttention 的想法来自操作系统里的 virtual memory / paging：
+**练习。** 两个提示共享它们的最后 500 个标记，但第一个标记不同。普通前缀缓存是否可以重用这 500 个标记？不可以：它们是一个公共后缀，因果状态依赖于前面的上下文。
 
-**不要要求一个 request 的 KV cache 在物理显存里连续存放，而是拆成固定大小的 block/page。**
-
-逻辑上，一个请求的 KV cache 是连续的：
-
-```
-token 0, token 1, token 2, ..., token n
-```
-
-但物理显存中可以是不连续的：
-
-```
-logical block 0 -> physical block 17
-logical block 1 -> physical block 3
-logical block 2 -> physical block 25
-```
-
-中间靠一个 **block table** 做映射。PagedAttention 论文明确说，它允许 attention keys 和 values 存在非连续的 paged memory 中，从而减少 KV cache 的碎片和重复拷贝。
-
-你可以理解成：
-
-```
-PagedAttention = 给 KV cache 做“页表管理”
-```
-
-它解决的是：
-
-```
-KV cache 显存碎片、动态增长、不同请求长度不一致、并行采样共享 KV 的问题
-```
-
-比如 beam search / parallel sampling 里，多个输出共享同一个 prompt，PagedAttention 可以让它们共享 prompt 部分的 physical blocks，并用 reference count / copy-on-write 管理。vLLM 的介绍里也强调了 block table、共享物理 blocks 和 copy-on-write。
-
-## RadixAttention
-
-RadixAttention 是 SGLang 里的核心优化。它解决的是另一类问题：
-
-很多 LLM 请求之间有相同前缀，比如：
-
-```
-Request 1:
-System prompt + few-shot examples + Question A
-
-Request 2:
-System prompt + few-shot examples + Question B
-
-Request 3:
-System prompt + few-shot examples + Question C
-```
-
-如果每次都重新 prefill `System prompt + few-shot examples`，会浪费大量计算。
-
-RadixAttention 的核心思想是：
-
-> 把已经算过的 token prefix 和对应的 KV cache 存在 radix tree 里。
->
->
-> 新请求来了以后，先在 radix tree 里找最长公共前缀，命中的部分直接复用 KV cache，只计算后面的 suffix。
->
-
-SGLang 官方博客说，RadixAttention 会在请求结束后保留 prompt 和 generation result 的 KV cache，并用 radix tree 支持 prefix search、insertion 和 eviction。
-
-简单例子：
-
-```
-已有缓存：
-root
- └── "You are a helpful assistant. Example 1 ... Example 2 ..."
-       ├── "Question A"
-       └── "Question B"
-
-新请求：
-"You are a helpful assistant. Example 1 ... Example 2 ... Question C"
-```
-
-RadixAttention 会发现：
-
-```
-shared prefix = "You are a helpful assistant. Example 1 ... Example 2 ..."
-```
-
-于是：
-
-```
-前缀部分：直接复用 KV cache
-Question C：重新 prefill
-```
-
-所以它解决的是：
-
-```
-跨 request / 跨 generation call 的 prefix KV cache 复用
-```
-
-这和 PagedAttention 不一样。PagedAttention 管的是 KV cache 的物理内存布局；RadixAttention 管的是“哪些 token prefix 对应哪些 KV cache 可以复用”。
+参考文献：[FlashAttention](https://arxiv.org/abs/2205.14135)，[PagedAttention](https://arxiv.org/abs/2309.06180)，[SGLang 和 RadixAttention](https://arxiv.org/abs/2312.07104)。

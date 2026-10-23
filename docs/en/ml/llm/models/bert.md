@@ -10,9 +10,13 @@ Masked language modeling selects 15% of token positions. In the original recipe,
 
 Next-sentence prediction classifies whether two segments are consecutive or randomly paired, with equal proportions in the original construction. It is a pretraining choice, not an indispensable property of every bidirectional encoder.
 
-![Original BERT (Bidirectional Encoder Representations from Transformer) figure 1](../../../../assets/notion/020-00.png)
+![BERT: learning from both sides of a token, original figure 1](../../../../assets/notion/020-00.png)
 
-![Original BERT (Bidirectional Encoder Representations from Transformer) figure 2](../../../../assets/notion/020-01.png)
+The input diagram adds token, segment, and positional embeddings. Segment embeddings distinguish the two input spans; they do not by themselves supply word order.
+
+![BERT: learning from both sides of a token, original figure 2](../../../../assets/notion/020-01.png)
+
+The pretraining diagram routes masked-token predictions to selected token positions and next-sentence prediction to the pooled sequence representation. NSP is part of the original BERT recipe, not a requirement of every later encoder.
 
 ## Adapting the representation
 

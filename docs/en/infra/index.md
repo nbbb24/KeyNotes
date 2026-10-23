@@ -19,9 +19,9 @@ CPU, GPU, and NPU describe processors with different design priorities, not mutu
 
 A die is a piece of silicon. A package contains one or more dies and their connections. A card can contain packages and other components. A runtime device is a software-visible object; a rank is a participant in a communication group. These boundaries need not coincide.
 
-![single-die.svg](../../assets/diagrams/single-die.svg)
+![Single-die architecture](../../assets/diagrams/single-die.svg)
 
-![multi-die.svg](../../assets/diagrams/multi-die.svg)
+![Multi-die architecture](../../assets/diagrams/multi-die.svg)
 
 These original diagrams illustrate single-die and multi-die packages, not a specification of any Ascend product. Trace the actual mapping before concluding that “cross-device” means “cross-card” or “cross-server.”
 

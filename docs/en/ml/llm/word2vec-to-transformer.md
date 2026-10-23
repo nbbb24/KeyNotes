@@ -31,31 +31,33 @@ In the original encoder–decoder Transformer, the decoder has causal self-atten
 
 ## Original diagrams, step by step
 
-![Original Word2Vec/Seq2Seq/transformer figure 1](../../../assets/notion/074-00.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 1](../../../assets/notion/074-00.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 2](../../../assets/notion/074-01.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 2](../../../assets/notion/074-01.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 3](../../../assets/notion/074-02.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 3](../../../assets/notion/074-02.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 4](../../../assets/notion/074-03.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 4](../../../assets/notion/074-03.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 5](../../../assets/notion/074-04.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 5](../../../assets/notion/074-04.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 6](../../../assets/notion/074-05.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 6](../../../assets/notion/074-05.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 7](../../../assets/notion/074-06.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 7](../../../assets/notion/074-06.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 8](../../../assets/notion/074-07.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 8](../../../assets/notion/074-07.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 9](../../../assets/notion/074-08.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 9](../../../assets/notion/074-08.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 10](../../../assets/notion/074-09.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 10](../../../assets/notion/074-09.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 11](../../../assets/notion/074-10.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 11](../../../assets/notion/074-10.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 12](../../../assets/notion/074-11.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 12](../../../assets/notion/074-11.png)
 
-![Original Word2Vec/Seq2Seq/transformer figure 13](../../../assets/notion/074-12.png)
+![From Word2Vec to sequence-to-sequence models and Transformers, original figure 13](../../../assets/notion/074-12.png)
+
+**Figure guide.** Figure 1 is the transformer destination for this learning path. Figures 2–5 show Word2Vec's context pairs, one-hot identifiers, and learned embedding tables. Figures 6–7 show recurrent encoder–decoder flow and the change in hidden-state shape. Figures 8–10 move from discrete input IDs to embeddings and position vectors. Figures 11–12 show multiple attention heads and the decoder's self-attention versus encoder–decoder attention: decoder states provide queries, encoder states provide keys and values in the cross-attention block. Figure 13 projects hidden states to vocabulary logits; a softmax may then convert logits into probabilities. The drawings come from different implementations, so compare their information flow rather than assuming identical normalization order.
 
 Use the figures to trace lookup, recurrent encoding, encoder self-attention, and decoder cross-attention. The factor $\sqrt d$ used for token embeddings in the original architecture is separate from the $1/\sqrt{d_k}$ factor used in attention scores.
 

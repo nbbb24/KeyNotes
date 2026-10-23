@@ -1,47 +1,38 @@
-!!! info "中文版正在逐篇更新"
+# DeepSeek-V3：压缩注意力、稀疏专家与训练系统
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+DeepSeek-V3 是一个在设计模型架构和基础设施方面非常有用的案例研究。原始报告描述了总参数量为 6710 亿，其中每个标记激活的参数约为 370 亿。稀疏激活减少了每个标记的算术运算量，与使用所有专家相比；它不会使所有存储的权重消失。
 
-# DeepseekV3
+## 多头潜在注意力
 
-[https://medium.com/data-science/deepseek-v3-explained-1-multi-head-latent-attention-ed6bee2a67c4](https://medium.com/data-science/deepseek-v3-explained-1-multi-head-latent-attention-ed6bee2a67c4)
+MLA 将键/值信息压缩到一个较低维度的潜在状态中。学习投影恢复所需的注意力数量，通过代数重新排列实现高效推理。单独的位置组件处理旋转部分。这比简单地“降维后升维”更具体：缓存表示和投影如何吸收决定了实际节省。
 
-paper[https://arxiv.org/pdf/2412.19437](https://arxiv.org/pdf/2412.19437)
+![DeepSeek-V3：压缩注意力、稀疏专家与训练系统：原图 1](../../../../assets/notion/030-00.png)
 
-### Multi-Head Latent Attention
+*将潜在内容路径与旋转位置路径分开跟踪。标准的全 K/V 缓存公式不直接描述这种存储方式。*
 
-map down→map up
+## 专家和平衡
 
-to reduce KV cache
+共享专家处理共同信息，而路由专家提供稀疏容量。选择偏差根据负载进行调整：过载的专家变得不那么吸引人，未被使用的专家变得更吸引人。平衡偏差影响专家选择，而不是必然影响最终组合权重。
 
-![image.png](../../../../assets/notion/030-00.png)
+![DeepSeek-V3：压缩注意力、稀疏专家与训练系统：原图 2](../../../../assets/notion/030-01.png)
+![DeepSeek-V3：压缩注意力、稀疏专家与训练系统：原图 3](../../../../assets/notion/030-02.png)
 
-### DeepseekMoE
+*专家图和选择偏差方程描述了容量和路由，这是两种不同的设计关注点。*
 
-![image.png](../../../../assets/notion/030-01.png)
+互补的序列级辅助损失仍然在食谱中存在。因此，“无辅助损失的负载平衡”不应扩展为“模型没有辅助损失”。
 
-Ns: shared experts, Nr: routed experts
+![DeepSeek-V3：压缩注意力、稀疏专家与训练系统：原图 4](../../../../assets/notion/030-03.png)
 
-**Auxiliary-Loss-Free Load Balancing**
+*序列级别的项会抑制即使在单独处理聚合平衡时序列内的严重不平衡。*
 
-**routing collapse** some experts being overused
+## 多标记预测和系统设计
 
-bias term is only used for routing
+![DeepSeek-V3：压缩注意力、稀疏专家与训练系统：原图 5](../../../../assets/notion/030-04.png)
 
-decrease the bias if expert is overloaded, increase if underloaded
+*顺序 MTP 模块提供额外的未来标记学习信号。它们在训练期间的角色与推理中的推测验证不同。*
 
-![image.png](../../../../assets/notion/030-02.png)
+报告将这些选择与 FP8 训练和计算/通信重叠结合在一起。评估声称的效率提升需要分离架构、数值格式、集群利用率和工作负载。一篇论文对一次训练运行的账目并不自动是研究、数据准备和部署的总成本。
 
-**Complementary Sequence-Wise Auxiliary Loss**
+**练习。** 37B 激活参数是否意味着单个设备有足够的空间来容纳完整的未卸载模型？不是。不活跃的专家仍然需要在系统中某个地方存储。
 
-prevent extreme imbalance within single sequence
-
-![image.png](../../../../assets/notion/030-03.png)
-
-Pi: the average routing weight of expert_i
-
-fi: frequency expert_i selected
-
-### Muti-Token Prediction
-
-![image.png](../../../../assets/notion/030-04.png)
+参考：[DeepSeek-V3 技术报告](https://arxiv.org/abs/2412.19437)。继续阅读 [MoE](../components/moe.md)，[MTP](../inference/multi-token-prediction.md) 和 [缓存布局](../inference/layers-pages.md)。

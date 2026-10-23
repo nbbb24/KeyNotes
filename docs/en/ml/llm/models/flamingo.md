@@ -4,7 +4,7 @@ Flamingo was designed to accept interleaved visual and textual examples and gene
 
 ## Follow the data
 
-![Original Flamingo figure 1](../../../../assets/notion/034-00.png)
+![Flamingo: connect frozen models with visual cross-attention, original figure 1](../../../../assets/notion/034-00.png)
 
 The original figure marks frozen components with snowflakes. Visual features pass through a trainable Perceiver Resampler. New gated cross-attention blocks are inserted among frozen language-model blocks. The diagram's interleaved dog and cat examples demonstrate the input format, not a requirement to fine-tune on each new prompt.
 

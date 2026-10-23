@@ -1,21 +1,25 @@
-!!! info "中文版正在逐篇更新"
+# LLM 方法与应用：课程路线
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+本轨道将原始讲义转化为一个连贯的学习序列。专题页面保留其图表，而独立章节则提供更深入的推导和实现示例。
 
-# Large Language Models: Methods and Applications
+## 按依赖顺序学习
 
-https://cmu-llms.org/schedule/
+1. [介绍](introduction.md): 令牌、向量、概率、损失和解码。
+2. [架构](architectures.md): 循环注意力、Transformer 块和可见性模式。
+3. [预训练](pretraining.md): 目标、分词、数据质量及打包。
+4. [架构进展](architecture-advances.md): 网关 FFN、GQA/MQA/MLA、规范化及位置。
+5. [评估](evaluation.md): 预测拟合、重叠指标、语义指标及任务检查。
+6. [微调](finetuning.md): 比较全量微调和参数高效方法。
+7. [检索研究与实验室](rag.md): 确定外部内存进入系统的地点。
 
-[Intro](introduction.md)
+## 构建一个累积项目
 
-[LLM architectures](architectures.md)
+使用一个小文档集合和一组固定的提问。首先建立生成基线。添加检索并检查证据。然后仅在错误分析识别出训练可以改进的行为时，测试一种适应方法。在整个过程中保持测试集不变，同时改变提示、检索器或训练超参数。
 
-[Learning objectives and pre-training data](pretraining.md)
+每次实验中，记录模型/版本、预处理、上下文预算、解码、延迟和正确性，并附上支持来源。一个强大的项目应解释为什么某个更改有帮助、在哪里失败以及消耗了什么资源。没有受控比较的流行方法列表不能回答这些问题。
 
-[Architecture Advancement of Transformer](architecture-advances.md)
+## 完成检查
 
-[Automatic evaluation](evaluation.md)
+你应该能够绘制每个注意力块中的 Q/K/V 源，计算一个小的交叉熵和 KV 缓存估计，识别损失掩码泄漏，并解释为什么更好的检索指标不一定能产生更好的最终答案。高级读者应为每个声称的改进添加一个消融实验和一个失败案例。
 
-[Finetuning](finetuning.md)
-
-[Retrieval Augmented Generation](rag.md)
+原始资源：[CMU 大规模语言模型课程日程](https://cmu-llms.org/schedule/)。实际网站在不同课程中有所变化；这些章节保留了提供的笔记主题，而不是声称完全镜像当前的日程安排。

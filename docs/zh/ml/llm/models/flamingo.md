@@ -1,56 +1,31 @@
-!!! info "中文版正在逐篇更新"
+# Flamingo：用视觉交叉注意力连接冻结模型
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+Flamingo旨在接受交错的视觉和文本示例并生成文本。其核心工程思想是保留预训练的视觉/语言骨干，同时学习一个桥梁，使语言模型能够访问图像或视频帧。
 
-# Flamingo
+## 跟随数据
 
-https://arxiv.org/abs/2204.14198
+![Flamingo：用视觉交叉注意力连接冻结模型：原图 1](../../../../assets/notion/034-00.png)
 
-![image.png](../../../../assets/notion/034-00.png)
+原始图表用雪花标记了冻结组件。视觉特征通过可训练的Perceiver Resampler传递。在冻结的语言模型块之间插入新的门控交叉注意力块。图中的交错狗和猫示例演示了输入格式，而不是对每个新提示进行微调的要求。
 
-1. **Visual Encoding (Frozen Vision Encoder)**
+论文使用了一个预训练的NFNet视觉编码器；“任何EfficientNet或ViT”描述了一种可能的适应方式，而不是精确的原始架构。Resampler使用学习到的潜在查询将可变的视觉输入转换为固定大小的视觉状态集。这控制了语言侧交叉注意力必须处理多少视觉信息。
 
-    Images or video frames are passed through a *frozen* vision encoder (e.g., EfficientNet / ViT), producing a large set of visual patch tokens.
+## 门控交互
 
-2. **Perceiver Resampler (Trainable)**
+简化后的残差更新公式为：
 
-    **A set of learnable latent queries** attends to the visual tokens via cross-attention.
+$$
+h'=h+\tanh(\alpha)\,\operatorname{CrossAttention}(h,v).
+$$
 
-    This produces a *compact, fixed-length sequence* of visual embeddings that are aligned with the language space.
+将门初始化在接近零附近允许模型从其预训练的语言行为开始，同时学习如何强烈地使用新的视觉路径。可训练的附加部分包括Resampler和门控交叉注意力/密集模块。冻结的骨干仍然进行计算并消耗内存。
 
-3. **Frozen Language Model (LLM Backbone)**
+## 交错示例和掩码
 
-    The main LLM (e.g., Chinchilla-style model) is *completely frozen*.
+提示可以包含一张图像、其描述、另一张图像和一个问题。视觉注意力掩码控制文本位置可以访问哪些图像特征。原始方法使用了一种受限的图像条件方案，而不是在每一步自由地关注每个图像。文本自注意力仍然可以从早期上下文中携带信息。
 
-    Its original transformer layers (self-attention + MLP blocks) remain unchanged.
+对于视频，帧编码和时间结构很重要：固定数量的重采样状态不能保留无限的帧细节。分别测试事件顺序和运动。
 
-4. **Gated Cross-Attention Layers (Trainable Add-Ons)**
+**练习。** 少样本提示是否更新Flamingo的权重？不。它根据输入中的示例进行条件生成。学习桥梁发生在训练期间。
 
-    At certain layers inside the LLM, Flamingo inserts **new trainable gated cross-attention modules**.
-
-    During text generation, these modules allow the LLM to query the visual embeddings.
-
-5. **Autoregressive Text Generation**
-
-    The LLM generates output tokens (answers, captions, descriptions) while having access to the image/video representations at every decoding step through the gated cross-attention layers.
-
-
-### **✅**
-
-### **Trainable Components**
-
-1. **Perceiver Resampler**
-    - Learnable latent queries
-    - Cross-attention layers
-    - Layer norms
-
-        → Responsible for compressing and aligning visual features.
-
-2. **Gated Cross-Attention Layers inside the LLM**
-    - Cross-attention weights
-    - Learnable gate scalar(s)
-
-        → Enable multimodal fusion without modifying the core LLM weights.
-
-3. **Small projection layers (where applicable)**
-    - Minor linear projections for modality alignment
+参考：[Flamingo](https://arxiv.org/abs/2204.14198)。比较 [BLIP-2](blip.md)，它通过不同的连接策略将一个学习到的视觉界面输入到冻结的LLM中。

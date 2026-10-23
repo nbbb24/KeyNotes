@@ -1,28 +1,57 @@
-!!! info "中文版正在逐篇更新"
+# 线性判别分析：利用标签寻找投影方向
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
+线性判别分析（LDA）有两个密切相关的作用：一个共享类协方差的概率分类器，和一个监督降维方法。与PCA不同，它使用标签来区分有用的分离和类内的变化。
 
-# Linear Discriminant Analysis (LDA)
+## 贝叶斯投影准则
 
-LDA finds a **projection vector**  such that:
-
-- The **between-class variance** is maximized.
-- The **within-class variance** is minimized.
+设 $S_W$ 总结了类内散度，$S_B$ 总结了类间散度。可以选择一个投影方向 $w$ 来最大化
 
 $$
-J(w)=wTSWwwTSBw
+J(w)=\frac{w^TS_Bw}{w^TS_Ww}.
 $$
 
-where
+分子奖励分离的类均值；分母惩罚类内的扩散。对应的广义特征问题是
 
-- $S_B$ = *between-class scatter matrix* → how far apart the class means are.
-- $S_W$ = *within-class scatter matrix* → how spread out points are inside each class.
+$$
+S_Bw=\lambda S_Ww.
+$$
 
-### Steps of LDA
+显式地写出 $S_W^{-1}S_B$ 是一个有用的理论简写，但只有当逆矩阵存在时才适用。数值实现应使用适当的求解器而不是盲目地反转可能奇异的矩阵。
 
-1. **Compute the mean of each class** and the **overall mean**.
-2. **Compute SWS_WSW** (sum of covariance within each class).
-3. **Compute SBS_BSB** (scatter due to class means’ difference).
-4. Solve the **generalized eigenvalue problem**:$S_W^{−1}S_Bw=λw$
-5. Select the top eigenvectors (those with largest eigenvalues). → These are the directions that maximize separability.
-6. Project your data onto these directions.
+## 工作几何示例
+
+想象两个类分别位于 `(-2, 0)` 和 `(2, 0)`。每个类都垂直拉伸，沿垂直轴的方差要大得多。PCA 可能会选择高方差的垂直方向，即使它不能区分均值。LDA 偏好水平方向，因为它相对于类内的扩散分离了这些类。
+
+这并不意味着 LDA 总是优于 PCA。标签信息可能稀缺或嘈杂，线性分离背后的假设可能不准确。
+
+## 分类器解释
+
+假设 $x\mid y=c$ 是均值为 $\mu_c$ 且协方差矩阵 $\Sigma$ 在各分类间共享的高斯分布。比较类别的对数后验概率会消去公共的二次项，留下线性判别得分：
+
+$$
+\delta_c(x)=x^T\Sigma^{-1}\mu_c-
+\frac12\mu_c^T\Sigma^{-1}\mu_c+\log\pi_c.
+$$
+
+类别先验 $\pi_c$ 影响决策边界。允许每个类别拥有自己的协方差会得到二次判别分析（QDA），它具有更多的灵活性但需要估计更多的参数。
+
+## 维度和数据要求
+
+有 $C$ 个类时，类间均值结构的秩最多为 $C-1$。因此，在通常的形式下，LDA 最多提供 $\min(d,C-1)$ 个判别成分。两个类最多提供一个这样的成分，无论原始特征数量如何。
+
+当特征数量超过观测数或特征之间强烈相关时，协方差估计可能会变得奇异或嘈杂。向更简单的协方差结构进行收缩可以提高估计的准确性。缩放和预处理仍然需要在训练折中进行拟合。
+
+## 进一步探讨
+
+LDA 的投影强调了其散度准则下的类均值差异。主要通过非线性几何或协方差不同的类别可能在这个子空间内分离不好。检查条件分布而不是将二维图视为完整模型的证据。
+
+LDA 的缩写 LDA 也意味着主题建模中的潜在狄利克雷分配（Latent Dirichlet Allocation）。这些是不同的算法；在上下文不明确时，请注明全称。
+
+**练习：** 一个三类数据集是否可以产生五个标准的 LDA 组件？**答案：** 不可以。即使有数百个特征，最多也只能提供两个判别组件。
+
+继续阅读 [PCA](pca.md)，[协方差](covariance-correlation.md) 和 [逻辑回归](linear-logistic.md)。
+
+## 参考文献和进一步阅读
+
+- [scikit-learn: 线性和二次判别分析](https://scikit-learn.org/stable/modules/lda_qda.html) 解释了概率模型、投影和收缩。
+- [scikit-learn: LDA API](https://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.LinearDiscriminantAnalysis.html) 指定了求解器和组件约束。

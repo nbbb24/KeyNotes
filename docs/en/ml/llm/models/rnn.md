@@ -21,7 +21,9 @@ $$
 
 The forget gate $f_t$ controls retention, the input gate $i_t$ controls new content, and the output gate $o_t$ controls exposure. An additive cell path helps preserve information but does not guarantee perfect memory for arbitrarily long sequences. GRUs combine state/memory more compactly using update and reset gates; whether they are faster or better depends on dimensions, kernels, and data.
 
-![Original RNN figure 1](../../../../assets/notion/066-00.png)
+![RNNs, LSTMs, and GRUs, original figure 1](../../../../assets/notion/066-00.png)
+
+**Figure guide.** Unrolling copies the *same* recurrent parameters across time steps; it does not create a different network for each token. Backpropagation through time passes gradients along the horizontal state chain, which helps explain why very long dependencies can be difficult.
 
 ## A useful example
 

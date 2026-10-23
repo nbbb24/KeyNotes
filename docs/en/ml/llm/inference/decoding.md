@@ -8,7 +8,9 @@ Greedy decoding selects the highest-probability next token. It is locally optima
 
 Beam search retains several candidate prefixes and expands them. A beam width of four keeps four sequences, not simply four independent top tokens at every position. Sequence scores generally sum log probabilities; length penalties and stopping rules affect results. Beam search costs more memory/computation and does not guarantee more factual or natural open-ended text.
 
-![Original Inference figure 1](../../../../assets/notion/038-00.png)
+![Decoding: turn token probabilities into a response, original figure 1](../../../../assets/notion/038-00.png)
+
+The tree keeps several candidate prefixes at each step and extends them. A beam search ranks partial sequences by accumulated log probability, often with a length adjustment; the circled branches are retained candidates, not independently sampled final answers.
 
 *The branching diagram represents candidate sequences. Pruning a prefix discards all its future continuations.*
 

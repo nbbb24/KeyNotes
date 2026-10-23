@@ -1,92 +1,52 @@
-!!! info "中文版正在逐篇更新"
+# 数据搬运：H2D、DMA 与异步复制
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
-
-# 数据搬运与 H2D
-
-## 一个张量的典型旅程
+一个张量已经能被 CPU 访问，并不代表加速器内核已经能使用它。搬到设备全局内存是一环，把一个计算块加载进片上存储又是一环。区分两者，才能解释很多看似属于“计算”的瓶颈。
 
 ```mermaid
 sequenceDiagram
-    participant CPU as CPU Program
-    participant HM as Host Memory
-    participant DM as Device Memory / GM
-    participant LM as Local Memory
-    participant CU as Vector / Cube Unit
-
-    CPU->>HM: 准备输入
-    HM->>DM: H2D（通常经过 PCIe）
-    DM->>LM: DMA / MTE copy-in
-    LM->>CU: 读取操作数
-    CU->>LM: 写入结果
-    LM->>DM: DMA / MTE copy-out
-    DM->>HM: D2H（需要取回时）
+    participant H as Host DRAM
+    participant G as 设备全局内存
+    participant L as 片上局部内存
+    participant C as 计算单元
+    H->>G: H2D 复制
+    G->>L: 计算块 Copy-in
+    L->>C: 提供操作数
+    C->>L: 写入结果
+    L->>G: 计算块 Copy-out
+    G->>H: 需要时进行 D2H
 ```
 
-注意两类容易混淆的搬运：
+H2D 完成不意味着所有操作数已经位于 AI Core 的局部缓冲区。内核调度和内部搬运仍然影响执行。
 
-- **Host ↔ Device**：跨 CPU/NPU 地址空间，常见名称是 H2D、D2H。
-- **Device Global ↔ On-chip Local**：发生在 NPU 内部存储层次之间，常由 DMA/MTE 完成。
+## 方向、引擎和路径分别是什么
 
-H2D 完成只表示数据进入了 Device Memory，不表示它已经位于 AI Core 可直接高效计算的片上缓冲区。
-
-## 同步与异步
-
-- **同步复制**：API 返回时复制通常已经完成，编程简单，但调用线程可能等待。
-- **异步复制**：复制进入 Stream/Queue 后即可返回，可以与计算重叠，但必须正确管理依赖、事件和缓冲区生命周期。
-- **Pinned Host Memory**：页锁定内存可减少驱动准备 DMA 的额外成本，通常更适合高吞吐 H2D/D2H。
-- **Batching**：大量小复制容易被提交开销和延迟主导，合并成较大批次往往更有效。
-
-## 带宽为什么达不到链路标称值
-
-端到端有效带宽受最窄环节限制：
-
-`B_effective ≤ min(B_host_memory, B_PCIe, B_device_memory, B_copy_engine)`
-
-还要扣除协议开销、传输粒度、NUMA 跨节点访问、PCIe Switch 共享、内存注册、同步等待和并发争用。
-
-## 排查 H2D/D2H 的最小清单
-
-1. 记录方向、大小、次数以及同步还是异步，避免只说“拷贝慢”。
-2. 确认 Host 缓冲区是否为页锁定内存，以及 CPU 内存所在 NUMA 节点。
-3. 查看 NPU 和 CPU/PCIe Root Complex 的拓扑，确认是否跨 Socket 或共享 PCIe 上行链路。
-4. 分开测量冷启动、稳态大块传输和大量小块传输。
-5. 区分 API 提交时间、Stream 完成时间和端到端业务时间。
-6. 检查复制能否与计算重叠，以及是否存在多余的 H2D → D2H 往返。
-
-## 方向速查
-
-| 源 | 目标 | 常用简称 | 常见路径 |
-| --- | --- | --- | --- |
-| Host DRAM | Device Memory | H2D | CPU 内存 → PCIe → NPU 内存 |
-| Device Memory | Host DRAM | D2H | NPU 内存 → PCIe → CPU 内存 |
-| Device A | Device B | D2D / P2P | PCIe、专用互联或网络，依拓扑而定 |
-| Host A | Host B | H2H | 本机内存复制或跨节点 Host 传输，依上下文而定 |
-| Device GM | AI Core Local Memory | Copy-in | DMA/MTE 片内搬运 |
-| AI Core Local Memory | Device GM | Copy-out | DMA/MTE 片内搬运 |
-
-## 传输方向不等于通信协议
-
-H2D 只说明数据从 Host Memory 移动到 Device Memory，并不直接说明使用哪一种 API、硬件引擎或链路。
-P2P 也只说明两个对等设备之间存在直接传输关系。分析一次数据移动时，需要分别回答：
-
-1. 数据起点和终点在哪里？
-2. 数据经过哪些总线、交换器件或网络？
-3. 哪个软件接口和硬件引擎负责搬运？
-4. 完成状态通过轮询、事件还是通知确认？
-
-## DMA、SDMA、RDMA 和 MTE
-
-| 术语 | 所在层次 | 重点 |
+| 术语 | 它说明什么 | 它没有说明什么 |
 | --- | --- | --- |
-| DMA | 通用数据搬运机制 | 专用引擎搬运内存数据，避免 CPU 逐字节复制 |
-| SDMA | 昇腾设备传输语境 | 常见于设备内或特定设备互联的数据搬运路径 |
-| RDMA | 网络访问语义 | 远端直接访问已注册内存，减少 CPU 参与和额外复制 |
-| MTE | AI Core 内部 | 在 GM、L1、L0、UB 等存储层次间搬运和转换数据 |
+| H2D / D2H | Host 到 Device / Device 到 Host 的方向 | 具体链路、引擎和同步语义 |
+| D2D | 设备内或设备之间复制，取决于 API | 是否涉及另一张物理卡 |
+| H2H | 两端都是 Host 内存 | 两端是否在同一台机器 |
+| P2P | 对等设备访问或传输能力 | 最终选中哪条路径，是否发生回退 |
+| DMA | 专用引擎搬运，避免 CPU 逐字节复制 | 初始化、协调和完成处理不需要 CPU |
+| SDMA | 昇腾场景中的设备搬运引擎或路径术语 | 它与 AI Core 的 MTE 完全相同 |
+| MTE | AI Core 存储层级之间的搬运及支持的转换 | 它是通用网络传输协议 |
+| RDMA | 对通信所需内存准备完成后进行远程访问 | 任意 Device 指针都能自动被远端访问 |
 
-MTE 和 SDMA 不能直接当作同一种硬件引擎；不同产品对这些名称的具体实现也可能不同。
+常见 H2D 会经过 PCIe 等 Host I/O 路径。设备传输可能经过 PCIe、专用互联或网络。分析时分别回答：端点在哪里、物理路线是什么、使用什么 API、通过什么机制确认完成。
 
-## 参考资料
+## 异步意味着必须管理生命周期
 
-- [昇腾 C 文档](https://asc.gitcode.com/)：《异构系统》。
-- [昇腾文档中心](https://www.hiascend.com/document)：《带宽测试》。
+同步接口有文档规定的完成点，具体保证仍应查阅接口定义。异步接口可能在操作入队后就返回。应用必须让源、目标缓冲区持续有效，并在相应操作完成前避免冲突访问。
+
+流水线的目标依赖关系是 `填充输入 → 复制 → 计算 → 消费输出`。Stream 或 Queue 保证部分顺序，Event 用于连接跨 Stream 依赖。提交后立即复用 Host 缓冲区，可能与 DMA 读取产生竞争。只测入队调用的时间，得到的是提交开销，不是传输带宽。
+
+页锁定 Host 内存可以减少准备开销，并支持高效 DMA 路径；它也是有限资源，适合用有界内存池复用，而不是无限制锁页。重叠执行还要求硬件引擎支持、任务独立和依赖正确，仅仅使用异步接口并不能证明发生了重叠。
+
+## 估算瓶颈
+
+一阶模型是 $T(S)=L+S/B$，其中 $L$ 为固定开销，$S$ 为字节数，$B$ 为持续带宽。若 $L=10\,\mu s$、$B=20$ GB/s，复制 4 KB 约需 $10.2\,\mu s$，复制 20 MB 约需 $1.01$ ms。小传输适合通过批处理摊薄开销，大传输更容易暴露带宽限制。
+
+有效带宽不会超过参与路径中最慢的内存、链路或引擎；争用还会进一步降低它。NUMA 放置、共享 PCIe 上行链路、内存注册和同步都会贡献开销。
+
+记录方向、大小、次数、缓冲区类型、NUMA 放置、预热和完成计时方式。对比稳态大块复制与大量小复制，检查是否存在多余往返。继续阅读[性能测量](performance-tools.md)。
+
+来源：[昇腾 AI Core 架构与 MTE](https://www.hiascend.com/doc_center/source/en/canncommercial/800/opdevg/tbeaicpudevg/atlasopdev_10_0008.html)。文档描述特定版本的架构，实际引擎行为需要对应产品的编程指南。

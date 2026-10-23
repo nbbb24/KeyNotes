@@ -1,20 +1,52 @@
-!!! info "中文版正在逐篇更新"
+# 特征向量：矩阵保留的方向
 
-    英文优化版已完成。本页暂时保留原笔记，中文版优化正文正在编写。
-
-# Eigenvector
-
-An **eigenvector** is a special kind of vector that **does not change its direction** when a linear transformation (like rotation, scaling, or stretching) is applied.
-
-For a square matrix A, if there exists a nonzero vector v and a scalar  $\lambda$  such that:
+矩阵会变换向量。多数向量的长度和方向都会变化，但一些特殊方向会保持在同一条直线上。若非零向量 $v$ 对方阵 $A$ 满足
 
 $$
-A v = \lambda v
+Av=\lambda v,
 $$
 
-then:
+则 $v$ 是特征向量，标量 $\lambda$ 是特征值。正特征值沿原方向缩放，负特征值还会翻转朝向；$\lambda=0$ 时向量被映射为零。因此，“特征向量方向永远不变”需要这些限定。
 
-- v is an **eigenvector** of A
-- $\lambda$ is the corresponding **eigenvalue**
+## 一个二维例子
 
-This means that applying A to v only changes its **magnitude** (by  $\lambda$), not its **direction**.
+考虑：
+
+$$
+A=\begin{bmatrix}3&1\\1&3\end{bmatrix}.
+$$
+
+$v_1=[1,1]^T$ 经过变换得到 $[4,4]^T=4v_1$；$v_2=[1,-1]^T$ 得到 $[2,-2]^T=2v_2$。这两个方向分别放大四倍和两倍。而 $[1,0]^T$ 混合了两个方向，结果为 $[3,1]^T$，方向发生变化。
+
+```python
+# runnable-example
+A = ((3, 1), (1, 3))
+def multiply(v):
+    return tuple(sum(a * b for a, b in zip(row, v)) for row in A)
+assert multiply((1, 1)) == (4, 4)
+assert multiply((1, -1)) == (2, -2)
+```
+
+特征向量的尺度不唯一：乘任意非零标量仍是特征向量。数值软件通常返回单位长度向量；不同运行中符号可能相反，却表示相同方向。
+
+## 机器学习为什么使用它
+
+协方差矩阵是实对称半正定矩阵，具有正交归一的特征向量和非负特征值。将数据投影到某个单位特征向量方向，方差等于对应特征值。这把矩阵几何与[主成分分析](pca.md)联系起来。
+
+图方法也使用类似思想。图拉普拉斯矩阵的特征向量可以揭示相连样本上缓慢变化的模式。稳定性分析则关心反复施加变换时，扰动会被放大还是衰减。解释取决于矩阵：协方差矩阵、邻接矩阵和 Hessian 描述的并不是同一种量。
+
+## 进阶：特征值与奇异值
+
+并非每个实矩阵都有完整的实特征向量基。二维平面旋转 90 度的矩阵，没有非零实特征向量；缺陷矩阵可能没有足够多线性无关的特征向量，因而无法对角化。
+
+奇异值分解也适用于矩形矩阵：$X=U\Sigma V^T$。奇异值非负，描述不同方向的放大程度。对中心化数据，$X$ 的右奇异向量直接给出 PCA 方向，无需显式构造 $X^TX$；构造后者可能使数值条件变差。
+
+特征值重复时，单个特征向量可能不稳定，但整个特征子空间仍然有意义。因此，不宜通过元素完全相等来比较主方向，应比较子空间或重建行为。
+
+## 检查理解
+
+**问题：**$[-1,-1]^T$ 与 $[1,1]^T$ 是不同主方向吗？**回答：**不是，它们张成同一个一维子空间，只是朝向相反。
+
+**练习：**把 $A$ 的非对角元素改成零。坐标轴成为特征值为 3 的特征向量；事实上，因为矩阵等于 $3I$，每个方向都被保留。
+
+资料：[MIT 特征值与特征向量课程](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/resources/lecture-21-eigenvalues-and-eigenvectors/)解释几何含义；[NumPy `eigh`](https://numpy.org/doc/stable/reference/generated/numpy.linalg.eigh.html)说明对称矩阵求解器。

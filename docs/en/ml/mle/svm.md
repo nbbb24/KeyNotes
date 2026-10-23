@@ -25,7 +25,9 @@ hinge = lambda y, score: max(0, 1 - y * score)
 assert [hinge(1, s) for s in [2, 0.5, -1]] == [0, 0.5, 2]
 ```
 
-![Original Support Vectors Machine figure 1](../../../assets/notion/106-00.png)
+![Support vector machines: classify with a margin, original figure 1](../../../assets/notion/106-00.png)
+
+The orange hyperplane separates the depicted classes; the dashed parallel lines mark a margin. The nearest training points are support vectors that constrain the boundary. In a soft-margin SVM, violations are allowed with a penalty, so not every point must remain outside the margin.
 
 ## Kernels: change the similarity without listing every feature
 
