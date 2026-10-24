@@ -49,7 +49,33 @@ plugins:
           site_description: 从原理、例子到工程实践，学习机器学习与基础设施。
           nav_translations:
             Home: 首页
+            Infra: 基础设施
+            ML: 机器学习
+            MLE: 机器学习基础
+            LLM: 大语言模型
             Learning map: 学习路线
+            Hardware and memory: 硬件与内存
+            Communication and transfer: 通信与传输
+            Practice and reference: 实践与参考
+            Data tools: 数据工具
+            Training and evaluation: 训练与评估
+            Retrieval and tools: 检索与工具
+            Alignment and RL: 对齐与强化学习
+            Advanced NLP: 高级自然语言处理
+            LLM methods and applications: 大语言模型方法与应用
+            Word2Vec to Transformers: 从 Word2Vec 到 Transformer
+            Attention variants: 注意力变体
+            Entropy, cross-entropy & KL: 熵、交叉熵与 KL 散度
+            Llama 3.1: Llama 3.1
+            Llama vs GPT: Llama 与 GPT 对比
+            FLOPs, memory & latency: FLOPs、内存与延迟
+            Multi-token & speculative decoding: 多 Token 与推测解码
+            Covariance & correlation; bias & variance: 协方差与相关性；偏差与方差
+            Overfitting & validation: 过拟合与验证
+            Dropout & normalization: Dropout 与归一化
+            Prompt, prefix & P-tuning: 提示、前缀与 P-tuning
+            Objectives, tokens & data: 目标、分词与数据
+            Retrieval-augmented LMs: 检索增强语言模型
             Data movement: 数据搬运
             End-to-end transfer: 端到端传输
             Glossary: 术语表
@@ -62,13 +88,10 @@ plugins:
             Components: 核心组件
             Models: 模型
             Adaptation: 微调与适配
-            Alignment and reinforcement learning: 对齐与强化学习
             Inference and systems: 推理与系统
             Multimodal: 多模态
             Speech: 语音
-            Tools and protocols: 工具与协议
             Foundations: 基础知识
-            Neural-network components: 神经网络组件
             Supervised models: 监督学习模型
             Trees and ensembles: 树与集成学习
             Clustering: 聚类
@@ -82,22 +105,18 @@ plugins:
             Advanced multimodal learning: 高级多模态学习
             Attention: 注意力
             Attention masks: 注意力掩码
-            FlashAttention, PagedAttention, and RadixAttention: FlashAttention、PagedAttention
-              和 RadixAttention
             BERT: BERT
             BLIP and BLIP-2: BLIP 与 BLIP-2
             Language-model foundations: 语言模型基础
             Multimodal learning: 多模态学习
             CLIP: CLIP
             CNNs: 卷积神经网络
-            Entropy, cross-entropy, and KL divergence: 熵、交叉熵与 KL 散度
             Direct Preference Optimization: 直接偏好优化
             DeepSpeed and ZeRO: DeepSpeed 与 ZeRO
             DeepSeek-R1: DeepSeek-R1
             DeepSeek-V3: DeepSeek-V3
             Knowledge distillation: 知识蒸馏
             ELMo: ELMo
-            FLOPs, memory traffic, and latency: FLOPs、内存流量与延迟
             Flamingo: Flamingo
             GPT: GPT
             GRPO: GRPO
@@ -109,18 +128,13 @@ plugins:
             Fine-tuning methods: 微调方法
             LLM course introduction: 大语言模型课程导论
             LLM architectures: 语言模型架构
-            Learning objectives, tokenization, and pretraining data: 学习目标、分词和预训练数据
-            Retrieval-augmented language models: 检索增强语言模型
             LayerNorm and RMSNorm: LayerNorm 与 RMSNorm
             KV-cache layouts: KV 缓存布局
             LLaMA: LLaMA
-            Llama 3.1 and the Llama 3 technical report: Llama 3.1 和 Llama 3 技术报告
-            Comparing Llama and GPT without confusing family names: 比较 Llama 与 GPT
             LLaVA: LLaVA
             LoRA: LoRA
             MCP: MCP
             Mixture of Experts: 混合专家模型
-            Multi-token prediction and speculative decoding: 多 Token 预测与推测解码
             Multimodal machine learning: 多模态机器学习
             PPO: PPO
             Position information: 位置信息
@@ -137,20 +151,15 @@ plugins:
             Tree of Thoughts: 思维树
             Tree-based RNNs: 树形 RNN
             Vision Transformer: 视觉 Transformer
-            From Word2Vec to sequence-to-sequence models and Transformers: 从 Word2Vec 到 Seq2Seq
-              与 Transformer
             Cross-modal alignment: 跨模态对齐
             LangChain: LangChain
-            Prompt tuning, prefix tuning, and P-tuning: 提示微调、前缀微调与 P-tuning
             Whisper: Whisper
             Activation functions: 激活函数
             Bagging versus boosting: Bagging 与 Boosting
-            Covariance, correlation, bias, and variance: 协方差、相关系数、偏差与方差
             DBSCAN: DBSCAN
             Data cleaning: 数据清洗
             Decision trees: 决策树
             Learning paradigms: 学习范式
-            Dropout, BatchNorm, and LayerNorm: Dropout、BatchNorm 与 LayerNorm
             Eigenvectors: 特征向量
             Gradient boosting: 梯度提升
             Hierarchical clustering: 层次聚类
@@ -166,7 +175,6 @@ plugins:
             Naive Bayes: 朴素贝叶斯
             Neural-network training challenges: 神经网络训练问题
             Optimizers: 优化器
-            Overfitting, regularization, and trustworthy validation: 过拟合、正则化与可信验证
             PCA: 主成分分析
             Random forests: 随机森林
             Support vector machines: 支持向量机
@@ -206,114 +214,35 @@ nav:
 - Home: index.md
 - Infra:
   - Learning map: infra/index.md
-  - Hardware: infra/hardware.md
-  - Glossary: infra/glossary.md
-  - Data movement: infra/data-movement.md
-  - Memory and addresses: infra/memory-addressing.md
-  - Interconnects: infra/interconnects.md
-  - Network planes: infra/network-planes.md
-  - End-to-end transfer: infra/end-to-end-transfer.md
-  - Performance tools: infra/performance-tools.md
+  - Hardware and memory:
+    - Hardware: infra/hardware.md
+    - Memory and addresses: infra/memory-addressing.md
+  - Communication and transfer:
+    - Data movement: infra/data-movement.md
+    - Interconnects: infra/interconnects.md
+    - Network planes: infra/network-planes.md
+    - End-to-end transfer: infra/end-to-end-transfer.md
+  - Practice and reference:
+    - Performance tools: infra/performance-tools.md
+    - Glossary: infra/glossary.md
 - ML:
   - Learning map: ml/index.md
-  - LLM:
-    - Learning map: ml/llm/index.md
-    - Language-model foundations: ml/llm/foundations.md
-    - From Word2Vec to sequence-to-sequence models and Transformers: ml/llm/word2vec-to-transformer.md
-    - Courses:
-      - Advanced NLP:
-        - Course overview: ml/llm/courses/advanced-nlp/index.md
-        - NLP introduction: ml/llm/courses/advanced-nlp/introduction.md
-        - Word representations: ml/llm/courses/advanced-nlp/word-representations.md
-      - LLM methods and applications:
-        - Course overview: ml/llm/courses/llm/index.md
-        - LLM course introduction: ml/llm/courses/llm/introduction.md
-        - LLM architectures: ml/llm/courses/llm/architectures.md
-        - Learning objectives, tokenization, and pretraining data: ml/llm/courses/llm/pretraining.md
-        - Transformer architecture advances: ml/llm/courses/llm/architecture-advances.md
-        - Automatic evaluation: ml/llm/courses/llm/evaluation.md
-        - Fine-tuning methods: ml/llm/courses/llm/finetuning.md
-        - Retrieval-augmented language models: ml/llm/courses/llm/rag.md
-      - Multimodal machine learning: ml/llm/courses/multimodal.md
-      - Advanced multimodal learning: ml/llm/courses/advanced-multimodal.md
-    - Components:
-      - Attention: ml/llm/components/attention.md
-      - Attention masks: ml/llm/components/attention-masks.md
-      - FlashAttention, PagedAttention, and RadixAttention: ml/llm/components/attention-variants.md
-      - Entropy, cross-entropy, and KL divergence: ml/llm/components/cross-entropy-kl.md
-      - LayerNorm and RMSNorm: ml/llm/components/normalization.md
-      - Position information: ml/llm/components/position.md
-      - Mixture of Experts: ml/llm/components/moe.md
-    - Models:
-      - RNNs, LSTMs, and GRUs: ml/llm/models/rnn.md
-      - Tree-based RNNs: ml/llm/models/tree-rnn.md
-      - CNNs: ml/llm/models/cnn.md
-      - ELMo: ml/llm/models/elmo.md
-      - BERT: ml/llm/models/bert.md
-      - GPT: ml/llm/models/gpt.md
-      - T5 and BART: ml/llm/models/t5-bart.md
-      - Vision Transformer: ml/llm/models/vit.md
-      - LLaMA: ml/llm/models/llama.md
-      - Llama 3.1 and the Llama 3 technical report: ml/llm/models/llama-3-1.md
-      - Comparing Llama and GPT without confusing family names: ml/llm/models/llama-vs-gpt.md
-      - DeepSeek-V3: ml/llm/models/deepseek-v3.md
-      - DeepSeek-R1: ml/llm/models/deepseek-r1.md
-      - Qwen2.5: ml/llm/models/qwen-2-5.md
-      - Qwen2.5-VL: ml/llm/models/qwen-2-5-vl.md
-      - CLIP: ml/llm/models/clip.md
-      - SigLIP: ml/llm/models/siglip.md
-      - ALBEF: ml/llm/models/albef.md
-      - BLIP and BLIP-2: ml/llm/models/blip.md
-      - Flamingo: ml/llm/models/flamingo.md
-      - LLaVA: ml/llm/models/llava.md
-    - Adaptation:
-      - Supervised fine-tuning: ml/llm/adaptation/sft.md
-      - LoRA: ml/llm/adaptation/lora.md
-      - Adapters: ml/llm/adaptation/adapters.md
-      - Prompt tuning, prefix tuning, and P-tuning: ml/llm/adaptation/prompt-tuning.md
-      - Knowledge distillation: ml/llm/adaptation/distillation.md
-    - Alignment and reinforcement learning:
-      - RLHF: ml/llm/alignment/rlhf.md
-      - Importance sampling: ml/llm/alignment/importance-sampling.md
-      - PPO: ml/llm/alignment/ppo.md
-      - Direct Preference Optimization: ml/llm/alignment/dpo.md
-      - GRPO: ml/llm/alignment/grpo.md
-    - Inference and systems:
-      - Decoding: ml/llm/inference/decoding.md
-      - KV cache: ml/llm/inference/kv-cache.md
-      - FLOPs, memory traffic, and latency: ml/llm/inference/flops.md
-      - Quantization: ml/llm/inference/quantization.md
-      - KV-cache layouts: ml/llm/inference/layers-pages.md
-      - Multi-token prediction and speculative decoding: ml/llm/inference/multi-token-prediction.md
-      - Tree of Thoughts: ml/llm/inference/tree-of-thoughts.md
-    - Multimodal:
-      - Multimodal learning: ml/llm/multimodal/foundations.md
-      - Representation fusion: ml/llm/multimodal/fusion.md
-      - Cross-modal alignment: ml/llm/multimodal/alignment.md
-    - Speech:
-      - Whisper: ml/llm/speech/whisper.md
-      - Speech and audio evaluation: ml/llm/speech/asr.md
-    - Retrieval-augmented generation: ml/llm/rag.md
-    - Tools and protocols:
-      - MCP: ml/llm/tools/mcp.md
-      - LangChain: ml/llm/tools/langchain.md
-      - DeepSpeed and ZeRO: ml/llm/tools/deepspeed.md
   - MLE:
     - Learning map: ml/mle/index.md
     - Foundations:
       - Learning paradigms: ml/mle/learning-paradigms.md
       - Data cleaning: ml/mle/data-cleaning.md
-      - Covariance, correlation, bias, and variance: ml/mle/covariance-correlation.md
+      - Covariance & correlation; bias & variance: ml/mle/covariance-correlation.md
       - Eigenvectors: ml/mle/eigenvectors.md
-      - Overfitting, regularization, and trustworthy validation: ml/mle/overfitting.md
+    - Training and evaluation:
+      - Loss functions: ml/mle/loss-functions.md
+      - Activation functions: ml/mle/activation-functions.md
+      - Optimizers: ml/mle/optimizers.md
+      - Overfitting & validation: ml/mle/overfitting.md
       - Metrics: ml/mle/metrics.md
       - Improving neural networks: ml/mle/improving-networks.md
       - Neural-network training challenges: ml/mle/training-challenges.md
-      - Dropout, BatchNorm, and LayerNorm: ml/mle/dropout-batchnorm.md
-    - Neural-network components:
-      - Activation functions: ml/mle/activation-functions.md
-      - Loss functions: ml/mle/loss-functions.md
-      - Optimizers: ml/mle/optimizers.md
+      - Dropout & normalization: ml/mle/dropout-batchnorm.md
     - Supervised models:
       - Linear and logistic regression: ml/mle/linear-logistic.md
       - Naive Bayes: ml/mle/naive-bayes.md
@@ -335,5 +264,88 @@ nav:
       - Linear discriminant analysis: ml/mle/lda.md
       - t-SNE: ml/mle/tsne.md
       - Isomap: ml/mle/isomap.md
-  - SQL: ml/sql.md
-  - Pandas: ml/pandas.md
+  - LLM:
+    - Learning map: ml/llm/index.md
+    - Language-model foundations: ml/llm/foundations.md
+    - Word2Vec to Transformers: ml/llm/word2vec-to-transformer.md
+    - Courses:
+      - Advanced NLP:
+        - Course overview: ml/llm/courses/advanced-nlp/index.md
+        - NLP introduction: ml/llm/courses/advanced-nlp/introduction.md
+        - Word representations: ml/llm/courses/advanced-nlp/word-representations.md
+      - LLM methods and applications:
+        - Course overview: ml/llm/courses/llm/index.md
+        - LLM course introduction: ml/llm/courses/llm/introduction.md
+        - LLM architectures: ml/llm/courses/llm/architectures.md
+        - Objectives, tokens & data: ml/llm/courses/llm/pretraining.md
+        - Transformer architecture advances: ml/llm/courses/llm/architecture-advances.md
+        - Automatic evaluation: ml/llm/courses/llm/evaluation.md
+        - Fine-tuning methods: ml/llm/courses/llm/finetuning.md
+        - Retrieval-augmented LMs: ml/llm/courses/llm/rag.md
+      - Multimodal machine learning: ml/llm/courses/multimodal.md
+      - Advanced multimodal learning: ml/llm/courses/advanced-multimodal.md
+    - Components:
+      - Attention: ml/llm/components/attention.md
+      - Attention masks: ml/llm/components/attention-masks.md
+      - Attention variants: ml/llm/components/attention-variants.md
+      - Entropy, cross-entropy & KL: ml/llm/components/cross-entropy-kl.md
+      - LayerNorm and RMSNorm: ml/llm/components/normalization.md
+      - Position information: ml/llm/components/position.md
+      - Mixture of Experts: ml/llm/components/moe.md
+    - Models:
+      - RNNs, LSTMs, and GRUs: ml/llm/models/rnn.md
+      - Tree-based RNNs: ml/llm/models/tree-rnn.md
+      - CNNs: ml/llm/models/cnn.md
+      - ELMo: ml/llm/models/elmo.md
+      - BERT: ml/llm/models/bert.md
+      - GPT: ml/llm/models/gpt.md
+      - T5 and BART: ml/llm/models/t5-bart.md
+      - Vision Transformer: ml/llm/models/vit.md
+      - LLaMA: ml/llm/models/llama.md
+      - Llama 3.1: ml/llm/models/llama-3-1.md
+      - Llama vs GPT: ml/llm/models/llama-vs-gpt.md
+      - DeepSeek-V3: ml/llm/models/deepseek-v3.md
+      - DeepSeek-R1: ml/llm/models/deepseek-r1.md
+      - Qwen2.5: ml/llm/models/qwen-2-5.md
+      - Qwen2.5-VL: ml/llm/models/qwen-2-5-vl.md
+      - CLIP: ml/llm/models/clip.md
+      - SigLIP: ml/llm/models/siglip.md
+      - ALBEF: ml/llm/models/albef.md
+      - BLIP and BLIP-2: ml/llm/models/blip.md
+      - Flamingo: ml/llm/models/flamingo.md
+      - LLaVA: ml/llm/models/llava.md
+    - Adaptation:
+      - Supervised fine-tuning: ml/llm/adaptation/sft.md
+      - LoRA: ml/llm/adaptation/lora.md
+      - Adapters: ml/llm/adaptation/adapters.md
+      - Prompt, prefix & P-tuning: ml/llm/adaptation/prompt-tuning.md
+      - Knowledge distillation: ml/llm/adaptation/distillation.md
+    - Alignment and RL:
+      - RLHF: ml/llm/alignment/rlhf.md
+      - Importance sampling: ml/llm/alignment/importance-sampling.md
+      - PPO: ml/llm/alignment/ppo.md
+      - Direct Preference Optimization: ml/llm/alignment/dpo.md
+      - GRPO: ml/llm/alignment/grpo.md
+    - Inference and systems:
+      - Decoding: ml/llm/inference/decoding.md
+      - KV cache: ml/llm/inference/kv-cache.md
+      - FLOPs, memory & latency: ml/llm/inference/flops.md
+      - Quantization: ml/llm/inference/quantization.md
+      - KV-cache layouts: ml/llm/inference/layers-pages.md
+      - Multi-token & speculative decoding: ml/llm/inference/multi-token-prediction.md
+      - Tree of Thoughts: ml/llm/inference/tree-of-thoughts.md
+    - Multimodal:
+      - Multimodal learning: ml/llm/multimodal/foundations.md
+      - Representation fusion: ml/llm/multimodal/fusion.md
+      - Cross-modal alignment: ml/llm/multimodal/alignment.md
+    - Speech:
+      - Whisper: ml/llm/speech/whisper.md
+      - Speech and audio evaluation: ml/llm/speech/asr.md
+    - Retrieval and tools:
+      - Retrieval-augmented generation: ml/llm/rag.md
+      - MCP: ml/llm/tools/mcp.md
+      - LangChain: ml/llm/tools/langchain.md
+      - DeepSpeed and ZeRO: ml/llm/tools/deepspeed.md
+  - Data tools:
+    - SQL: ml/sql.md
+    - Pandas: ml/pandas.md
