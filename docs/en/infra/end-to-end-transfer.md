@@ -44,4 +44,4 @@ For a cache application, also validate token count, tensor layout, dtype, layer 
 
 Check identity mapping, then connection state, memory reachability and permissions, route health, submission progress, and completion visibility. Only then interpret performance. Preserve buffers and registration handles while work is outstanding; timeout does not necessarily cancel already submitted DMA.
 
-A useful experiment transfers a small known pattern, validates the destination after completion, then scales size and concurrency separately. Report both successful completion and content integrity. Related: [addresses and registration](memory-addressing.md), [network planes](network-planes.md), and [KV-cache size](../ml/llm/inference/kv-cache.md).
+A useful experiment transfers a small known pattern, validates the destination after completion, then scales size and concurrency separately. Report both successful completion and content integrity. Related: [addresses and registration](memory-addressing.md), [the full P/D serving flow](serving-frameworks.md), [network planes](network-planes.md), and [KV-cache size](../ml/llm/inference/kv-cache.md).

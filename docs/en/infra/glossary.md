@@ -28,7 +28,9 @@ Use this page while drawing a transfer path. For every term, ask whether it name
 | MMU | Memory-management unit implementing address translation and protection |
 | NUMA | Access cost depends on processor and memory location |
 | SVM | Shared Virtual Memory; sharing addresses does not erase synchronization requirements |
-| GVA | Context-dependent term, sometimes Global Virtual Address; inspect the implementation |
+| GVA | Global Virtual Address in MemFabric: logical identity for a managed slice, not a universally dereferenceable pointer |
+| HVA / DVA | Host virtual address in one process / device virtual address in one device context; mapping and lifetime still apply |
+| Reserve / backing / map | Claim virtual address range / obtain physical storage / associate storage with the range; distinct steps |
 | MR / registration | Memory region and preparation for communication-engine access |
 | Endpoint / EID | Communication endpoint / endpoint identifier |
 | Key or access descriptor | Backend-defined information authorizing or locating remote access |
@@ -48,6 +50,7 @@ Use this page while drawing a transfer path. For every term, ask whether it name
 | HCCL / HCOMM | Collective communication library / supported lower-level communication resources and operations |
 | Scale-up / scale-out | Expansion within a tightly coupled domain / across networked systems; boundaries depend on architecture |
 | Completion / notification | Operation status / signal to another participant; neither implies every possible visibility guarantee |
+| P/D separation | Run prompt prefill and iterative decode on separate workers, with a KV-cache handoff |
 
 “UB” also means Unified Buffer in AI Core documentation. The same abbreviation does not make the on-chip buffer the Unified Bus interconnect.
 

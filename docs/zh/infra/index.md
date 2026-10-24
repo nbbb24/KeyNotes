@@ -8,6 +8,7 @@
 | --- | --- | --- |
 | 硬件 | 谁负责计算？Die、封装、Device 和 Rank 有何区别？ | [硬件层级](hardware.md) |
 | 内存 | 字节放在哪里？哪个地址空间能够描述它们？ | [内存与地址](memory-addressing.md) |
+| 推理服务 | vLLM、SGLang 如何规划 HBM、复用 KV，并完成 Prefill 到 Decode 的交接？ | [推理框架](serving-frameworks.md) |
 | 搬运 | 谁搬数据？方向是什么？何时才能使用？ | [数据搬运](data-movement.md) |
 | 互联 | 哪条路径和哪种传输机制能到达目标？ | [互联与通信](interconnects.md) |
 | 组织 | 不同网络分别承载什么流量？ | [网络平面](network-planes.md) |
@@ -45,7 +46,7 @@ Endpoint 表示通信端点。初始化阶段发现对端和能力、准备队�
 
 假设 Prefill Worker 生成了一份 Decode Worker 要使用的缓存。先根据层数、KV 头数、头维度、序列长度和数据类型计算大小；再定位源、目标内存，判断支持直达还是必须经过 Host 中转；最后在解码消费数据前，建立完成状态和可见性保证。
 
-同样是“Decode 一直等待”，原因可能是缓存过大、注册失败、Rank 映射错误、链路拥塞，也可能是通知丢失。[端到端传输](end-to-end-transfer.md)会逐层区分这些假设。
+同样是“Decode 一直等待”，原因可能是缓存过大、注册失败、Rank 映射错误、链路拥塞，也可能是通知丢失。[推理框架](serving-frameworks.md)跟踪完整请求，[端到端传输](end-to-end-transfer.md)则拆解搬运过程。
 
 ## 学习顺序与自测
 

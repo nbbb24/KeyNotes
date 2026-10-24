@@ -81,6 +81,7 @@ plugins:
             Glossary: 术语表
             Interconnects: 互联与通信
             Memory and addresses: 内存与地址
+            Serving frameworks: 推理框架
             Hardware: 硬件层级
             Network planes: 网络平面
             Performance tools: 性能与工具
@@ -217,6 +218,7 @@ nav:
   - Hardware and memory:
     - Hardware: infra/hardware.md
     - Memory and addresses: infra/memory-addressing.md
+    - Serving frameworks: infra/serving-frameworks.md
   - Communication and transfer:
     - Data movement: infra/data-movement.md
     - Interconnects: infra/interconnects.md

@@ -28,7 +28,9 @@
 | MMU | 执行地址转换和保护的内存管理单元 |
 | NUMA | 访问代价取决于处理器与内存所在位置 |
 | SVM | Shared Virtual Memory；共享地址不代表不需要同步 |
-| GVA | 含义依上下文而定，有时指 Global Virtual Address，需要查看实现 |
+| GVA | 在 MemFabric 中是 Global Virtual Address：受管理片段的逻辑身份，并非到处可解引用的指针 |
+| HVA / DVA | 某个进程的 Host 虚拟地址 / 某个设备上下文中的 Device 虚拟地址；仍受映射和生命周期约束 |
+| 预留 / 后端内存 / 映射 | 占用虚拟地址范围 / 取得物理存储 / 把存储关联到地址范围，是不同步骤 |
 | MR / Registration | Memory Region，以及为通信引擎准备访问条件的注册操作 |
 | Endpoint / EID | 通信端点 / 端点标识符 |
 | Key / Access Descriptor | 后端定义的访问授权或远端资源定位信息 |
@@ -48,6 +50,7 @@
 | HCCL / HCOMM | 集合通信库 / 受支持的底层通信资源与操作能力 |
 | Scale-up / Scale-out | 紧耦合域内扩展 / 通过网络连接系统进行扩展，边界取决于架构 |
 | Completion / Notification | 操作状态 / 给另一参与者的信号；它们都不自动包含所有可见性保证 |
+| PD 分离 | 输入 Prefill 与逐步 Decode 分别由不同 Worker 执行，并交接 KV Cache |
 
 AI Core 文档中的 UB 还可能表示 Unified Buffer。同一个缩写，不代表片上缓冲区就是 Unified Bus 互联。
 

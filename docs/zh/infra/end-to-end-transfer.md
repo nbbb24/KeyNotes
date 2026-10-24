@@ -44,4 +44,4 @@ Host 中转路径为 `HBM A → DRAM A → 网络 → DRAM B → HBM B`。它可
 
 先检查身份映射，再检查连接状态、内存可达性和权限、路径健康、提交进度、完成可见性，最后解释性能。存在在途操作时，缓冲区和注册句柄必须保持有效；超时不一定会取消已经提交的 DMA。
 
-一个有效的小实验是传输已知数据模式，在完成后验证目标内容，再分别扩大大小与并发。报告既要包含完成状态，也要包含内容完整性。相关章节：[地址与注册](memory-addressing.md)、[网络平面](network-planes.md)和 [KV Cache 大小](../ml/llm/inference/kv-cache.md)。
+一个有效的小实验是传输已知数据模式，在完成后验证目标内容，再分别扩大大小与并发。报告既要包含完成状态，也要包含内容完整性。相关章节：[地址与注册](memory-addressing.md)、[完整 PD 服务流程](serving-frameworks.md)、[网络平面](network-planes.md)和 [KV Cache 大小](../ml/llm/inference/kv-cache.md)。

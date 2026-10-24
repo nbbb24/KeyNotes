@@ -8,6 +8,7 @@ An accelerator does useful work only when the right data reaches the right memor
 | --- | --- | --- |
 | Hardware | Which unit computes? What is a die, package, device, or rank? | [Hardware](hardware.md) |
 | Memory | Where are bytes stored? Which address space names them? | [Memory and addresses](memory-addressing.md) |
+| Serving | How do vLLM and SGLang budget HBM, reuse KV, and hand work from prefill to decode? | [Serving frameworks](serving-frameworks.md) |
 | Movement | Who copies the bytes, in which direction, and when are they ready? | [Data movement](data-movement.md) |
 | Interconnect | Which path and transport can reach the destination? | [Interconnects](interconnects.md) |
 | Organization | Which network carries which traffic? | [Network planes](network-planes.md) |
@@ -45,7 +46,7 @@ An endpoint identifies a communication participant. Initialization discovers pee
 
 Suppose a prefill worker produces a cache needed by a decode worker. First calculate the cache size from layers, KV heads, head dimension, sequence length, and dtype. Then locate source and destination memory and determine whether the supported path is direct or host-staged. Finally establish completion and visibility before decoding consumes the result.
 
-The same symptom, “decode is waiting,” can arise from an oversized cache, failed registration, wrong rank mapping, link congestion, or a missing notification. [The end-to-end walkthrough](end-to-end-transfer.md) separates these hypotheses.
+The same symptom, “decode is waiting,” can arise from an oversized cache, failed registration, wrong rank mapping, link congestion, or a missing notification. [Serving frameworks](serving-frameworks.md) follow the whole request; [the end-to-end walkthrough](end-to-end-transfer.md) isolates the transfer.
 
 ## A learning sequence and self-check
 
