@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use KeyNotes, please cite the project and the specific page you used."
+title: "KeyNotes: ML and Infrastructure Learning Notes"
+authors:
+  - name: "nbbb24"
+url: "https://infra-knowledge.readthedocs.io/en/latest/"
+repository-code: "https://github.com/nbbb24/KeyNotes"
+preferred-citation:
+  type: website
+  title: "KeyNotes: ML and Infrastructure Learning Notes"
+  authors:
+    - name: "nbbb24"
+  url: "https://infra-knowledge.readthedocs.io/en/latest/"
