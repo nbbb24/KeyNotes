@@ -1,4 +1,4 @@
-# KeyNotes
+# 📚 KeyNotes
 
 Understand a concept, work through an example, and connect it to the system that uses it. KeyNotes brings machine learning and infrastructure into one learning path: model quality and system performance are often two sides of the same engineering decision.
 

@@ -1,4 +1,4 @@
-# Machine learning: from a question to a reliable system
+# 🧠 Machine learning: from a question to a reliable system
 
 Machine learning estimates patterns from data and uses them to make predictions or decisions. Learning an algorithm is only one part: you must define the task, prevent information leakage, select an objective, evaluate the right behavior, and understand deployment constraints.
 

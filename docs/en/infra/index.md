@@ -1,4 +1,4 @@
-# Infrastructure: from an NPU to a distributed system
+# 🏗️ Infrastructure: from an NPU to a distributed system
 
 An accelerator does useful work only when the right data reaches the right memory at the right time. This guide connects Ascend NPU concepts with distributed inference, MemFabric, and KV-cache movement. A2, A3, and A5 names identify product contexts; they do not imply identical topology, memory mapping, or protocol support. Check the installed hardware and software together.
 

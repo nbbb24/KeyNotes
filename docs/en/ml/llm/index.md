@@ -1,4 +1,4 @@
-# Language models: a learning map
+# 🤖 Language models: a learning map
 
 Language-model engineering connects representations, objectives, optimization, generation, and systems. Study the connections: memorizing model names will not explain why a model hallucinates, why a long prompt runs out of memory, or why fine-tuning fails to teach a missing fact.
 

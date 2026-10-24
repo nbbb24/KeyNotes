@@ -1,4 +1,4 @@
-# Machine-learning foundations: build a model you can explain and evaluate
+# 📐 Machine-learning foundations: build a model you can explain and evaluate
 
 This section develops the tools needed to turn observations into reliable predictions. You do not need to memorize every algorithm before starting. Learn how a problem becomes a dataset, how an objective becomes an update, and how an evaluation can fail even when the code runs correctly.
 
