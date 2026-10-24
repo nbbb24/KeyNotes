@@ -1,8 +1,8 @@
-# t-SNE: visualize local neighborhoods without overreading the map
+# 🗺️ t-SNE: visualize local neighborhoods without overreading the map
 
 t-distributed stochastic neighbor embedding (t-SNE) creates a low-dimensional visualization that emphasizes local neighborhoods. Its output can be useful for exploring representations, but it is not a faithful geographic map of all high-dimensional distances.
 
-## Convert distances into neighborhood probabilities
+## 🧭 Convert distances into neighborhood probabilities
 
 In the original space, t-SNE assigns high similarity to nearby observations using locally scaled Gaussian neighborhoods. The perplexity parameter controls an effective neighborhood scale; it is related to the entropy of each conditional distribution, not a fixed number of clusters.
 
@@ -14,13 +14,13 @@ $$
 
 Because this direction of KL heavily penalizes separating pairs with large $p_{ij}$, preserving local neighbors is central. It does not impose equal accuracy on all far-away relationships.
 
-## A concrete interpretation example
+## 🔍 A concrete interpretation example
 
 Suppose a digit representation produces separate islands for several writing styles. Two islands being far apart does not imply that their source-space distance is twice that of two closer islands. A large island does not necessarily contain more variance than a small one, because local scaling and the embedding objective distort density and area.
 
 If class labels are colored on the plot, ask whether the representation was already trained using those labels. A visually clean separation is then not independent evidence that an unsupervised method discovered the categories.
 
-## A responsible workflow
+## 🔄 A responsible workflow
 
 1. Clean and scale features where appropriate; consider PCA to reduce noise and computation.
 2. Run several plausible perplexities and random seeds.
@@ -30,7 +30,7 @@ If class labels are colored on the plot, ask whether the representation was alre
 
 Perplexity must be compatible with sample count. Learning rate, initialization, early exaggeration, iteration budget, and approximation method also affect the result. Keep these settings with the figure.
 
-## Going further
+## 🚀 Going further
 
 The objective is nonconvex, so different layouts can represent similar local structure. Rotation, reflection, and translation of the whole map do not change its neighborhood meaning. Runs on different datasets cannot automatically be compared by coordinate position.
 
@@ -42,7 +42,7 @@ Approximate algorithms reduce the cost of repulsive interactions, yet large data
 
 Continue with [PCA](pca.md), [Isomap](isomap.md), and [clustering](kmeans.md).
 
-## Sources and further reading
+## 📚 Sources and further reading
 
 - [van der Maaten and Hinton: t-SNE](https://www.jmlr.org/papers/v9/vandermaaten08a.html) introduces the objective.
 - [scikit-learn: manifold learning](https://scikit-learn.org/stable/modules/manifold.html#t-distributed-stochastic-neighbor-embedding-t-sne) documents practical parameters and caveats.

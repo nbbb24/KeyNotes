@@ -1,8 +1,8 @@
-# Multi-token prediction and speculative decoding
+# ⏩ Multi-token prediction and speculative decoding
 
 Ordinary language-model training predicts the next token at each position. Multi-token prediction adds supervision for several future positions. It can improve learned representations and can supply draft tokens for faster inference, but these are two distinct uses.
 
-## Independent prediction heads
+## 🧭 Independent prediction heads
 
 One design shares a backbone and uses several heads to predict $x_{t+1},x_{t+2},\ldots$. A simplified loss is
 
@@ -18,7 +18,7 @@ The heads provide auxiliary learning signals at different horizons. Predictions 
 
 *The original notes contrast a shared trunk with multiple future-token heads and shared output projection. Track the prediction offset attached to each head.*
 
-## DeepSeek-V3's sequential modules
+## 🧩 DeepSeek-V3's sequential modules
 
 DeepSeek-V3 uses sequential MTP modules. Each depth combines the previous-depth representation with the embedding of a shifted token, normalizes both, projects their concatenation, and applies a Transformer block. Embedding and output-head parameters are shared with the main model. The shifted input is part of teacher-forced training; it must not be mistaken for access to an unknown future token during ordinary generation.
 
@@ -28,7 +28,7 @@ DeepSeek-V3 uses sequential MTP modules. Each depth combines the previous-depth 
 
 MTP modules may be discarded for ordinary next-token inference or used to propose speculative tokens with a compatible verification algorithm.
 
-## Verification is the critical step
+## 🔄 Verification is the critical step
 
 Speculative decoding uses a cheap draft mechanism and a target model to verify several proposed tokens in parallel. Exact sampling algorithms include acceptance and correction steps that preserve the target distribution under their assumptions. Simply accepting all draft tokens changes the model's output distribution.
 

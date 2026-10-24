@@ -1,10 +1,10 @@
-# LayerNorm and RMSNorm
+# ⚖️ LayerNorm and RMSNorm
 
 Deep residual networks repeatedly add transformed features. Normalization controls feature scale so optimization does not depend too strongly on drifting activation magnitudes. In a Transformer, normalization usually acts on the hidden features of each token independently.
 
 For a tensor with shape `[batch, sequence, hidden]`, normalizing the last dimension uses one mean/variance per token. “Normalize columns” is ambiguous without stating tensor axes.
 
-## LayerNorm centers and rescales
+## 🏗️ LayerNorm centers and rescales
 
 For a token vector $x\in\mathbb R^d$:
 
@@ -16,7 +16,7 @@ $$
 
 The learned scale and bias allow useful feature distributions after normalization. Unlike BatchNorm, LayerNorm does not estimate statistics across examples and normally has no train/evaluation running-statistics switch.
 
-## RMSNorm does not subtract the mean
+## 🧩 RMSNorm does not subtract the mean
 
 $$
 \operatorname{RMSNorm}(x)_i=
@@ -38,7 +38,7 @@ assert ln == [-1.0, 1.0]
 assert abs(sum(v * v for v in rn) / 2 - 1) < 1e-12
 ```
 
-## Placement and numerical care
+## 📍 Placement and numerical care
 
 Post-norm computes $\operatorname{LN}(x+F(x))$; pre-norm computes $x+F(\operatorname{LN}(x))$. Pre-norm preserves an explicit identity route through the residual stream, which often helps optimization of deep networks. Placement affects training dynamics and is part of the architecture, not a cosmetic refactor of trained weights.
 

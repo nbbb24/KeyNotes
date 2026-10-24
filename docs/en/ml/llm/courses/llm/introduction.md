@@ -1,8 +1,8 @@
-# LLM course introduction: probabilities, representations, and generation
+# 🚪 LLM course introduction: probabilities, representations, and generation
 
 This chapter follows a token from text input to a generated output. The key is to distinguish the distribution a model defines, the vectors used to compute it, the loss used for learning, and the rule used for decoding.
 
-## Conditional and unconditional modeling
+## 🏗️ Conditional and unconditional modeling
 
 An unconditional sequence model defines $p(y)=\prod_t p(y_t\mid y_{<t})$. “Unconditional” means no additional external input x; it still conditions each token on preceding tokens. Conditional generation defines $p(y\mid x)=\prod_t p(y_t\mid x,y_{<t})$, as in translation or summarization.
 
@@ -13,7 +13,7 @@ An unconditional sequence model defines $p(y)=\prod_t p(y_t\mid y_{<t})$. “Unc
 
 *The encoder–decoder diagram is one way to implement conditional generation. A decoder-only model can also condition on a prompt prefix.*
 
-## IDs become hidden states, then logits
+## 🧩 IDs become hidden states, then logits
 
 A tokenizer maps text to IDs from a fixed vocabulary. Embedding lookup selects vectors, and an encoder or decoder transforms them into contextual hidden states.
 
@@ -32,7 +32,7 @@ For hidden state h, logits are $z=W_{vocab}h+b$. Softmax gives probabilities, an
 
 *The two equations express the same negative-log-likelihood objective before and after expanding softmax. Padding and other excluded positions require loss masks.*
 
-## Generation is a separate decision
+## 📌 Generation is a separate decision
 
 Greedy selection, random sampling, temperature, top-k, top-p, and beam search operate on the predicted distribution. Top-p retains the smallest sorted candidate set reaching **at least** p cumulative probability, not a set constrained to remain below p. See the worked example in [decoding](../../inference/decoding.md).
 
@@ -45,7 +45,7 @@ Greedy selection, random sampling, temperature, top-k, top-p, and beam search op
 
 Frequency penalties depend on counts; presence penalties depend on whether a token has appeared. Exact formulas vary by API. Stop tokens and maximum output length affect completion quality and should be recorded in experiments.
 
-## Historical recurrent computation
+## 🚀 Historical recurrent computation
 
 ![LLM course introduction: probabilities, representations, and generation, original figure 16](../../../../../assets/notion/043-15.png)
 ![LLM course introduction: probabilities, representations, and generation, original figure 17](../../../../../assets/notion/043-16.png)

@@ -1,8 +1,8 @@
-# BLIP and BLIP-2: understanding, generation, and a learned bridge
+# 🖼️ BLIP and BLIP-2: understanding, generation, and a learned bridge
 
 BLIP and BLIP-2 are related but distinct designs. BLIP combines visual understanding and text generation while improving noisy captions. BLIP-2 connects pretrained frozen vision and language models through a trainable Querying Transformer, or Q-Former.
 
-## BLIP: three operating modes
+## 🧭 BLIP: three operating modes
 
 ![BLIP and BLIP-2: understanding, generation, and a learned bridge, original figure 1](../../../../assets/notion/021-00.png)
 
@@ -10,7 +10,7 @@ BLIP and BLIP-2 are related but distinct designs. BLIP combines visual understan
 
 ITC aligns independently encoded image/text representations. ITM uses cross-attention to judge whether a pair matches, including hard negatives. The language-modeling mode generates text conditioned on image features. The CapFilt data procedure generates synthetic captions and filters noisy captions, making data quality part of the method rather than relying only on architecture.
 
-## BLIP-2 stage 1: learn a visual representation interface
+## 🔄 BLIP-2 stage 1: learn a visual representation interface
 
 ![BLIP and BLIP-2: understanding, generation, and a learned bridge, original figure 2](../../../../assets/notion/021-01.png)
 
@@ -28,7 +28,7 @@ Stage 1 trains Q-Former using image–text contrastive learning, image–text ma
 
 *The masking diagrams show why changing the objective requires changing permitted query/text interactions.*
 
-## BLIP-2 stage 2: connect to a frozen language model
+## 🔄 BLIP-2 stage 2: connect to a frozen language model
 
 A learned linear projection maps query outputs to the LLM's input width. These visual prefix embeddings condition a frozen decoder-only or encoder–decoder language model, and a generative objective trains the bridge. This is separate from the three representation-learning objectives of stage 1; combining them into one undifferentiated training stage obscures the method.
 
@@ -36,7 +36,7 @@ A learned linear projection maps query outputs to the LLM's input width. These v
 
 *The top path conditions a decoder-only LM; the bottom path connects to an encoder–decoder LM. Both use projected visual query outputs.*
 
-## Why compress visual features?
+## 💡 Why compress visual features?
 
 If a vision encoder emits hundreds of patch states, a fixed query set reduces the interface sequence length. That saves downstream work but introduces a bottleneck: tiny text or several small objects may need more visual detail. Compression alone is not knowledge distillation; distillation requires a teacher-derived learning target.
 

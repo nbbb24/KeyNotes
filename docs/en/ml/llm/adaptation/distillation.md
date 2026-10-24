@@ -1,8 +1,8 @@
-# Knowledge distillation: train a student from a teacher
+# 🫖 Knowledge distillation: train a student from a teacher
 
 Distillation transfers behavior from a teacher model to a student. It is useful when the teacher is accurate but expensive, or when a smaller model should inherit task-specific behavior. The teacher can be one model or an ensemble.
 
-## Soft targets contain more than the top label
+## 🧭 Soft targets contain more than the top label
 
 For teacher logits $z^T$, student logits $z^S$, and temperature $T$:
 
@@ -21,13 +21,13 @@ Higher temperature exposes relative probabilities among alternatives. The $T^2$ 
 
 If a teacher assigns `[0.7, 0.25, 0.05]` to dog, wolf, and airplane, the student learns that wolf is a more plausible confusion than airplane. A one-hot dog label lacks that relationship. This information is useful only to the extent that the teacher's distinctions are useful.
 
-## Other forms
+## 🧩 Other forms
 
 Feature distillation matches hidden states, sometimes through a projection when widths differ. Sequence distillation trains on teacher-generated outputs. Reasoning-data distillation uses curated teacher solutions, but copying long explanations does not guarantee the student acquired reliable reasoning. Validate answers and process quality separately.
 
 For different tokenizers, direct token-logit matching is not straightforward because output coordinates refer to different units. Sequence-level supervision or an explicit alignment method may be more suitable.
 
-## Evaluate the student independently
+## 📊 Evaluate the student independently
 
 Compare quality, latency, memory, and robustness at the same task settings. A smaller student can inherit teacher mistakes or amplify dataset shortcuts. Distillation data must cover the deployment distribution; a strong teacher queried only on easy examples may leave important behaviors untaught.
 

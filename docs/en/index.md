@@ -2,7 +2,7 @@
 
 Understand a concept, work through an example, and connect it to the system that uses it. KeyNotes brings machine learning and infrastructure into one learning path: model quality and system performance are often two sides of the same engineering decision.
 
-## Choose a starting point
+## 🧭 Choose a starting point
 
 | Your question | Start here | What you will learn to do |
 | --- | --- | --- |
@@ -12,7 +12,7 @@ Understand a concept, work through an example, and connect it to the system that
 | Why is an accelerator waiting for data? | [Infrastructure learning map](infra/index.md) | Trace memory, transfers, interconnects, and completion |
 | How do I prepare a trustworthy dataset? | [SQL](ml/sql.md) and [Pandas](ml/pandas.md) | Preserve row meaning, handle missingness, and avoid join mistakes |
 
-## Learn in two passes
+## 🎯 Learn in two passes
 
 On the first pass, read the motivation, diagrams, and worked example. Explain the mechanism in your own words before memorizing its name. On the second pass, derive the equations, check assumptions, and ask when the technique fails. The exercises and links between chapters support this second pass.
 
@@ -29,7 +29,7 @@ flowchart LR
 
 The arrows are a learning loop: deployment failures often reveal missing data or evaluation cases, not only implementation defects.
 
-## Languages and figures
+## 📌 Languages and figures
 
 Use the language icon in the top-right corner to switch between English and Chinese on the corresponding topic. Technical names remain recognizable in both editions. Original note figures are retained; surrounding explanations clarify abbreviations, assumptions, and corrections where a screenshot contains an error. New diagrams provide a view of the mechanism without replacing the original images.
 

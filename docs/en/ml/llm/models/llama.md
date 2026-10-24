@@ -1,14 +1,14 @@
-# LLaMA: a compact set of Transformer design choices
+# 🦙 LLaMA: a compact set of Transformer design choices
 
 The original LLaMA paper describes decoder-only language models built from established components with careful training. This chapter explains those components; later Llama releases have their own configurations and should not be treated as identical architectures.
 
-## Pre-normalization and RMSNorm
+## 🧭 Pre-normalization and RMSNorm
 
 A pre-norm residual block computes $x+F(\operatorname{Norm}(x))$. The identity path helps gradient flow through a deep stack. The original Transformer used a post-norm arrangement, but neither placement alone guarantees or prevents vanishing/exploding gradients.
 
 LLaMA uses RMSNorm, which rescales using the root mean square without subtracting the feature mean. See [normalization](../components/normalization.md) for the exact formula. Replacing it with LayerNorm changes the computation and cannot be assumed compatible with trained weights.
 
-## SwiGLU, with the projections kept separate
+## 🧩 SwiGLU, with the projections kept separate
 
 A common bias-free formulation is
 
@@ -33,7 +33,7 @@ The third panel multiplies the value and activated gate elementwise. A full tran
 
 *Use the original activation diagrams to distinguish sigmoid gating, Swish/SiLU, and the two projected branches of SwiGLU. The final down projection is also part of the FFN.*
 
-## RoPE and generation
+## 📌 RoPE and generation
 
 Rotary position embeddings modify Q/K coordinate pairs so attention scores encode relative displacement. The model remains causal and benefits from KV caching during generation. These design choices interact with training data, optimization, and scale; naming the components does not predict benchmark quality by itself.
 

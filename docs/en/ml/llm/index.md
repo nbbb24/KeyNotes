@@ -2,7 +2,7 @@
 
 Language-model engineering connects representations, objectives, optimization, generation, and systems. Study the connections: memorizing model names will not explain why a model hallucinates, why a long prompt runs out of memory, or why fine-tuning fails to teach a missing fact.
 
-## Follow one sequence through the model
+## 🔄 Follow one sequence through the model
 
 Start with [foundations](foundations.md) and [Word2Vec to Transformer](word2vec-to-transformer.md). Learn how tokens become vectors, how [attention](components/attention.md) combines information, and how [positions](components/position.md) and [masks](components/attention-masks.md) constrain it. [Normalization](components/normalization.md), [cross-entropy and KL](components/cross-entropy-kl.md), and [attention variants](components/attention-variants.md) explain the main computational pieces.
 
@@ -17,7 +17,7 @@ flowchart LR
 
 For each arrow, ask what changes: data, trainable parameters, objective, or inference procedure. Retrieval changes available evidence; LoRA changes how parameter updates are represented; sampling changes how outputs are selected. They solve different problems.
 
-## Architecture and model families
+## 🏗️ Architecture and model families
 
 | Question | Chapters |
 | --- | --- |
@@ -29,7 +29,7 @@ For each arrow, ask what changes: data, trainable parameters, objective, or infe
 
 Model chapters describe specific research families and releases, not a continuously updated leaderboard. Compare evidence and assumptions before transferring a reported improvement to another setting.
 
-## Choose the right intervention
+## 📌 Choose the right intervention
 
 For task behavior, study [SFT](adaptation/sft.md), [LoRA](adaptation/lora.md), [adapters](adaptation/adapters.md), [prompt/prefix tuning](adaptation/prompt-tuning.md), and [distillation](adaptation/distillation.md). For preference optimization, follow [RLHF](alignment/rlhf.md) → [importance sampling](alignment/importance-sampling.md) → [PPO](alignment/ppo.md), then compare [DPO](alignment/dpo.md) and [GRPO](alignment/grpo.md).
 
@@ -37,7 +37,7 @@ For generation and deployment, connect [decoding](inference/decoding.md), [KV ca
 
 For external information and actions, study [RAG](rag.md), [Tree of Thoughts](inference/tree-of-thoughts.md), [MCP](tools/mcp.md), [LangChain](tools/langchain.md), and [DeepSpeed](tools/deepspeed.md). Distinguish model reasoning, search, tool orchestration, and distributed training infrastructure.
 
-## Structured courses and multimodal extensions
+## 🚀 Structured courses and multimodal extensions
 
 The course tracks provide longer sequences: [Advanced NLP](courses/advanced-nlp/index.md), [LLM methods and applications](courses/llm/index.md), [Multimodal Machine Learning](courses/multimodal.md), and [Advanced Multimodal Topics](courses/advanced-multimodal.md). Supplement them with [multimodal foundations](multimodal/foundations.md), [fusion](multimodal/fusion.md), and [alignment](multimodal/alignment.md).
 

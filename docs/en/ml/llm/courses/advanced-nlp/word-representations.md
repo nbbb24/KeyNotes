@@ -1,8 +1,8 @@
-# Word representations: lookup tables, CBOW, and context
+# 🔤 Word representations: lookup tables, CBOW, and context
 
 Words must become numeric inputs before a neural model can process them. An embedding table provides a compact representation while allowing the model to learn which words behave similarly in a particular training objective.
 
-## Lookup is matrix multiplication without the waste
+## 🧭 Lookup is matrix multiplication without the waste
 
 Let $E$ have shape $V\times d$. A one-hot vector for token ID $i$ multiplied by $E$ selects row $E_i$. An embedding lookup performs this selection directly, avoiding a length-$V$ dense vector. Gradients update the selected rows, subject to the optimizer's behavior.
 
@@ -14,7 +14,7 @@ The CBOW diagram looks up context-word vectors, combines them, and predicts a ce
 
 The lookup diagram shows that selecting an embedding row is mathematically equivalent to multiplying by a one-hot vector, but direct indexing avoids the waste of a huge sparse multiplication.
 
-## Continuous bag of words
+## 🧩 Continuous bag of words
 
 CBOW predicts a center word from its surrounding words. A simple implementation averages context embeddings:
 
@@ -25,7 +25,7 @@ $$
 
 For `the cat sat on the mat`, a context around `sat` might include `cat` and `on`. Skip-gram reverses the direction: a center word predicts surrounding words. Training choices such as window size, subsampling, and negative sampling affect what relationships the vectors capture.
 
-## What similarity means
+## 📌 What similarity means
 
 Cosine similarity compares direction, not magnitude. Words used in similar contexts can be close even if their meanings oppose each other: `hot` and `cold` occur in similar grammatical environments. Nearest neighbors therefore reveal distributional behavior, not a guaranteed synonym dictionary. Analogy arithmetic is an empirical pattern and can encode biases from the corpus.
 

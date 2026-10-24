@@ -1,8 +1,8 @@
-# FLOPs, memory traffic, and latency
+# 📊 FLOPs, memory traffic, and latency
 
 FLOPs count floating-point operations. FLOP/s measures a rate. Neither alone is elapsed time: a workload can be limited by arithmetic, memory bandwidth, communication, or software overhead.
 
-## Start with a matrix multiplication
+## 🧭 Start with a matrix multiplication
 
 Multiplying an $m\times k$ matrix by a $k\times n$ matrix uses approximately $2mkn$ FLOPs when a multiply and an addition count separately. Some specifications count a fused multiply-add differently, so state the convention.
 
@@ -14,13 +14,13 @@ $$
 
 A $1\times4096$ vector multiplied by a $4096\times4096$ weight requires about 33.6 million FLOPs. Reading the FP16 weight once requires about 33.6 MB. At batch one, that low arithmetic intensity can make weight bandwidth more important than peak matrix throughput.
 
-## Transformer estimates
+## 🧮 Transformer estimates
 
 Dense attention's QK and weighted-value products each scale as $O(S^2d)$ during full-sequence processing. Projection and FFN costs scale approximately linearly with S and quadratically with hidden width. For many dense-model training estimates, $6ND$ is a useful rough count for N parameters and D training tokens, assuming forward/backward matrix operations dominate. It omits important details such as long-context attention, recomputation, embeddings, sparsity, and communication.
 
 For MoE, total parameter count is not the same as parameters activated per token. For inference, separate prefill from cached decode and include KV reads. A smaller FLOP count can still be slower if kernels are inefficient or communication dominates.
 
-## A roofline estimate
+## 🧮 A roofline estimate
 
 $$
 \text{attainable FLOP/s}\leq

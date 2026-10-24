@@ -1,8 +1,8 @@
-# Vision Transformer: turning an image into a sequence
+# 🖼️ Vision Transformer: turning an image into a sequence
 
 ViT applies a Transformer encoder to image patches. Its starting point is simple: if a language model can mix information among token vectors, an image model can mix information among vectors representing local image regions.
 
-## Patch embedding, carefully counted
+## 🧮 Patch embedding, carefully counted
 
 An image of height $H$, width $W$, and $C$ channels is split into $P\times P$ patches. Assuming divisible dimensions, the number of patches is $N=HW/P^2$. Each flattened patch has $P^2C$ values and is projected to hidden width $d$.
 
@@ -19,11 +19,11 @@ A convolution with kernel size and stride both equal to the patch size can imple
 
 **Figure guide.** Read the image from bottom to top: image patches are flattened and projected into tokens, position information and a class token are added, and a transformer encoder exchanges information between patches. The classification head reads the class representation. Patch count controls attention cost, so image resolution is part of the model's systems design.
 
-## What the encoder learns
+## 🎯 What the encoder learns
 
 Self-attention allows a patch to exchange information with distant patches from the first layer. A class-token state or a pooling operation supplies a representation for classification. Compared with CNNs, a plain ViT has weaker built-in locality assumptions and relies more on data, pretraining, and augmentation to learn useful visual structure.
 
-## Resolution is a systems decision
+## 📌 Resolution is a systems decision
 
 Reducing patch width from 16 to 8 at fixed image size quadruples the number of patch tokens. Dense attention score size then grows by roughly sixteen times, ignoring the class token. Increasing resolution can help small-object recognition or OCR but increases cost. Positional embeddings may need interpolation when the patch grid changes; verify the model's prescribed preprocessing.
 

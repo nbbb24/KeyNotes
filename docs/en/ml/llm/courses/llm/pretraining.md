@@ -1,8 +1,8 @@
-# Learning objectives, tokenization, and pretraining data
+# 📚 Learning objectives, tokenization, and pretraining data
 
 A model learns the prediction problem created by its data pipeline. Architecture, objective, tokenization, masking, and batching must agree; a correct Transformer implementation can still learn the wrong task if these pieces are mismatched.
 
-## Objective and information visibility
+## 🎯 Objective and information visibility
 
 Causal language modeling predicts the next token from earlier tokens. Masked modeling reconstructs selected hidden content from visible context. Prefix modeling can use bidirectional input with causal output. Denoising objectives define a corruption and reconstruction target.
 
@@ -10,7 +10,7 @@ Causal language modeling predicts the next token from earlier tokens. Masked mod
 
 *The diagram varies architecture, objective, adaptation, and evaluation separately. A result cannot be attributed to architecture if several other factors changed at once.*
 
-## From clean text to subwords
+## 🧩 From clean text to subwords
 
 ![Learning objectives, tokenization, and pretraining data, original figure 2](../../../../../assets/notion/045-01.png)
 ![Learning objectives, tokenization, and pretraining data, original figure 3](../../../../../assets/notion/045-02.png)
@@ -21,7 +21,7 @@ Classical BPE repeatedly merges frequent adjacent units. Byte-level variants can
 
 Vocabulary size trades sequence length against embedding/output-table size. A tokenizer that produces many more tokens for one language increases cost and reduces the amount of text fitting in a context window. Evaluate coverage and compression by language/domain.
 
-## Padding versus packing
+## ⚖️ Padding versus packing
 
 ![Learning objectives, tokenization, and pretraining data, original figure 4](../../../../../assets/notion/045-03.png)
 ![Learning objectives, tokenization, and pretraining data, original figure 5](../../../../../assets/notion/045-04.png)
@@ -31,7 +31,7 @@ Vocabulary size trades sequence length against embedding/output-table size. A to
 
 Padding needs an attention mask and usually a loss mask. Packing may permit cross-document attention or use segment boundaries to prevent it; state which objective is intended. End-of-document tokens identify boundaries but do not by themselves enforce attention isolation. Truncation can remove crucial targets or split structured examples.
 
-## Data quality before scale
+## 📦 Data quality before scale
 
 Deduplicate near-identical content, separate evaluation sources, record data provenance, and inspect language/domain balance. Avoid fitting preprocessing on held-out evaluation data. Contamination can raise benchmark scores without improving generalization. More tokens of repeated low-quality material are not equivalent to more useful evidence.
 

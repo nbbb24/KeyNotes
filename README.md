@@ -1,4 +1,4 @@
-# KeyNotes
+# 📚 KeyNotes
 
 [![Read the Docs](https://img.shields.io/badge/Docs-Read%20the%20Docs-blue?logo=readthedocs)](https://infra-knowledge.readthedocs.io/en/latest/)
 [![CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-blue.svg)](https://creativecommons.org/licenses/by/4.0/)
@@ -10,7 +10,7 @@ KeyNotes is a bilingual learning guide to **machine learning** and the **infrast
 
 Read the [English documentation](https://infra-knowledge.readthedocs.io/en/latest/) or switch to 简体中文 with the language icon on any page. The two editions share the same topic structure.
 
-## Contributing
+## 🤝 Contributing
 
 Corrections, clearer examples, diagrams, and new topics are welcome. Open an issue to discuss a larger addition, or submit a pull request with a focused change.
 
@@ -21,7 +21,7 @@ Corrections, clearer examples, diagrams, and new topics are welcome. Open an iss
 
 The original Notion material and image checksums are recorded in [`migration/`](migration/).
 
-## Sharing and citation
+## 🔗 Sharing and citation
 
 Original KeyNotes documentation text and diagrams are shared under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) where the contributors hold the necessary rights. You may share and adapt them, including commercially, with attribution, a license link, and an indication of changes. Imported images and third-party material are excluded unless their own notices say otherwise; see [LICENSE.md](LICENSE.md) for scope.
 

@@ -1,8 +1,8 @@
-# Inference frameworks: vLLM, SGLang, and the memory behind serving
+# 🚀 Inference frameworks: vLLM, SGLang, and the memory behind serving
 
 An inference framework turns incoming requests into model execution. Its scheduler decides which tokens run together; its memory manager keeps weights and KV cache available; its transfer connector moves cache state if prefill and decode run on different workers. Understanding these responsibilities is more useful than memorizing one deployment command. Here **HBM** means accelerator memory (the same reasoning applies to a supported GPU/NPU device-memory tier), and **DRAM** means host memory.
 
-## Why prefill and decode behave differently
+## 💡 Why prefill and decode behave differently
 
 **Prefill** processes the prompt, often many tokens in parallel, and produces the first response token plus a KV cache for the input. It tends to demand compute and temporary activation memory. **Decode** appends tokens one or a few at a time, repeatedly reading weights and earlier KV state; cache capacity and memory bandwidth become prominent. Mixing long prefill batches with latency-sensitive decode steps can cause interference. Separating the phases lets operators scale and tune them independently, but it adds KV transfer, coordination, and failure handling. The split is useful only when those costs are outweighed by the scheduling benefits. See the [vLLM disaggregated-prefill guide](https://docs.vllm.ai/en/latest/features/disagg_prefill/) and [SGLang PD guide](https://docs.sglang.ai/backend/pd_disaggregation.html).
 
@@ -15,7 +15,7 @@ flowchart LR
     D --> U
 ```
 
-## What occupies HBM and DRAM?
+## 🧠 What occupies HBM and DRAM?
 
 | Resource | Typical home | Why it matters |
 | --- | --- | --- |
@@ -37,7 +37,7 @@ $$B_{KV}=L\times 2\times H_{KV}\times D_{head}\times T\times b$$
 
 Here $L$ is layer count, $H_{KV}$ KV heads, $D_{head}$ head dimension, $T$ retained tokens, and $b$ bytes per element. With 32 layers, 8 KV heads, dimension 128, 2,048 tokens, and BF16 (2 bytes), the result is **268,435,456 bytes = 256 MiB**. If an illustrative 80 GiB device has 30 GiB available for KV after weights and other reserves, division suggests **120** such sequences at most. Actual concurrency is lower or differently shaped because block rounding, output growth, fragmentation, activation peaks, parallel sharding, and cache reuse all matter. Sliding-window, MLA, or quantized KV layouts require a different formula. Work through [KV-cache fundamentals](../ml/llm/inference/kv-cache.md) before applying this estimate to a real model.
 
-## A complete P/D request: a shared system prompt
+## 📌 A complete P/D request: a shared system prompt
 
 Assume two requests share a system prompt, then diverge. Both P and D have compatible model weights/tokenizer and an agreed KV layout; the router knows where each request will run. The following is a logical sequence—vLLM's KV connectors and SGLang's Mooncake/NIXL/Ascend transfer backends implement details differently.
 
@@ -50,12 +50,12 @@ Assume two requests share a system prompt, then diverge. Both P and D have compa
 
 vLLM's [Ascend P/D design](https://docs.vllm.ai/projects/ascend/en/main/developer_guide/Design_Documents/disaggregated_prefill.html) gives a concrete connector walkthrough: D allocates blocks, the cache is transferred, then D continues generation. SGLang's [PD documentation](https://docs.sglang.ai/backend/pd_disaggregation.html) shows separate prefill/decode server roles and selectable transfer backends, including an Ascend path. Neither framework implies that every deployment uses MemFabric; the configured connector/backend determines the actual path.
 
-## Reuse is a placement and identity problem
+## 📍 Reuse is a placement and identity problem
 
 If the second request has exactly the same tokenized prefix and compatible model/cache settings, it may reuse completed prefix KV instead of recomputing it. **vLLM** hashes full cache blocks from their tokens and preceding prefix, with additional identity inputs such as adapter or cache salt; its manager tracks references and evicts blocks when space is needed. **SGLang** uses a radix-tree-based prefix cache to find shared paths; HiCache can place colder reusable data in DRAM or storage. A hit is beneficial only after accounting for retrieval/transfer cost. [vLLM's prefix-cache design](https://docs.vllm.ai/en/latest/design/prefix_caching/) explains block identity and eviction; [SGLang HiCache](https://github.com/sgl-project/sglang/blob/main/docs/docs/advanced_features/hicache.mdx) explains the tiers.
 
 Do not reuse cache across incompatible model revisions, tokenizer outputs, positional settings, KV dtypes/layouts, adapters, or isolation domains. Prefix matching is about *token IDs and execution context*, not merely similar-looking text. In P/D deployments, a useful prefix on one P worker may be absent on the chosen D worker; placement, cache-aware routing, and transfer decide whether reuse actually saves work.
 
-## Measure the whole request
+## 📊 Measure the whole request
 
 Track **TTFT** (time to first token), **ITL** (time between generated tokens), request throughput, cache-hit rate, device-memory headroom, KV transfer bytes/time, wait time for free blocks, and failures. For a slow request, separate queueing, prefill compute, KV transfer, decode scheduling, and token generation. A faster P worker alone will not help when D is waiting on a saturated link or has no free KV blocks. Connect this view to [memory addressing](memory-addressing.md), [data movement](data-movement.md), and [performance tools](performance-tools.md).

@@ -1,8 +1,8 @@
-# DeepSeek-V3: attention compression, sparse experts, and training systems
+# 🧠 DeepSeek-V3: attention compression, sparse experts, and training systems
 
 DeepSeek-V3 is a useful case study in designing model architecture and infrastructure together. The original report describes 671 billion total parameters with about 37 billion activated per token. Sparse activation reduces per-token arithmetic relative to using every expert; it does not make all stored weights disappear.
 
-## Multi-head Latent Attention
+## 🧭 Multi-head Latent Attention
 
 MLA compresses key/value information into a lower-dimensional latent state. Learned projections recover the needed attention quantities, with algebraic rearrangements enabling efficient inference. A separate positional component handles the rotary part. This is more specific than simply “down-project then up-project”: the cache representation and how projections are absorbed determine the actual saving.
 
@@ -10,7 +10,7 @@ MLA compresses key/value information into a lower-dimensional latent state. Lear
 
 *Track the latent content path separately from the rotary positional path. Standard full-K/V cache formulas do not directly describe this storage.*
 
-## Experts and balancing
+## 🧩 Experts and balancing
 
 Shared experts process common information while routed experts provide sparse capacity. Selection biases are adjusted according to load: overloaded experts become less attractive and underused experts more attractive. The balancing bias affects expert selection rather than necessarily the final combination weights.
 
@@ -25,7 +25,7 @@ A complementary sequence-wise auxiliary loss remains in the recipe. Therefore, �
 
 *The sequence-level term discourages severe imbalance within a sequence even when aggregate balancing is handled separately.*
 
-## Multi-token prediction and systems design
+## 📦 Multi-token prediction and systems design
 
 ![DeepSeek-V3: attention compression, sparse experts, and training systems, original figure 5](../../../../assets/notion/030-04.png)
 

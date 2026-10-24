@@ -1,8 +1,8 @@
-# BERT: learning from both sides of a token
+# 🔤 BERT: learning from both sides of a token
 
 BERT is an encoder model trained to build contextual representations using left and right context. It is useful for understanding tasks such as classification, entity recognition, and extractive question answering. The original 2018 recipe is described here; later BERT-family models change parts of it.
 
-## Inputs and pretraining
+## 🎯 Inputs and pretraining
 
 Each input position combines token, position, and segment embeddings. `[CLS]` is a sequence-level token and `[SEP]` separates segments. A segment embedding distinguishes portions of a sentence pair; it is not a grammatical label.
 
@@ -18,7 +18,7 @@ The input diagram adds token, segment, and positional embeddings. Segment embedd
 
 The pretraining diagram routes masked-token predictions to selected token positions and next-sentence prediction to the pooled sequence representation. NSP is part of the original BERT recipe, not a requirement of every later encoder.
 
-## Adapting the representation
+## 🧩 Adapting the representation
 
 | Task | Readout | Example |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ The pretraining diagram routes masked-token predictions to selected token positi
 
 For “The bank approved a loan” versus “They sat beside the bank,” the state for `bank` changes with context. A static Word2Vec lookup would start with the same vector in both sentences.
 
-## Practical limits
+## ⚠️ Practical limits
 
 Subword tokenization complicates word-level labels: decide whether to label the first subtoken, all subtokens, or aggregate them. Extractive QA cannot produce an answer absent from the supplied passage without an additional mechanism. Bidirectional attention also makes an ordinary BERT encoder unsuitable as a drop-in causal generator.
 

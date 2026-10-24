@@ -1,8 +1,8 @@
-# GRPO: compare responses within a prompt group
+# 👥 GRPO: compare responses within a prompt group
 
 Group Relative Policy Optimization estimates advantages from several responses to the same prompt instead of fitting a separate value model. The approach was introduced in DeepSeekMath and later used in DeepSeek reasoning training. Removing the critic reduces one source of training cost, but does not remove rollout or reward-evaluation cost.
 
-## Group-relative advantage
+## 🧭 Group-relative advantage
 
 For G responses with rewards $r_i$, an outcome-supervised version uses
 
@@ -32,13 +32,13 @@ The last expression is a sampled estimator involving a reference-to-current prob
 
 *The diagrams contrast a learned value baseline with group reward statistics, then show the clipped objective and a sampled KL estimator. Keep the reference and old policies distinct.*
 
-## Outcome versus process supervision
+## ⚖️ Outcome versus process supervision
 
 Outcome supervision assigns a score to the completed response and can use the same normalized outcome advantage for its tokens. Process supervision scores intermediate steps and defines token advantages from appropriate future step rewards. It requires a credible step evaluator; plausible wording is not proof of a valid step.
 
 For verifiable math or code, rule-based checks can provide rewards. Format rewards check presentation separately from correctness. An automated verifier can still be incomplete or exploitable, so inspect high-reward failures.
 
-## Avoid misleading analogies
+## 📌 Avoid misleading analogies
 
 PPO does not force all responses into one solution pattern, and GRPO does not inherently remove bias or guarantee diversity. Group size, sampling, rewards, KL strength, and optimization determine behavior. “No critic” means no learned value baseline in this formulation, not “no model-based judgments.”
 

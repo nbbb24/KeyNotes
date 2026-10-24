@@ -1,8 +1,8 @@
-# ELMo: a word representation that changes with context
+# 🔤 ELMo: a word representation that changes with context
 
 Static word embeddings give a word type one vector. ELMo addresses polysemy: `bank` should have different representations in a financial sentence and a river sentence. It learns contextual features from a bidirectional language model, then exposes those features to downstream tasks.
 
-## How the representation is constructed
+## ⚙️ How the representation is constructed
 
 The original system uses character-based token representations followed by stacked forward and backward LSTMs. The forward model predicts from the left; the backward model predicts from the right. Their states are concatenated at corresponding positions. This is more precise than saying one recurrent model can see both directions while performing a causal prediction.
 
@@ -14,11 +14,11 @@ $$
 
 where $s_j$ are softmax-normalized layer weights, $h_{k,j}$ are token representations from different levels, and $\gamma$ is a learned scale. The token layer and different recurrent layers may supply different information; using only the top layer discards this flexibility.
 
-## Work through an example
+## 🧩 Work through an example
 
 In “The bank raised rates,” the left/right recurrent states encode clues such as `raised` and `rates`. In “The bank was muddy,” different context changes the vector even though the spelling is identical. A sentiment or entity model can use these vectors as additional input features without relearning all language structure from its small labeled dataset.
 
-## What ELMo teaches about transfer learning
+## 🎯 What ELMo teaches about transfer learning
 
 Pretraining and the downstream task are distinct. A language-model objective supplies broadly useful representations; a task-specific readout learns how to use them. Contextualization does not guarantee factual correctness or eliminate domain shift. Character input helps with morphology and unusual spellings but does not make unknown terminology automatically understood.
 

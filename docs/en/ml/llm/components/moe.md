@@ -1,8 +1,8 @@
-# Mixture of Experts: more capacity with sparse computation
+# 🧩 Mixture of Experts: more capacity with sparse computation
 
 A sparse MoE replaces some dense feed-forward layers with multiple expert networks. A router selects a small subset for each token. The model can store many parameters while activating only part of them on a forward pass. It still needs memory for the experts that are resident across the serving system.
 
-## Follow one token
+## 📦 Follow one token
 
 For token state $x$, a router computes scores, selects a set $S(x)$ of $k$ experts, and combines their outputs:
 
@@ -22,7 +22,7 @@ flowchart LR
     W --> Y[Output state]
 ```
 
-## Why balancing matters
+## 💡 Why balancing matters
 
 If nearly all tokens select one expert, that expert becomes a communication/computation bottleneck while others receive little training. Importance measures sum soft routing probabilities; load measures actual assignment counts. These differ: many tiny probabilities and a few large probabilities can have the same sum but very different top-k traffic.
 
@@ -30,11 +30,11 @@ A common auxiliary objective uses the product of assignment fraction and average
 
 For $T$ tokens, $E$ experts, and top-$k$ routing, mean assignments per expert are $kT/E$. A capacity factor reserves room above this mean. Depending on the system, overflow tokens may be dropped, rerouted, or handled with dynamic capacity. These choices affect both quality and latency.
 
-## DeepSeek-style design choices
+## 📌 DeepSeek-style design choices
 
 Fine-grained experts use narrower expert FFNs and more selectable combinations. Shared experts process every token to capture common features. DeepSeek's later auxiliary-loss-free balancing adjusts expert-selection biases based on load; those biases need not enter the combination weights. “Loss-free” should not be read as “no training losses anywhere”: the full architecture can retain other regularizers, including sequence-level balancing.
 
-## Original visual notes
+## 🚀 Original visual notes
 
 ![Mixture of Experts: more capacity with sparse computation, original figure 1](../../../../assets/notion/056-00.png)
 
@@ -56,7 +56,7 @@ Fine-grained experts use narrower expert FFNs and more selectable combinations. 
 
 Use the figures to distinguish the expert layer, router distribution, balancing objectives, z-loss, and capacity limit. These are separate mechanisms, not interchangeable names for one regularizer.
 
-## Systems consequences and a check
+## 🔄 Systems consequences and a check
 
 Expert parallelism sends tokens to the devices hosting selected experts, often requiring all-to-all communication. Total parameter count, active parameter count, activation memory, and communication volume answer different cost questions. Small batches can underutilize experts even when arithmetic per token looks attractive.
 

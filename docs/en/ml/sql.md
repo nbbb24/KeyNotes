@@ -1,14 +1,14 @@
-# SQL: reason about rows before memorizing syntax
+# 🗃️ SQL: reason about rows before memorizing syntax
 
 SQL expresses operations over relational data. Good queries begin by defining one row, its key, and the intended output grain. A query can be syntactically correct while double-counting revenue after a many-to-many join.
 
-## The main operations
+## 🧭 The main operations
 
 `SELECT` retrieves data; `INSERT`, `UPDATE`, and `DELETE` change rows. `CREATE`, `ALTER`, and `DROP` define objects. `GRANT`/`REVOKE` manage privileges, while `COMMIT`, `ROLLBACK`, and `SAVEPOINT` manage transactions. DDL/DML/DCL/TCL are useful teaching categories; naming conventions and transaction behavior vary by database.
 
 For query reasoning, think `FROM/JOIN → WHERE → GROUP BY → HAVING → window calculations → SELECT/DISTINCT → ORDER BY → limit`. This is a conceptual processing order, not a promise about the optimizer's physical execution plan.
 
-## Filtering, aggregation, and nulls
+## 🧩 Filtering, aggregation, and nulls
 
 ```sql
 SELECT department_id, COUNT(*) AS employees, AVG(salary) AS mean_salary
@@ -22,7 +22,7 @@ HAVING COUNT(*) > 5;
 
 Use `IS NULL`, not `= NULL`. SQL comparisons can evaluate to unknown, and `WHERE` retains only true rows. `COALESCE` selects the first non-null value; choosing zero as a replacement is a business assumption. `CASE WHEN` expresses conditional values, for example `SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END)`.
 
-## Joins and missing matches
+## 📌 Joins and missing matches
 
 An inner join retains matches; a left join retains every left row; right and full joins preserve the corresponding unmatched sides. If one left key matches three right rows, it produces three output rows. A filter on a right-table column in `WHERE` can remove null-extended rows from a left join; put the appropriate match restriction in `ON` when unmatched left rows should remain.
 
@@ -40,7 +40,7 @@ This includes employees with a null department ID. Add `e.department_id IS NOT N
 
 A self-join uses two aliases for one table: join `employees e` to `employees m` on `e.manager_id = m.id`. Use a left join if employees without managers should remain. `UNION` removes duplicate result rows; `UNION ALL` retains them and avoids that deduplication work. Neither guarantees order without `ORDER BY`.
 
-## Subqueries, CTEs, ranking, and ties
+## 🚀 Subqueries, CTEs, ranking, and ties
 
 A scalar subquery can compare salary with `(SELECT AVG(salary) FROM employees)`. A CTE names a query result for readability and reuse within the statement; it is not automatically a stored table or an optimization barrier in every engine.
 
@@ -58,7 +58,7 @@ This returns all employees with the third-highest distinct salary. With salaries
 
 Windows keep row identities while computing over related rows. `PARTITION BY department_id` restarts a calculation per department. For running totals, specify a frame such as `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`; default frames can include tied peers. See [window functions](https://www.postgresql.org/docs/current/tutorial-window.html).
 
-## Dates, duplicates, and integrity
+## 🔍 Dates, duplicates, and integrity
 
 ```sql
 SELECT customer_id, COUNT(*) AS purchases
@@ -74,7 +74,7 @@ Find repeated keys with `GROUP BY key HAVING COUNT(*) > 1`, then decide whether 
 
 Normalization reduces update anomalies: 1NF avoids repeating groups under the chosen relational representation; 2NF removes partial dependencies of non-key attributes on candidate keys; 3NF removes inappropriate transitive dependencies, with a formal definition in terms of functional dependencies. Denormalization trades redundant storage and maintenance for selected read paths. It requires an update-consistency strategy.
 
-## Performance and transaction boundaries
+## 📊 Performance and transaction boundaries
 
 Indexes can accelerate suitable filters, joins, and ordering, but cost storage and maintenance; a scan may be preferable for a large fraction of a table. Inspect query plans and actual cardinalities. An index does not repair a logically multiplying join.
 

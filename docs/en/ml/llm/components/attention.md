@@ -1,8 +1,8 @@
-# Attention: a learned weighted lookup
+# 👀 Attention: a learned weighted lookup
 
 A fixed vector cannot conveniently preserve every detail in a long sentence. Attention lets each output position retrieve different information from the input. In translation, generating a person's name should emphasize the corresponding source words; generating a verb may need other positions.
 
-## Queries, keys, and values
+## 🧭 Queries, keys, and values
 
 A query describes what a position needs. Keys are descriptors used to match that query. Values contain information to aggregate. These are learned projections, not literal database fields:
 
@@ -24,7 +24,7 @@ output = sum(w * v for w, v in zip(weights, [2.0, 10.0]))
 assert abs(output - 8.0) < 1e-12
 ```
 
-## Self-attention, cross-attention, and heads
+## 🧩 Self-attention, cross-attention, and heads
 
 Self-attention obtains Q, K, and V from the same sequence. Cross-attention obtains queries from the receiving sequence and keys/values from another source. A text decoder can therefore query image features or encoder states. Multiple heads learn separate projections, concatenate their outputs, and use an output projection to mix them. They are not guaranteed to specialize into human-readable linguistic roles.
 
@@ -40,7 +40,7 @@ flowchart LR
     V --> O
 ```
 
-## Beyond the first implementation
+## 🛠️ Beyond the first implementation
 
 Dense attention has quadratic score size in sequence length. [FlashAttention](attention-variants.md) changes memory traffic without approximating the mathematical attention operation. [KV caching](../inference/kv-cache.md) reuses past keys and values during generation. Neither removes the need for correct positions and masks.
 

@@ -1,8 +1,8 @@
-# Retrieval-augmented generation: build answers from evidence
+# 🔎 Retrieval-augmented generation: build answers from evidence
 
 RAG retrieves external information and supplies it to a generator. It is useful when answers need traceable, domain-specific, or changing evidence. Retrieval adds access to documents; it does not guarantee that the generator uses them faithfully.
 
-## End-to-end pipeline
+## 🔄 End-to-end pipeline
 
 ```mermaid
 flowchart LR
@@ -17,7 +17,7 @@ flowchart LR
 
 Keep source titles, URLs, timestamps, section positions, versions, and access metadata with chunks. Synchronize deletions and permission changes as well as new content. Indexing a document is not permanent permission to show it to every user.
 
-## Chunking and embeddings
+## 🧩 Chunking and embeddings
 
 Chunks should preserve useful semantic units such as a paragraph, table, or procedure. Fixed windows with overlap are a baseline, not a universal 400–800-token rule. Small chunks can lose context; large chunks can dilute relevance and consume the generator's budget. Preserve headings and table meaning during extraction.
 
@@ -29,7 +29,7 @@ $$
 
 For normalized vectors, dot product and cosine coincide. Use the embedding model's intended query/document formatting and similarity convention. Changing the embedding model usually requires re-embedding the corpus; equal dimensions do not imply compatible spaces.
 
-## Retrieval and indexing
+## 🔎 Retrieval and indexing
 
 Sparse methods such as BM25 are strong for exact terms, identifiers, and rare symbols. Dense retrieval can match semantic paraphrases but may miss exact numerical distinctions. Hybrid retrieval combines candidate sets or calibrated rankings; raw BM25 and cosine scores are not automatically comparable. Reciprocal-rank fusion is one way to combine rankings without assuming common score scales.
 
@@ -37,7 +37,7 @@ Exact vector search offers a useful baseline. Approximate indexes such as HNSW o
 
 Query rewriting, decomposition, or HyDE can improve recall but can also alter intent or inject invented terms. A hypothetical generated document is a retrieval aid, not evidence to cite.
 
-## Reranking and context assembly
+## 🚀 Reranking and context assembly
 
 A cross-encoder jointly scores a query and candidate passage. It can improve ordering among retrieved candidates, but cannot recover a relevant document that never entered the candidate pool. A pairwise hinge objective has the form
 
@@ -47,11 +47,11 @@ $$
 
 Select evidence within the context budget, deduplicate near-identical chunks, preserve useful source diversity, and handle conflicting versions explicitly. Reserving output tokens and instructions is part of the budget. Longer context is not automatically better if distractors crowd out decisive evidence.
 
-## Generation and checks
+## ✅ Generation and checks
 
 Ask for answers supported by the supplied passages, with citations attached to the claims they support. Verify that cited passages actually entail those claims. An instruction to “use only evidence” reduces neither hallucination nor prompt-injection risk to zero. Retrieved text is untrusted content; it should not acquire authority to change tool permissions or system behavior. Validate structured output against a schema and separately check semantic correctness.
 
-## Evaluate each stage
+## 📊 Evaluate each stage
 
 | Metric | Definition or purpose |
 | --- | --- |

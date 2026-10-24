@@ -1,8 +1,8 @@
-# Llama 3.1 and the Llama 3 technical report
+# 🦙 Llama 3.1 and the Llama 3 technical report
 
 The Llama 3 report covers text models and additional multimodal experiments. Released Llama 3.1 text checkpoints should not be described as if they automatically include every image, video, and speech component explored in the report.
 
-## Text architecture and post-training
+## 🎯 Text architecture and post-training
 
 The reported text models use a decoder-only Transformer with grouped-query attention. Sharing KV heads among query heads reduces cache storage; the published configurations use eight KV heads. Model size changes layer count and hidden dimensions, so compute cache size from the exact checkpoint configuration.
 
@@ -16,7 +16,7 @@ Post-training iterates data collection, reward modeling, rejection sampling, SFT
 
 *The post-training diagram is a data-and-model iteration loop, not a single pass through one dataset.*
 
-## Tool use and deployment
+## 🛠️ Tool use and deployment
 
 ![Llama 3.1 and the Llama 3 technical report, original figure 3](../../../../assets/notion/051-02.png)
 
@@ -24,7 +24,7 @@ Post-training iterates data collection, reward modeling, rejection sampling, SFT
 
 The report also describes selective FP8 inference choices, including leaving first/last Transformer layers unquantized. Such results depend on kernels and hardware; “FP8” is not a promise of a fixed speedup for every model or batch.
 
-## Multimodal experiments are separate scope
+## 📌 Multimodal experiments are separate scope
 
 ![Llama 3.1 and the Llama 3 technical report, original figure 4](../../../../assets/notion/051-03.png)
 

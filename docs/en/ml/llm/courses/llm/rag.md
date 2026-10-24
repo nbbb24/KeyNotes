@@ -1,8 +1,8 @@
-# Retrieval-augmented language models: a research map and lab
+# 🔎 Retrieval-augmented language models: a research map and lab
 
 Retrieval can enter a language system at the input, hidden-state, output-distribution, or training-objective level. This chapter organizes the original research slides by that design choice. Begin with the [practical RAG pipeline](../../rag.md) if retrieval is new to you.
 
-## The common pattern and REALM
+## 🧭 The common pattern and REALM
 
 ![Retrieval-augmented language models: a research map and lab, original figure 1](../../../../../assets/notion/046-00.png)
 
@@ -14,7 +14,7 @@ Retrieval can enter a language system at the input, hidden-state, output-distrib
 
 *The nearest-neighbor diagram shows candidate selection in embedding space. Retrieval quality is meaningful only relative to the prediction task and corpus.*
 
-## RETRO: retrieved context inside the network
+## 🏗️ RETRO: retrieved context inside the network
 
 [RETRO](https://arxiv.org/abs/2112.04426) retrieves neighbors for text chunks, encodes them, and uses chunked cross-attention to condition a decoder. Causal alignment matters: retrieval based on a completed chunk must not expose future target information to earlier positions.
 
@@ -34,7 +34,7 @@ Retrieval can enter a language system at the input, hidden-state, output-distrib
 
 *The gated architecture slide illustrates a retrieval-enhanced variant. Its training/inference gating policy is a model-specific choice, not a universal rule for all RETRO-style systems.*
 
-## kNN-LM and TRIME: memory at prediction time and during training
+## 🧠 kNN-LM and TRIME: memory at prediction time and during training
 
 [kNN-LM](https://arxiv.org/abs/1911.00172) stores context representations with their next-token targets. Neighbors vote for a nonparametric token distribution, which is interpolated with the model distribution:
 
@@ -53,7 +53,7 @@ $$
 
 *The target token can receive support from its embedding and contextual memories. Positive/negative memory construction is part of the objective.*
 
-## Teach the generator to use evidence
+## 🚀 Teach the generator to use evidence
 
 [SAIL](https://arxiv.org/abs/2305.15225) augments instruction data with search results and trains the model to use relevant evidence amid distracting material.
 
@@ -68,7 +68,7 @@ $$
 
 *Reflection scores guide candidate selection. A “supported” token is a model judgment, not proof that the citation entails the claim.*
 
-## Improve the retriever and evidence interface
+## 🔎 Improve the retriever and evidence interface
 
 [REPLUG](https://arxiv.org/abs/2301.12652) can adapt a retriever using feedback from a black-box language model while leaving the generator unchanged. [RA-DIT](https://arxiv.org/abs/2310.01352) tunes both retrieval and generation to improve their compatibility.
 
@@ -87,7 +87,7 @@ $$
 
 *The program, examples, and metric jointly determine what is optimized. A flawed metric can reward a flawed pipeline.*
 
-## Lab: locate the failure before choosing a method
+## ⚠️ Lab: locate the failure before choosing a method
 
 Build a small document QA set with known supporting passages. Compare no retrieval, retrieved evidence, and oracle evidence. If oracle evidence fails, improve the generator/interface. If oracle succeeds but retrieval fails, improve the corpus, query, or retriever. If added distractors cause failure, test filtering or evidence-aware training. Record citation support, correctness, latency, and token cost.
 

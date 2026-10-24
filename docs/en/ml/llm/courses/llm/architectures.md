@@ -1,8 +1,8 @@
-# LLM architectures: from recurrent attention to Transformers
+# 🏗️ LLM architectures: from recurrent attention to Transformers
 
 Architecture specifies how information moves through a model. Decoding specifies how outputs are chosen. Keeping those separate prevents confusing a beam-search improvement with a change to the network itself.
 
-## Begin with sequence search
+## 🔄 Begin with sequence search
 
 ![LLM architectures: from recurrent attention to Transformers, original figure 1](../../../../../assets/notion/044-00.png)
 ![LLM architectures: from recurrent attention to Transformers, original figure 2](../../../../../assets/notion/044-01.png)
@@ -11,7 +11,7 @@ Architecture specifies how information moves through a model. Decoding specifies
 
 In the first diagram, greedy selection begins with b at probability 0.4, but the path a→b has probability $0.35\times0.8=0.28$, exceeding b→b at $0.4\times0.5=0.20$. This illustrates why local and sequence-level optima can differ. Beam search is still approximate because pruned prefixes cannot return.
 
-## Attention removes the fixed-summary bottleneck
+## 🧩 Attention removes the fixed-summary bottleneck
 
 An attention-based decoder forms a context vector from source states:
 
@@ -29,7 +29,7 @@ The sum normalizes over source positions for one decoder query. Index convention
 
 *The context is a weighted source-state sum; the decoder combines it with its own state. The normalization denominator must range over the available source positions.*
 
-## Q, K, and V in each architecture
+## 🏗️ Q, K, and V in each architecture
 
 In encoder self-attention, all three come from encoder states. In decoder causal self-attention, all three come from decoder states with a causal mask. In encoder–decoder cross-attention, **queries come from the decoder; keys and values come from the encoder**.
 
@@ -42,7 +42,7 @@ In encoder self-attention, all three come from encoder states. In decoder causal
 
 *These block diagrams use residual additions, normalization, and FFNs. Function-argument order is notation-dependent; trace the Q/K/V sources instead of assuming the first displayed argument is always Q.*
 
-## Visibility distinguishes model families
+## 🏗️ Visibility distinguishes model families
 
 ![LLM architectures: from recurrent attention to Transformers, original figure 10](../../../../../assets/notion/044-09.png)
 

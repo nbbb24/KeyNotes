@@ -1,14 +1,14 @@
-# SQL：先明确每行代表什么，再写语法
+# 🗃️ SQL：先明确每行代表什么，再写语法
 
 SQL 表达对关系数据的操作。好的查询应该首先定义一行、其键以及预期的输出粒度。一个查询可以语法正确，但在多对多连接后重复计算收入。
 
-## 主要操作
+## 🧭 主要操作
 
 `SELECT` 用于检索数据；`INSERT`、`UPDATE` 和 `DELETE` 用于更改行。`CREATE`、`ALTER` 和 `DROP` 用于定义对象。`GRANT`/`REVOKE` 管理权限，而 `COMMIT`、`ROLLBACK` 和 `SAVEPOINT` 管理事务。DDL/DML/DCL/TCL 是有用的教学类别；命名约定和事务行为因数据库而异。
 
 分析查询时，思考 `FROM/JOIN → WHERE → GROUP BY → HAVING → 窗口计算 → SELECT/DISTINCT → ORDER BY → LIMIT`。这是理解查询的逻辑顺序，而不是对优化器物理执行计划的承诺。
 
-## 过滤、聚合和空值
+## 🧩 过滤、聚合和空值
 
 ```sql
 SELECT department_id, COUNT(*) AS employees, AVG(salary) AS mean_salary
@@ -22,7 +22,7 @@ HAVING COUNT(*) > 5;
 
 使用 `IS NULL`，而不是 `= NULL`。SQL 比较可以评估为未知，而 `WHERE` 只保留真行。`COALESCE` 选择第一个非空值；将零作为替换是一种业务假设。`CASE WHEN` 表达条件值，例如 `SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END)`。
 
-## 连接和未匹配记录
+## 📌 连接和未匹配记录
 
 内连接保留匹配项；左连接保留所有左侧行；右连接和全连接保留相应的未匹配侧。如果一个左侧键匹配三个右侧行，则产生三行输出。在 `WHERE` 中对右侧表列的过滤可以移除左连接中的右侧为空的结果行；当需要保留未匹配的左侧行时，在 `ON` 子句中添加适当的匹配限制。
 
@@ -40,7 +40,7 @@ WHERE NOT EXISTS (
 
 自连接使用一个表的两个别名：将 `employees e` 连接到 `employees m` 上 `e.manager_id = m.id`。如果需要保留没有经理的员工，则使用左连接。`UNION` 移除重复的结果行；`UNION ALL` 保留它们并避免去重工作。两者在没有 `ORDER BY` 的情况下不保证顺序。
 
-## 子查询、CTE、排名和平局
+## 🚀 子查询、CTE、排名和平局
 
 标量子查询可以将工资与 `(SELECT AVG(salary) FROM employees)` 进行比较。CTE（公共表表达式）为可读性和在语句内重用命名查询结果；它不是每个引擎中的自动存储表或优化屏障。
 
@@ -58,7 +58,7 @@ SELECT employee_id, salary FROM ranked WHERE salary_rank = 3;
 
 窗口保持行标识符的同时对相关行组成的窗口进行计算。`PARTITION BY department_id` 每个部门重新启动计算。对于运行总计，指定一个框架，如 `ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`；默认框架可以包括排序键相同的行。请参阅 [窗口函数](https://www.postgresql.org/docs/current/tutorial-window.html)。
 
-## 日期、重复项和完整性
+## 🔍 日期、重复项和完整性
 
 ```sql
 SELECT customer_id, COUNT(*) AS purchases
@@ -74,7 +74,7 @@ HAVING COUNT(*) > 3;
 
 规范化减少更新异常：1NF 避免在所选的关系表示下重复组；2NF 要求非主属性不对候选键的真子集产生部分依赖；3NF 对非主属性通过其他非键属性形成的传递依赖作进一步约束。严格判断应以函数依赖和候选键的正式定义为准。反规范化通过冗余存储和维护换取选定的读路径。它需要一个更新一致性策略。
 
-## 性能和事务边界
+## 📊 性能和事务边界
 
 索引可以加速合适的过滤、连接和排序，但会消耗存储和维护；对于表的一部分扫描可能更优。检查查询计划和实际基数。索引不能修复因多对多匹配而使行数膨胀的连接。
 

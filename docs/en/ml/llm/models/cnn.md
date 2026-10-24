@@ -1,8 +1,8 @@
-# CNNs: learning local patterns with shared filters
+# 🖼️ CNNs: learning local patterns with shared filters
 
 A convolutional neural network scans learned filters across an input. Reusing a filter at different positions reduces parameter count and expresses the assumption that a useful local pattern can occur anywhere. Early layers often detect edges or textures; deeper layers combine patterns over larger receptive fields. These interpretations are tendencies, not fixed labels for every channel.
 
-## Shapes and a concrete calculation
+## 🧮 Shapes and a concrete calculation
 
 For input width $W$, kernel size $K$, padding $P$, dilation $D$, and stride $S$, one spatial output dimension is
 
@@ -34,11 +34,11 @@ The detection slide distinguishes R-CNN, which applies a CNN to many warped prop
 
 The class activation map combines spatial feature maps using class-specific weights. Bright regions indicate contributions to that class score; they are not a guaranteed causal explanation of the prediction.
 
-## Detection: distinguish R-CNN generations
+## 🧩 Detection: distinguish R-CNN generations
 
 Original R-CNN generates region proposals, warps each region, and runs a CNN on those region images. Fast R-CNN computes a shared feature map for the whole image and pools proposal regions from it. Faster R-CNN learns a region-proposal network. Saying “R-CNN runs one CNN on the whole image” conflates these generations.
 
-## Class activation maps
+## 📌 Class activation maps
 
 For a network with global average pooling and a linear classifier, a class activation map is
 
@@ -48,7 +48,7 @@ $$
 
 where $A_k$ is a final spatial feature map and $w_{ck}$ is its class weight. This highlights locations contributing to that class score under the model. Flattening before a dense layer does not literally delete location indices; rather, it changes the structure and does not provide the same direct CAM decomposition. Grad-CAM uses gradients and applies more broadly than original CAM.
 
-## Practice and limits
+## ⚠️ Practice and limits
 
 To diagnose a classifier, compare predictions on translated, cropped, and background-swapped images. A heatmap can reveal background reliance, but it is not proof that the model reasons like a person. Test the hypothesis with interventions and held-out data.
 

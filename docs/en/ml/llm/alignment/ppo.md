@@ -1,8 +1,8 @@
-# PPO: improve a policy while moderating update size
+# ⚖️ PPO: improve a policy while moderating update size
 
 Proximal Policy Optimization is a family of policy-gradient methods. The clipped surrogate is widely used because it reuses a batch for several updates while discouraging some overly large probability changes. Clipping is not a hard guarantee that the entire policy stays inside a trust region.
 
-## Ratio and advantage
+## 🧭 Ratio and advantage
 
 For a sampled state/action pair:
 
@@ -15,7 +15,7 @@ This is maximized; a minimization implementation negates it. The ratio compares 
 
 For $A=2$, $r=1.4$, and $\epsilon=0.2$, the objective uses $\min(2.8,2.4)=2.4$, removing the incentive from that term to increase the ratio further. For a negative advantage, the clipping behavior reverses. The ratio itself is not forcibly clamped in the resulting policy.
 
-## Returns, critic, and GAE
+## 🧩 Returns, critic, and GAE
 
 An undiscounted return is the sum of future rewards. With discount $\gamma$:
 
@@ -32,7 +32,7 @@ $$
 
 with correct termination/bootstrap handling. The critic is trained toward a return target, commonly with squared error. Its coefficient, entropy bonus, and clipping details are hyperparameters; 0.1 is not a universal critic weight.
 
-## PPO in language models
+## 🏗️ PPO in language models
 
 Sample responses from the rollout policy, score them, compute values/advantages, then update policy and critic. A fixed-reference KL penalty can regularize behavior toward an SFT model. This is separate from the current/old-policy ratio and from a measured KL used for early stopping or update control.
 
@@ -62,7 +62,7 @@ Sample responses from the rollout policy, score them, compute values/advantages,
 
 *Read the original equations by tracking which policy appears in each denominator. The reference model controls drift from a baseline; the old policy identifies how the sampled actions were collected.*
 
-## Practical failure modes
+## ⚠️ Practical failure modes
 
 Large update epochs, poor advantage estimates, reward-scale changes, and stale rollout data can destabilize training. Monitor reward, independent task quality, KL, clipping fraction, entropy, value error, and response length. A low actor loss alone does not establish progress.
 

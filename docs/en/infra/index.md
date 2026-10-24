@@ -2,7 +2,7 @@
 
 An accelerator does useful work only when the right data reaches the right memory at the right time. This guide connects Ascend NPU concepts with distributed inference, MemFabric, and KV-cache movement. A2, A3, and A5 names identify product contexts; they do not imply identical topology, memory mapping, or protocol support. Check the installed hardware and software together.
 
-## A map of the layers
+## 🏗️ A map of the layers
 
 | Layer | Questions | Read next |
 | --- | --- | --- |
@@ -16,7 +16,7 @@ An accelerator does useful work only when the right data reaches the right memor
 
 CPU, GPU, and NPU describe processors with different design priorities, not mutually exclusive abilities. The CPU commonly orchestrates work; accelerators emphasize parallel tensor computation. HBM holds weights, activations, and KV caches, while smaller on-chip buffers feed compute units. Host DRAM and remote storage extend capacity at additional access cost.
 
-## Physical identity is not software identity
+## 🧩 Physical identity is not software identity
 
 A die is a piece of silicon. A package contains one or more dies and their connections. A card can contain packages and other components. A runtime device is a software-visible object; a rank is a participant in a communication group. These boundaries need not coincide.
 
@@ -26,7 +26,7 @@ A die is a piece of silicon. A package contains one or more dies and their conne
 
 These original diagrams illustrate single-die and multi-die packages, not a specification of any Ascend product. Trace the actual mapping before concluding that “cross-device” means “cross-card” or “cross-server.”
 
-## Connect the software responsibilities
+## 📌 Connect the software responsibilities
 
 ```mermaid
 flowchart TD
@@ -42,13 +42,13 @@ This is a responsibility map. It does not require every deployment to use every 
 
 An endpoint identifies a communication participant. Initialization discovers peers and capabilities, prepares queues, and exchanges access descriptions. The data path then submits transfers and observes completion. Registering memory prepares access; it does not send the tensor.
 
-## A running example: moving a KV cache
+## 🧩 A running example: moving a KV cache
 
 Suppose a prefill worker produces a cache needed by a decode worker. First calculate the cache size from layers, KV heads, head dimension, sequence length, and dtype. Then locate source and destination memory and determine whether the supported path is direct or host-staged. Finally establish completion and visibility before decoding consumes the result.
 
 The same symptom, “decode is waiting,” can arise from an oversized cache, failed registration, wrong rank mapping, link congestion, or a missing notification. [Serving frameworks](serving-frameworks.md) follow the whole request; [the end-to-end walkthrough](end-to-end-transfer.md) isolates the transfer.
 
-## A learning sequence and self-check
+## 🔄 A learning sequence and self-check
 
 1. Draw devices, dies, NUMA nodes, and interconnects.
 2. Label H2D, D2H, and device transfers; add address spaces and registrations.

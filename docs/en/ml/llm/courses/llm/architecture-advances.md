@@ -1,8 +1,8 @@
-# Transformer architecture advances: identify the bottleneck first
+# 🏗️ Transformer architecture advances: identify the bottleneck first
 
 Modern Transformer variants modify FFNs, attention state, normalization, and positions. These changes address different resources or learning dynamics. Compare them at matched parameter, compute, data, and context budgets where possible.
 
-## Feed-forward networks
+## 🏗️ Feed-forward networks
 
 ![Transformer architecture advances: identify the bottleneck first, original figure 1](../../../../../assets/notion/040-00.png)
 ![Transformer architecture advances: identify the bottleneck first, original figure 2](../../../../../assets/notion/040-01.png)
@@ -11,7 +11,7 @@ Modern Transformer variants modify FFNs, attention state, normalization, and pos
 
 A standard FFN uses two projections around an activation. A gated FFN multiplies two projected branches, one nonlinear, before a down projection. Because that adds a matrix, reduce intermediate width when seeking a matched parameter budget. See [LLaMA's SwiGLU](../../models/llama.md).
 
-## Attention heads and cache storage
+## 🧠 Attention heads and cache storage
 
 ![Transformer architecture advances: identify the bottleneck first, original figure 3](../../../../../assets/notion/040-02.png)
 ![Transformer architecture advances: identify the bottleneck first, original figure 4](../../../../../assets/notion/040-03.png)
@@ -24,14 +24,14 @@ MHA uses separate KV heads for each query head. GQA shares KV heads across query
 
 For 32 query heads and 8 KV heads, four query heads share each KV head. The standard cache is one quarter the corresponding 32-KV-head cache at equal other dimensions. Attention kernels still compute distinct query-head outputs.
 
-## Normalization and residual paths
+## 📌 Normalization and residual paths
 
 ![Transformer architecture advances: identify the bottleneck first, original figure 7](../../../../../assets/notion/040-06.png)
 ![Transformer architecture advances: identify the bottleneck first, original figure 8](../../../../../assets/notion/040-07.png)
 
 *Pre-norm and post-norm place normalization on different sides of a residual addition. RMSNorm rescales without centering; the plots reflect particular experiments, not universal convergence guarantees.*
 
-## Position information
+## 📍 Position information
 
 ![Transformer architecture advances: identify the bottleneck first, original figure 9](../../../../../assets/notion/040-08.png)
 ![Transformer architecture advances: identify the bottleneck first, original figure 10](../../../../../assets/notion/040-09.png)

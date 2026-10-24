@@ -1,4 +1,4 @@
-# Data movement: H2D, DMA, and asynchronous copies
+# 🔄 Data movement: H2D, DMA, and asynchronous copies
 
 A tensor can be available to the CPU yet unavailable to an accelerator kernel. Moving it to device global memory is one step; bringing a tile into on-chip storage is another. Distinguishing these steps explains many apparent “compute” bottlenecks.
 
@@ -18,7 +18,7 @@ sequenceDiagram
 
 H2D completion does not imply that every operand is already in an AI Core's local buffers. Kernel scheduling and internal data movement still matter.
 
-## Directions, engines, and paths
+## 🧭 Directions, engines, and paths
 
 | Term | What it tells you | What it does not tell you |
 | --- | --- | --- |
@@ -33,7 +33,7 @@ H2D completion does not imply that every operand is already in an AI Core's loca
 
 A typical H2D copy traverses a host I/O path such as PCIe. A device transfer may traverse PCIe, a dedicated interconnect, or a network. Ask separately about endpoints, physical route, transfer API, and completion mechanism.
 
-## Asynchrony is a lifetime contract
+## 🧩 Asynchrony is a lifetime contract
 
 A synchronous interface has a documented completion point; inspect its precise guarantees. An asynchronous interface can return after enqueueing work. The application must keep source and destination storage alive and prevent conflicting access until the relevant completion.
 
@@ -41,7 +41,7 @@ For a pipeline, the intended dependency is `fill input → copy → compute → 
 
 Pinned host memory can reduce preparation costs and enable efficient DMA paths. It is a limited resource, so reuse a bounded pool instead of pinning arbitrary amounts. Overlap requires supported engines, independent work, and correct dependencies; “async” alone does not prove overlap.
 
-## Estimate the bottleneck
+## 🧮 Estimate the bottleneck
 
 A first-order model is $T(S)=L+S/B$, where $L$ is fixed overhead, $S$ bytes, and $B$ sustained bytes/s. For $L=10\,\mu s$ and $B=20$ GB/s, a 4 KB copy takes about $10.2\,\mu s$, while a 20 MB copy takes about $1.01$ ms. Small transfers benefit from batching; large transfers expose bandwidth limits.
 

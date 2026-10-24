@@ -1,8 +1,8 @@
-# Memory and addresses: where bytes live and who can access them
+# 🧠 Memory and addresses: where bytes live and who can access them
 
 A numerical address is meaningful only in an address space. Two processes can use the same virtual address for different storage, and a device may need a mapping or registration before accessing host memory. This is why copying a pointer value is not equivalent to sharing a buffer.
 
-## Capacity, locality, and persistence
+## 🧭 Capacity, locality, and persistence
 
 | Storage | Typical role | Main question |
 | --- | --- | --- |
@@ -14,7 +14,7 @@ A numerical address is meaningful only in an address space. Two processes can us
 
 AI Core L1 is a hardware buffer. A software system's “L1 cache,” such as a hierarchical KV-cache tier, is a different abstraction. Likewise, local Unified Buffer and Unified Bus share an abbreviation but not a function.
 
-## One name, several address spaces
+## 🧠 One name, several address spaces
 
 A CPU MMU translates a process virtual address (VA) to physical storage (PA), enforcing permissions. Devices may use I/O virtual addresses (IOVA) translated by an IOMMU. Shared Virtual Memory can simplify addressing on supported systems, but it does not eliminate migration, coherence, permission, or ordering requirements.
 
@@ -28,7 +28,7 @@ In a distributed memory manager, **unified addressing** means that a resource ca
 
 For example, a cache slice might be named by GVA `G+0x2000` while process A sees HVA `H_A+0x2000` and device B sees DVA `D_B+0x2000`. Their numerical values need not match. A lookup or mapping connects them; exporting the GVA alone does not grant access to the bytes. Different backends can represent these relationships differently, so inspect the API and memory type before assuming a conversion exists. In the MemFabric source, host-transfer and device-transfer paths explicitly translate GVA to HVA or DVA where needed.
 
-## Allocation is a lifecycle, not one call
+## 📍 Allocation is a lifecycle, not one call
 
 The word “allocate” often hides several independent steps. Keeping them separate explains why a large address range can be reserved even when the device has far less physical memory.
 
@@ -55,17 +55,17 @@ This is a conceptual lifecycle, not a mandatory call order for every backend: so
 
 Suppose a service reserves a **64 GiB** device VA window for a cache pool, then backs only **8 GiB** with HBM. It can hand out logical locations within the backed portion, but accessing an unbacked address in the remaining 56 GiB is invalid. Later growth requires more backing and mappings, subject to free HBM and runtime limits. Releasing the 8 GiB backing does not automatically make the virtual window available to another allocator; the reservation must also be released. Conversely, freeing the reservation while DMA still refers to its mapped slices is unsafe. The numbers illustrate the distinction; they are not a recommendation for any device.
 
-## Translation and access preparation
+## 🚀 Translation and access preparation
 
 When moving a slice to another process or device, exchange a supported descriptor that includes enough identity, size, type, and access information. The receiver imports it and establishes its *own* mapping. A GVA may help locate the slice, but does not substitute for the import or transfer protocol. For the communication sequence, see [the end-to-end transfer](end-to-end-transfer.md).
 
-## NUMA makes placement observable
+## 📍 NUMA makes placement observable
 
 In a multi-socket system, a CPU can access local or remote DRAM with different cost. A device attached near NUMA node 0 may access node-0 buffers more efficiently than node-1 buffers. CPU affinity alone does not guarantee memory placement: allocation policy and first-touch behavior matter.
 
 For a host-offload benchmark, record the submitting CPU, actual buffer placement, device PCIe location, and network adapter location. Compare otherwise identical local and remote placements. A bandwidth drop can come from a socket interconnect rather than the accelerator link.
 
-## Diagnose an invalid address without guessing
+## ⚠️ Diagnose an invalid address without guessing
 
 For `TransformVa no mapping`, ask whether the expected mapping exists in the current context. For registration failure, check type, address, size, alignment, permissions, supported backend, and resource limits. For import failure, validate handle provenance, memory type, and exporter lifetime. A pointer inside a valid allocation can still fail if `offset + length` exceeds its bounds.
 

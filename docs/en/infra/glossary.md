@@ -1,8 +1,8 @@
-# Infrastructure glossary: identify the layer first
+# 📖 Infrastructure glossary: identify the layer first
 
 Use this page while drawing a transfer path. For every term, ask whether it names a physical object, address, operation, network role, or software abstraction. Many debugging mistakes come from treating terms in different categories as interchangeable.
 
-## Hardware and identity
+## 🧭 Hardware and identity
 
 | Term | Meaning | Diagnostic question |
 | --- | --- | --- |
@@ -15,7 +15,7 @@ Use this page while drawing a transfer path. For every term, ask whether it name
 | AI Core | Accelerator compute resource | Which matrix/vector architecture applies? |
 | AICPU | Device-side auxiliary processor | Which tasks run there rather than on AI Core? |
 
-## Storage and addresses
+## 🧠 Storage and addresses
 
 | Term | Meaning and distinction |
 | --- | --- |
@@ -35,7 +35,7 @@ Use this page while drawing a transfer path. For every term, ask whether it name
 | Endpoint / EID | Communication endpoint / endpoint identifier |
 | Key or access descriptor | Backend-defined information authorizing or locating remote access |
 
-## Movement and communication
+## 🔄 Movement and communication
 
 | Term | Meaning and distinction |
 | --- | --- |
@@ -54,7 +54,7 @@ Use this page while drawing a transfer path. For every term, ask whether it name
 
 “UB” also means Unified Buffer in AI Core documentation. The same abbreviation does not make the on-chip buffer the Unified Bus interconnect.
 
-## Planes and performance
+## 📊 Planes and performance
 
 Control and data planes describe responsibilities: establishing/managing communication versus moving payloads. Parameter, storage, business, and out-of-band networks describe traffic purposes. An external enclosure port describes a physical boundary, not a protocol.
 

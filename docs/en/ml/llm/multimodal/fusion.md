@@ -1,8 +1,8 @@
-# Representation fusion: learn when modalities interact
+# 🧬 Representation fusion: learn when modalities interact
 
 Fusion combines information from different modalities for a prediction. A useful design must express the interactions the task needs without adding more complexity than the data can support. Always compare against strong unimodal models.
 
-## Early and late fusion
+## 🧭 Early and late fusion
 
 ![Representation fusion: learn when modalities interact, original figure 1](../../../../assets/notion/067-00.png)
 
@@ -14,7 +14,7 @@ Fusion combines information from different modalities for a prediction. A useful
 
 Concatenation followed by a linear layer is additive: $W[x_A;x_B]=W_Ax_A+W_Bx_B$. A nonlinear network after concatenation can express interactions. Thus, “early fusion” is not synonymous with “multiplicative,” and a single linear layer does not automatically provide rich cross-modal reasoning.
 
-## Work through an interaction
+## 🧩 Work through an interaction
 
 Consider a review score predicted from smiling frequency $a$ and a binary indicator $b$ for professional-critic status:
 
@@ -31,7 +31,7 @@ The effect of smiling is $w_1$ when $b=0$ and $w_1+w_3$ when $b=1$. The product 
 
 *These four slides add an intercept, individual effects, and then an interaction. A frequentist 95% confidence procedure covers the fixed parameter in 95% of repeated samples under its assumptions; a computed interval is not literally a 95% posterior probability for that parameter.*
 
-## Additive, bilinear, and tensor fusion
+## 📌 Additive, bilinear, and tensor fusion
 
 ![Representation fusion: learn when modalities interact, original figure 7](../../../../assets/notion/067-06.png)
 ![Representation fusion: learn when modalities interact, original figure 8](../../../../assets/notion/067-07.png)
@@ -58,7 +58,7 @@ Low-rank factorization approximates the fusion weight tensor with a sum of simpl
 
 *Read these as factorization of the weight tensor followed by rearrangement of the computation, not as an assertion that every full tensor is exactly low rank.*
 
-## Gates and modality-conditioned shifts
+## 🚀 Gates and modality-conditioned shifts
 
 A gate can compute $g=\sigma(W[x_A;x_B]+b)$ and blend projected features as $g\odot u_A+(1-g)\odot u_B$. A modality-shifting design adds a gated correction from secondary modalities to a primary representation. For example, tone of voice can modify how a textual phrase is interpreted.
 
@@ -67,7 +67,7 @@ A gate can compute $g=\sigma(W[x_A;x_B]+b)$ and blend projected features as $g\o
 
 *Soft gates are differentiable. Hard selection needs an appropriate gradient estimator or separate optimization strategy.*
 
-## Are non-additive interactions actually useful?
+## 🔍 Are non-additive interactions actually useful?
 
 An additive approximation can reveal whether a complex model mostly uses independent modality effects. With expectations under a chosen product distribution, an additive projection has the form
 
@@ -82,7 +82,7 @@ The centering term avoids double-counting the global mean; the original slide om
 
 *Compare the full model against its additive approximation using held-out predictions. A larger model is not evidence that interactions improved generalization.*
 
-## Heterogeneity and optimization
+## 🎯 Heterogeneity and optimization
 
 Different modalities or tasks need not benefit from identical parameter sharing. Transfer experiments can inform which encoders or interaction modules to share. Such decisions require validation because negative transfer is possible.
 

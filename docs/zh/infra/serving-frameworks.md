@@ -1,8 +1,8 @@
-# 推理框架：vLLM、SGLang 与服务背后的内存管理
+# 🚀 推理框架：vLLM、SGLang 与服务背后的内存管理
 
 推理框架把请求变成模型计算：调度器决定哪些 Token 一起执行，内存管理器保证权重和 KV Cache 可用；如果 Prefill 与 Decode 分布在不同 Worker，传输连接器还要搬运缓存。理解这些职责，比记住某条部署命令更重要。下文用 **HBM** 表示加速器内存（受支持的 GPU/NPU 设备内存层级也可类比），用 **DRAM** 表示主机内存。
 
-## 为什么要区分 Prefill 与 Decode？
+## 💡 为什么要区分 Prefill 与 Decode？
 
 **Prefill** 一次处理输入中的许多 Token，生成首个输出 Token 和输入的 KV Cache，通常更依赖算力及临时激活内存。**Decode** 每轮追加一个或少量 Token，反复读取权重与既有 KV，因而对缓存容量和内存带宽更敏感。把长 Prefill 批次与对延迟敏感的 Decode 混合调度，容易互相干扰。PD 分离让两阶段独立扩缩容与调参，但也带来 KV 传输、协调和故障处理成本；只有收益超过这些代价才值得使用。参见 [vLLM 的分离式 Prefill](https://docs.vllm.ai/en/latest/features/disagg_prefill/)与 [SGLang 的 PD 文档](https://docs.sglang.ai/backend/pd_disaggregation.html)。
 
@@ -15,7 +15,7 @@ flowchart LR
     D --> U
 ```
 
-## HBM 与 DRAM 分别放什么？
+## 🧠 HBM 与 DRAM 分别放什么？
 
 | 资源 | 常见位置 | 为什么重要 |
 | --- | --- | --- |
@@ -37,7 +37,7 @@ $$B_{KV}=L\times 2\times H_{KV}\times D_{head}\times T\times b$$
 
 其中 $L$ 是层数，$H_{KV}$ 是 KV 头数，$D_{head}$ 是头维度，$T$ 是保留的 Token 数，$b$ 是单元素字节数。取 32 层、8 个 KV 头、头维 128、2,048 个 Token、BF16（每元素 2 字节），得到 **268,435,456 字节，即 256 MiB**。假设一块 80 GiB 设备在扣除权重及其他预留后可给 KV 使用 30 GiB，简单相除得到理论上限 **120** 个这样的序列。实际并发还受块舍入、输出增长、碎片、激活峰值、并行切分和前缀复用影响。滑动窗口、MLA、量化 KV 等布局必须另算。把公式用于真实模型前，可先看 [KV Cache 基础](../ml/llm/inference/kv-cache.md)。
 
-## 完整走一遍 PD 请求：共享系统提示词
+## 📌 完整走一遍 PD 请求：共享系统提示词
 
 假设两个请求使用同一段系统提示词，后续用户输入不同。P、D 两侧具有兼容的模型权重、Tokenizer 和 KV 布局，路由器知道请求的落点。以下描述的是逻辑流程；vLLM 的 KV Connector 与 SGLang 的 Mooncake、NIXL、Ascend 等后端在实现细节上并不相同。
 
@@ -50,12 +50,12 @@ $$B_{KV}=L\times 2\times H_{KV}\times D_{head}\times T\times b$$
 
 vLLM 的 [Ascend PD 设计](https://docs.vllm.ai/projects/ascend/en/main/developer_guide/Design_Documents/disaggregated_prefill.html)给出了连接器的具体过程：D 分配块、缓存传输、D 继续生成。SGLang 的 [PD 文档](https://docs.sglang.ai/backend/pd_disaggregation.html)展示独立 P/D 服务角色及可选传输后端，包括 Ascend 路径。这不表示所有 vLLM 或 SGLang 部署默认使用 MemFabric；实际路径由连接器和后端配置决定。
 
-## 缓存复用同时是放置与身份问题
+## 🧠 缓存复用同时是放置与身份问题
 
 若第二个请求的 Token 前缀完全一致，且模型与缓存配置兼容，就可能直接复用此前的前缀 KV。**vLLM** 对完整缓存块及其前驱前缀计算哈希，必要时加入 Adapter、Cache Salt 等身份信息；缓存管理器维护引用并在空间不足时淘汰。**SGLang** 通过基于基数树的前缀缓存寻找公共路径；HiCache 可以把较冷的数据放在 DRAM 或存储中。命中是否划算，还要算上取回与传输开销。参见 [vLLM 前缀缓存设计](https://docs.vllm.ai/en/latest/design/prefix_caching/)和 [SGLang HiCache](https://github.com/sgl-project/sglang/blob/main/docs/docs/advanced_features/hicache.mdx)。
 
 模型版本、分词结果、位置设置、KV 数据类型与布局、Adapter 或隔离域不兼容时，不应复用缓存。前缀匹配比较的是 *Token ID 与执行上下文*，不是文本看起来相似即可。PD 分离时，P 上已有的前缀不一定在选中的 D 上；缓存感知路由、放置和传输共同决定复用能否真正省时间。
 
-## 测量完整请求
+## 📊 测量完整请求
 
 同时观察 **TTFT**（首 Token 延迟）、**ITL**（输出 Token 间延迟）、请求吞吐、缓存命中率、设备内存余量、KV 传输量与耗时、等待空闲块的时间及故障率。请求慢时，应拆分排队、Prefill 计算、KV 传输、Decode 调度与逐 Token 生成。若 D 正等待拥塞链路或空闲 KV 块，单纯加快 P 不会解决问题。再结合[内存与地址](memory-addressing.md)、[数据搬运](data-movement.md)和[性能工具](performance-tools.md)定位瓶颈。

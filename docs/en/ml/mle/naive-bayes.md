@@ -1,8 +1,8 @@
-# Naive Bayes: a useful classifier built from a strong assumption
+# 🎲 Naive Bayes: a useful classifier built from a strong assumption
 
 Naive Bayes applies Bayes' rule while assuming that features are conditionally independent given the class. The assumption is often false, yet the resulting classifier can be a useful, inexpensive baseline, especially for text. Understand both the computational benefit and the probability limitations.
 
-## Derive the classification rule
+## 🧮 Derive the classification rule
 
 For class $c$ and features $x_1,\ldots,x_d$,
 
@@ -20,13 +20,13 @@ $$
 
 This turns many small products into sums and avoids numerical underflow. Normalizing scores into probabilities still requires a stable log-sum-exp operation.
 
-## Worked example: a spam signal
+## 🧩 Worked example: a spam signal
 
 Suppose spam has prior 0.2 and legitimate mail prior 0.8. For two binary features, “contains offer” and “contains link,” assume their presence probabilities are `(0.8, 0.7)` in spam and `(0.1, 0.2)` in legitimate mail. A message containing both receives unnormalized scores $0.2\times0.8\times0.7=0.112$ and $0.8\times0.1\times0.2=0.016$. The normalized spam probability is 0.875 under this model.
 
 This example deliberately assumes conditional independence. If “offer” and “link” are nearly redundant within a class, multiplying both pieces of evidence can exaggerate confidence.
 
-## Choose the likelihood family
+## 📌 Choose the likelihood family
 
 | Variant | Feature interpretation | Typical use |
 | --- | --- | --- |
@@ -39,7 +39,7 @@ Do not pass arbitrary signed standardized values into a count-based likelihood. 
 
 For word counts, additive smoothing estimates $p(w\mid c)=(N_{wc}+\alpha)/(N_c+\alpha V)$. It prevents an unseen word from making the entire class likelihood zero. The vocabulary size $V$, tokenization, and smoothing strength all matter.
 
-## Going further
+## 🚀 Going further
 
 Naive Bayes can classify well even when its posterior probabilities are poorly calibrated. A correct ordering of class scores is a weaker requirement than an accurate probability. If probabilities drive decisions, validate calibration separately.
 
@@ -49,7 +49,7 @@ Fit tokenization and vocabulary only on training data. Preserve the real class p
 
 Continue with [linear and logistic regression](linear-logistic.md) and [metrics](metrics.md).
 
-## Sources and further reading
+## 📚 Sources and further reading
 
 - [scikit-learn: Naive Bayes](https://scikit-learn.org/stable/modules/naive_bayes.html) defines variants and limitations.
 - [Stanford: Introduction to Information Retrieval, Naive Bayes](https://nlp.stanford.edu/IR-book/html/htmledition/naive-bayes-text-classification-1.html) derives the text classifier.

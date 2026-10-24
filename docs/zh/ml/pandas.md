@@ -1,8 +1,8 @@
-# Pandas：保留每一行的意义
+# 🐼 Pandas：保留每一行的意义
 
 Pandas 提供了带有标签的一维 `Series` 和二维 `DataFrame` 对象。它的价值不仅在于方便的语法：标签、类型、连接和分组让你能够表达数据转换。危险在于一个转换可能成功运行，但改变了某一行的意义。
 
-## 创建并检查一个小数据集
+## 📦 创建并检查一个小数据集
 
 ```python
 # runnable-example
@@ -22,13 +22,13 @@ print(df.head())
 
 使用 `tail(3)`、`columns`、`info()` 和 `describe()` 来检查形状、标签、数据类型和分布。一个看起来像数字的标识符可能需要字符串存储以保留前导零。`read_csv`/`to_csv(index=False)` 处理 CSV；`read_excel`/`to_excel(index=False)` 处理带有适当引擎的电子表格。指定重要的数据类型和日期解释，而不是完全依赖推断。
 
-## 标签不是位置
+## 📍 标签不是位置
 
 `df['age']` 返回一个 Series；`df[['name', 'age']]` 返回一个 DataFrame。`iloc[0:2]` 选择位置 0 和 1。在一个有序的整数索引上，`loc[0:2]` 包括端点标签，并且因此可以选择三行。标签不需要是连续的或唯一的。
 
 使用 `loc` 一次完成筛选和赋值：`df.loc[df['age'] > 20, 'salary'] = 7500`。避免链式赋值，如 `df[df['age'] > 20]['salary'] = 7500`；它不能可靠地表达对原始对象的修改。通过标签对 Series 进行对齐也会与位置赋值重新排序值。请参阅 [索引指南](https://pandas.pydata.org/docs/user_guide/indexing.html)。
 
-## 按目的清理数据
+## 📦 按目的清理数据
 
 | 任务 | 示例 | 应采取的决策 |
 | --- | --- | --- |
@@ -41,7 +41,7 @@ print(df.head())
 
 不要用 `age` 列的平均值填充每一列。只在训练集上计算填补缺失值所需的统计量。高于第 95 百分位数的工资只是高值，不一定是错误；在删除之前检查域约束。`drop_duplicates` 可能会丢弃真正的重复事件，如果键是错误的。
 
-## 聚合、组合和验证基数
+## ✅ 聚合、组合和验证基数
 
 `df.groupby('department')['salary'].mean()` 将行减少到每个组一个值。命名聚合可以使输出意义明确：
 
@@ -57,7 +57,7 @@ summary = df.groupby("department", dropna=False).agg(
 
 `merge` 基于键进行组合，`join` 通常使用索引进行组合，而 `concat` 在轴上堆叠。连接不会像 SQL `UNION` 那样移除重复项；行堆叠更接近 `UNION ALL`，带有标签对齐的细节。在附加唯一查找表时，请使用显式键和 `validate='many_to_one'`。两边都有重复键会增加行数。Pandas 可以匹配空连接键彼此，而普通 SQL 等值连接不这样做；请务必检查这一点。请参阅 [`merge`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.merge.html)。
 
-## 日期、表达式和层次索引
+## 🏗️ 日期、表达式和层次索引
 
 使用 `pd.to_datetime` 解析；在你同时检查新出现的缺失值时，才使用 `errors='coerce'`。对于时间戳，定义时区处理。在 `set_index('date')` 之后，`resample('MS')['salary'].sum()` 按月开始分组；在当前 pandas 中使用 `ME` 表示月末。`df.index.month` 提取月份数字，但会丢失年份，因此按其分组可能会混合年份。请参阅 [时间序列操作](https://pandas.pydata.org/docs/user_guide/timeseries.html)。
 

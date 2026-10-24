@@ -1,8 +1,8 @@
-# Tree-based RNNs: compose meaning along structure
+# 🌳 Tree-based RNNs: compose meaning along structure
 
 A sequence RNN combines tokens in linear order. A tree-structured recurrent model combines children according to a supplied hierarchy, such as a syntactic parse. Its motivation is compositional meaning: the phrase “not very good” should be interpreted through interactions among words, not just their independent scores.
 
-## Composition at a parent node
+## 📍 Composition at a parent node
 
 A simple binary recursive network computes
 
@@ -20,13 +20,13 @@ Tree-LSTMs extend the LSTM cell to multiple children. A child-sum variant aggreg
 
 **Figure guide.** The first image maps a syntactic parse into a tree computation; the second composes two child vectors into their parent. Parameters may be shared across nodes, while the tree structure changes with the input. The dimension labels in the source drawing are illustrative rather than a required Tree-RNN size.
 
-## Example: negation scope
+## 🧩 Example: negation scope
 
 Compare “not [very good]” with “[not very] good.” Different groupings change the composition path. A parse tree can supply a useful structural bias, but a wrong parse can also send the model down an inappropriate path. This is why tree quality and downstream task quality must be evaluated separately.
 
 A balanced tree can shorten the number of composition steps between distant leaves compared with a long chain. It does not eliminate gradient problems, and real parse trees need not be balanced. Variable structures also complicate batching and efficient execution.
 
-## When this perspective helps
+## 📌 When this perspective helps
 
 Tree models are useful for studying syntax, compositional sentiment, and hierarchical data. They are different from decision trees: a decision tree routes examples by feature tests, whereas a tree-RNN computes vector representations over an input structure. They also differ from Tree of Thoughts, which organizes inference-time search over generated candidates.
 

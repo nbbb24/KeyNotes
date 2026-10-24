@@ -1,8 +1,8 @@
-# Supervised fine-tuning: teach the desired response behavior
+# 🎓 Supervised fine-tuning: teach the desired response behavior
 
 Supervised fine-tuning, or SFT, trains a pretrained model on examples of inputs and desired outputs. For a chat model, this usually means conversations whose assistant responses demonstrate the target style, task, and behavior.
 
-## The objective and the data format
+## 🎯 The objective and the data format
 
 For prompt $x$ and response tokens $y_1,\ldots,y_T$:
 
@@ -14,7 +14,7 @@ A response-only setup masks prompt tokens out of the loss. Other recipes train o
 
 For a support assistant, a useful example includes the user's problem, relevant context, a correct response, and appropriate uncertainty when information is missing. Repeating polished but factually wrong answers teaches the wrong behavior efficiently.
 
-## A reliable training workflow
+## 🔄 A reliable training workflow
 
 1. Define the task and collect representative, reviewed examples.
 2. Split by source/user/time where needed to avoid near-duplicate leakage.
@@ -24,7 +24,7 @@ For a support assistant, a useful example includes the user's problem, relevant 
 
 Packing examples saves padding but must preserve boundaries and the intended attention visibility. A lower training loss may reflect memorization or duplicated data rather than better behavior.
 
-## What SFT can and cannot do
+## ⚠️ What SFT can and cannot do
 
 SFT is especially useful for output formats, domain procedures, and following instructions demonstrated in the data. It is not a dependable mechanism for continuously updating a large factual database; [retrieval](../rag.md) can provide changing evidence at inference time. Fine-tuning may also cause forgetting, so include regression tests for capabilities the application still needs.
 

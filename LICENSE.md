@@ -1,4 +1,4 @@
-# Content license and attribution
+# ⚖️ Content license and attribution
 
 Unless a page or asset says otherwise, original documentation prose and original diagrams contributed to KeyNotes by their rights holders are licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode.en).
 

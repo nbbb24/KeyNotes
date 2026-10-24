@@ -1,8 +1,8 @@
-# Automatic evaluation: measure the behavior you need
+# 📊 Automatic evaluation: measure the behavior you need
 
 A metric compresses behavior into a number. Choose it according to the task, state its conventions, and inspect examples where it disagrees with the intended outcome. No single metric measures fluency, factuality, reasoning, and user usefulness simultaneously.
 
-## Predictive fit: perplexity
+## 🧭 Predictive fit: perplexity
 
 $$
 \operatorname{PPL}=\exp\left(-\frac1N\sum_t\log p(y_t\mid y_{<t})\right).
@@ -14,7 +14,7 @@ $$
 
 A uniform model over four choices has perplexity 4. Lower perplexity does not by itself establish better instruction following or factual reliability.
 
-## Lexical overlap
+## 🧩 Lexical overlap
 
 ![Automatic evaluation: measure the behavior you need, original figure 2](../../../../../assets/notion/041-01.png)
 ![Automatic evaluation: measure the behavior you need, original figure 3](../../../../../assets/notion/041-02.png)
@@ -34,7 +34,7 @@ $$
 
 For P=R=0.8, F is 0.8 for any positive beta. This simple check exposes the screenshot's typo. Character order, whitespace, and n-gram settings should be recorded.
 
-## Contextual and learned metrics
+## 📊 Contextual and learned metrics
 
 ![Automatic evaluation: measure the behavior you need, original figure 6](../../../../../assets/notion/041-05.png)
 ![Automatic evaluation: measure the behavior you need, original figure 7](../../../../../assets/notion/041-06.png)
@@ -48,7 +48,7 @@ For P=R=0.8, F is 0.8 for any positive beta. This simple check exposes the scree
 
 Learned metrics inherit training biases and domain limits. LLM judges also need calibrated rubrics, order controls, and checks for verbosity or model-family bias. Human review remains useful on targeted error sets.
 
-## A complete evaluation record
+## 📊 A complete evaluation record
 
 Record dataset/version, split, preprocessing, model/checkpoint, prompt/template, decoding, number of samples, metric implementation, and uncertainty. For code, execute tests; for extraction, compare fields; for RAG, check both answer correctness and citation support. Use bootstrap or repeated-run intervals when variation affects the decision.
 

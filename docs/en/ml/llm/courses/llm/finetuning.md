@@ -1,8 +1,8 @@
-# Fine-tuning methods: choose what is allowed to change
+# 🛠️ Fine-tuning methods: choose what is allowed to change
 
 Fine-tuning adapts a pretrained model using task data. Separate the training objective from the parameterization: SFT or DPO defines what to optimize; full tuning, LoRA, adapters, or prompts define which degrees of freedom can change.
 
-## A map of adaptation
+## 🧭 A map of adaptation
 
 ![Fine-tuning methods: choose what is allowed to change, original figure 1](../../../../../assets/notion/042-00.png)
 ![Fine-tuning methods: choose what is allowed to change, original figure 2](../../../../../assets/notion/042-01.png)
@@ -12,7 +12,7 @@ Fine-tuning adapts a pretrained model using task data. Separate the training obj
 
 A hard prompt is discrete text. A template wraps an input into a task format; a **verbalizer maps class labels to output words/tokens**. These terms are related but not interchangeable. For sentiment, the template might be `Review: ... Sentiment:` and the verbalizer might map labels to `positive` and `negative`.
 
-## Prompt and prefix tuning
+## 🧩 Prompt and prefix tuning
 
 ![Fine-tuning methods: choose what is allowed to change, original figure 4](../../../../../assets/notion/042-03.png)
 ![Fine-tuning methods: choose what is allowed to change, original figure 5](../../../../../assets/notion/042-04.png)
@@ -23,7 +23,7 @@ A hard prompt is discrete text. A template wraps an input into a task format; a 
 
 See [prompt methods](../../adaptation/prompt-tuning.md) for counts and deployment implications. More injection points can increase expressiveness but do not guarantee better optimization.
 
-## Adapters, sparse choices, and low-rank updates
+## 📌 Adapters, sparse choices, and low-rank updates
 
 ![Fine-tuning methods: choose what is allowed to change, original figure 8](../../../../../assets/notion/042-07.png)
 
@@ -39,7 +39,7 @@ DiffPruning learns sparse parameter deltas using a sparsity-inducing objective/r
 
 *Low-rank branches add a learned update while retaining the frozen main matrix. The low rank constrains the update, not the total adapted matrix.*
 
-## Design a useful comparison
+## ⚖️ Design a useful comparison
 
 Use one fixed train/validation/test split and compare task quality, trainable parameters, peak memory, training time, checkpoint size, and inference latency. Tune learning rates per method fairly. Small trainable parameter count does not imply proportional speedup because the frozen backbone still executes.
 

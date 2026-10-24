@@ -1,8 +1,8 @@
-# DeepSpeed and ZeRO: fit training states across devices
+# 🚀 DeepSpeed and ZeRO: fit training states across devices
 
 DeepSpeed is a deep-learning optimization system. ZeRO, its Zero Redundancy Optimizer family, reduces replicated training state across data-parallel workers. The name is DeepSpeed; it is separate from the DeepSeek model family.
 
-## Why weights are not the whole memory bill
+## 💡 Why weights are not the whole memory bill
 
 Training stores weights, gradients, optimizer state, activations, and temporary buffers. Adam-like optimizers maintain two moment estimates, often in FP32, and mixed-precision recipes may also keep master weights. A model whose inference weights fit on one device can still exceed its memory during training.
 
@@ -16,13 +16,13 @@ Ordinary data parallelism replicates model state on each worker. ZeRO partitions
 
 With eight workers, ideal evenly partitioned state occupies one eighth per worker for the portions being sharded. Activations, buffers, and temporarily gathered parameters do not necessarily shrink by that factor.
 
-## Memory savings exchange work with communication
+## 🧠 Memory savings exchange work with communication
 
 ZeRO-3 gathers parameters when computation needs them and releases/reuses storage according to the execution schedule. Offloading can place selected states in CPU memory or NVMe, adding transfer costs. The best configuration depends on interconnect bandwidth, host memory, storage, batch size, and overlap—not simply the highest stage number.
 
 Activation checkpointing addresses a different memory component by recomputing activations during backward. Tensor and pipeline parallelism partition computation in other ways. These techniques can coexist but require coherent process groups and batch accounting.
 
-## An illustrative configuration
+## 🧩 An illustrative configuration
 
 ```json
 {

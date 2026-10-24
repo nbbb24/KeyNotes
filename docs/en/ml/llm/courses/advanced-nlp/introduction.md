@@ -1,8 +1,8 @@
-# NLP introduction: from text to measurable predictions
+# 🚪 NLP introduction: from text to measurable predictions
 
 Natural language processing begins by defining a task, a representation, and an evaluation protocol. A large model is one possible component; it does not replace a clear target or a trustworthy dataset.
 
-## Start with a bag-of-words baseline
+## 🧭 Start with a bag-of-words baseline
 
 A bag-of-words vector counts vocabulary items in a document. With vocabulary `[good, bad, movie]`, `good good movie` becomes `[2,0,1]`. A linear classifier learns weights on these features:
 
@@ -24,13 +24,13 @@ The bag-of-words diagram counts word identities before applying learned weights.
 
 The limitations slide lists morphology, synonyms, combinations, and sentence structure. Adding n-grams can recover some local combinations, but increases sparsity and does not solve arbitrary long-range structure.
 
-## What the representation misses
+## 🧩 What the representation misses
 
 `dog bites person` and `person bites dog` have the same unigram counts. Negation, order, long-range dependencies, and polysemy need richer features or contextual models. N-grams recover local order but expand the feature space and still provide limited generalization to unseen combinations.
 
 Embeddings replace sparse lexical identity with learned dense vectors. Contextual models then make a token's representation depend on its sentence. This progression adds capability and cost; use a baseline to determine which added complexity actually helps.
 
-## A practical experiment
+## 🛠️ A practical experiment
 
 For review classification, split by the unit that could leak information—such as product, user, or time—before fitting the vectorizer. Train a bag-of-words logistic classifier and a contextual model. Compare class-specific precision/recall and inspect errors involving negation, sarcasm, and domain vocabulary. A higher aggregate score can hide regressions on a small but important subgroup.
 

@@ -1,4 +1,4 @@
-# Importance sampling: learn from a different sampling distribution
+# 🎲 Importance sampling: learn from a different sampling distribution
 
 Importance sampling estimates an expectation under a target distribution p using samples from a proposal distribution q. It is useful when sampling from p is difficult or when data were collected under an earlier policy.
 
@@ -9,7 +9,7 @@ $$
 
 The identity requires q to be positive wherever p contributes to the expectation. If the proposal never samples an important region, weights cannot recover information that is absent.
 
-## A discrete example
+## 🧭 A discrete example
 
 Let p assign probabilities `[0.8,0.2]`, q assign `[0.5,0.5]`, and f take values `[1,3]`. The target expectation is $0.8+0.6=1.4$. Under q, weights are `[1.6,0.4]`, giving $0.5\cdot1.6\cdot1+0.5\cdot0.4\cdot3=1.4$.
 
@@ -23,7 +23,7 @@ assert abs(target - weighted) < 1e-12
 
 This exact finite sum illustrates the identity. A finite Monte Carlo sample has sampling error, and a few very large weights can dominate it.
 
-## In policy optimization
+## 🎯 In policy optimization
 
 A policy likelihood ratio compares the current and data-collecting policies at the same state/action:
 
