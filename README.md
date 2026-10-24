@@ -1,6 +1,6 @@
 # KeyNotes
 
-[![Read the Docs](https://readthedocs.org/projects/infra-knowledge/badge/?version=latest)](https://infra-knowledge.readthedocs.io/en/latest/)
+[![Read the Docs](https://img.shields.io/badge/Docs-Read%20the%20Docs-blue?logo=readthedocs)](https://infra-knowledge.readthedocs.io/en/latest/)
 [![CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-blue.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 KeyNotes is a bilingual learning guide to **machine learning** and the **infrastructure behind it**. It connects first principles, worked examples, diagrams, and engineering trade-offs so newcomers can build intuition and experienced readers can trace how systems work.
