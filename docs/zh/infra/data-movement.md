@@ -62,6 +62,30 @@ flowchart LR
 
 锁页 H2D 的生命周期可以记为：`aclrtMallocHost → 填充数据 → aclrtMemcpyAsync → aclrtSynchronizeStream 确认完成 → 在所有使用者结束后复用或 aclrtFreeHost`。等待前不要改写或释放 DMA 仍可能读取的源缓冲区；D2H 则还需在完成后才能消费目标数据。
 
+### 实测：HugeTLB 不自动等于 Runtime 的 pinned Host 内存 {#hugetlb-runtime-pinned}
+
+**操作系统层面的“不可 swap”，不等于 CANN Runtime 已将该缓冲区识别并准备为可走 pinned 异步复制路径的 Host 内存。** HugeTLB 提供大页与驻留方面的语义；`aclrtMallocHost` 提供 Runtime 管理的锁页 Host 分配。仅仅使用 HugeTLB，不能直接套用 `aclrtMallocHost` 的异步返回行为。
+
+以下是笔记提供者报告的实测记录，所有数值均为约数。**调用阶段**指 Host 侧复制 API 的调用耗时，**同步阶段**指随后 stream 同步的等待耗时；逐条路径按原记录的调用阶段口径保留，不将其解释为每个小拷贝的单次耗时。此处未附完整的软件/硬件版本、复制数据量、批次数和计时边界，因此用于说明本次行为，不作为通用带宽基准。
+
+| Host 缓冲区来源 | 复制路径 | API 调用阶段 | 后续 stream 同步 |
+| --- | --- | --- | --- |
+| HugeTLB / hugetlb | `aclrtMemcpyBatchAsync` | 约 3.5 ms | 约 6 µs |
+| `aclrtMallocHost` | `aclrtMemcpyBatchAsync` | 约 0.33 ms | 约 2.67 ms |
+| HugeTLB / hugetlb | 逐条 `aclrtMemcpyAsync` | 约 3.5 ms | 约 9 µs |
+
+这组时间分布可以这样理解：
+
+1. **HugeTLB 的 BatchAsync：**耗时主要落在 API 调用阶段，之后同步只需约 6 µs，符合拷贝在 API 返回前已完成、后续 stream 中几乎没有这批拷贝需要等待的行为。
+2. **`aclrtMallocHost` 的 BatchAsync：**调用约 0.33 ms，随后同步约 2.67 ms，符合 API 下发后由 stream 异步推进拷贝、同步接口等待剩余工作完成的行为。拷贝可以在提交后立即开始，不是等到调用同步接口才启动。
+3. **HugeTLB 的逐条 MemcpyAsync：**调用约 3.5 ms、同步约 9 µs，同样呈现主要在调用阶段等待的分布；这个观察不只出现在批量接口上。
+
+因此，**本次 HugeTLB 缓冲区没有表现出 `aclrtMallocHost` 缓冲区对应的 Runtime pinned 异步复制行为，不能仅凭它不可 swap 就将两者等同。** 这一解释与前述官方 `aclrtMemcpyAsync` 对非锁页/锁页 Host 内存返回语义的区分一致；批量路径的结论在此以所报告的实测为依据。计时本身不能证明 Runtime 内部的登记方式、是否使用某个暂存缓冲区或具体执行路径。
+
+评估时要一起看**调用时间和后续同步时间**，不能只凭约 0.33 ms 的返回时间计算拷贝带宽或宣称全部搬运已完成。复测时还应固定数据量、复制次数、stream 初始状态和内存放置，检查复制及同步返回值、校验目标数据，并结合运行时日志或设备时间线确认内部路径。是否能对 HugeTLB 内存执行额外的 Host 注册，应另查对应版本的支持范围，不能从“不可 swap”推导出注册必然成功。
+
+相关概念：[Linux HugeTLB](page-tables-huge-pages.md#linux-hugetlb)、[Host 锁页内存与注册](memory-addressing.md#host-pinned-memory)。
+
 ## 🧩 异步意味着必须管理生命周期
 
 同步接口有文档规定的完成点，具体保证仍应查阅接口定义。异步接口可能在操作入队后就返回。应用必须让源、目标缓冲区持续有效，并在相应操作完成前避免冲突访问。

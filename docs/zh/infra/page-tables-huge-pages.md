@@ -432,6 +432,8 @@ ls /sys/kernel/mm/hugepages/
 
 HugeTLB 的不可换出属性，也不能代替[设备 DMA 所需的锁页、注册及映射准备](memory-addressing.md#host-memory-registration)。页大小、内存池管理和设备访问条件仍是不同层次的问题。
 
+**CANN 实测补充：不可 swap 不等于 Runtime pinned。** 笔记中的 HugeTLB `aclrtMemcpyBatchAsync` 记录为调用约 3.5 ms、随后同步约 6 µs；`aclrtMallocHost` 对照为调用约 0.33 ms、同步约 2.67 ms；HugeTLB 的逐条 `aclrtMemcpyAsync` 路径则为调用约 3.5 ms、同步约 9 µs。这与前者主要在 API 内完成拷贝、后者提交后由 stream 异步推进的行为相符，不能把 HugeTLB 的驻留保证直接当成 Runtime 的 pinned 异步路径保证。完整数据、计时口径及推断边界见[数据搬运中的实测分析](data-movement.md#hugetlb-runtime-pinned)。
+
 ## 5. 页大小、十六进制与地址计算 {#page-address-arithmetic}
 
 ### 5.1. 为什么页大小用十六进制表示？ {#5}

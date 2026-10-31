@@ -62,6 +62,30 @@ The official [memory management overview](https://www.hiascend.com/doc_center/so
 
 The pinned H2D lifetime is `aclrtMallocHost → fill → aclrtMemcpyAsync → confirm completion with aclrtSynchronizeStream → reuse or aclrtFreeHost after all users finish`. Do not modify or free a source while DMA may still read it. For D2H, wait before consuming the destination.
 
+### Measurement: HugeTLB is not automatically Runtime-pinned host memory {#hugetlb-runtime-pinned}
+
+**Being non-swappable at the OS level does not mean CANN Runtime recognizes and prepares a buffer for its pinned asynchronous host-copy path.** HugeTLB supplies huge-page and residency semantics; `aclrtMallocHost` supplies Runtime-managed pinned host allocations. HugeTLB alone does not establish the same asynchronous return behavior.
+
+The note contributor reported the following approximate measurements. The **call phase** measures the host-side copy API calls; **synchronization** measures the subsequent stream wait. The individual-copy path retains the reported call-phase scope; it is not interpreted as the duration of each small copy. Complete software/hardware versions, byte counts, batch counts, and timing boundaries were not supplied with this note, so these values describe this observation rather than a general bandwidth benchmark.
+
+| Host buffer source | Copy path | API call phase | Subsequent stream synchronization |
+| --- | --- | --- | --- |
+| HugeTLB / hugetlb | `aclrtMemcpyBatchAsync` | About 3.5 ms | About 6 µs |
+| `aclrtMallocHost` | `aclrtMemcpyBatchAsync` | About 0.33 ms | About 2.67 ms |
+| HugeTLB / hugetlb | Individual `aclrtMemcpyAsync` calls | About 3.5 ms | About 9 µs |
+
+Interpret the distribution as follows:
+
+1. **HugeTLB with BatchAsync:** most waiting occurs inside the API call, followed by about 6 µs of synchronization. This is consistent with the copy completing before API return, leaving almost none of this copy work for the later stream wait.
+2. **`aclrtMallocHost` with BatchAsync:** about 0.33 ms in the call and 2.67 ms in synchronization is consistent with submission followed by asynchronous stream progress, with synchronization waiting for the remaining work. Transfers can begin after submission; they do not wait for the synchronization call to start.
+3. **HugeTLB with individual MemcpyAsync calls:** about 3.5 ms in the call phase and 9 µs in synchronization shows a similar distribution. The observation is not confined to the batch interface.
+
+Thus, **the tested HugeTLB buffer did not exhibit the Runtime-pinned asynchronous behavior of the `aclrtMallocHost` buffer; non-swappability alone does not make them equivalent.** This interpretation agrees with the earlier official `aclrtMemcpyAsync` distinction between non-pinned and pinned host return behavior; the batch-path conclusion here relies on the reported measurement. Timing alone cannot establish Runtime registration internals, use of a particular staging buffer, or the exact execution path.
+
+Evaluate **call time together with subsequent synchronization**, rather than treating a 0.33 ms return as completed-transfer bandwidth. A repeatable comparison also fixes bytes, copy count, initial stream state, and placement; checks copy/synchronization results and destination contents; and uses Runtime logs or a device timeline to identify internal paths. Any additional Host registration of HugeTLB memory needs separate version-specific support checks; non-swappability does not guarantee registration succeeds.
+
+Related concepts: [Linux HugeTLB](page-tables-huge-pages.md#linux-hugetlb) and [host pinning and registration](memory-addressing.md#host-pinned-memory).
+
 ## 🧩 Asynchrony is a lifetime contract
 
 A synchronous interface has a documented completion point; inspect its precise guarantees. An asynchronous interface can return after enqueueing work. The application must keep source and destination storage alive and prevent conflicting access until the relevant completion.

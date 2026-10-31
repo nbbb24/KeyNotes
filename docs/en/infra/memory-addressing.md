@@ -73,6 +73,8 @@ Both are **host memory**; pinning does not turn DRAM into HBM. “Ordinary memor
 
 See [Linux HugeTLB](page-tables-huge-pages.md#linux-hugetlb) for explicit huge-page pools, mappings, and statistics, and compare their role with pinning and device access preparation here.
 
+The table does not classify every non-swappable host allocation as Runtime-pinned. HugeTLB does not automatically gain the asynchronous copy behavior associated with `aclrtMallocHost`; see the [reported HugeTLB versus Runtime-pinned measurements](data-movement.md#hugetlb-runtime-pinned) for call/wait times and their interpretation.
+
 ### Existing allocations: pin, map, and unregister {#host-memory-registration}
 
 For supported memory and products, `aclrtHostRegisterV2` prepares an existing host region:

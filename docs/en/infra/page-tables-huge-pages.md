@@ -432,6 +432,8 @@ Inspect per-size sysfs directories when multiple sizes coexist. **1GiB of pool c
 
 HugeTLB's non-swappable property also does not replace [device DMA pinning, registration, and mapping requirements](memory-addressing.md#host-memory-registration). Page size, pool management, and device access remain separate concerns.
 
+**CANN measurement: non-swappable does not imply Runtime-pinned.** The reported HugeTLB `aclrtMemcpyBatchAsync` call took about 3.5 ms, followed by 6 µs of synchronization; the `aclrtMallocHost` comparison took 0.33 ms and 2.67 ms. HugeTLB with individual `aclrtMemcpyAsync` calls took about 3.5 ms and 9 µs. This is consistent with the former completing mainly inside the API and the latter progressing asynchronously on the stream after submission. HugeTLB residency alone does not guarantee the Runtime-pinned asynchronous path. See the [measurement analysis](data-movement.md#hugetlb-runtime-pinned) for the full table, timing scope, and inference limits.
+
 ## 5. Page size, hexadecimal, and address arithmetic {#page-address-arithmetic}
 
 ### 5.1. Why express page sizes in hexadecimal? {#5-why-express-page-sizes-in-hexadecimal}

@@ -73,6 +73,8 @@ flowchart LR
 
 Linux 的显式大页池及其申请、统计方式见[HugeTLB 机制](page-tables-huge-pages.md#linux-hugetlb)，可与本节的锁页和设备访问准备对照理解。
 
+上表也不表示“所有不可换出的 Host 内存都等于 Runtime pinned 分配”。HugeTLB 虽不可 swap，仍不能自动获得 `aclrtMallocHost` 对应的异步复制行为；本次记录的调用/同步耗时差异及其解释见[HugeTLB 与 Runtime pinned 的实测对照](data-movement.md#hugetlb-runtime-pinned)。
+
 ### 已有普通内存时：锁页、设备映射与注销 {#host-memory-registration}
 
 对受支持的内存和产品，`aclrtHostRegisterV2` 可以准备已有 Host 区域：
