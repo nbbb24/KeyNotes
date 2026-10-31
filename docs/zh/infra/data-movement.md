@@ -33,6 +33,35 @@ H2D 完成不意味着所有操作数已经位于 AI Core 的局部缓冲区。�
 
 常见 H2D 会经过 PCIe 等 Host I/O 路径。设备传输可能经过 PCIe、专用互联或网络。分析时分别回答：端点在哪里、物理路线是什么、使用什么 API、通过什么机制确认完成。
 
+## 🧷 普通内存为什么会多一次缓冲区拷贝？ {#pageable-staging}
+
+CANN 9.0 [官方《Host 锁页内存使用》](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/900/programug/acldevg/runtime_doc_dev_0006.html)描述的 H2D 路径可以画成下面两条：
+
+```mermaid
+flowchart LR
+    A[Pageable Host 应用缓冲区] -->|Host 端暂存拷贝| B[Runtime 暂存缓冲区]
+    B -->|DMA| D[Device 内存]
+    C[Pinned Host 应用缓冲区] -->|DMA| D
+```
+
+因此，**调用一个使用 DMA 的复制接口，不代表整条路径都省去了 Host 端拷贝**。在上述普通内存路径中，DMA 搬运的是后半段；暂存步骤仍有额外开销。图中的暂存缓冲区不同于 AI Core 的片上局部缓冲区。
+
+锁页路径省去的是这一步暂存，Host→Device 传输仍然存在，不能称为完全没有数据复制。进一步推论，如果应用先把已有普通缓冲区手动复制到锁页缓冲区，这次 Host 端拷贝仍应计入成本；让数据直接生成在可复用的锁页缓冲区中，才可能省去它。内存类型、注册与释放方式见[锁页内存说明](memory-addressing.md#host-pinned-memory)。
+
+### 同一个 Async 接口，返回时机也要看内存类型 {#cann-copy-completion}
+
+官方[内存管理总述](https://www.hiascend.com/doc_center/source/en/CANNCommunityEdition/900/programug/acldevg/runtime_doc_dev_0004.html)将 `aclrtMemcpy` 与 `aclrtMemcpyAsync` 分别用于同步和异步拷贝。但 9.0 的 [`memcpy_async` 接口参考（含 `aclrtMemcpyAsync` C 原型）](https://www.hiascend.com/doc_center/source/en/CANNCommunityEdition/900/API/runtimeapi/aclpythondevg_01_0121.html)还按 Host 内存类型细分返回语义：
+
+| 调用场景 | 返回语义 |
+| --- | --- |
+| `aclrtMemcpy` | 同步拷贝；普通 Host 内存仍可能走暂存路径 |
+| `aclrtMemcpyAsync` + 锁页 Host 内存 | 成功表示任务已提交，完成状态仍需另行确认 |
+| `aclrtMemcpyAsync` + 非锁页 Host 内存 | 按所引 9.0 文档，复制任务完成后才返回 |
+
+这说明 **Async 名称、Host 缓冲区类型、实际完成点必须一起判断**。所引接口还要求源、目的地址 64 字节对齐；产品形态、复制方向及版本支持应以对应接口文档为准。这里的 64 字节约束属于拷贝接口，前一章的 4KB 首地址约束属于 `aclrtHostRegisterV2`，两者不能互相替代。
+
+锁页 H2D 的生命周期可以记为：`aclrtMallocHost → 填充数据 → aclrtMemcpyAsync → aclrtSynchronizeStream 确认完成 → 在所有使用者结束后复用或 aclrtFreeHost`。等待前不要改写或释放 DMA 仍可能读取的源缓冲区；D2H 则还需在完成后才能消费目标数据。
+
 ## 🧩 异步意味着必须管理生命周期
 
 同步接口有文档规定的完成点，具体保证仍应查阅接口定义。异步接口可能在操作入队后就返回。应用必须让源、目标缓冲区持续有效，并在相应操作完成前避免冲突访问。

@@ -59,6 +59,38 @@ This is a conceptual lifecycle, not a mandatory call order for every backend: so
 
 Suppose a service reserves a **64 GiB** device VA window for a cache pool, then backs only **8 GiB** with HBM. It can hand out logical locations within the backed portion, but accessing an unbacked address in the remaining 56 GiB is invalid. Later growth requires more backing and mappings, subject to free HBM and runtime limits. Releasing the 8 GiB backing does not automatically make the virtual window available to another allocator; the reservation must also be released. Conversely, freeing the reservation while DMA still refers to its mapped slices is unsafe. The numbers illustrate the distinction; they are not a recommendation for any device.
 
+## 🧷 Pageable and pinned host memory {#host-pinned-memory}
+
+A CPU-accessible host buffer may still need preparation for direct device DMA. CANN 9.0's official [Host page-locked memory guide](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/900/programug/acldevg/runtime_doc_dev_0006.html) distinguishes:
+
+| Comparison | Ordinary pageable memory | Page-locked / pinned memory |
+| --- | --- | --- |
+| Typical allocation / release | `malloc` / `free`, ordinary `mmap` / `munmap` | Runtime's `aclrtMallocHost` / `aclrtFreeHost` |
+| Residency | OS-managed; may be swapped when eligible | Resident with stable virtual-to-physical page associations while pinned |
+| Documented H2D path | Stage into a buffer, then DMA to the device | Direct DMA without that staging step |
+
+Both are **host memory**; pinning does not turn DRAM into HBM. “Ordinary memory” here also differs from [ordinary versus huge pages](page-tables-huge-pages.md): pinning concerns residency and access preparation, while page size concerns mapping granularity. See [staging copies](data-movement.md#pageable-staging) for the transfer paths.
+
+### Existing allocations: pin, map, and unregister {#host-memory-registration}
+
+For supported memory and products, `aclrtHostRegisterV2` prepares an existing host region:
+
+- `ACL_HOST_REG_PINNED` registers suitable ordinary host memory as pinned.
+- `ACL_HOST_REG_MAPPED` establishes device access; `aclrtHostGetDevicePointer` retrieves the device-side address. Combine flags as supported. Pinning and device mapping have separate responsibilities.
+
+```text
+Prepare an eligible host region
+  → aclrtHostRegisterV2 with the required pinning / mapping flags
+  → Obtain the device pointer if direct device access is needed
+  → Submit access and wait for all relevant users to finish
+  → aclrtHostUnregister
+  → Release the region through its original allocator
+```
+
+The accompanying [commercial 9.0 `aclrtHostRegisterV2` reference](https://www.hiascend.com/doc_center/source/zh/canncommercial/900/API/runtimeapi/aclcppdevg_03_2128.html) requires a **4KB-aligned host base address** and lists supported products. For kernels **5.10 or earlier**, it directs users to `aclrtMallocHost` instead of registering pageable memory. Ordinary `malloc` does not guarantee 4KB alignment. Registration also preserves allocation ownership: unregister, then release through the original allocator.
+
+Check device addresses separately from CPU pointers: DMA addresses need not equal CPU virtual or physical addresses. See the [Linux DMA address explanation](https://docs.kernel.org/core-api/dma-api-howto.html#cpu-and-dma-addresses).
+
 ## 🚀 Translation and access preparation
 
 When moving a slice to another process or device, exchange a supported descriptor that includes enough identity, size, type, and access information. The receiver imports it and establishes its *own* mapping. A GVA may help locate the slice, but does not substitute for the import or transfer protocol. For the communication sequence, see [the end-to-end transfer](end-to-end-transfer.md).

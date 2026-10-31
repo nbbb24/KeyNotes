@@ -33,6 +33,35 @@ H2D completion does not imply that every operand is already in an AI Core's loca
 
 A typical H2D copy traverses a host I/O path such as PCIe. A device transfer may traverse PCIe, a dedicated interconnect, or a network. Ask separately about endpoints, physical route, transfer API, and completion mechanism.
 
+## 🧷 Why pageable memory needs a staging copy {#pageable-staging}
+
+CANN 9.0's official [Host page-locked memory guide](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/900/programug/acldevg/runtime_doc_dev_0006.html) describes these H2D paths:
+
+```mermaid
+flowchart LR
+    A[Pageable host application buffer] -->|Host staging copy| B[Runtime staging buffer]
+    B -->|DMA| D[Device memory]
+    C[Pinned host application buffer] -->|DMA| D
+```
+
+**A copy API using DMA can still involve a host-side copy.** In the pageable path above, DMA handles the second leg; staging adds overhead. This staging buffer is distinct from an AI Core's on-chip local buffers.
+
+Pinning removes that staging step, while the host-to-device transfer remains. As a further inference, manually copying an existing pageable buffer into a pinned buffer still incurs a host copy; producing data directly in a reusable pinned buffer can avoid it. See [pinned memory](memory-addressing.md#host-pinned-memory) for memory types, registration, and release.
+
+### Async return behavior depends on host memory type {#cann-copy-completion}
+
+The official [memory management overview](https://www.hiascend.com/doc_center/source/en/CANNCommunityEdition/900/programug/acldevg/runtime_doc_dev_0004.html) identifies `aclrtMemcpy` and `aclrtMemcpyAsync` as synchronous and asynchronous copy APIs. The 9.0 [`memcpy_async` reference, including the `aclrtMemcpyAsync` C prototype](https://www.hiascend.com/doc_center/source/en/CANNCommunityEdition/900/API/runtimeapi/aclpythondevg_01_0121.html), further distinguishes:
+
+| Call | Return behavior |
+| --- | --- |
+| `aclrtMemcpy` | Synchronous copy; pageable host memory can still require staging |
+| `aclrtMemcpyAsync` with pinned host memory | Success means submission; completion needs confirmation |
+| `aclrtMemcpyAsync` with non-pinned host memory | Returns after the copy completes, according to the cited 9.0 documentation |
+
+**Consider the Async name, buffer type, and actual completion point together.** The cited copy API also requires 64-byte-aligned source and destination addresses; check product mode, direction, and version support. This copy alignment differs from `aclrtHostRegisterV2`'s 4KB host-base alignment requirement; neither replaces the other.
+
+The pinned H2D lifetime is `aclrtMallocHost → fill → aclrtMemcpyAsync → confirm completion with aclrtSynchronizeStream → reuse or aclrtFreeHost after all users finish`. Do not modify or free a source while DMA may still read it. For D2H, wait before consuming the destination.
+
 ## 🧩 Asynchrony is a lifetime contract
 
 A synchronous interface has a documented completion point; inspect its precise guarantees. An asynchronous interface can return after enqueueing work. The application must keep source and destination storage alive and prevent conflicting access until the relevant completion.

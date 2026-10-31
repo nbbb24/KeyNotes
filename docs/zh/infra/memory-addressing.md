@@ -59,6 +59,38 @@ flowchart LR
 
 假设服务先为缓存池预留 **64 GiB** 设备 VA 窗口，只用 HBM 为其中 **8 GiB** 提供后端内存。服务可以在已映射的 8 GiB 内分配逻辑位置，但访问其余未映射的 56 GiB 是无效的。后续扩容仍需取得更多后端内存并建立映射，受空闲 HBM 和运行时限制。释放 8 GiB 后端内存，也不等于把整个虚拟窗口还给其他分配器；预留还要单独释放。反过来，DMA 尚在使用映射片段时提前释放预留范围也不安全。这些数字仅用于解释区别，不是设备配置建议。
 
+## 🧷 Host 普通内存与锁页内存 {#host-pinned-memory}
+
+能被 CPU 访问的 Host 缓冲区，不一定已经适合设备直接 DMA。CANN 9.0 的[官方《Host 锁页内存使用》](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/900/programug/acldevg/runtime_doc_dev_0006.html)区分了两类 Host 内存：
+
+| 对比项 | 普通可换页内存（Pageable） | 锁页内存（Page-Locked / Pinned） |
+| --- | --- | --- |
+| 常见申请与释放 | `malloc` / `free`、普通 `mmap` / `munmap` | Runtime 的 `aclrtMallocHost` / `aclrtFreeHost` |
+| 页面驻留 | 受操作系统管理，满足换出条件时可能进入交换空间 | 有效锁定期间保持驻留，虚拟页与物理页对应关系稳定 |
+| 官方描述的 H2D 路径 | 先复制到暂存缓冲区，再由 DMA 搬到 Device | 可以直接走 DMA，省去上述暂存步骤 |
+
+两者讨论的都是 **Host 内存**；锁页不会把 DRAM 变成 HBM。这里的“普通内存”也不同于[普通页与大页](page-tables-huge-pages.md)：前者区分能否换出及访问准备，后者区分映射粒度。具体缓冲区路径见[数据搬运中的暂存拷贝](data-movement.md#pageable-staging)。
+
+### 已有普通内存时：锁页、设备映射与注销 {#host-memory-registration}
+
+对受支持的内存和产品，`aclrtHostRegisterV2` 可以准备已有 Host 区域：
+
+- `ACL_HOST_REG_PINNED`：将合适的普通 Host 内存注册为锁页内存。
+- `ACL_HOST_REG_MAPPED`：建立 Device 可访问的映射，再用 `aclrtHostGetDevicePointer` 获取设备侧地址。两个标志可以按接口要求组合；锁页与设备映射承担不同职责。
+
+```text
+准备满足条件的 Host 区域
+  → aclrtHostRegisterV2（所需锁页 / 映射标志）
+  → 需要设备直接访问时，获取对应 Device 指针
+  → 提交访问并等待全部相关使用者完成
+  → aclrtHostUnregister
+  → 使用原分配方式释放 Host 区域
+```
+
+配套的 [9.0 商用版 `aclrtHostRegisterV2` API 参考](https://www.hiascend.com/doc_center/source/zh/canncommercial/900/API/runtimeapi/aclcppdevg_03_2128.html)要求 Host 首地址 **4KB 对齐**，并限定产品支持范围；该版文档指出，内核 **5.10 或更低**时不能用此方式注册非锁页内存，应改用 `aclrtMallocHost`。普通 `malloc` 并不保证满足 4KB 对齐，不能把任意返回值直接传入。注册也不会把原分配的所有权转交给 Runtime，注销后仍需匹配原分配方式释放。
+
+设备看到的地址与 CPU 指针也应分别确认：DMA 地址并不普遍等于 CPU 虚拟地址或物理地址，见 [Linux DMA API 地址说明](https://docs.kernel.org/core-api/dma-api-howto.html#cpu-and-dma-addresses)。
+
 ## 🧠 地址转换与访问准备
 
 片段需要供另一进程或设备使用时，应交换后端支持的描述，其中包含足够的身份、大小、类型及访问权限信息。接收方导入后建立*自己的*映射。GVA 可以帮助定位片段，却不能替代导入或传输协议。通信顺序见[端到端传输](end-to-end-transfer.md)。
