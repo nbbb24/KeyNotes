@@ -398,6 +398,40 @@ It changes neither this example's 48-bit effective virtual address width nor the
 
 The core effects are **fewer page-table mapping entries, less TLB pressure, and lower address-translation overhead**.
 
+### 4.6. How Linux manages huge pages with HugeTLB {#linux-hugetlb}
+
+The preceding sections explain hardware mappings. **HugeTLB provides Linux applications with explicit huge-page allocation and management**, using pools for individual page sizes. Official guide: [HugeTLB Pages (hugetlbpage)](https://cdn.kernel.org/doc/html/latest/admin-guide/mm/hugetlbpage.html).
+
+Follow resource preparation, mapping, and observation:
+
+1. **Prepare pools** at boot or runtime. `/proc/sys/vm/nr_hugepages` controls the persistent pool's default-size page count; `/sys/kernel/mm/hugepages/` exposes individual sizes. Physical contiguity and NUMA placement affect allocation success.
+2. **Request mappings explicitly** through `mmap(..., MAP_HUGETLB, ...)`, mapped `hugetlbfs` files, or `shmget` / `shmat`. `MAP_HUGETLB` needs no filesystem mount. Combine it with `MAP_HUGE_1GB` on supported systems; mapping and unmapping have huge-page alignment requirements. See [mmap](https://man7.org/linux/man-pages/man2/mmap.2.html).
+3. **Track lifetime.** HugeTLB pages cannot be swapped out. Released persistent pages return to the pool, rather than automatically returning to the kernel's ordinary page allocator.
+
+Inspect Linux state without changing configuration:
+
+```sh
+cat /proc/meminfo
+ls /sys/kernel/mm/hugepages/
+```
+
+Distinguish these fields; see also [proc_meminfo](https://man7.org/linux/man-pages/man5/proc_meminfo.5.html):
+
+| Field | Meaning |
+| --- | --- |
+| `HugePages_Total` | Default-size pool page count |
+| `HugePages_Free` | Unallocated pool pages |
+| `HugePages_Rsvd` | Committed pages not yet allocated at fault time |
+| `HugePages_Surp` | Surplus pages above the persistent target |
+| `Hugepagesize` | Default page size, not pool capacity |
+| `Hugetlb` | Combined capacity across HugeTLB sizes, as explained in the kernel guide |
+
+Inspect per-size sysfs directories when multiple sizes coexist. **1GiB of pool capacity does not imply one 1GiB page:** 512 × 2MiB has equal capacity but different mapping granularity.
+
+**Distinguish HugeTLB from Transparent Huge Pages (THP).** THP transparently uses, merges, or splits huge pages for eligible mappings according to kernel policy, without using HugeTLB's reserved pool. Ordinary `malloc` regions may benefit; a large allocation alone guarantees neither HugeTLB nor 1GB pages. See [Transparent Hugepage Support](https://cdn.kernel.org/doc/html/latest/admin-guide/mm/transhuge.html).
+
+HugeTLB's non-swappable property also does not replace [device DMA pinning, registration, and mapping requirements](memory-addressing.md#host-memory-registration). Page size, pool management, and device access remain separate concerns.
+
 ## 5. Page size, hexadecimal, and address arithmetic {#page-address-arithmetic}
 
 ### 5.1. Why express page sizes in hexadecimal? {#5-why-express-page-sizes-in-hexadecimal}

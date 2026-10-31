@@ -398,6 +398,40 @@ PGD(9) + PUD(9) + Offset(30) = 48 bit
 
 核心效果是：**减少页表映射项数量、降低 TLB 压力，并减少地址转换开销。**
 
+### 4.6. Linux 如何通过 HugeTLB 管理大页？ {#linux-hugetlb}
+
+前文解释了大页的硬件映射方式；**HugeTLB 是 Linux 向应用提供显式大页分配与管理的机制**，通过按页大小区分的大页池提供资源。官方文档入口：[HugeTLB Pages（hugetlbpage）](https://cdn.kernel.org/doc/html/latest/admin-guide/mm/hugetlbpage.html)。
+
+可以沿着“准备资源 → 建立映射 → 观察使用情况”理解：
+
+1. **准备大页池。** 可在启动时预分配，或运行时调整。`/proc/sys/vm/nr_hugepages` 控制默认大页大小下的持久池页数；不同页大小的池可在 `/sys/kernel/mm/hugepages/` 查看。分配能否成功仍受连续物理内存与 NUMA 放置影响。
+2. **应用显式申请映射。** 可使用 `mmap(..., MAP_HUGETLB, ...)`、映射 `hugetlbfs` 文件，或通过 `shmget` / `shmat` 使用共享内存。`MAP_HUGETLB` 不要求先挂载 `hugetlbfs`；在受支持的系统上可组合 `MAP_HUGE_1GB` 选择 1GB 页，映射、解除映射也需满足大页的对齐要求。接口细节见 [Linux mmap 手册](https://man7.org/linux/man-pages/man2/mmap.2.html)。
+3. **理解资源生命周期。** HugeTLB 页不会被换出到 swap。持久大页被应用释放后回到池中，仍占用为大页池准备的内存，不能把“应用释放”直接当成“已还给内核普通页分配器”。
+
+在 Linux 上，可以先只读查看：
+
+```sh
+cat /proc/meminfo
+ls /sys/kernel/mm/hugepages/
+```
+
+重点区分以下统计；字段说明可同时查阅 [Linux proc_meminfo 手册](https://man7.org/linux/man-pages/man5/proc_meminfo.5.html)：
+
+| 字段 | 应怎样理解 |
+| --- | --- |
+| `HugePages_Total` | 默认大页大小对应的池页数 |
+| `HugePages_Free` | 池中尚未分配的页数 |
+| `HugePages_Rsvd` | 已承诺给映射、但尚未在缺页时实际分配的页数 |
+| `HugePages_Surp` | 超出持久池目标的 surplus 页数 |
+| `Hugepagesize` | 默认大页大小，不是池的总容量 |
+| `Hugetlb` | 所有 HugeTLB 页大小合计占用的容量，见上述内核指南 |
+
+多种大页大小并存时，应结合相应 sysfs 子目录查看。**1GiB 的大页池容量，不代表正在使用一个 1GiB 页**：512 个 2MiB 页也有相同容量，但映射粒度不同。
+
+**HugeTLB 与透明大页 THP 要分开理解。** THP 由内核按策略为符合条件的映射透明使用、合并或拆分大页，不依赖 HugeTLB 的预留池；普通 `malloc` 区域也可能受 THP 影响。因此，分配一块很大的缓冲区，并不等于显式申请 HugeTLB，更不保证使用 1GB 页。参见 [Linux Transparent Hugepage Support](https://cdn.kernel.org/doc/html/latest/admin-guide/mm/transhuge.html)。
+
+HugeTLB 的不可换出属性，也不能代替[设备 DMA 所需的锁页、注册及映射准备](memory-addressing.md#host-memory-registration)。页大小、内存池管理和设备访问条件仍是不同层次的问题。
+
 ## 5. 页大小、十六进制与地址计算 {#page-address-arithmetic}
 
 ### 5.1. 为什么页大小用十六进制表示？ {#5}

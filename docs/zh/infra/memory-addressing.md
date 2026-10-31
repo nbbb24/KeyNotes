@@ -71,6 +71,8 @@ flowchart LR
 
 两者讨论的都是 **Host 内存**；锁页不会把 DRAM 变成 HBM。这里的“普通内存”也不同于[普通页与大页](page-tables-huge-pages.md)：前者区分能否换出及访问准备，后者区分映射粒度。具体缓冲区路径见[数据搬运中的暂存拷贝](data-movement.md#pageable-staging)。
 
+Linux 的显式大页池及其申请、统计方式见[HugeTLB 机制](page-tables-huge-pages.md#linux-hugetlb)，可与本节的锁页和设备访问准备对照理解。
+
 ### 已有普通内存时：锁页、设备映射与注销 {#host-memory-registration}
 
 对受支持的内存和产品，`aclrtHostRegisterV2` 可以准备已有 Host 区域：

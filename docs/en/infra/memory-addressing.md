@@ -71,6 +71,8 @@ A CPU-accessible host buffer may still need preparation for direct device DMA. C
 
 Both are **host memory**; pinning does not turn DRAM into HBM. “Ordinary memory” here also differs from [ordinary versus huge pages](page-tables-huge-pages.md): pinning concerns residency and access preparation, while page size concerns mapping granularity. See [staging copies](data-movement.md#pageable-staging) for the transfer paths.
 
+See [Linux HugeTLB](page-tables-huge-pages.md#linux-hugetlb) for explicit huge-page pools, mappings, and statistics, and compare their role with pinning and device access preparation here.
+
 ### Existing allocations: pin, map, and unregister {#host-memory-registration}
 
 For supported memory and products, `aclrtHostRegisterV2` prepares an existing host region:
