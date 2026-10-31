@@ -6,16 +6,37 @@ This chapter follows [Memory and addresses](memory-addressing.md) and compares 4
 
 TB likewise means the binary capacity TiB here, with $1\text{TB}=2^{40}$ bytes. The detailed multilevel examples use **typical x86-64 four-level paging**: first divide the address, then follow how entries at each level complete the mapping.
 
-## 1. What is a page table?
+## 1. Basic concepts and core formulas {#1-what-is-a-page-table}
 
-A program uses a **virtual address (VA)**. To access physical memory, the CPU needs to translate it into a **physical address (PA)**. Four concepts have distinct responsibilities:
+A program uses a **virtual address (VA)**. To access physical memory, the CPU needs to translate it into a **physical address (PA)**. Put addresses, page numbers, mapping records, and hardware responsibilities together:
 
-| Concept | Responsibility | How to think about it |
-| --- | --- | --- |
-| Page table | Records virtual-to-physical address mappings | A mapping table, usually organized into multiple levels |
-| PTE (Page Table Entry) | A record in a page table; a final mapping entry describes the physical page, permissions, and other information | An entry in the table, separate from the data page it maps |
-| MMU (Memory Management Unit) | Performs virtual-to-physical translation and checks access permissions | The hardware that executes translation |
-| TLB (Translation Lookaside Buffer) | Caches address mappings to avoid repeated page-table lookups | A cache of recently used translation results |
+| Concept | Full name | Responsibility | How to think about it |
+| --- | --- | --- | --- |
+| VA | Virtual Address | Address used by the program | The address supplied for a program's memory access |
+| PA | Physical Address | Address obtained through translation | Locates the target in physical address space |
+| VPN | Virtual Page Number | Identifies the virtual page | The address portion that determines the mapping |
+| PFN | Page Frame Number | Identifies the physical frame | Combine it with the page size to obtain the physical page base |
+| PTE | Page Table Entry | A record in a page table; a final mapping entry describes the physical page, permissions, and other information | An entry in the table, separate from the data page it maps |
+| Page table | Page Table | Records virtual-to-physical address mappings | A mapping table, usually organized into multiple levels |
+| MMU | Memory Management Unit | Performs virtual-to-physical translation and checks access permissions | The hardware that executes translation |
+| TLB | Translation Lookaside Buffer | Caches address mappings to avoid repeated page-table lookups | A cache of recently used translation results |
+| Offset | Page offset | Selects a particular byte within a page | Preserved by the paging translation |
+
+The three core relationships are:
+
+$$
+\boxed{\mathrm{VA}=\mathrm{VPN}\mathbin{\Vert}\mathrm{Offset}}
+$$
+
+$$
+\boxed{\mathrm{VPN}\xrightarrow{\text{page table}}\mathrm{PFN}}
+$$
+
+$$
+\boxed{\mathrm{PA}=\mathrm{PhysicalPageBase}+\mathrm{Offset}}
+$$
+
+The first is also written `VA = VPN + Offset`, where “+” means **field concatenation**, rather than numerical addition of unshifted values. The equation uses $\Vert$ to make concatenation explicit. Adding an offset to a physical page base is numerical addition. With page size $S=2^n$, the numerical address relationship is $\mathrm{VA}=\mathrm{VPN}\times S+\mathrm{Offset}$.
 
 The following flow assumes a valid mapping and permitted access, using a common system with hardware page-table walks as its example:
 
@@ -31,34 +52,129 @@ flowchart TD
 
 **A TLB miss is not a page fault.** A miss means that the cache lacks the translation; the page table may still hold a valid mapping. A page fault involves conditions such as an absent mapping, a nonresident page, or access permissions. See the [Linux page-table documentation](https://docs.kernel.org/mm/page_tables.html) for page-table levels, permissions, and translation caches.
 
-## 2. Ordinary pages versus huge pages
+## 2. A complete walk: from malloc to a physical memory access {#malloc-to-physical-address}
 
-The key difference is **the memory range covered by one mapping**. Dividing the same amount of memory into larger pages requires fewer pages and final mapping entries.
+Start with a C fragment emphasizing allocation and the first write:
 
-| Comparison | 4KB ordinary page | 2MB huge page | 1GB huge page |
-| --- | --- | --- | --- |
-| Range covered by one mapping | 4KB | 2MB | 1GB |
-| Pages needed to map 1GB | 262144 | 512 | 1 |
-| Page offset | 12 bits | 21 bits | 30 bits |
-| Page size in hexadecimal | `0x1000` | `0x200000` | `0x40000000` |
-
-Calculate the page count directly. Assume that the 1GB region satisfies the relevant page alignment and is mapped entirely with the same page size:
-
-```text
-4KB pages: 1GB / 4KB = 2^30 / 2^12 = 2^18 = 262144 pages
-2MB pages: 1GB / 2MB = 2^30 / 2^21 = 2^9  = 512 pages
-1GB pages: 1GB / 1GB = 2^30 / 2^30 = 1 page
+```c
+char* p = (char*)malloc(4096);
+p[0] = 1;
 ```
 
-These are counts of data pages, and therefore **final mapping entries**. They do not include upper-level directory entries in a multilevel page table.
+A real program must check allocation success and call `free` after the last use. Follow an actual memory access using typical x86-64 four-level paging and ordinary 4KB pages.
 
-**The PTE itself has not become 1GB; the range covered by one mapping has changed.** An entry holds mapping information, while data lives in the mapped physical page. In a multilevel page table, some entries refer to another table and others complete the mapping as leaf entries. Huge pages may be mapped directly by higher-level entries, ending the walk before the lowest level. When reading implementations, distinguish the general term “page-table entry” from PTE as a name specifically for the lowest-level entry; see the [Linux page-table hierarchy](https://docs.kernel.org/mm/page_tables.html).
+For the arithmetic, fix an **example access address** of `VA = 0x12345678`. It can identify a byte inside an allocation; it is not a claim that a real `malloc` must return this value. Actual return values must satisfy allocator alignment guarantees. Nor does `malloc(4096)` guarantee a 4KB-aligned start or exactly one virtual page: 4096 bytes beginning at page offset `0x678` cross two 4KB pages. See the [Linux malloc manual](https://man7.org/linux/man-pages/man3/malloc.3.html) for allocation and return values, and the [Linux mmap manual](https://man7.org/linux/man-pages/man2/mmap.2.html) for page-aligned mappings.
 
-## 3. How is a virtual address divided?
+### 2.1. Step one: malloc supplies usable virtual addresses
+
+```c
+char* p = (char*)malloc(4096);
+```
+
+The allocator supplies a usable virtual address range. It may reuse managed heap storage or obtain more space from the operating system. A `malloc` call therefore need not create a new mapping, and receiving an address does not mean an equal amount of physical memory was allocated at that moment.
+
+For demand-allocated pages, the first access may raise a **page fault**. If the address belongs to a valid region, the kernel can allocate a physical page, establish or update the mapping, and restart the access. The allocator may already have touched the page, so the first write to `p[0]` need not fault. An access that cannot be handled legally does not automatically become a successful physical memory access. See [Linux page tables and faults](https://docs.kernel.org/mm/page_tables.html#mmu-tlb-and-page-faults).
+
+### 2.2. Step two: split VA into VPN and offset
+
+A 4KB page contains $2^{12}$ bytes. The low 12 bits are the offset, and the remaining effective address bits form the VPN:
+
+```text
+VA                    = 0x12345678
+Page size             = 0x1000
+VPN                   = VA >> 12  = 0x12345
+Offset                = VA & 0xFFF = 0x678
+Reconstruct VA        = 0x12345 × 0x1000 + 0x678 = 0x12345678
+```
+
+**VPN determines the page mapping; the offset selects the byte within it.** This is a logical explanation of address fields, not a requirement that hardware execute each step serially.
+
+### 2.3. Step three: check the TLB first
+
+Think of the TLB as the MMU's translation cache. A simplified illustration for the current address space, expressed in 4KB pages, is:
+
+```text
+TLB
+┌──────────────┬──────────────┐
+│ VPN          │ PFN          │
+├──────────────┼──────────────┤
+│ 0x12345      │ 0xABCDE      │
+│ 0x12346      │ 0x98765      │
+└──────────────┴──────────────┘
+```
+
+- **Hit with permitted access:** obtain physical frame information without another table walk for this access, then proceed to PA construction.
+- **Miss:** walk the tables; a valid translation can then fill the TLB for later accesses.
+
+The diagram shows only VPN and PFN. Real translations also distinguish address space, page size, and permissions; the same VPN in two processes does not automatically identify the same physical memory.
+
+### 2.4. Step four: walk the tables on a TLB miss
+
+The 48 effective bits split as `PGD(9) + PUD(9) + PMD(9) + PTE(9) + Offset(12)`. Starting from the current address space's table root, the MMU uses a different 9-bit index at each level:
+
+```text
+PGD: select an entry using the PGD index → locate the PUD table
+ ↓
+PUD: select an entry using the PUD index → locate the PMD table
+ ↓
+PMD: select an entry using the PMD index → locate the PTE table
+ ↓
+PTE: select an entry using the PTE index → obtain frame information and permissions
+ ↓
+PFN
+```
+
+For `0x12345678`, the indices are:
+
+```text
+PGD index = (VA >> 39) & 0x1FF = 0x000
+PUD index = (VA >> 30) & 0x1FF = 0x000
+PMD index = (VA >> 21) & 0x1FF = 0x091
+PTE index = (VA >> 12) & 0x1FF = 0x145
+```
+
+Three points matter:
+
+1. A **non-leaf entry** identifies the next table and carries control information.
+2. A **leaf entry** describes a physical frame and permissions instead of referring to another table.
+3. **The index path normally determines the VPN, so a PTE need not store the complete VPN again.** The table and slot containing an entry are part of how the mapping is represented.
+
+### 2.5. Step five: turn PFN into a physical page base
+
+Assume the final mapping is present and permits this access:
+
+```text
+VPN = 0x12345
+        ↓
+PFN recorded by the leaf PTE = 0xABCDE
+```
+
+Using this example's 4KB frame units:
+
+$$
+0xABCDE\times0x1000=0xABCDE000
+$$
+
+`0x1000` is 4KB in hexadecimal. PFN is frame information decoded from the entry; the complete PTE value, including flags, is not itself the physical page address.
+
+### 2.6. Step six: preserve the offset and construct PA
+
+```text
+Physical page base: 0xABCDE000
+Page offset:        0x00000678
+────────────────────────────
+Physical address:   0xABCDE678
+```
+
+Throughout translation, **the offset remains `0x678`, while VPN `0x12345` maps to PFN `0xABCDE`**. The resulting PA locates a byte backed by DRAM in this example.
+
+Distinguish **translation** from **when DRAM is accessed**. CPU data caches can satisfy hits, and a common write-back policy allows a write to update a cache before reaching memory later. Executing `p[0] = 1` does not imply an immediate DRAM write. The TLB caches translations; data caches hold data. See [Intel's cache write-back explanation](https://edc.intel.com/content/www/us/en/design/ipla/software-development-platforms/client/platforms/alder-lake-desktop/12th-generation-intel-core-processors-datasheet-volume-1-of-2/001/cache-line-write-back/).
+
+## 3. Multilevel tables: address fields, demand allocation, and coverage {#3-how-is-a-virtual-address-divided}
 
 Assume a **48-bit virtual address**. This means 48 effective address bits participate in translation; processors do not all use the same address width.
 
-### 3.1. Start with a virtual page number and offset
+### 3.1. Start with a virtual page number and offset {#31-start-with-a-virtual-page-number-and-offset}
 
 | Page size | Virtual page number (VPN) | Page offset |
 | --- | --- | --- |
@@ -98,7 +214,7 @@ Here, PFN is the physical frame number **in units of this mapping's page size $S
 
 In this paging model, translation changes the page's location while **preserving the page offset**. A larger page uses more offset bits and fewer VPN bits.
 
-### 3.2. How 48 address bits relate to four-level paging
+### 3.2. How 48 address bits relate to four-level paging {#32-how-48-address-bits-relate-to-four-level-paging}
 
 With typical **x86-64 four-level paging**, 48 effective virtual address bits represent $2^{48}$ byte positions: **256TB (256TiB) of virtual address space**. This is virtual address capacity, not installed physical memory, and it does not imply that all addresses are mapped. See the [Linux four-level and five-level paging explanation](https://docs.kernel.org/arch/x86/x86_64/5level-paging.html).
 
@@ -122,7 +238,23 @@ Bits:    [47:39]  [38:30]  [29:21]  [20:12]   [11:0]
 
 **How can 48 effective bits coexist with a 64-bit pointer?** In the conventional x86-64 four-level canonical address form, the high 16 bits of a 64-bit address replicate bit 47. Valid addresses occupy a low 128TiB region and a high 128TiB region, totaling 256TiB, with a noncanonical hole between them. This is not one contiguous 256TiB range starting at zero, nor does it mean a user process can freely use all that capacity. See the [Linux x86-64 virtual memory layout](https://docs.kernel.org/arch/x86/x86_64/mm.html).
 
-## 4. How large is one page table? {#page-table-size}
+### 3.3. Why could a flat table require 512GiB? {#why-multilevel-page-tables}
+
+With 48 address bits and 4KB pages, the virtual page count is:
+
+$$
+\frac{2^{48}}{2^{12}}=2^{36}=68{,}719{,}476{,}736
+$$
+
+That is approximately **68.7 billion virtual pages**. Preallocating a complete single-level table with an 8-byte entry for every page would require:
+
+$$
+2^{36}\times8=2^{39}\text{ bytes}=512\text{ GiB}
+$$
+
+Most programs do not use the entire address space, so preparing every possible entry wastes memory. **Multilevel tables allocate lower levels on demand:** an unmapped range can have an absent lower branch instead of a fully allocated collection of bottom-level entries.
+
+### 3.4. How large is one page table? {#page-table-size}
 
 In this x86-64 paging scheme:
 
@@ -138,7 +270,49 @@ One table: 512 entries × 8 bytes = 4096 bytes = 4KB
 
 **The size of a table and the memory range mapped by an entry are different concepts.** A 4KB table does not imply that every entry can map only 4KB; an entry mapping 1GB does not occupy 1GB. A process may use many such tables, so its entire multilevel structure is not limited to 4KB. These sizes apply to this x86-64 example, rather than every architecture. Compare the entry types, 512-entry table sizes, and PMD/PUD range definitions in the [Linux x86-64 page-table definitions](https://github.com/torvalds/linux/blob/master/arch/x86/include/asm/pgtable_64_types.h).
 
-## 5. How do multilevel tables map ordinary and huge pages? {#leaf-levels}
+### 3.5. How much does each level cover? {#level-coverage}
+
+Every table in this four-level example has 512 entries, but the virtual coverage depends on its level:
+
+| Level | Coverage of one entry | Coverage of one table |
+| --- | --- | --- |
+| PGD | 512GiB | 256TiB |
+| PUD | 1GiB | 512GiB |
+| PMD | 2MiB | 1GiB |
+| PTE | 4KiB | 2MiB |
+
+Starting at the bottom, multiply by 512: `4KiB × 512 = 2MiB`, then `1GiB`, `512GiB`, and `256TiB`. **Coverage does not imply that the corresponding amount of physical memory has been allocated.**
+
+For non-leaf entries, coverage describes the virtual range of the lower subtree, rather than a promise to map one physical page of that size. A PGD entry covering 512GiB does not mean this example supports 512GiB pages. Adjacent virtual pages covered by a PTE table also need not map to adjacent physical frames.
+
+## 4. How ordinary and huge pages change translation {#huge-pages}
+
+### 4.1. Ordinary pages versus huge pages {#2-ordinary-pages-versus-huge-pages}
+
+The key difference is **the memory range covered by one mapping**. Dividing the same amount of memory into larger pages requires fewer pages and final mapping entries.
+
+| Comparison | 4KB ordinary page | 2MB huge page | 1GB huge page |
+| --- | --- | --- | --- |
+| Range covered by one mapping | 4KB | 2MB | 1GB |
+| Pages needed to map 1GB | 262144 | 512 | 1 |
+| Page offset | 12 bits | 21 bits | 30 bits |
+| Page size in hexadecimal | `0x1000` | `0x200000` | `0x40000000` |
+| Table walk | PGD → PUD → PMD → PTE | PGD → PUD → PMD | PGD → PUD |
+| Physical contiguity | Each 4KB page contiguous and aligned; different pages need not be adjacent | Each 2MB page contiguous and aligned | Entire 1GB contiguous and 1GB-aligned |
+
+Calculate the page count directly. Assume that the 1GB region satisfies the relevant page alignment and is mapped entirely with the same page size:
+
+```text
+4KB pages: 1GB / 4KB = 2^30 / 2^12 = 2^18 = 262144 pages
+2MB pages: 1GB / 2MB = 2^30 / 2^21 = 2^9  = 512 pages
+1GB pages: 1GB / 1GB = 2^30 / 2^30 = 1 page
+```
+
+These are counts of data pages, and therefore **final mapping entries**. They do not include upper-level directory entries in a multilevel page table.
+
+**The PTE itself has not become 1GB; the range covered by one mapping has changed.** An entry holds mapping information, while data lives in the mapped physical page. In a multilevel page table, some entries refer to another table and others complete the mapping as leaf entries. Huge pages may be mapped directly by higher-level entries, ending the walk before the lowest level. When reading implementations, distinguish the general term “page-table entry” from PTE as a name specifically for the lowest-level entry; see the [Linux page-table hierarchy](https://docs.kernel.org/mm/page_tables.html).
+
+### 4.2. How do multilevel tables map ordinary and huge pages? {#leaf-levels}
 
 A **leaf page-table entry** completes a physical memory mapping instead of pointing to another table. “Leaf” means this mapping ends here; it need not be at the bottom PTE level.
 
@@ -165,7 +339,7 @@ Compare the leaf level, offset width, and number of leaf mappings needed for 1GB
 
 For a 2MB page, the PMD entry completes the mapping without continuing to a PTE table. For a 1GB page, the PUD entry completes it without continuing to PMD or PTE tables. These are logical walk paths. Actual latency depends on the TLB, page-walk caches, and ordinary caches; the number of levels is not a count of actual DRAM accesses.
 
-## 6. Why does a 1GB page shorten the walk? {#huge-page-offset-bits}
+### 4.3. Why does a 1GB page shorten the walk? {#huge-page-offset-bits}
 
 Compare the address fields to see where the bits go when a mapping ends earlier.
 
@@ -193,7 +367,7 @@ The **18 bits previously used as PMD and PTE indices** become part of the offset
 
 Thus **a 1GB page does not delete 18 bits or change the virtual address width; the mapping ends earlier, at the PUD level**. This example still has a 48-bit effective virtual address. What changes is which bits select table entries and which locate a byte within the physical page.
 
-## 7. Why can huge pages improve performance? {#4-why-can-huge-pages-improve-performance}
+### 4.4. Why can huge pages improve performance? {#4-why-can-huge-pages-improve-performance}
 
 The mapping counts and walk paths explain three main benefits:
 
@@ -214,7 +388,19 @@ This is a theoretical example. Actual TLB capacity varies with hardware and page
 
 Allocation costs matter too: huge pages require appropriate contiguous physical memory and alignment, and using only a small portion can waste capacity. They do not guarantee that every program runs faster. See the [Linux HugeTLB documentation](https://docs.kernel.org/admin-guide/mm/hugetlbpage.html) for supported sizes and allocation constraints.
 
-## 8. Why express page sizes in hexadecimal? {#5-why-express-page-sizes-in-hexadecimal}
+### 4.5. What does configuring 1GB pages actually change? {#huge-page-configuration}
+
+In this x86-64 four-level example, assume the processor supports 1GB pages, memory meets the corresponding alignment and contiguity requirements, and the operating system **actually establishes a 1GB mapping for the region**:
+
+**Configuring and using a 1GB page means the operating system uses a PUD-level leaf entry to map a 1GB virtual address range directly to a 1GB physical address range.**
+
+It changes neither this example's 48-bit effective virtual address width nor the system's basic page-table structure. It changes **the mapping granularity and walk depth for regions using huge pages**. Different regions can use 4KB, 2MB, and 1GB pages simultaneously; one 1GB mapping does not reduce the entire system to two-level tables. Requesting huge pages is also distinct from confirming the mapping granularity actually established.
+
+The core effects are **fewer page-table mapping entries, less TLB pressure, and lower address-translation overhead**.
+
+## 5. Page size, hexadecimal, and address arithmetic {#page-address-arithmetic}
+
+### 5.1. Why express page sizes in hexadecimal? {#5-why-express-page-sizes-in-hexadecimal}
 
 Because:
 
@@ -236,7 +422,7 @@ For example, the following values are in bytes, and `0x` denotes hexadecimal:
 
 `0x1000` is 1 shifted left by 12 bits; `0x200000` is $2\times16^5=2^{21}$; and `0x40000000` is $4\times16^7=2^{30}$. Hexadecimal can therefore represent 2MB and 1GB clearly even though their offset widths are not multiples of four.
 
-## 9. Why can the physical page base address differ? {#6-why-can-the-physical-page-base-address-differ}
+### 5.2. Why can the physical page base address differ? {#6-why-can-the-physical-page-base-address-differ}
 
 **Different page sizes define different memory boundaries.** The same physical address belongs to pages with different starting points when memory is grouped by different page sizes. This compares two partitioning schemes, rather than assigning two page sizes to a single translation.
 
@@ -276,7 +462,7 @@ Final address = 0x40000000 + 0x1234 = 0x40001234
 
 A page base must be a multiple of the page size. A 4KB base has 12 low zero bits; a 1GB base has 30 low zero bits. Although the base and offset differ, their sum reconstructs the same physical address.
 
-## 10. Page size and offset width {#7-page-size-and-offset-width}
+### 5.3. Page size and offset width {#7-page-size-and-offset-width}
 
 **A page of $2^n$ bytes needs $n$ offset bits.** It contains $2^n$ byte positions, numbered from 0 through $2^n-1$.
 
@@ -294,15 +480,39 @@ For a 1GB page:
 
 Do not confuse the page size with the offset of its last byte. An offset of `0x40000000` has already reached the beginning of the next 1GB page.
 
-## 11. What does configuring 1GB pages actually change? {#huge-page-configuration}
+## 6. The complete flow and what to study next {#allocation-to-dram-summary}
 
-In this x86-64 four-level example, assume the processor supports 1GB pages, memory meets the corresponding alignment and contiguity requirements, and the operating system **actually establishes a 1GB mapping for the region**:
+Connect allocation, ordinary translation, fault handling, and the subsequent memory access:
 
-**Configuring and using a 1GB page means the operating system uses a PUD-level leaf entry to map a 1GB virtual address range directly to a 1GB physical address range.**
+```mermaid
+flowchart TD
+    A[Program malloc / mmap] --> B[Obtain usable virtual addresses VA]
+    B --> C[CPU issues a memory access]
+    C --> D[MMU distinguishes VPN and offset]
+    D --> E[Check TLB in the current address space]
+    E -->|Hit| J[Obtain frame information and check permissions]
+    E -->|Miss| F[Walk tables using indices]
+    F -->|Valid mapping| I[Obtain translation and fill TLB]
+    I --> J
+    F -->|Absent or invalid mapping| G[Page fault handled by kernel]
+    J -->|Permission fault| G
+    G -->|Handleable: establish or update mapping and retry| C
+    G -->|Cannot handle legally| X[Access failure or exception handling]
+    J -->|Access permitted| K[Physical page base + original offset]
+    K --> L[Construct physical address PA]
+    L --> M[CPU caches and memory hierarchy]
+    M -->|Memory access or write-back required by cache policy| N[Access DRAM]
+```
 
-It changes neither this example's 48-bit effective virtual address width nor the system's basic page-table structure. It changes **the mapping granularity and walk depth for regions using huge pages**. Different regions can use 4KB, 2MB, and 1GB pages simultaneously; one 1GB mapping does not reduce the entire system to two-level tables. Requesting huge pages is also distinct from confirming the mapping granularity actually established.
+The diagram expresses logical dependencies; hardware need not execute every box serially. A fault retries only when the kernel can resolve it legally, rather than supplying a physical page for every arbitrary address.
 
-The core effects are **fewer page-table mapping entries, less TLB pressure, and lower address-translation overhead**.
+Three conclusions connect the concepts:
+
+1. **Page tables record mappings at page granularity.** They do not store a complete entry for every virtual byte address: a virtual page maps to a physical frame, and the offset selects the byte.
+2. **The MMU executes translation, the TLB caches translations, and page tables store mapping information.** VPN determines an index path; PFN determines a physical page base.
+3. **One 1GB leaf mapping covers contiguous 1GB virtual and physical ranges.** The table itself has not become 1GB, and an ordinary-page access does not scan 262144 PTEs. The benefits come from greater coverage, fewer lower tables, and shorter translation paths.
+
+This is a foundation for Linux virtual memory. When studying NPU DVAs, device MMUs, [IOMMUs and DMA addresses](memory-addressing.md), [pinned memory](memory-addressing.md#host-pinned-memory), and MemFabric's [GVA unified addressing](gva-unified-addressing.md), distinguish address space, page granularity, permissions, and transport. Do not assume they use this chapter's x86-64 levels or page sizes.
 
 Connect the ideas in one sentence: **The CPU uses a virtual address, finds the corresponding physical page through the TLB or page tables, and combines it with the page offset to obtain a physical address; the central advantage of huge pages is that each mapping covers more memory, reducing mapping counts and TLB pressure.**
 
