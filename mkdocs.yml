@@ -82,6 +82,7 @@ plugins:
             🔌 Interconnects: 🔌 互联与通信
             🧠 Memory and addresses: 🧠 内存与地址
             🗂️ Page tables and huge pages: 🗂️ 页表与大页
+            🌐 GVA unified addressing: 🌐 GVA 统一编址
             🚀 Serving frameworks: 🚀 推理框架
             🖥️ Hardware: 🖥️ 硬件层级
             🌐 Network planes: 🌐 网络平面
@@ -220,6 +221,7 @@ nav:
     - 🖥️ Hardware: infra/hardware.md
     - 🧠 Memory and addresses: infra/memory-addressing.md
     - 🗂️ Page tables and huge pages: infra/page-tables-huge-pages.md
+    - 🌐 GVA unified addressing: infra/gva-unified-addressing.md
     - 🚀 Serving frameworks: infra/serving-frameworks.md
   - 🔄 Communication and transfer:
     - 🔄 Data movement: infra/data-movement.md

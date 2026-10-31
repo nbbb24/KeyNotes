@@ -9,6 +9,7 @@
 | 硬件 | 谁负责计算？Die、封装、Device 和 Rank 有何区别？ | [硬件层级](hardware.md) |
 | 内存 | 字节放在哪里？哪个地址空间能够描述它们？ | [内存与地址](memory-addressing.md) |
 | 分页与转换 | 页表、PTE、MMU、TLB 如何配合？大页为何能减少映射数量？ | [页表、PTE、大页与地址转换](page-tables-huge-pages.md) |
+| 全局寻址 | 如何通过 GVA 统一定位跨进程、跨设备、跨节点的 DRAM 与 HBM？ | [GVA 统一编址原理](gva-unified-addressing.md) |
 | 推理服务 | vLLM、SGLang 如何规划 HBM、复用 KV，并完成 Prefill 到 Decode 的交接？ | [推理框架](serving-frameworks.md) |
 | 搬运 | 谁搬数据？方向是什么？何时才能使用？ | [数据搬运](data-movement.md) |
 | 互联 | 哪条路径和哪种传输机制能到达目标？ | [互联与通信](interconnects.md) |

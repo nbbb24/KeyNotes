@@ -30,6 +30,8 @@ In a distributed memory manager, **unified addressing** means that a resource ca
 
 For example, a cache slice might be named by GVA `G+0x2000` while process A sees HVA `H_A+0x2000` and device B sees DVA `D_B+0x2000`. Their numerical values need not match. A lookup or mapping connects them; exporting the GVA alone does not grant access to the bytes. Different backends can represent these relationships differently, so inspect the API and memory type before assuming a conversion exists. In the MemFabric source, host-transfer and device-transfer paths explicitly translate GVA to HVA or DVA where needed.
 
+For how GVA brings DRAM and HBM across processes, devices, and nodes into one logical address space, locates resources, and selects an access path, see [How GVA unified addressing works](gva-unified-addressing.md). That chapter also explains how GVA differs from, and can interact with, hardware page tables.
+
 ## 📍 Allocation is a lifecycle, not one call
 
 The word “allocate” often hides several independent steps. Keeping them separate explains why a large address range can be reserved even when the device has far less physical memory.

@@ -189,4 +189,6 @@ Do not confuse the page size with the offset of its last byte. An offset of `0x4
 
 Connect the ideas in one sentence: **The CPU uses a virtual address, finds the corresponding physical page through the TLB or page tables, and combines it with the page offset to obtain a physical address; the central advantage of huge pages is that each mapping covers more memory, reducing mapping counts and TLB pressure.**
 
+Continue with [How GVA unified addressing works](gva-unified-addressing.md) to connect page-table translation within one address space with resource addressing across processes, devices, and nodes.
+
 Return to [Memory and addresses](memory-addressing.md) to connect a single translation with virtual-range reservation, physical allocation, mapping, and registration.
