@@ -18,6 +18,8 @@ AI Core 的 L1 是硬件缓冲区；分层 KV Cache 中的“L1 缓存”是软�
 
 CPU 的 MMU 将进程虚拟地址 VA 转换到物理存储 PA，并实施权限保护。设备可能使用由 IOMMU 转换的 I/O 虚拟地址 IOVA。在受支持的系统上，Shared Virtual Memory 可以简化寻址，但不会消除数据迁移、一致性、权限和顺序要求。
 
+要进一步理解一次 CPU 地址转换，接着阅读[页表、PTE、大页与地址转换](page-tables-huge-pages.md)：从页表与 TLB 的分工开始，拆解页号和页内偏移，再通过 4KB、2MB、1GB 页的完整例子理解大页的性能收益。
+
 在分布式内存管理器中，**统一编址**指资源可以在共享的*逻辑*地址空间中拥有稳定身份，不代表各机器的物理内存变成一个自动保持一致性的堆。以 [MemFabric Hybrid 的实现](https://gitcode.com/Ascend/memfabric_hybrid)为例，需要区分：
 
 | 名称 | 标识什么 | 谁能直接使用？ |

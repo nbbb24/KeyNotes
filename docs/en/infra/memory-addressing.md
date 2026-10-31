@@ -18,6 +18,8 @@ AI Core L1 is a hardware buffer. A software system's “L1 cache,” such as a h
 
 A CPU MMU translates a process virtual address (VA) to physical storage (PA), enforcing permissions. Devices may use I/O virtual addresses (IOVA) translated by an IOMMU. Shared Virtual Memory can simplify addressing on supported systems, but it does not eliminate migration, coherence, permission, or ordering requirements.
 
+For a closer look at a CPU translation, continue with [Page tables, PTEs, huge pages, and address translation](page-tables-huge-pages.md): distinguish page tables from the TLB, split addresses into page numbers and offsets, and use complete 4KB, 2MB, and 1GB examples to understand huge-page performance benefits.
+
 In a distributed memory manager, **unified addressing** means that a resource can have a stable identity in a shared *logical* address space. It does not make every machine's physical memory one coherent heap. In [MemFabric Hybrid's implementation](https://gitcode.com/Ascend/memfabric_hybrid), the important names are:
 
 | Name | What it identifies | Who can use it directly? |
