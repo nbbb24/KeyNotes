@@ -24,6 +24,8 @@ Terms such as `page_first_direct` or `page_first_kv_split` are framework/version
 
 ## 📊 Measure the complete path
 
+Layer-first describes memory layout; layerwise describes execution or transfer timing. Neither implies the other. See [layerwise inference](layerwise-inference.md) for transfer, prefetch, buffer reuse, and chunked prefill, and [inference parallelism](parallelism.md) for TP/PP ownership of layers and KV shards.
+
 Include layout-conversion kernels, gather/scatter operations, DMA granularity, alignment, and synchronization. A faster storage transfer can lose its benefit if repacking before every attention call is expensive. Use representative prefix lengths and reuse rates.
 
 **Exercise.** Does permuting a tensor's logical dimensions always move its bytes? No. A view may only change strides; a contiguous conversion performs the actual data movement.

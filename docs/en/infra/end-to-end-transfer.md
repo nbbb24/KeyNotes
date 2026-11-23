@@ -30,6 +30,8 @@ The diagram is a logical protocol. Some backends provide receiver-side completio
 
 ## ⚖️ Compare the physical paths
 
+Expand the submission step: the host can submit after a producer event, a device can publish a request to a CPU proxy, or a supported backend can submit directly from device code. Evaluate control and payload paths separately; CPU submission does not require D2H staging. See [device initiation](device-initiated-transfer.md) and [WQEs, SQEs, CQEs, and doorbells](work-queues.md).
+
 A host-staged route is `HBM A → DRAM A → network → DRAM B → HBM B`. It can reuse host networking but adds copies, buffers, and synchronization. A supported direct route is `HBM A → communication engine/NIC → network → HBM B`. Direct access depends on reachability, registration, permissions, and backend support; a configuration label alone is insufficient evidence.
 
 For a 1 GB cache, sequential stages sustaining 20, 10, and 20 GB/s need at least $0.05+0.10+0.05=0.20$ s before fixed overheads. Chunked pipelining can overlap stages and approach the slowest stage's throughput, but the first and last chunks still pay startup and drain costs. This is a modeling example, not a hardware benchmark.

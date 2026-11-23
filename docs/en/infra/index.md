@@ -12,6 +12,8 @@ An accelerator does useful work only when the right data reaches the right memor
 | Global addressing | How does GVA locate DRAM and HBM across processes, devices, and nodes? | [How GVA unified addressing works](gva-unified-addressing.md) |
 | Serving | How do vLLM and SGLang budget HBM, reuse KV, and hand work from prefill to decode? | [Serving frameworks](serving-frameworks.md) |
 | Movement | Who copies the bytes, in which direction, and when are they ready? | [Data movement](data-movement.md) |
+| Work queues | How do WQEs, SQEs, CQEs, and doorbells connect submission to completion? | [Work queues and doorbells](work-queues.md) |
+| Device initiation | How does a GPU/NPU request work, submit it, and enable safe remote consumption? | [Device-initiated transfer](device-initiated-transfer.md) |
 | Interconnect | Which path and transport can reach the destination? | [Interconnects](interconnects.md) |
 | Organization | Which network carries which traffic? | [Network planes](network-planes.md) |
 | Measurement | Is time spent on setup, movement, or waiting? | [Performance](performance-tools.md) |
@@ -55,8 +57,10 @@ The same symptom, “decode is waiting,” can arise from an oversized cache, fa
 1. Draw devices, dies, NUMA nodes, and interconnects.
 2. Label H2D, D2H, and device transfers; add address spaces and registrations.
 3. Separate traffic-purpose networks from control/data roles.
-4. Trace initialization, submission, completion, and consumption.
+4. Trace initialization, submission, completion, and consumption; distinguish host, proxy, and direct device submission.
 5. Measure latency, bandwidth, concurrency, and overlap.
+
+Connect movement to model execution with [TP, PP, DP, EP, and CP](../ml/llm/inference/parallelism.md), followed by [layerwise KV transfer and pipelining](../ml/llm/inference/layerwise-inference.md). The former explains partitioning; the latter explains when data is produced, moved, and consumed.
 
 Can you explain why H2D is a direction, RDMA an access mechanism, and an external enclosure port a physical boundary? Can you explain why crossing a die need not cross a server? If so, use the [glossary](glossary.md) as a reference rather than a vocabulary list to memorize.
 

@@ -50,9 +50,17 @@ Use this page while drawing a transfer path. For every term, ask whether it name
 | HCCL / HCOMM | Collective communication library / supported lower-level communication resources and operations |
 | Scale-up / scale-out | Expansion within a tightly coupled domain / across networked systems; boundaries depend on architecture |
 | Completion / notification | Operation status / signal to another participant; neither implies every possible visibility guarantee |
+| WR / WQE | Software work request / hardware-consumed work queue element; different structures |
+| SQ / RQ / QP | RDMA send queue / receive queue / queue pair associating queues and transport state |
+| SQE | Submission Queue Entry, or Send Queue Entry in a particular system; identify the owning queue |
+| CQ / CQE / WC | Completion queue / hardware completion entry / software completion returned by verbs |
+| Doorbell / DBR | Notify hardware of work / memory doorbell record used in some implementations |
+| Device-initiated / proxy | Device originates communication / agent submits it; independent of payload staging |
 | P/D separation | Run prompt prefill and iterative decode on separate workers, with a KV-cache handoff |
 
 “UB” also means Unified Buffer in AI Core documentation. The same abbreviation does not make the on-chip buffer the Unified Bus interconnect.
+
+See [work queues and doorbells](work-queues.md) for completion boundaries and [device initiation](device-initiated-transfer.md) for submission versus movement. Model-level TP, PP, DP, EP, and CP are explained in [inference parallelism](../ml/llm/inference/parallelism.md).
 
 ## 📊 Planes and performance
 

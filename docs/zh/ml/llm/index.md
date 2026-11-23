@@ -35,6 +35,8 @@ flowchart LR
 
 对于生成和部署，连接[解码](inference/decoding.md)，[KV缓存](inference/kv-cache.md)，[FLOPs](inference/flops.md)，[量化](inference/quantization.md)，[层和页面](inference/layers-pages.md)和[多标记预测](inference/multi-token-prediction.md)。[MoE](components/moe.md)是一种架构和路由技术；它本身不是一个代理框架。
 
+系统学习推理时，先用[并行策略](inference/parallelism.md)理解 TP、PP、DP、EP、CP 的切分对象、通信和内存，再用[逐层推理与传输](inference/layerwise-inference.md)串起 Layerwise、Continuous Batching、Chunked Prefill 和 PD KV 流水线。底层任务如何交给硬件，可接着阅读 Infra 的[工作队列](../../infra/work-queues.md)与[设备发起传输](../../infra/device-initiated-transfer.md)。
+
 对于外部信息和行动，研究[RAG](rag.md)，[思维树](inference/tree-of-thoughts.md)，[MCP](tools/mcp.md)，[LangChain](tools/langchain.md)和[DeepSpeed](tools/deepspeed.md)。区分模型推理、搜索、工具编排和分布式训练基础设施。
 
 ## 🚀 结构化课程和多模态扩展

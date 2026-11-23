@@ -12,6 +12,8 @@
 | 全局寻址 | 如何通过 GVA 统一定位跨进程、跨设备、跨节点的 DRAM 与 HBM？ | [GVA 统一编址原理](gva-unified-addressing.md) |
 | 推理服务 | vLLM、SGLang 如何规划 HBM、复用 KV，并完成 Prefill 到 Decode 的交接？ | [推理框架](serving-frameworks.md) |
 | 搬运 | 谁搬数据？方向是什么？何时才能使用？ | [数据搬运](data-movement.md) |
+| 任务队列 | WQE、SQE、CQE、Doorbell 如何连接提交与完成？ | [工作队列与门铃](work-queues.md) |
+| 设备发起 | GPU/NPU 如何提出请求、提交任务并让远端安全消费？ | [设备发起传输](device-initiated-transfer.md) |
 | 互联 | 哪条路径和哪种传输机制能到达目标？ | [互联与通信](interconnects.md) |
 | 组织 | 不同网络分别承载什么流量？ | [网络平面](network-planes.md) |
 | 测量 | 时间花在初始化、搬运还是等待上？ | [性能分析](performance-tools.md) |
@@ -55,8 +57,10 @@ Endpoint 表示通信端点。初始化阶段发现对端和能力、准备队�
 1. 画出 Device、Die、NUMA 节点及互联关系。
 2. 标出 H2D、D2H 和设备间传输，再补上地址空间与注册关系。
 3. 区分按流量用途划分的网络与控制面、数据面职责。
-4. 跟踪初始化、提交、完成和消费四个环节。
+4. 跟踪初始化、提交、完成和消费四个环节，再区分 Host、代理和设备直接提交。
 5. 测量延迟、带宽、并发和重叠执行。
+
+将搬运知识用于模型执行时，继续学习[TP、PP、DP、EP 与 CP](../ml/llm/inference/parallelism.md)，再跟踪[逐层 KV 传输和流水线](../ml/llm/inference/layerwise-inference.md)。前者解释数据如何分片，后者解释何时生产、搬运与消费。
 
 你能解释为什么 H2D 是方向、RDMA 是访问机制、出框口是物理边界吗？能解释为什么跨 Die 不一定跨服务器吗？弄清这些关系后，[术语表](glossary.md)就可以作为查阅工具，而不必成为死记硬背的词汇表。
 

@@ -92,7 +92,7 @@ def main():
             parser.feed(page.read_text())
             original_figures = {target(page, url) for url in parser.images
                                 if target(page, url) is not None
-                                and '/assets/notion/' in str(target(page, url))}
+                                and '/assets/notion/' in target(page, url).as_posix()}
             expected_figures = {SITE / f'assets/notion/{item["id"]:03}-{j:02}.png'
                                 for j in range(item['images'])}
             if original_figures != expected_figures:

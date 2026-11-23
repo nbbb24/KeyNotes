@@ -35,6 +35,8 @@ For task behavior, study [SFT](adaptation/sft.md), [LoRA](adaptation/lora.md), [
 
 For generation and deployment, connect [decoding](inference/decoding.md), [KV cache](inference/kv-cache.md), [FLOPs](inference/flops.md), [quantization](inference/quantization.md), [layers and pages](inference/layers-pages.md), and [multi-token prediction](inference/multi-token-prediction.md). [MoE](components/moe.md) is an architecture and routing technique; it is not itself an agent framework.
 
+For inference systems, study [parallelism](inference/parallelism.md) to connect TP, PP, DP, EP, and CP with partitioning, communication, and memory. Then follow [layerwise inference](inference/layerwise-inference.md) through continuous batching, chunked prefill, and P/D KV pipelines. Continue into infrastructure [work queues](../../infra/work-queues.md) and [device initiation](../../infra/device-initiated-transfer.md) to see how hardware receives the work.
+
 For external information and actions, study [RAG](rag.md), [Tree of Thoughts](inference/tree-of-thoughts.md), [MCP](tools/mcp.md), [LangChain](tools/langchain.md), and [DeepSpeed](tools/deepspeed.md). Distinguish model reasoning, search, tool orchestration, and distributed training infrastructure.
 
 ## 🚀 Structured courses and multimodal extensions

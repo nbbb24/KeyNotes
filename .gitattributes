@@ -1,0 +1,2 @@
+# Preserve original SVG bytes used by migration/image-manifest.json.
+docs/assets/diagrams/*.svg -text

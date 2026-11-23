@@ -58,4 +58,6 @@ vLLM 的 [Ascend PD 设计](https://docs.vllm.ai/projects/ascend/en/main/develop
 
 ## 📊 测量完整请求
 
+Worker 内部采用哪些 TP/PP/DP/EP 组，决定权重和 KV 如何分片；P/D 切分不一致时，还要核对连接器能否重分片。参见[推理并行策略](../ml/llm/inference/parallelism.md)。如果按层搬运 KV，再用[逐层推理与传输](../ml/llm/inference/layerwise-inference.md)区分生产事件、传输完成和 Decode 准入。
+
 同时观察 **TTFT**（首 Token 延迟）、**ITL**（输出 Token 间延迟）、请求吞吐、缓存命中率、设备内存余量、KV 传输量与耗时、等待空闲块的时间及故障率。请求慢时，应拆分排队、Prefill 计算、KV 传输、Decode 调度与逐 Token 生成。若 D 正等待拥塞链路或空闲 KV 块，单纯加快 P 不会解决问题。再结合[内存与地址](memory-addressing.md)、[数据搬运](data-movement.md)和[性能工具](performance-tools.md)定位瓶颈。

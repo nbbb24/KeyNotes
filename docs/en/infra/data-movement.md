@@ -96,6 +96,8 @@ Pinned host memory can reduce preparation costs and enable efficient DMA paths. 
 
 ## 🧮 Estimate the bottleneck
 
+To trace who submits a copy, read [work queues and doorbells](work-queues.md) and [device-initiated transfer](device-initiated-transfer.md): they explain hardware descriptors and the control responsibilities of hosts, proxies, and GPU/NPU kernels.
+
 A first-order model is $T(S)=L+S/B$, where $L$ is fixed overhead, $S$ bytes, and $B$ sustained bytes/s. For $L=10\,\mu s$ and $B=20$ GB/s, a 4 KB copy takes about $10.2\,\mu s$, while a 20 MB copy takes about $1.01$ ms. Small transfers benefit from batching; large transfers expose bandwidth limits.
 
 The effective bandwidth cannot exceed the slowest participating memory, link, or engine, and contention lowers it further. NUMA placement, shared PCIe uplinks, registration, and synchronization all contribute.

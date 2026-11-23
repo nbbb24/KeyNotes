@@ -58,4 +58,6 @@ Do not reuse cache across incompatible model revisions, tokenizer outputs, posit
 
 ## 📊 Measure the whole request
 
+Worker TP/PP/DP/EP groups determine weight and KV ownership; mismatched P/D layouts also require connector support for resharding. See [inference parallelism](../ml/llm/inference/parallelism.md). For per-layer KV movement, [layerwise inference](../ml/llm/inference/layerwise-inference.md) distinguishes production events, transfer completion, and decode admission.
+
 Track **TTFT** (time to first token), **ITL** (time between generated tokens), request throughput, cache-hit rate, device-memory headroom, KV transfer bytes/time, wait time for free blocks, and failures. For a slow request, separate queueing, prefill compute, KV transfer, decode scheduling, and token generation. A faster P worker alone will not help when D is waiting on a saturated link or has no free KV blocks. Connect this view to [memory addressing](memory-addressing.md), [data movement](data-movement.md), and [performance tools](performance-tools.md).
