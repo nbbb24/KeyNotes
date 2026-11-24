@@ -54,6 +54,8 @@ Use this page while drawing a transfer path. For every term, ask whether it name
 | SQ / RQ / QP | RDMA send queue / receive queue / queue pair associating queues and transport state |
 | SQE | Submission Queue Entry, or Send Queue Entry in a particular system; identify the owning queue |
 | CQ / CQE / WC | Completion queue / hardware completion entry / software completion returned by verbs |
+| Jetty / JFS / JFR / JFC | URMA endpoint / send / receive / completion resources; associated SQ/RQ/CQ are distinct from Runtime scheduling queues |
+| CR | URMA Completion Record returned by `urma_poll_jfc`; match request identity and check status |
 | Doorbell / DBR | Notify hardware of work / memory doorbell record used in some implementations |
 | Device-initiated / proxy | Device originates communication / agent submits it; independent of payload staging |
 | P/D separation | Run prompt prefill and iterative decode on separate workers, with a KV-cache handoff |

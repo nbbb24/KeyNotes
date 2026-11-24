@@ -19,7 +19,7 @@ For each arrow, ask what changes: data, trainable parameters, objective, or infe
 
 ## 🏗️ Architecture and model families
 
-For checkpoint-specific layer shapes, use the top-level [model structures reference](../../models/index.md): GLM-5.1/5.2, DeepSeek-V4 Flash/Pro, and V4.1 Flash include weight/activation/KV tables and complete layer maps. The table below retains the conceptual and historical family reading paths.
+For checkpoint-specific layer shapes, use the [model structures reference](model-structures/index.md) within this LLM section: GLM-5.1/5.2, DeepSeek-V4 Flash/Pro, and V4.1 Flash include weight/activation/KV tables and complete layer maps. The table below retains the conceptual and historical family reading paths.
 
 | Question | Chapters |
 | --- | --- |

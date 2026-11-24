@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="850" viewBox="0 0 1120 850" role="img" aria-labelledby="title desc">
+<title id="title">One copy task: WQE placement in Runtime SQ</title><desc id="desc">Pinned public CANN Runtime snapshot: Direct WQE and doorbell are separate paths.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="850" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">One copy task: WQE placement in Runtime SQ</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Pinned public CANN Runtime snapshot: Direct WQE and doorbell are separate paths.</tspan></text>
+<rect x="36" y="113" width="1048" height="93" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="142" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Runtime creates a copy task: src, dst, size, stream dependencies</tspan></text>
+<text x="52" y="169" font-size="16" text-anchor="start"><tspan x="52" dy="0">Driver prepares WQE / Jetty information; Runtime constructs scheduling SQEs before execution.</tspan></text>
+<polyline points="285,206 285,250" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="835,206 835,250" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="250" width="498" height="126" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="279" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Path 1: Direct WQE</tspan></text>
+<text x="52" y="306" font-size="16" text-anchor="start"><tspan x="52" dy="0">Driver returns WQE bytes and length</tspan><tspan x="52" dy="23">dieId / functionId / jettyId</tspan><tspan x="52" dy="23">Runtime saves these in task.ubDma</tspan></text>
+<rect x="586" y="250" width="498" height="126" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="602" y="279" font-size="18" text-anchor="start" font-weight="650"><tspan x="602" dy="0">Path 2: Doorbell</tspan></text>
+<text x="602" y="306" font-size="16" text-anchor="start"><tspan x="602" dy="0">Convert WQEs → fill Jetty queue</tspan><tspan x="602" dy="23">Query / bind Jetty; track PI</tspan><tspan x="602" dy="23">WQE data resides in communication queue</tspan></text>
+<polyline points="285,376 285,421" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="835,376 835,421" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="421" width="498" height="75" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="450" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Runtime SQ slot n: header SQE</tspan></text>
+<text x="52" y="477" font-size="16" text-anchor="start"><tspan x="52" dy="0">ASYNCDMA + Direct mode + Jetty IDs</tspan></text>
+<rect x="36" y="502" width="498" height="75" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="531" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Runtime SQ slot n+1: WQE bytes</tspan></text>
+<text x="52" y="558" font-size="16" text-anchor="start"><tspan x="52" dy="0">Hardware consumes the trailing direct payload</tspan></text>
+<rect x="586" y="421" width="498" height="156" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="602" y="450" font-size="18" text-anchor="start" font-weight="650"><tspan x="602" dy="0">Runtime SQ: doorbell SQE</tspan></text>
+<text x="602" y="477" font-size="16" text-anchor="start"><tspan x="602" dy="0">UBDMA + Doorbell mode</tspan><tspan x="602" dy="23">dieId / functionId / jettyId / PI</tspan><tspan x="602" dy="23">Trigger the already populated Jetty queue</tspan><tspan x="602" dy="23">No trailing WQE slot for this mode</tspan></text>
+<polyline points="285,577 285,635" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="835,577 835,635" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="635" width="1048" height="111" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="664" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Device scheduling and movement</tspan></text>
+<text x="52" y="691" font-size="16" text-anchor="start"><tspan x="52" dy="0">Dependencies ready → consume Runtime SQE → direct / doorbell execution → UB movement.</tspan><tspan x="52" dy="23">The backend maps JFC completion to Runtime task progress; the milestones are not equivalent.</tspan><tspan x="52" dy="23">Runtime SQ is a queue, SQE an entry; the physical entry count depends on the selected mode.</tspan></text>
+<text x="36" y="809" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Modes and fields follow a pinned implementation, not every product, release, or inter-server path.</tspan></text>
+</svg>

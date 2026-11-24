@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650" role="img" aria-labelledby="title desc">
+<title id="title">From CQ success to synchronization: what was awaited?</title><desc id="desc">Each row answers a different question. One successful CR on B does not finish A&#x27;s stream.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="650" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">From CQ success to synchronization: what was awaited?</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Each row answers a different question. One successful CR on B does not finish A&#x27;s stream.</tspan></text>
+<rect x="36" y="120" width="480" height="109" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="149" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Posting accepted</tspan></text>
+<text x="52" y="176" font-size="16" text-anchor="start"><tspan x="52" dy="0">Request queued</tspan><tspan x="52" dy="23">Execution can still fail</tspan></text>
+<rect x="604" y="120" width="480" height="109" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="620" y="149" font-size="18" text-anchor="start" font-weight="650"><tspan x="620" dy="0">Completion still pending</tspan></text>
+<text x="620" y="176" font-size="16" text-anchor="start"><tspan x="620" dy="0">Track this request</tspan><tspan x="620" dy="23">Do not infer buffer reuse</tspan></text>
+<polyline points="516,174 604,174" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="260" width="480" height="109" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="52" y="289" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">A communication completion</tspan></text>
+<text x="52" y="316" font-size="16" text-anchor="start"><tspan x="52" dy="0">Match request; check success CR</tspan><tspan x="52" dy="23">Apply operation reuse rules</tspan></text>
+<rect x="604" y="260" width="480" height="109" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="620" y="289" font-size="18" text-anchor="start" font-weight="650"><tspan x="620" dy="0">A Runtime / stream wait</tspan></text>
+<text x="620" y="316" font-size="16" text-anchor="start"><tspan x="620" dy="0">Backend tracks task completion</tspan><tspan x="620" dy="23">All work in wait scope completes</tspan></text>
+<polyline points="516,314 604,314" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="400" width="480" height="109" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="429" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">B receive completion</tspan></text>
+<text x="52" y="456" font-size="16" text-anchor="start"><tspan x="52" dy="0">Only for notified operations</tspan><tspan x="52" dy="23">Check identity, length, generation</tspan></text>
+<rect x="604" y="400" width="480" height="109" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="620" y="429" font-size="18" text-anchor="start" font-weight="650"><tspan x="620" dy="0">B ready → consumed → credit</tspan></text>
+<text x="620" y="456" font-size="16" text-anchor="start"><tspan x="620" dy="0">Establish HBM visibility first</tspan><tspan x="620" dy="23">Release target after consumption</tspan></text>
+<polyline points="516,454 604,454" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="609" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">The backend maps communication to Runtime completion; synchronization covers its defined scope.</tspan><tspan x="36" dy="22">Global handoff needs a protocol; consumption acknowledgment requires an explicit ACK / credit.</tspan></text>
+</svg>

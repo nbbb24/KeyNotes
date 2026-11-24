@@ -1,113 +1,103 @@
-# 🧠 DeepSeek-V4 Flash / Pro：mHC、压缩注意力与专家 Shape
+# 🧠 DeepSeek-V4 Flash / Pro: mHC, compressed attention, and expert shapes
 
-V4 Flash 与 Pro 都结合 **四流 mHC、压缩注意力和 MoE**。阅读时分别跟踪层间残差、Attention 分支和全局缓存；三者的 shape 不相同。
+V4 Flash and Pro combine **four-stream mHC, compressed attention, and MoE**. Track inter-layer residuals, attention branches, and global caches separately: they have different shapes.
 
-??? note "配置、实现与适用范围"
+??? note "Pinned configuration, implementation, and scope"
 
-    本页分别绑定官方 [Flash 配置](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/config.json)与 [Pro 配置](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/b5968e9190ef611bbf34a7229255be88a0e937c1/config.json)，模块 shape 由相同快照的[官方参考代码](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/inference/model.py)推导。这里不是 Flash-0731、Pro-0813 或 API 动态别名的规格表；其他 checkpoint 需重新核对。
+    This page separately pins the official [Flash config](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/config.json) and [Pro config](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/b5968e9190ef611bbf34a7229255be88a0e937c1/config.json). Module shapes are derived from the corresponding [official reference code](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/inference/model.py). Flash-0731, Pro-0813, and moving API aliases require separate verification.
 
-## 🗺️ 全局维度
+## 🗺️ Global dimensions
 
-| 项目 | V4-Flash | V4-Pro |
+| Setting | V4-Flash | V4-Pro |
 | --- | ---: | ---: |
-| 主干层数 / 隐藏宽度 H | 43 / 4096 | 61 / 7168 |
-| 词表 | 129280 | 129280 |
-| Q 头数 / 每头宽度 | 64 / 512 | 128 / 512 |
-| NoPE / RoPE 维度 | 448 / 64 | 448 / 64 |
-| Q 低秩维度 | 1024 | 1536 |
-| O 分组数 / 每组低秩维度 | 8 / 1024 | 16 / 1024 |
-| 路由专家 / top-k / 共享专家 | 256 / 6 / 1 | 384 / 6 / 1 |
-| 每专家 FFN 中间宽度 F | 2048 | 3072 |
-| Hash 路由层 | 0、1、2 | 0、1、2 |
-| 滑动窗口 / mHC 扩展数 | 128 / 4 | 128 / 4 |
-| Indexer 头数 × 头宽 / top-k | 64 × 128 / 512 | 64 × 128 / 1024 |
-| 最大位置数 / 额外 MTP 层数 | 1048576 / 1 | 1048576 / 1 |
+| Backbone layers / H | 43 / 4096 | 61 / 7168 |
+| Vocabulary | 129280 | 129280 |
+| Q heads / head width | 64 / 512 | 128 / 512 |
+| NoPE / RoPE widths | 448 / 64 | 448 / 64 |
+| Q rank | 1024 | 1536 |
+| O groups / rank per group | 8 / 1024 | 16 / 1024 |
+| Routed experts / top-k / shared experts | 256 / 6 / 1 | 384 / 6 / 1 |
+| Per-expert FFN width F | 2048 | 3072 |
+| Hash-routed layers | 0, 1, 2 | 0, 1, 2 |
+| Sliding window / mHC expansion | 128 / 4 | 128 / 4 |
+| Index heads × width / top-k | 64 × 128 / 512 | 64 × 128 / 1024 |
+| Maximum positions / extra MTP layers | 1048576 / 1 | 1048576 / 1 |
 
-模型卡的主干参数口径为 Flash 284B、每 Token 激活 13B，Pro 1.6T、激活 49B；这不是把存储的所有专家都算作每步激活。[官方模型卡](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/README.md)与 [V4 报告](https://arxiv.org/abs/2606.19348)给出架构背景。
+The model card reports Flash backbone parameters as 284B with 13B active per token, and Pro as 1.6T with 49B active. Stored experts are not all activated every step. See the [official model card](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/README.md) and [V4 report](https://arxiv.org/abs/2606.19348).
 
-## 🪜 层间残差与分支输入不是同一个 Shape
-
-<figure class="model-figure" markdown="1">
-
-[![DeepSeek mHC 四流残差合并、子层计算与混合回写](../../assets/model-diagrams/zh/mhc.svg)](../../assets/model-diagrams/zh/mhc.svg)
-
-</figure>
-
-Embedding 输出 `[B,S,H]`，进入主干前扩展为 `[B,S,4,H]`。mHC 把四份流混合成 Attention/FFN 的 `[B,S,H]` 输入，子层输出再合回四流残差。
-
-因此层间 shape 分别为 Flash `[B,S,4,4096]`、Pro `[B,S,4,7168]`。
-
-mHC 的 `hc_attn_fn` 和 `hc_ffn_fn` 各为 `[24,4H]`，因为 `(2+4)×4=24`；Flash 为 `[24,16384]`，Pro 为 `[24,28672]`。
-
-混合结果分为 pre/post 各 4 个系数与 4×4 组合矩阵。这些控制维度不改变单专家的输入宽度 H。
-
-## 📐 主注意力的投影
+## 🪜 Residual streams versus sublayer input
 
 <figure class="model-figure" markdown="1">
 
-[![DeepSeek V4 的低秩 Query、窗口与压缩缓存、分组 O 投影](../../assets/model-diagrams/zh/v4-attention.svg)](../../assets/model-diagrams/zh/v4-attention.svg)
+[![DeepSeek mHC residual collapse, sublayer computation, and four-stream merge](../../../../assets/model-diagrams/en/mhc.svg)](../../../../assets/model-diagrams/en/mhc.svg)
 
 </figure>
 
-| 模块 | Flash 权重 `[out,in]` | Pro 权重 `[out,in]` | 逻辑输出 |
+Embedding produces `[B,S,H]`, expanded into `[B,S,4,H]` before the backbone. mHC collapses the streams into `[B,S,H]` for attention/FFN, then merges the result into four-stream residuals. Inter-layer shapes are `[B,S,4,4096]` for Flash and `[B,S,4,7168]` for Pro.
+
+Each `hc_attn_fn` and `hc_ffn_fn` has shape `[24,4H]`, since `(2+4)×4=24`: `[24,16384]` for Flash and `[24,28672]` for Pro. Coefficients split into four pre-weights, four post-weights, and a 4×4 combination matrix. These control dimensions do not change expert input width H.
+
+## 📐 Main attention projections
+
+<figure class="model-figure" markdown="1">
+
+[![DeepSeek V4 low-rank query, window and compressed caches, and grouped O projection](../../../../assets/model-diagrams/en/v4-attention.svg)](../../../../assets/model-diagrams/en/v4-attention.svg)
+
+</figure>
+
+| Module | Flash weight `[out,in]` | Pro weight `[out,in]` | Logical output |
 | --- | --- | --- | --- |
 | `wq_a` | `[1024,4096]` | `[1536,7168]` | `[B,S,Rq]` |
 | `wq_b` | `[32768,1024]` | `[65536,1536]` | `[B,S,A,512]` |
-| `wkv` | `[512,4096]` | `[512,7168]` | 每 Token 一个共享潜在 KV `[B,S,512]` |
-| 分组 `wo_a` 存储视图 | `[8192,4096]` | `[16384,4096]` | `[B,S,G,1024]` |
-| 分组 `wo_a` 运算视图 | `[8,1024,4096]` | `[16,1024,4096]` | 每组只处理自己的 Query 头 |
+| `wkv` | `[512,4096]` | `[512,7168]` | Shared latent KV `[B,S,512]` |
+| Grouped `wo_a`, storage view | `[8192,4096]` | `[16384,4096]` | `[B,S,G,1024]` |
+| Grouped `wo_a`, operation view | `[8,1024,4096]` | `[16,1024,4096]` | Each group handles only its heads |
 | `wo_b` | `[4096,8192]` | `[7168,16384]` | `[B,S,H]` |
-| Embedding / 未绑定 Head | 各 `[129280,4096]` | 各 `[129280,7168]` | `[B,S,H]` / 所需位置 logits |
+| Embedding / untied head | Each `[129280,4096]` | Each `[129280,7168]` | `[B,S,H]` / selected-position logits |
 
-`wo_a` 是分组块对角投影，**不能将其解释为一个任意稠密的 `[G×1024,A×512]` 权重**。每组的输入宽度都是 `A×512/G=4096`。
+`wo_a` is grouped/block-diagonal, **not an arbitrary dense `[G×1024,A×512]` matrix**. Each group's input width is `A×512/G=4096`. Q norm has width Rq, KV norm 512, and layer norms H. Reference attention also inverse-rotates the output's RoPE slice before O projection.
 
-Q norm 宽度为 Rq，KV norm 为 512，层 norm 为 H。参考代码对输出的 RoPE 分量还做逆旋转，再进入 O 投影。
+## 🔄 Layer placement of SWA, CSA, and HCA
 
-## 🔄 SWA、CSA 与 HCA 如何分到每层
+See [compressed attention and indexers](../components/compressed-attention.md) for mechanisms and worked examples. This section maps them onto V4 layer indices and cache shapes.
 
-原理和算例见[压缩注意力与 Indexer](compressed-attention.md)；本节聚焦它们在 V4 中的具体层号和缓存 shape。
+Every layer has a local SWA path. `compress_ratios[l]` determines the extra global path:
 
-每层有局部 SWA 路径；`compress_ratios[l]` 决定是否额外读取全局压缩路径：
-
-| 模型 / 层号 | 比例 | 注意力路径 |
+| Model / layer indices | Ratio | Attention |
 | --- | ---: | --- |
-| Flash 0、1 | 0 | 纯 SWA |
-| Flash 偶数 2–42 | 4 | SWA + CSA；Indexer 选择压缩位置 |
-| Flash 奇数 3–41 | 128 | SWA + HCA；不创建 CSA Indexer |
-| Pro 0、1 及奇数 3–59 | 128 | SWA + HCA |
-| Pro 偶数 2–60 | 4 | SWA + CSA |
+| Flash 0, 1 | 0 | SWA only |
+| Flash even 2–42 | 4 | SWA + CSA; indexer selects compressed positions |
+| Flash odd 3–41 | 128 | SWA + HCA; no CSA indexer |
+| Pro 0, 1 and odd 3–59 | 128 | SWA + HCA |
+| Pro even 2–60 | 4 | SWA + CSA |
 
-Flash 主干为 2 层纯 SWA、21 层 CSA、20 层 HCA；Pro 为 30 层 CSA、31 层 HCA。JSON 的比例数组还包含一个 MTP 项：Flash 第 43 项、Pro 第 61 项为 0，不能将其多算为主干层。
+Flash has 2 pure SWA, 21 CSA, and 20 HCA backbone layers. Pro has 30 CSA and 31 HCA layers. The ratio arrays include an extra MTP entry: Flash index 43 and Pro index 61 are zero and do not add backbone layers.
 
-压缩层的主缓存逻辑容量可以写为 `[B,128+floor(T_max/r),512]`，r=0 则只有窗口 `[B,128,512]`；当前有效压缩长度取决于已完成的压缩组。
+For compressed layers, main logical capacity is `[B,128+floor(T_max/r),512]`; r=0 has only `[B,128,512]`. Effective compressed length follows completed groups. CSA also holds compressed index keys of capacity `[B,floor(T_max/4),128]`. Top-k bounds attended positions rather than deleting all unselected historical state.
 
-CSA 还持有 128 维压缩 Indexer Key，逻辑容量 `[B,floor(T_max/4),128]`。Top-k 限制读取位置，不等于删掉所有未选中的历史缓存。
+The ratio-4 main compressor uses overlapping gated pooling: reference `wkv/wgate` output width is 1024, versus 512 at ratio 128. These are separate modules from local per-layer `wkv`; identical leaf names do not establish shared weights.
 
-比例 4 的主 Compressor 使用带重叠的 gated pooling：参考实现中 `wkv/wgate` 输出宽度 1024；比例 128 时输出宽度为 512。
+## 🧩 Hash-routed layers are still MoE
 
-它们与每层局部 `wkv` 是不同模块，不能只看到相同名称就合并为一个权重。
-
-## 🧩 FFN：第一批 Hash 层仍然是 MoE
-
-| 模块 | Flash | Pro |
+| Module | Flash | Pro |
 | --- | --- | --- |
-| Router 权重 | `[256,4096]` | `[384,7168]` |
-| 每 Token 路由 ID / 权重 | `[N,6]` | `[N,6]` |
-| Token→专家表，层 0–2 | `[129280,6]` 整数表 | 相同 |
-| 单专家 gate / up | 各 `[2048,4096]` | 各 `[3072,7168]` |
-| 单专家 down | `[4096,2048]` | `[7168,3072]` |
-| 共享专家 | 相同 F/H 的一个额外专家 | 相同 |
+| Router weight | `[256,4096]` | `[384,7168]` |
+| Selected IDs / weights | `[N,6]` | `[N,6]` |
+| Token-to-expert table, layers 0–2 | Integer `[129280,6]` | Same |
+| One expert gate / up | Each `[2048,4096]` | Each `[3072,7168]` |
+| One expert down | `[4096,2048]` | `[7168,3072]` |
+| Shared expert | One extra expert with the same F/H | Same |
 
-前三层通过 Token ID 决定路由专家 ID，仍有专家权重计算；不是 GLM 那样的前三层 Dense。后续层按分数选择专家。FP4 专家权重的物理打包 shape、scale 与未量化逻辑权重不同；分组、量化和 TP 还会继续改变实际存储布局。
+The first three layers derive selected expert IDs from token IDs; expert computation still occurs. They are not GLM's three initial dense layers. Later layers select by score. FP4 packing, scales, fusion, and TP alter physical storage beyond these logical shapes.
 
-## 🪜 完整层表与部署边界
+## 🪜 Complete maps and deployment boundaries
 
-下表中的全局 KV 所有者是该层自己；这与 [V4.1 的跨层共享](deepseek-v4-1.md)不同。参考代码的缓存可用 BF16 缓冲区模拟量化数值，不能把其分配大小直接当作生产部署的低精度缓存字节。
+Global KV is owned by its layer here, unlike [V4.1 cross-layer sharing](deepseek-v4-1.md). Reference buffers can retain BF16 storage while simulating quantized values, so their allocated bytes are not a production packed-cache budget.
 
 <!-- BEGIN GENERATED LAYERS deepseek-v4-flash -->
-??? info "DeepSeek-V4-Flash · 43 主干层"
+??? info "DeepSeek-V4-Flash · 43 backbone layers"
 
-    | 层 | 四流残差输入/输出 | Attention | FFN | 全局 KV 来源 / 有效长度 | Indexer 来源 |
+    | Layer | Four-stream residual in/out | Attention | FFN | Global KV owner / valid length | Indexer source |
     | --- | --- | --- | --- | --- | --- |
     | 0 | `[B,S,4,4096]` | SWA | Hash-MoE | — | — |
     | 1 | `[B,S,4,4096]` | SWA | Hash-MoE | — | — |
@@ -155,9 +145,9 @@ CSA 还持有 128 维压缩 Indexer Key，逻辑容量 `[B,floor(T_max/4),128]`�
 <!-- END GENERATED LAYERS deepseek-v4-flash -->
 
 <!-- BEGIN GENERATED LAYERS deepseek-v4-pro -->
-??? info "DeepSeek-V4-Pro · 61 主干层"
+??? info "DeepSeek-V4-Pro · 61 backbone layers"
 
-    | 层 | 四流残差输入/输出 | Attention | FFN | 全局 KV 来源 / 有效长度 | Indexer 来源 |
+    | Layer | Four-stream residual in/out | Attention | FFN | Global KV owner / valid length | Indexer source |
     | --- | --- | --- | --- | --- | --- |
     | 0 | `[B,S,4,7168]` | SWA + HCA, r=128 | Hash-MoE | own L0: `[B,floor(T/128),512]` | — |
     | 1 | `[B,S,4,7168]` | SWA + HCA, r=128 | Hash-MoE | own L1: `[B,floor(T/128),512]` | — |
@@ -222,4 +212,4 @@ CSA 还持有 128 维压缩 Indexer Key，逻辑容量 `[B,floor(T_max/4),128]`�
     | 60 | `[B,S,4,7168]` | SWA + CSA, r=4 | MoE | own L60: `[B,floor(T/4),512]` | own L60 |
 <!-- END GENERATED LAYERS deepseek-v4-pro -->
 
-做 PP 时跨 Stage 的状态还可能含四流残差；做 TP 时要核对头组 G 的切分；做 EP 时专家是全局还是本地集合另算。参见[并行策略](../ml/llm/inference/parallelism.md)与[逐层传输](../ml/llm/inference/layerwise-inference.md)。
+PP boundaries can carry four-stream residuals. TP must respect head groups, while EP distinguishes global and local expert sets. See [parallelism](../inference/parallelism.md) and [layerwise transfer](../inference/layerwise-inference.md).

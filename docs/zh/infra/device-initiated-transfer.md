@@ -4,6 +4,8 @@
 
 队列术语先看 [WQE、SQE、CQE 与 Doorbell](work-queues.md)。
 
+需要具体追踪 UB 拷贝的驱动返回值、Jetty ID 和 Runtime SQE 时，阅读[Jetty 与 Runtime 拷贝](jetty-runtime-copy.md)：其中对照源码说明 Direct WQE 与 Doorbell 两条路径。
+
 ## 🧩 三种提交路径
 
 | 模式 | 谁提出搬运请求 | 谁向通信引擎提交 | 载荷是否可以设备直达 |

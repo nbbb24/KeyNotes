@@ -1,12 +1,12 @@
 # 🧬 模型结构：从官方配置读到每层 Shape
 
-本栏是模型结构参考，与 [LLM 模型家族导读](../ml/llm/index.md)互补。每篇按 **checkpoint → 全局维度 → 逐层分工 → 模块权重与激活 → KV Cache → 并行部署边界**展开。
+本栏是模型结构参考，与 [LLM 模型家族导读](../index.md)互补。每篇按 **checkpoint → 全局维度 → 逐层分工 → 模块权重与激活 → KV Cache → 并行部署边界**展开。
 
 数字以官方配置和参考代码为依据，shape 计算是据此作出的推导，不是设备实测。
 
 <figure class="model-figure" markdown="1">
 
-[![五个主体型号的计算与缓存结构总览](../../assets/model-diagrams/zh/model-map.svg)](../../assets/model-diagrams/zh/model-map.svg)
+[![五个主体型号的计算与缓存结构总览](../../../../assets/model-diagrams/zh/model-map.svg)](../../../../assets/model-diagrams/zh/model-map.svg)
 
 <figcaption markdown="span">图：先分清模型深度、计算宽度与缓存所有权。点击图可打开原始矢量图。</figcaption>
 
@@ -14,7 +14,7 @@
 
 ## 🗺️ 型号与阅读入口
 
-还不熟悉 SWA、CSA、HCA 或 Indexer 的分工时，先读[压缩注意力与 Indexer](compressed-attention.md)，再对照下面的型号配置。
+还不熟悉 SWA、CSA、HCA 或 Indexer 的分工时，先读[压缩注意力与 Indexer](../components/compressed-attention.md)，再对照下面的型号配置。
 
 | 模型 | 主干层数 | 隐藏宽度 H | 主注意力 Q 头数 × 每头宽度 | 路由专家 / 每 Token 选中 | 结构入口 |
 | --- | ---: | ---: | --- | --- | --- |
@@ -34,14 +34,14 @@ GLM 的主注意力 Q/K 头宽为 `qk_nope_head_dim + qk_rope_head_dim = 192 + 6
 
 | 官方仓库 | 固定 revision | 配置快照 |
 | --- | --- | --- |
-| `zai-org/GLM-5.1` | `26e1bd6e011f` | [JSON](../../assets/model-specs/glm-5-1.config.json) |
-| `zai-org/GLM-5.2` | `cf457fa734ab` | [JSON](../../assets/model-specs/glm-5-2.config.json) |
-| `deepseek-ai/DeepSeek-V4-Flash` | `60d8d70770c6` | [JSON](../../assets/model-specs/deepseek-v4-flash.config.json) |
-| `deepseek-ai/DeepSeek-V4-Pro` | `b5968e9190ef` | [JSON](../../assets/model-specs/deepseek-v4-pro.config.json) |
-| `deepseek-ai/DeepSeek-V4.1-Flash` | `314113f8a7da` | [JSON](../../assets/model-specs/deepseek-v4-1-flash.config.json) |
-| `deepseek-ai/DeepSeek-V4.1-Flash-1017` | `08c8657f0229` | [JSON](../../assets/model-specs/deepseek-v4-1-flash-1017.config.json) |
+| `zai-org/GLM-5.1` | `26e1bd6e011f` | [JSON](../../../../assets/model-specs/glm-5-1.config.json) |
+| `zai-org/GLM-5.2` | `cf457fa734ab` | [JSON](../../../../assets/model-specs/glm-5-2.config.json) |
+| `deepseek-ai/DeepSeek-V4-Flash` | `60d8d70770c6` | [JSON](../../../../assets/model-specs/deepseek-v4-flash.config.json) |
+| `deepseek-ai/DeepSeek-V4-Pro` | `b5968e9190ef` | [JSON](../../../../assets/model-specs/deepseek-v4-pro.config.json) |
+| `deepseek-ai/DeepSeek-V4.1-Flash` | `314113f8a7da` | [JSON](../../../../assets/model-specs/deepseek-v4-1-flash.config.json) |
+| `deepseek-ai/DeepSeek-V4.1-Flash-1017` | `08c8657f0229` | [JSON](../../../../assets/model-specs/deepseek-v4-1-flash-1017.config.json) |
 
-完整 revision、配置 SHA-256 与官方实现链接保存在[来源清单](../../assets/model-specs/sources.json)。配置快照分别保留上游 [GLM MIT 许可](../../assets/model-specs/glm.LICENSE.txt)和 [DeepSeek MIT 许可](../../assets/model-specs/deepseek.LICENSE.txt)。
+完整 revision、配置 SHA-256 与官方实现链接保存在[来源清单](../../../../assets/model-specs/sources.json)。配置快照分别保留上游 [GLM MIT 许可](../../../../assets/model-specs/glm.LICENSE.txt)和 [DeepSeek MIT 许可](../../../../assets/model-specs/deepseek.LICENSE.txt)。
 
 V4.1 Flash 与 1017 在本次快照中的配置相同，这不表示权重、后训练结果或行为相同。
 
@@ -55,7 +55,7 @@ V4.1 Flash 与 1017 在本次快照中的配置相同，这不表示权重、后
 
 <figure class="model-figure" markdown="1">
 
-[![300 个主干层的 Dense、MoE、Indexer 与压缩注意力分布](../../assets/model-diagrams/zh/layer-map.svg)](../../assets/model-diagrams/zh/layer-map.svg)
+[![300 个主干层的 Dense、MoE、Indexer 与压缩注意力分布](../../../../assets/model-diagrams/zh/layer-map.svg)](../../../../assets/model-diagrams/zh/layer-map.svg)
 
 <figcaption markdown="span">图：一个小格对应一层；各行分类不同，图例与行标签一起阅读。</figcaption>
 
@@ -69,4 +69,4 @@ V4.1 Flash 与 1017 在本次快照中的配置相同，这不表示权重、后
 
 该脚本只做 shape 与层表计算，不下载或加载模型权重。
 
-将结构映射到设备时，继续阅读[TP / PP / DP / EP / CP](../ml/llm/inference/parallelism.md)、[逐层推理与传输](../ml/llm/inference/layerwise-inference.md)和[设备提交搬运任务](../infra/device-initiated-transfer.md)。
+将结构映射到设备时，继续阅读[TP / PP / DP / EP / CP](../inference/parallelism.md)、[逐层推理与传输](../inference/layerwise-inference.md)和[设备提交搬运任务](../../../infra/device-initiated-transfer.md)。

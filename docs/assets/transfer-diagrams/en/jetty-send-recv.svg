@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="820" viewBox="0 0 1120 820" role="img" aria-labelledby="title desc">
+<title id="title">URMA Send/Recv: JFS on A to JFR on B</title><desc id="desc">One 4 KiB SEND; resources already exist and IDs are illustrative. Ordinary WRITE differs.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="820" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">URMA Send/Recv: JFS on A to JFR on B</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">One 4 KiB SEND; resources already exist and IDs are illustrative. Ordinary WRITE differs.</tspan></text>
+<rect x="36" y="117" width="440" height="141" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="146" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">A: Jetty / send side JFS</tspan></text>
+<text x="52" y="173" font-size="16" text-anchor="start"><tspan x="52" dy="0">local ID = 17; user_ctx = 42</tspan><tspan x="52" dy="23">Send WR: SEND, src, length, target handle</tspan><tspan x="52" dy="23">Provider encodes WQE in SQ</tspan></text>
+<rect x="644" y="117" width="440" height="141" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="660" y="146" font-size="18" text-anchor="start" font-weight="650"><tspan x="660" dy="0">B: Jetty / receive side JFR</tspan></text>
+<text x="660" y="173" font-size="16" text-anchor="start"><tspan x="660" dy="0">local ID = 29; user_ctx = 900</tspan><tspan x="660" dy="23">Prepost receive: dst, capacity, segment</tspan><tspan x="660" dy="23">Provider publishes receive descriptor</tspan></text>
+<polyline points="476,185 644,185" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="560" y="166" font-size="15" text-anchor="middle"><tspan x="560" dy="0">Imported peer</tspan></text>
+<rect x="36" y="312" width="440" height="103" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="341" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Source payload: src / 4096 bytes</tspan></text>
+<text x="52" y="368" font-size="16" text-anchor="start"><tspan x="52" dy="0">Hardware reads after producer readiness</tspan><tspan x="52" dy="23">The WQE is not the 4096-byte payload</tspan></text>
+<rect x="644" y="312" width="440" height="103" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="660" y="341" font-size="18" text-anchor="start" font-weight="650"><tspan x="660" dy="0">Destination: B preposted dst</tspan></text>
+<text x="660" y="368" font-size="16" text-anchor="start"><tspan x="660" dy="0">Hardware places data using receive WR</tspan><tspan x="660" dy="23">SEND does not select a remote dst pointer</tspan></text>
+<polyline points="256,258 256,312" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="864,258 864,312" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="476,363 644,363" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="560" y="344" font-size="15" text-anchor="middle"><tspan x="560" dy="0">UB transfer</tspan></text>
+<rect x="36" y="471" width="440" height="125" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="52" y="500" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">A: associated JFC / CQ (e.g. ID=3)</tspan></text>
+<text x="52" y="527" font-size="16" text-anchor="start"><tspan x="52" dy="0">Hardware writes send CQE per policy</tspan><tspan x="52" dy="23">poll_jfc → CR: status, user_ctx=42</tspan><tspan x="52" dy="23">Check success before source reuse</tspan></text>
+<rect x="644" y="471" width="440" height="125" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="660" y="500" font-size="18" text-anchor="start" font-weight="650"><tspan x="660" dy="0">B: associated JFC / CQ (e.g. ID=8)</tspan></text>
+<text x="660" y="527" font-size="16" text-anchor="start"><tspan x="660" dy="0">Hardware writes a receive CQE, not a task</tspan><tspan x="660" dy="23">poll_jfc → CR: status, user_ctx=900</tspan><tspan x="660" dy="23">Validate length / generation and visibility</tspan></text>
+<polyline points="256,415 256,471" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="864,415 864,471" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="650" width="1048" height="94" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="679" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Upper-layer synchronization and handoff</tspan></text>
+<text x="52" y="706" font-size="16" text-anchor="start"><tspan x="52" dy="0">A send completion, B receive completion, stream wait, and B consumption are distinct evidence.</tspan><tspan x="52" dy="23">Return target-slot credit after consumption; each user_ctx comes from its own local WR.</tspan></text>
+<text x="36" y="779" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Use Jetty or standalone JFS/JFR resources. Dispatch records by request identity when a JFC is shared.</tspan></text>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="850" viewBox="0 0 1120 850" role="img" aria-labelledby="title desc">
+<title id="title">One 64 KiB Write with Immediate: post to consume</title><desc id="desc">RC, non-inline, registered host memory; the two applications poll independently.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="850" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">One 64 KiB Write with Immediate: post to consume</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">RC, non-inline, registered host memory; the two applications poll independently.</tspan></text>
+<rect x="15" y="103" width="250" height="48" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="31" y="132" font-size="18" text-anchor="start" font-weight="650"><tspan x="31" dy="0">App A / SQ / CQ</tspan></text>
+<path d="M140 154 V665" stroke="#bdc9d9" stroke-dasharray="5 5"/>
+<rect x="285" y="103" width="250" height="48" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="301" y="132" font-size="18" text-anchor="start" font-weight="650"><tspan x="301" dy="0">NIC A</tspan></text>
+<path d="M410 154 V665" stroke="#bdc9d9" stroke-dasharray="5 5"/>
+<rect x="585" y="103" width="250" height="48" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="601" y="132" font-size="18" text-anchor="start" font-weight="650"><tspan x="601" dy="0">NIC B</tspan></text>
+<path d="M710 154 V665" stroke="#bdc9d9" stroke-dasharray="5 5"/>
+<rect x="855" y="103" width="250" height="48" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="871" y="132" font-size="18" text-anchor="start" font-weight="650"><tspan x="871" dy="0">App B / RQ / CQ</tspan></text>
+<path d="M980 154 V665" stroke="#bdc9d9" stroke-dasharray="5 5"/>
+<polyline points="980,197 710,197" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="845.0" y="185" font-size="15" text-anchor="middle"><tspan x="845.0" dy="0">1. Post receive WR → RQ WQE</tspan></text>
+<polyline points="980,248 140,248" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="560.0" y="236" font-size="15" text-anchor="middle"><tspan x="560.0" dy="0">2. Control channel: address, rkey, length; receiver ready</tspan></text>
+<polyline points="140,312 410,312" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="275.0" y="300" font-size="15" text-anchor="middle"><tspan x="275.0" dy="0">3. Source ready; WR → SQ WQE → doorbell</tspan></text>
+<rect x="283" y="334" width="254" height="59" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="299" y="363" font-size="18" text-anchor="start" font-weight="650"><tspan x="299" dy="0">4. DMA-read source</tspan></text>
+<polyline points="410,434 710,434" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="560.0" y="422" font-size="15" text-anchor="middle"><tspan x="560.0" dy="0">5. Packetized 64 KiB payload</tspan></text>
+<polyline points="710,500 980,500" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="845.0" y="488" font-size="15" text-anchor="middle"><tspan x="845.0" dy="0">6. DMA to target; receive CQE</tspan></text>
+<polyline points="710,559 410,559" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<text x="560.0" y="547" font-size="15" text-anchor="middle"><tspan x="560.0" dy="0">7. RC transport ACK</tspan></text>
+<polyline points="410,620 140,620" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="275.0" y="608" font-size="15" text-anchor="middle"><tspan x="275.0" dy="0">8. Local send CQE</tspan></text>
+<rect x="24" y="684" width="510" height="94" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="40" y="713" font-size="18" text-anchor="start" font-weight="650"><tspan x="40" dy="0">A: poll → check success WC → reuse source</tspan></text>
+<text x="40" y="740" font-size="16" text-anchor="start"><tspan x="40" dy="0">wr_id=42; does not establish that B finished computing.</tspan></text>
+<rect x="560" y="684" width="536" height="94" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="576" y="713" font-size="18" text-anchor="start" font-weight="650"><tspan x="576" dy="0">B: poll → check generation → consume → credit</tspan></text>
+<text x="576" y="740" font-size="16" text-anchor="start"><tspan x="576" dy="0">wr_id=900; imm=7; credit uses an extra application protocol.</tspan></text>
+<text x="36" y="809" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Successful path; WRs, WQEs, packets, and CQEs are not one-to-one. GPU targets need device visibility.</tspan></text>
+</svg>

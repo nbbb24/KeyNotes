@@ -30,7 +30,7 @@ The diagram is a logical protocol. Some backends provide receiver-side completio
 
 ## ⚖️ Compare the physical paths
 
-Expand the submission step: the host can submit after a producer event, a device can publish a request to a CPU proxy, or a supported backend can submit directly from device code. Evaluate control and payload paths separately; CPU submission does not require D2H staging. See [device initiation](device-initiated-transfer.md) and [WQEs, SQEs, CQEs, and doorbells](work-queues.md).
+Expand the submission step: the host can submit after a producer event, a device can publish a request to a CPU proxy, or a supported backend can submit directly from device code. Evaluate control and payload paths separately; CPU submission does not require D2H staging. See [device initiation](device-initiated-transfer.md). For a concrete queue walkthrough, follow [one 64 KiB Write with Immediate](work-queues.md): B posts receive resources, A submits, NICs move payload, each side polls, and B consumes data before returning credit.
 
 A host-staged route is `HBM A → DRAM A → network → DRAM B → HBM B`. It can reuse host networking but adds copies, buffers, and synchronization. A supported direct route is `HBM A → communication engine/NIC → network → HBM B`.
 

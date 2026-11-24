@@ -31,7 +31,7 @@
 
 <figure class="model-figure" markdown="1">
 
-[![GLM 投影、Q 重排与量化权重打包的 shape 流程](../../assets/model-diagrams/zh/shape-flow.svg)](../../assets/model-diagrams/zh/shape-flow.svg)
+[![GLM 投影、Q 重排与量化权重打包的 shape 流程](../../../../assets/model-diagrams/zh/shape-flow.svg)](../../../../assets/model-diagrams/zh/shape-flow.svg)
 
 </figure>
 
@@ -50,7 +50,7 @@ GLM 页的层间隐藏状态为 `[B,S,6144]`。DeepSeek V4/V4.1 的 mHC 维护 `
 
 `hc_mult=4` 没有把每个专家的输入矩阵改为 `4H`，也不表示每个子层执行四次独立 Transformer。
 
-MLA、单共享潜在 KV、滑动窗口和跨层缓存共享，都不能直接套用 `2 × 层数 × KV头数 × 头宽 × T`。必须先确认保留了什么、由哪一层拥有，以及其他层是否引用同一缓冲区。参见[KV Cache 基础](../ml/llm/inference/kv-cache.md)。
+MLA、单共享潜在 KV、滑动窗口和跨层缓存共享，都不能直接套用 `2 × 层数 × KV头数 × 头宽 × T`。必须先确认保留了什么、由哪一层拥有，以及其他层是否引用同一缓冲区。参见[KV Cache 基础](../inference/kv-cache.md)。
 
 ## 🔄 从全局 Shape 到每卡 Shape
 
@@ -58,7 +58,7 @@ TP 按列切分一个投影时，逻辑权重的 `out` 维可能分片；按行�
 
 例如 GLM `q_b` 做 TP=4 且按 64 个头均分，可得到每卡 `[4096,2048]` 权重和 `[B,S,16,256]` Q；这不授权把 `kv_a`、所有 norm 和所有缓存也除以 4。
 
-DeepSeek 分组 O 投影还需满足头组与 TP 的兼容条件。具体检查[并行组](../ml/llm/inference/parallelism.md)和所用后端。
+DeepSeek 分组 O 投影还需满足头组与 TP 的兼容条件。具体检查[并行组](../inference/parallelism.md)和所用后端。
 
 参数量为权重维度乘积，而存储字节还依赖 dtype、scale、复制和分片。例如 `[2304,5120]` 有 11,796,480 个逻辑参数；FP4 载荷下限为 5,898,240 字节，实际还需 scale 等开销。
 

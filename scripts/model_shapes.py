@@ -132,7 +132,7 @@ def main():
     mismatches = []
     for lang in ('en', 'zh'):
         for slug, filename in PAGES.items():
-            page = ROOT / 'docs' / lang / 'models' / filename
+            page = ROOT / 'docs' / lang / 'ml/llm/model-structures' / filename
             raw = page.read_text(encoding='utf-8')
             begin = f'<!-- BEGIN GENERATED LAYERS {slug} -->'
             end = f'<!-- END GENERATED LAYERS {slug} -->'

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="670" viewBox="0 0 1120 670" role="img" aria-labelledby="title desc">
+<title id="title">Where SQEs fit: device scheduling and NIC work queues</title><desc id="desc">The transaction uses host verbs. This map shows a device-scheduled RDMA backend.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="670" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">Where SQEs fit: device scheduling and NIC work queues</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">The transaction uses host verbs. This map shows a device-scheduled RDMA backend.</tspan></text>
+<rect x="36" y="119" width="320" height="106" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="148" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Framework / communication op</tspan></text>
+<text x="52" y="175" font-size="16" text-anchor="start"><tspan x="52" dy="0">Request, stream dependencies, chunks</tspan><tspan x="52" dy="23">Example: transfer one layer of KV</tspan></text>
+<rect x="400" y="119" width="320" height="106" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="416" y="148" font-size="18" text-anchor="start" font-weight="650"><tspan x="416" dy="0">Runtime / device task queue</tspan></text>
+<text x="416" y="175" font-size="16" text-anchor="start"><tspan x="416" dy="0">Task descriptor: SQE</tspan><tspan x="416" dy="23">Scheduling and execution dependencies</tspan></text>
+<rect x="764" y="119" width="320" height="106" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="780" y="148" font-size="18" text-anchor="start" font-weight="650"><tspan x="780" dy="0">Device scheduler / execution</tspan></text>
+<text x="780" y="175" font-size="16" text-anchor="start"><tspan x="780" dy="0">Wait for producer; execute comm work</tspan><tspan x="780" dy="23">Product- and mode-specific</tspan></text>
+<polyline points="356,173 400,173" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="720,173 764,173" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="924,225 924,294" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="764" y="294" width="320" height="106" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="780" y="323" font-size="18" text-anchor="start" font-weight="650"><tspan x="780" dy="0">RDMA communication backend</tspan></text>
+<text x="780" y="350" font-size="16" text-anchor="start"><tspan x="780" dy="0">Encode WQEs in NIC SQ</tspan><tspan x="780" dy="23">Publish records and notify NIC</tspan></text>
+<rect x="400" y="294" width="320" height="106" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="416" y="323" font-size="18" text-anchor="start" font-weight="650"><tspan x="416" dy="0">NIC / DMA engine</tspan></text>
+<text x="416" y="350" font-size="16" text-anchor="start"><tspan x="416" dy="0">WQE → source → network → target</tspan><tspan x="416" dy="23">Write completion into associated CQ</tspan></text>
+<rect x="36" y="294" width="320" height="106" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="323" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Communication / task progress</tspan></text>
+<text x="52" y="350" font-size="16" text-anchor="start"><tspan x="52" dy="0">Check CQE / WC and notifications</tspan><tspan x="52" dy="23">Release subsequent dependent work</tspan></text>
+<polyline points="764,347 720,347" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="400,347 356,347" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="443" width="1048" height="133" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="472" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Scope of this map</tspan></text>
+<text x="52" y="499" font-size="16" text-anchor="start"><tspan x="52" dy="0">An operator can expand into multiple tasks and WQEs; do not assume a 1:1:1 mapping.</tspan><tspan x="52" dy="23">GPU-direct submission can enter NIC queues from a kernel; host verbs use a provider.</tspan><tspan x="52" dy="23">Label the subsystem: a device scheduling SQ and an RDMA send queue are distinct.</tspan></text>
+<text x="36" y="629" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">A responsibility map, not a fixed internal call chain for every CANN / HCCL release.</tspan></text>
+</svg>

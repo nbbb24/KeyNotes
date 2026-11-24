@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | 模型怎样从数据中学习？ | [机器学习基础](ml/mle/index.md) | 选择损失函数，正确划分数据，评价泛化能力 |
 | 语言模型怎样工作？ | [LLM 学习路线](ml/llm/index.md) | 跟踪词元如何经过注意力、训练、适配和生成 |
-| GLM、DeepSeek 每一层的权重和缓存 shape 是什么？ | [模型结构专栏](models/index.md) | 对照官方配置查层号、投影、专家、共享 KV 和视觉维度 |
+| GLM、DeepSeek 每一层的权重和缓存 shape 是什么？ | [模型结构专栏](ml/llm/model-structures/index.md) | 对照官方配置查层号、投影、专家、共享 KV 和视觉维度 |
 | 图像、语音和语言怎样联系起来？ | [多模态基础](ml/llm/multimodal/foundations.md) | 区分表征、对齐、融合和评价 |
 | 为什么加速器一直在等数据？ | [Infra 学习路线](infra/index.md) | 追踪内存、数据搬运、互联和完成同步 |
 | 怎样准备可信的数据集？ | [SQL](ml/sql.md) 与 [Pandas](ml/pandas.md) | 保持每行数据的含义，处理缺失值，避免连接错误 |

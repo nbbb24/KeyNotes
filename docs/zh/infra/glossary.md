@@ -54,6 +54,8 @@
 | SQ / RQ / QP | RDMA 发送队列 / 接收队列 / 关联队列与传输状态的 Queue Pair |
 | SQE | Submission Queue Entry，或具体系统中的 Send Queue Entry；先确认所属队列 |
 | CQ / CQE / WC | 完成队列 / 硬件完成项 / verbs 返回的软件完成结果 |
+| Jetty / JFS / JFR / JFC | URMA 端点 / 发送资源 / 接收资源 / 完成资源；关联的 SQ、RQ、CQ 与 Runtime 调度队列分层 |
+| CR | URMA Completion Record，`urma_poll_jfc` 返回的软件完成记录，需匹配请求并检查状态 |
 | Doorbell / DBR | 向硬件发布新工作的门铃 / 部分实现使用的内存门铃记录 |
 | Device-initiated / Proxy | 设备提出通信请求 / 代理执行提交；与载荷是否直达是不同维度 |
 | PD 分离 | 输入 Prefill 与逐步 Decode 分别由不同 Worker 执行，并交接 KV Cache |
@@ -61,6 +63,8 @@
 AI Core 文档中的 UB 还可能表示 Unified Buffer。同一个缩写，不代表片上缓冲区就是 Unified Bus 互联。
 
 队列关系与完成边界见[工作队列与门铃](work-queues.md)，提交方与实际搬运方的区别见[设备发起传输](device-initiated-transfer.md)。模型层的 TP、PP、DP、EP、CP 则见[推理并行策略](../ml/llm/inference/parallelism.md)。
+
+URMA 双端资源与 CANN Runtime 的 Direct WQE / Doorbell 布局，见[Jetty 与 Runtime 拷贝](jetty-runtime-copy.md)。
 
 ## 📊 网络平面与性能
 

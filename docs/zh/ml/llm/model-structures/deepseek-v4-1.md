@@ -40,7 +40,7 @@ flowchart LR
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 mHC 的四流残差和单流 Attention、FFN 输入](../../assets/model-diagrams/zh/mhc.svg)](../../assets/model-diagrams/zh/mhc.svg)
+[![V4.1 mHC 的四流残差和单流 Attention、FFN 输入](../../../../assets/model-diagrams/zh/mhc.svg)](../../../../assets/model-diagrams/zh/mhc.svg)
 
 </figure>
 
@@ -64,7 +64,7 @@ flowchart LR
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 的四个全局 KV 所有者、使用层范围和 Indexer 重新选择层](../../assets/model-diagrams/zh/v41-kv.svg)](../../assets/model-diagrams/zh/v41-kv.svg)
+[![V4.1 的四个全局 KV 所有者、使用层范围和 Indexer 重新选择层](../../../../assets/model-diagrams/zh/v41-kv.svg)](../../../../assets/model-diagrams/zh/v41-kv.svg)
 
 <figcaption markdown="span">图：层 20–39 使用同一组全局 KV；24、28、32、36 仅重新选择位置。每层独立 SWA 窗口另行保留。</figcaption>
 
@@ -88,7 +88,7 @@ Indexer Query 为 `[B,S,32,128]`，`wq_b=[4096,1280]`；所有者将 512 维潜�
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 全局主 KV 的 720 字节与索引 Key 的 170 字节拆解](../../assets/model-diagrams/zh/v41-cache.svg)](../../assets/model-diagrams/zh/v41-cache.svg)
+[![V4.1 全局主 KV 的 720 字节与索引 Key 的 170 字节拆解](../../../../assets/model-diagrams/zh/v41-cache.svg)](../../../../assets/model-diagrams/zh/v41-cache.svg)
 
 </figure>
 
@@ -109,7 +109,7 @@ SWA bounded replay 可以重建近期窗口，是否保留、卸载或重放由�
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 Engram 从 n-gram 哈希、24 路查表到 Key、Value 和四流门控](../../assets/model-diagrams/zh/v41-engram.svg)](../../assets/model-diagrams/zh/v41-engram.svg)
+[![V4.1 Engram 从 n-gram 哈希、24 路查表到 Key、Value 和四流门控](../../../../assets/model-diagrams/zh/v41-engram.svg)](../../../../assets/model-diagrams/zh/v41-engram.svg)
 
 </figure>
 
@@ -148,7 +148,7 @@ SWA bounded replay 可以重建近期窗口，是否保留、卸载或重放由�
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 视觉 Patch、32 层 ViT、3×3 下采样和语言 Aligner 的 shape](../../assets/model-diagrams/zh/v41-vision.svg)](../../assets/model-diagrams/zh/v41-vision.svg)
+[![V4.1 视觉 Patch、32 层 ViT、3×3 下采样和语言 Aligner 的 shape](../../../../assets/model-diagrams/zh/v41-vision.svg)](../../../../assets/model-diagrams/zh/v41-vision.svg)
 
 </figure>
 
@@ -171,7 +171,7 @@ ViT 使用图像内双向 Attention 与 2D RoPE；视觉 Embedding 替换语言�
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 DSpark 的目标层、草稿块、三层草稿网络和主干验证](../../assets/model-diagrams/zh/v41-dspark.svg)](../../assets/model-diagrams/zh/v41-dspark.svg)
+[![V4.1 DSpark 的目标层、草稿块、三层草稿网络和主干验证](../../../../assets/model-diagrams/zh/v41-dspark.svg)](../../../../assets/model-diagrams/zh/v41-dspark.svg)
 
 </figure>
 
@@ -193,7 +193,7 @@ ViT 使用图像内双向 Attention 与 2D RoPE；视觉 Embedding 替换语言�
 
 4. 产生 `[B,5,129280]` 草稿 logits，再执行验证与接受策略。
 
-`compress_ratios` 的末 3 个 0 属于预测层，不计入 40 层主干。**实际接受 Token 数**由验证决定，不能用草稿深度或块大小代替。参见[推测解码](../ml/llm/inference/multi-token-prediction.md)。
+`compress_ratios` 的末 3 个 0 属于预测层，不计入 40 层主干。**实际接受 Token 数**由验证决定，不能用草稿深度或块大小代替。参见[推测解码](../inference/multi-token-prediction.md)。
 
 ## 🪜 完整文本主干层表
 
@@ -244,4 +244,4 @@ ViT 使用图像内双向 Attention 与 2D RoPE；视觉 Embedding 替换语言�
     | 39 | `[B,S,4,5120]` | CSA2 Reuse, r=1 | MoE | L20: `[B,T,512]` | L36; K from L20 |
 <!-- END GENERATED LAYERS deepseek-v4-1-flash -->
 
-将此模型做 PP 或逐层 KV 卸载时，必须保留缓存所有者与引用关系：一个 Stage 不能把“本层没有生成全局 KV”解释成“不需要历史 KV”。参见[并行策略](../ml/llm/inference/parallelism.md)和[逐层生命周期](../ml/llm/inference/layerwise-inference.md)。
+将此模型做 PP 或逐层 KV 卸载时，必须保留缓存所有者与引用关系：一个 Stage 不能把“本层没有生成全局 KV”解释成“不需要历史 KV”。参见[并行策略](../inference/parallelism.md)和[逐层生命周期](../inference/layerwise-inference.md)。

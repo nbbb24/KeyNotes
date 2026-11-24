@@ -21,3 +21,4 @@ jobs:
       - run: python scripts/verify_examples.py
       - run: python scripts/model_shapes.py --check
       - run: python scripts/model_diagrams.py --check
+      - run: python scripts/transfer_diagrams.py --check

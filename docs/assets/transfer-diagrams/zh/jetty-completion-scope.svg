@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650" role="img" aria-labelledby="title desc">
+<title id="title">“CQ OK”到“同步成功”：到底等待哪件事</title><desc id="desc">每一行回答不同问题；B 的一个成功 CR 不会自动完成 A 的整个 Stream。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="650" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">“CQ OK”到“同步成功”：到底等待哪件事</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">每一行回答不同问题；B 的一个成功 CR 不会自动完成 A 的整个 Stream。</tspan></text>
+<rect x="36" y="120" width="480" height="109" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="149" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">提交成功</tspan></text>
+<text x="52" y="176" font-size="16" text-anchor="start"><tspan x="52" dy="0">请求进入队列</tspan><tspan x="52" dy="23">仍可能执行失败</tspan></text>
+<rect x="604" y="120" width="480" height="109" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="620" y="149" font-size="18" text-anchor="start" font-weight="650"><tspan x="620" dy="0">完成条件尚未满足</tspan></text>
+<text x="620" y="176" font-size="16" text-anchor="start"><tspan x="620" dy="0">继续跟踪本次请求</tspan><tspan x="620" dy="23">不能据此复用缓冲区</tspan></text>
+<polyline points="516,174 604,174" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="260" width="480" height="109" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="52" y="289" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">A 的通信完成</tspan></text>
+<text x="52" y="316" font-size="16" text-anchor="start"><tspan x="52" dy="0">匹配请求，检查成功 CR</tspan><tspan x="52" dy="23">按操作语义判断源可复用</tspan></text>
+<rect x="604" y="260" width="480" height="109" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="620" y="289" font-size="18" text-anchor="start" font-weight="650"><tspan x="620" dy="0">A 的 Runtime / Stream 等待</tspan></text>
+<text x="620" y="316" font-size="16" text-anchor="start"><tspan x="620" dy="0">后端接通任务完成与依赖</tspan><tspan x="620" dy="23">等待范围内的任务全部满足</tspan></text>
+<polyline points="516,314 604,314" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="400" width="480" height="109" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="429" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">B 的接收完成</tspan></text>
+<text x="52" y="456" font-size="16" text-anchor="start"><tspan x="52" dy="0">只用于有接收通知的操作</tspan><tspan x="52" dy="23">校验身份、长度与批次</tspan></text>
+<rect x="604" y="400" width="480" height="109" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="620" y="429" font-size="18" text-anchor="start" font-weight="650"><tspan x="620" dy="0">B 可消费 → 消费完 → 归还</tspan></text>
+<text x="620" y="456" font-size="16" text-anchor="start"><tspan x="620" dy="0">先满足 HBM 可见性与依赖</tspan><tspan x="620" dy="23">消费后才归还目标槽位</tspan></text>
+<polyline points="516,454 604,454" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="609" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">通信完成与 Runtime 完成需按后端映射；同步只确认 API 约定的对象、批次、依赖和范围。</tspan><tspan x="36" dy="22">全局交接需要应用协议；如果还要确认消费结束，必须明确等待消费后的 ACK / credit。</tspan></text>
+</svg>

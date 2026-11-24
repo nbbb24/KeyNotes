@@ -38,7 +38,7 @@ flowchart LR
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 four-stream mHC residuals and single-stream attention and FFN inputs](../../assets/model-diagrams/en/mhc.svg)](../../assets/model-diagrams/en/mhc.svg)
+[![V4.1 four-stream mHC residuals and single-stream attention and FFN inputs](../../../../assets/model-diagrams/en/mhc.svg)](../../../../assets/model-diagrams/en/mhc.svg)
 
 </figure>
 
@@ -62,7 +62,7 @@ Every layer retains its own recent SWA KV, while only a few layers own **global*
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 global KV owners, consuming layer ranges, and reindexing layers](../../assets/model-diagrams/en/v41-kv.svg)](../../assets/model-diagrams/en/v41-kv.svg)
+[![V4.1 global KV owners, consuming layer ranges, and reindexing layers](../../../../assets/model-diagrams/en/v41-kv.svg)](../../../../assets/model-diagrams/en/v41-kv.svg)
 
 <figcaption markdown="span">Figure: layers 20–39 share one global KV group; layers 24, 28, 32, and 36 only reselect positions. Per-layer SWA windows remain separate.</figcaption>
 
@@ -84,7 +84,7 @@ Layer 20 selects at most 2048 candidate blocks of 8 positions. Deeper Reindex la
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 global cache split into 720 bytes of main KV and 170 bytes of index keys](../../assets/model-diagrams/en/v41-cache.svg)](../../assets/model-diagrams/en/v41-cache.svg)
+[![V4.1 global cache split into 720 bytes of main KV and 170 bytes of index keys](../../../../assets/model-diagrams/en/v41-cache.svg)](../../../../assets/model-diagrams/en/v41-cache.svg)
 
 </figure>
 
@@ -101,7 +101,7 @@ If all 40 backbone `[B,128,512]` SWA windows remain BF16-resident, B=1 uses **5 
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 Engram n-gram hashes, 24 lookups, keys, values, and residual gating](../../assets/model-diagrams/en/v41-engram.svg)](../../assets/model-diagrams/en/v41-engram.svg)
+[![V4.1 Engram n-gram hashes, 24 lookups, keys, values, and residual gating](../../../../assets/model-diagrams/en/v41-engram.svg)](../../../../assets/model-diagrams/en/v41-engram.svg)
 
 </figure>
 
@@ -140,7 +140,7 @@ These counts differ from quantized storage bytes. A reference script's schedulin
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 patches, 32-layer ViT, 3×3 downsampling, and language aligner shapes](../../assets/model-diagrams/en/v41-vision.svg)](../../assets/model-diagrams/en/v41-vision.svg)
+[![V4.1 patches, 32-layer ViT, 3×3 downsampling, and language aligner shapes](../../../../assets/model-diagrams/en/v41-vision.svg)](../../../../assets/model-diagrams/en/v41-vision.svg)
 
 </figure>
 
@@ -161,7 +161,7 @@ ViT uses image-local bidirectional attention and 2D RoPE. Visual embeddings repl
 
 <figure class="model-figure" markdown="1">
 
-[![V4.1 DSpark target layers, draft block, three-stage draft network, and verification](../../assets/model-diagrams/en/v41-dspark.svg)](../../assets/model-diagrams/en/v41-dspark.svg)
+[![V4.1 DSpark target layers, draft block, three-stage draft network, and verification](../../../../assets/model-diagrams/en/v41-dspark.svg)](../../../../assets/model-diagrams/en/v41-dspark.svg)
 
 </figure>
 
@@ -183,7 +183,7 @@ Follow the draft shapes in order:
 
 4. Produce `[B,5,129280]` logits, then verify and accept drafts.
 
-The final three zero compression ratios belong to prediction stages, outside the 40-layer backbone. **Accepted-token count** follows verification rather than draft depth or block size. See [speculative decoding](../ml/llm/inference/multi-token-prediction.md).
+The final three zero compression ratios belong to prediction stages, outside the 40-layer backbone. **Accepted-token count** follows verification rather than draft depth or block size. See [speculative decoding](../inference/multi-token-prediction.md).
 
 ## 🪜 Complete text backbone map
 
@@ -234,4 +234,4 @@ The final three zero compression ratios belong to prediction stages, outside the
     | 39 | `[B,S,4,5120]` | CSA2 Reuse, r=1 | MoE | L20: `[B,T,512]` | L36; K from L20 |
 <!-- END GENERATED LAYERS deepseek-v4-1-flash -->
 
-PP or layerwise KV offloading must preserve ownership and references: a layer that does not produce global KV still needs historical information. See [parallelism](../ml/llm/inference/parallelism.md) and [layerwise lifetimes](../ml/llm/inference/layerwise-inference.md).
+PP or layerwise KV offloading must preserve ownership and references: a layer that does not produce global KV still needs historical information. See [parallelism](../inference/parallelism.md) and [layerwise lifetimes](../inference/layerwise-inference.md).

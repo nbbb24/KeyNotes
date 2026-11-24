@@ -8,7 +8,7 @@ Understand a concept, work through an example, and connect it to the system that
 | --- | --- | --- |
 | How do models learn from data? | [Machine learning foundations](ml/mle/index.md) | Choose a loss, split data correctly, and evaluate generalization |
 | How does a language model work? | [LLM learning map](ml/llm/index.md) | Follow tokens through attention, training, adaptation, and generation |
-| What are GLM and DeepSeek layer, weight, and cache shapes? | [Model structures](models/index.md) | Trace official configs through projections, experts, shared KV, and vision |
+| What are GLM and DeepSeek layer, weight, and cache shapes? | [Model structures](ml/llm/model-structures/index.md) | Trace official configs through projections, experts, shared KV, and vision |
 | How do images, speech, and language meet? | [Multimodal foundations](ml/llm/multimodal/foundations.md) | Distinguish representation, alignment, fusion, and evaluation |
 | Why is an accelerator waiting for data? | [Infrastructure learning map](infra/index.md) | Trace memory, transfers, interconnects, and completion |
 | How do I prepare a trustworthy dataset? | [SQL](ml/sql.md) and [Pandas](ml/pandas.md) | Preserve row meaning, handle missingness, and avoid join mistakes |

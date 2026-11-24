@@ -27,7 +27,7 @@ Embedding 和未绑定的 LM Head 权重分别为 `[154880,6144]`；保留全部
 
 <figure class="model-figure" markdown="1">
 
-[![GLM 主干层的 Attention、FFN 与两条残差路径](../../assets/model-diagrams/zh/glm-block.svg)](../../assets/model-diagrams/zh/glm-block.svg)
+[![GLM 主干层的 Attention、FFN 与两条残差路径](../../../../assets/model-diagrams/zh/glm-block.svg)](../../../../assets/model-diagrams/zh/glm-block.svg)
 
 <figcaption markdown="span">图：横向经过 Attention，随后经过 FFN；两条灰色旁路分别保留相应子层的输入。</figcaption>
 
@@ -35,7 +35,7 @@ Embedding 和未绑定的 LM Head 权重分别为 `[154880,6144]`；保留全部
 
 <figure class="model-figure" markdown="1">
 
-[![GLM MLA 从隐藏状态分解为 Query、潜在 KV、RoPE 与输出投影](../../assets/model-diagrams/zh/glm-mla.svg)](../../assets/model-diagrams/zh/glm-mla.svg)
+[![GLM MLA 从隐藏状态分解为 Query、潜在 KV、RoPE 与输出投影](../../../../assets/model-diagrams/zh/glm-mla.svg)](../../../../assets/model-diagrams/zh/glm-mla.svg)
 
 </figure>
 
@@ -78,7 +78,7 @@ JSON 的 `head_dim=64` 不能替代这里主注意力的 256；参考配置类�
 
 <figure class="model-figure" markdown="1">
 
-[![GLM top-8 路由专家、共享专家与输出合并](../../assets/model-diagrams/zh/glm-moe.svg)](../../assets/model-diagrams/zh/glm-moe.svg)
+[![GLM top-8 路由专家、共享专家与输出合并](../../../../assets/model-diagrams/zh/glm-moe.svg)](../../../../assets/model-diagrams/zh/glm-moe.svg)
 
 </figure>
 
@@ -195,4 +195,4 @@ MLA 的主缓存可表达为每层 `[B,T,512]` 潜在状态与 `[B,T,64]` RoPE K
     | 77 | `[B,S,6144]` | MoE E=256, k=8, F=2048 | full; L77 | own L77: `[B,T,512]` + `[B,T,64]` |
 <!-- END GENERATED LAYERS glm-5-1 -->
 
-继续比较 [GLM-5.2 的 IndexShare](glm-5-2.md)，再结合[TP/EP](../ml/llm/inference/parallelism.md)与[逐层 KV 搬运](../ml/llm/inference/layerwise-inference.md)定位每卡的实际 shape。
+继续比较 [GLM-5.2 的 IndexShare](glm-5-2.md)，再结合[TP/EP](../inference/parallelism.md)与[逐层 KV 搬运](../inference/layerwise-inference.md)定位每卡的实际 shape。

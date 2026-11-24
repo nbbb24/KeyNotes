@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="670" viewBox="0 0 1120 670" role="img" aria-labelledby="title desc">
+<title id="title">SQE 在哪里：设备任务调度与网卡工作队列</title><desc id="desc">上图是 Host verbs；下图只解释采用设备任务调度 + RDMA 后端时的职责边界。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="670" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">SQE 在哪里：设备任务调度与网卡工作队列</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">上图是 Host verbs；下图只解释采用设备任务调度 + RDMA 后端时的职责边界。</tspan></text>
+<rect x="36" y="119" width="320" height="106" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="148" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">框架 / 通信算子</tspan></text>
+<text x="52" y="175" font-size="16" text-anchor="start"><tspan x="52" dy="0">请求、Stream 依赖、分块计划</tspan><tspan x="52" dy="23">例：发送一层 KV</tspan></text>
+<rect x="400" y="119" width="320" height="106" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="416" y="148" font-size="18" text-anchor="start" font-weight="650"><tspan x="416" dy="0">Runtime / 设备任务队列</tspan></text>
+<text x="416" y="175" font-size="16" text-anchor="start"><tspan x="416" dy="0">任务描述符：SQE</tspan><tspan x="416" dy="23">记录调度与执行依赖</tspan></text>
+<rect x="764" y="119" width="320" height="106" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="780" y="148" font-size="18" text-anchor="start" font-weight="650"><tspan x="780" dy="0">设备调度 / 执行后端</tspan></text>
+<text x="780" y="175" font-size="16" text-anchor="start"><tspan x="780" dy="0">等待前置任务；执行通信工作</tspan><tspan x="780" dy="23">实现随产品与模式变化</tspan></text>
+<polyline points="356,173 400,173" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="720,173 764,173" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="924,225 924,294" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="764" y="294" width="320" height="106" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="780" y="323" font-size="18" text-anchor="start" font-weight="650"><tspan x="780" dy="0">RDMA 通信后端</tspan></text>
+<text x="780" y="350" font-size="16" text-anchor="start"><tspan x="780" dy="0">编码网卡 SQ 中的 WQE</tspan><tspan x="780" dy="23">发布记录并通知 NIC</tspan></text>
+<rect x="400" y="294" width="320" height="106" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="416" y="323" font-size="18" text-anchor="start" font-weight="650"><tspan x="416" dy="0">NIC / DMA 引擎</tspan></text>
+<text x="416" y="350" font-size="16" text-anchor="start"><tspan x="416" dy="0">取 WQE → 读源 → 网络 → 写目标</tspan><tspan x="416" dy="23">完成信息写入对应 CQ</tspan></text>
+<rect x="36" y="294" width="320" height="106" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="323" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">通信完成与任务推进</tspan></text>
+<text x="52" y="350" font-size="16" text-anchor="start"><tspan x="52" dy="0">检查 CQE / WC 与通知</tspan><tspan x="52" dy="23">满足依赖后推进后续任务</tspan></text>
+<polyline points="764,347 720,347" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="400,347 356,347" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="443" width="1048" height="133" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="472" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">读图边界</tspan></text>
+<text x="52" y="499" font-size="16" text-anchor="start"><tspan x="52" dy="0">一个算子可拆成多个任务、多个 WQE；不能按 1 个 SQE = 1 个 WQE = 1 个 CQE 计数。</tspan><tspan x="52" dy="23">GPU 直接提交可从内核进入 NIC 队列；Host verbs 可直接经 provider 提交。</tspan><tspan x="52" dy="23">设备调度的 SQ 与 RDMA 的 Send Queue 必须分别标明所属模块。</tspan></text>
+<text x="36" y="629" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">职责示意，不代表所有 CANN / HCCL 版本的固定内部调用链。</tspan></text>
+</svg>

@@ -6,13 +6,13 @@
 
 ??? note "配置与实现依据"
 
-    机制参考 [DeepSeek-V4 报告 §2.3](https://arxiv.org/html/2606.19348v1#S2.SS3)及本栏固定的[官方参考实现](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/inference/model.py)。数值对应 [Flash / Pro 配置](deepseek-v4.md)，不是所有名为 CSA 或 SWA 的模型的通用参数。
+    机制参考 [DeepSeek-V4 报告 §2.3](https://arxiv.org/html/2606.19348v1#S2.SS3)及本栏固定的[官方参考实现](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/inference/model.py)。数值对应 [Flash / Pro 配置](../model-structures/deepseek-v4.md)，不是所有名为 CSA 或 SWA 的模型的通用参数。
 
 ## 🗺️ 四者的分工
 
 <figure class="model-figure" markdown="1">
 
-[![SWA 最近窗口、CSA 稀疏选择和 HCA 重压缩全局读取的路径对照](../../assets/model-diagrams/zh/attention-paths.svg)](../../assets/model-diagrams/zh/attention-paths.svg)
+[![SWA 最近窗口、CSA 稀疏选择和 HCA 重压缩全局读取的路径对照](../../../../assets/model-diagrams/zh/attention-paths.svg)](../../../../assets/model-diagrams/zh/attention-paths.svg)
 
 <figcaption markdown="span">比较的是三条访问路径。V4 的 CSA/HCA 层同时保留 SWA 分支，并非一层只能三选一。</figcaption>
 
@@ -113,7 +113,7 @@ Flash CSA 与 HCA 在这个例子里都可读取 640 个位置，但信息粒度
 | V4 HCA | 不做学习式 Top-k 选择 | 读取更重压缩后的全局条目 |
 | V4.1 CSA2 | 来源层生成并共享的全局位置 | 分别复用主 KV、Indexer Key 或 Top-k |
 
-V4.1 的 Full、Reindex、Reuse 表示不同资源职责，不是 V4 的 4/128 比例交替。具体层号见 [V4.1 缓存所有权](deepseek-v4-1.md)；GLM 的索引复用见 [GLM-5.2](glm-5-2.md)。
+V4.1 的 Full、Reindex、Reuse 表示不同资源职责，不是 V4 的 4/128 比例交替。具体层号见 [V4.1 缓存所有权](../model-structures/deepseek-v4-1.md)；GLM 的索引复用见 [GLM-5.2](../model-structures/glm-5-2.md)。
 
 ## 📌 阅读模型配置时的检查顺序
 
@@ -127,4 +127,4 @@ V4.1 的 Full、Reindex、Reuse 表示不同资源职责，不是 V4 的 4/128 �
 
 5. 最后计算主注意力读取量、缓存字节和实际执行开销。
 
-主干各层的路径分布与投影 shape，可继续查阅 [V4 Flash / Pro](deepseek-v4.md)；缓存何时可被下一层或远端消费，见[逐层执行与传输](../ml/llm/inference/layerwise-inference.md)。
+主干各层的路径分布与投影 shape，可继续查阅 [V4 Flash / Pro](../model-structures/deepseek-v4.md)；缓存何时可被下一层或远端消费，见[逐层执行与传输](../inference/layerwise-inference.md)。

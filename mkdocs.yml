@@ -5,6 +5,8 @@ repo_url: https://github.com/nbbb24/KeyNotes
 repo_name: nbbb24/KeyNotes
 edit_uri: edit/main/docs/
 docs_dir: docs
+hooks:
+  - scripts/hooks/legacy_model_urls.py
 theme:
   name: material
   custom_dir: overrides
@@ -53,8 +55,6 @@ plugins:
             🧬 Model structures: 🧬 模型结构
             📐 Shape conventions: 📐 Shape 阅读约定
             🔎 Compressed attention and indexers: 🔎 压缩注意力与 Indexer
-            🧠 GLM family: 🧠 GLM 系列
-            🧠 DeepSeek family: 🧠 DeepSeek 系列
             🧠 GLM-5.1: 🧠 GLM-5.1
             🧠 GLM-5.2: 🧠 GLM-5.2
             🧠 DeepSeek-V4 Flash and Pro: 🧠 DeepSeek-V4 Flash 与 Pro
@@ -87,6 +87,7 @@ plugins:
             🔎 Retrieval-augmented LMs: 🔎 检索增强语言模型
             🔄 Data movement: 🔄 数据搬运
             📬 Work queues and doorbells: 📬 工作队列与门铃
+            🛶 Jetty and Runtime copy: 🛶 Jetty 与 Runtime 拷贝
             🚦 Device-initiated transfer: 🚦 设备发起传输
             📦 End-to-end transfer: 📦 端到端传输
             📖 Glossary: 📖 术语表
@@ -100,7 +101,7 @@ plugins:
             📊 Performance tools: 📊 性能与工具
             🎓 Courses: 🎓 课程
             🧩 Components: 🧩 核心组件
-            🤖 Models: 🤖 模型
+            📚 Model guides: 📚 模型原理导读
             🛠️ Adaptation: 🛠️ 微调与适配
             ⚙️ Inference and systems: ⚙️ 推理与系统
             🖼️ Multimodal: 🖼️ 多模态
@@ -239,6 +240,7 @@ nav:
   - 🔄 Communication and transfer:
     - 🔄 Data movement: infra/data-movement.md
     - 📬 Work queues and doorbells: infra/work-queues.md
+    - 🛶 Jetty and Runtime copy: infra/jetty-runtime-copy.md
     - 🚦 Device-initiated transfer: infra/device-initiated-transfer.md
     - 🔌 Interconnects: infra/interconnects.md
     - 🌐 Network planes: infra/network-planes.md
@@ -246,16 +248,6 @@ nav:
   - 🛠️ Practice and reference:
     - 📊 Performance tools: infra/performance-tools.md
     - 📖 Glossary: infra/glossary.md
-- 🧬 Model structures:
-  - 🗺️ Learning map: models/index.md
-  - 📐 Shape conventions: models/shape-conventions.md
-  - 🔎 Compressed attention and indexers: models/compressed-attention.md
-  - 🧠 GLM family:
-    - 🧠 GLM-5.1: models/glm-5-1.md
-    - 🧠 GLM-5.2: models/glm-5-2.md
-  - 🧠 DeepSeek family:
-    - 🧠 DeepSeek-V4 Flash and Pro: models/deepseek-v4.md
-    - 🧠 DeepSeek-V4.1 Flash: models/deepseek-v4-1.md
 - 🧠 ML:
   - 🗺️ Learning map: ml/index.md
   - 📐 MLE:
@@ -319,11 +311,19 @@ nav:
       - 👀 Attention: ml/llm/components/attention.md
       - 🎭 Attention masks: ml/llm/components/attention-masks.md
       - ⚡ Attention variants: ml/llm/components/attention-variants.md
+      - 🔎 Compressed attention and indexers: ml/llm/components/compressed-attention.md
       - 📐 Entropy, cross-entropy & KL: ml/llm/components/cross-entropy-kl.md
       - ⚖️ LayerNorm and RMSNorm: ml/llm/components/normalization.md
       - 📍 Position information: ml/llm/components/position.md
       - 🧩 Mixture of Experts: ml/llm/components/moe.md
-    - 🤖 Models:
+    - 🧬 Model structures:
+      - 🗺️ Learning map: ml/llm/model-structures/index.md
+      - 📐 Shape conventions: ml/llm/model-structures/shape-conventions.md
+      - 🧠 GLM-5.1: ml/llm/model-structures/glm-5-1.md
+      - 🧠 GLM-5.2: ml/llm/model-structures/glm-5-2.md
+      - 🧠 DeepSeek-V4 Flash and Pro: ml/llm/model-structures/deepseek-v4.md
+      - 🧠 DeepSeek-V4.1 Flash: ml/llm/model-structures/deepseek-v4-1.md
+    - 📚 Model guides:
       - 🔁 RNNs, LSTMs, and GRUs: ml/llm/models/rnn.md
       - 🌳 Tree-based RNNs: ml/llm/models/tree-rnn.md
       - 🖼️ CNNs: ml/llm/models/cnn.md

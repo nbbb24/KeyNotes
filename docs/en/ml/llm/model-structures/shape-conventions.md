@@ -25,7 +25,7 @@ For prefill with B=2 and S=128, GLM layer input is `[2,128,6144]` and Q is `[2,1
 
 <figure class="model-figure" markdown="1">
 
-[![GLM projection, Q reshaping, and packed quantized-weight shapes](../../assets/model-diagrams/en/shape-flow.svg)](../../assets/model-diagrams/en/shape-flow.svg)
+[![GLM projection, Q reshaping, and packed quantized-weight shapes](../../../../assets/model-diagrams/en/shape-flow.svg)](../../../../assets/model-diagrams/en/shape-flow.svg)
 
 </figure>
 
@@ -42,12 +42,12 @@ Reference code using fake quantization can store quantized numerical values back
 
 GLM inter-layer hidden states are `[B,S,6144]`. DeepSeek V4/V4.1 mHC maintains `[B,S,4,H]` residuals, collapsed to `[B,S,H]` at attention/FFN inputs. `hc_mult=4` does not make every expert matrix accept `4H`, or imply four independent Transformer executions per sublayer.
 
-MLA, shared latent KV, sliding windows, and cross-layer sharing require explicit cache accounting rather than blindly applying `2 × layers × KV heads × head width × T`. Identify the stored representation, its owning layer, and any aliases. See [KV fundamentals](../ml/llm/inference/kv-cache.md).
+MLA, shared latent KV, sliding windows, and cross-layer sharing require explicit cache accounting rather than blindly applying `2 × layers × KV heads × head width × T`. Identify the stored representation, its owning layer, and any aliases. See [KV fundamentals](../inference/kv-cache.md).
 
 ## 🔄 From global to per-device shapes
 
 Column-parallel projections may partition `out`; row-parallel projections partition `in` with corresponding reductions. EP primarily partitions experts; PP partitions layers. Norms, shared latent KV, Engram tables, and grouped output projections need not use the same partition.
 
-For example, head-sharded TP=4 can turn GLM `q_b` into local weight `[4096,2048]` and Q `[B,S,16,256]`. It does not authorize dividing `kv_a`, every norm, and every cache by four. DeepSeek grouped O projections also constrain compatible group/TP layouts. Check [parallel groups](../ml/llm/inference/parallelism.md) and the backend.
+For example, head-sharded TP=4 can turn GLM `q_b` into local weight `[4096,2048]` and Q `[B,S,16,256]`. It does not authorize dividing `kv_a`, every norm, and every cache by four. DeepSeek grouped O projections also constrain compatible group/TP layouts. Check [parallel groups](../inference/parallelism.md) and the backend.
 
 Weight dimensions determine logical parameter count; bytes also depend on precision, scales, replication, and partitioning. `[2304,5120]` has 11,796,480 parameters, with a 5,898,240-byte FP4 payload before scales. These are calculations under explicit assumptions, not measurements.

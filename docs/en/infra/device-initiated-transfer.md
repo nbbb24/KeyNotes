@@ -2,6 +2,8 @@
 
 “The data lives on a device,” “the device initiates communication,” and “the NIC directly accesses device memory” describe different properties. Follow a kernel-produced KV block through request creation, submission, movement, and remote consumption. Read [WQE, SQE, CQE, and doorbells](work-queues.md) for queue terminology.
 
+For concrete UB driver outputs, Jetty IDs, and scheduling SQEs, see [Jetty and Runtime copy](jetty-runtime-copy.md), which traces Direct WQE and doorbell mode through pinned source.
+
 ## 🧩 Three submission paths
 
 | Mode | Who requests movement? | Who submits to the engine? | Can the payload use a direct device path? |

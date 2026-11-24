@@ -34,7 +34,7 @@ sequenceDiagram
 
 进一步拆开“提交传输”这一步：Host 可以等生产事件后提交，设备也可以向 CPU proxy 发布请求，或在受支持的后端直接操作通信队列。
 
-控制路径与载荷路径分别判断；CPU 提交不意味着必须 D2H 中转。具体机制见[设备发起传输](device-initiated-transfer.md)，底层的描述符、门铃与完成队列见[WQE、SQE、CQE 与 Doorbell](work-queues.md)。
+控制路径与载荷路径分别判断；CPU 提交不意味着必须 D2H 中转。具体机制见[设备发起传输](device-initiated-transfer.md)。需要逐项对照硬件队列时，先走完[一笔 64 KiB Write with Immediate](work-queues.md)：从 B 贴接收 WR，到 A 提交、网卡搬运、双方 Poll，再到消费与归还 credit。
 
 Host 中转路径为 `HBM A → DRAM A → 网络 → DRAM B → HBM B`。它可以复用 Host 网络栈，但增加复制、缓冲区和同步。
 

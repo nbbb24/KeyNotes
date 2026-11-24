@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="850" viewBox="0 0 1120 850" role="img" aria-labelledby="title desc">
+<title id="title">同一个 Copy Task：WQE 如何进入 Runtime SQ</title><desc id="desc">CANN Runtime 公开代码快照；左侧 Direct WQE 与右侧 Doorbell 是两条不同路径。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="850" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">同一个 Copy Task：WQE 如何进入 Runtime SQ</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">CANN Runtime 公开代码快照；左侧 Direct WQE 与右侧 Doorbell 是两条不同路径。</tspan></text>
+<rect x="36" y="113" width="1048" height="93" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="142" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Runtime 创建拷贝任务：src、dst、size、Stream 依赖</tspan></text>
+<text x="52" y="169" font-size="16" text-anchor="start"><tspan x="52" dy="0">驱动准备 WQE / Jetty 信息，Runtime 再构造调度 SQE；任务在执行前进入调度。</tspan></text>
+<polyline points="285,206 285,250" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="835,206 835,250" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="250" width="498" height="126" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="279" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">路径一：Direct WQE</tspan></text>
+<text x="52" y="306" font-size="16" text-anchor="start"><tspan x="52" dy="0">Driver 返回 WQE 字节与长度</tspan><tspan x="52" dy="23">dieId / functionId / jettyId</tspan><tspan x="52" dy="23">Runtime 保存到 task.ubDma</tspan></text>
+<rect x="586" y="250" width="498" height="126" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="602" y="279" font-size="18" text-anchor="start" font-weight="650"><tspan x="602" dy="0">路径二：Doorbell</tspan></text>
+<text x="602" y="306" font-size="16" text-anchor="start"><tspan x="602" dy="0">转换 WQE → 填 Jetty 队列</tspan><tspan x="602" dy="23">查询 / 绑定 Jetty，记录 PI</tspan><tspan x="602" dy="23">WQE 数据已放在通信队列</tspan></text>
+<polyline points="285,376 285,421" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="835,376 835,421" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="421" width="498" height="75" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="450" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Runtime SQ 槽位 n：头 SQE</tspan></text>
+<text x="52" y="477" font-size="16" text-anchor="start"><tspan x="52" dy="0">ASYNCDMA + Direct mode + Jetty IDs</tspan></text>
+<rect x="36" y="502" width="498" height="75" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="531" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Runtime SQ 槽位 n+1：WQE 数据</tspan></text>
+<text x="52" y="558" font-size="16" text-anchor="start"><tspan x="52" dy="0">硬件按 Direct 格式消费后继槽位</tspan></text>
+<rect x="586" y="421" width="498" height="156" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="602" y="450" font-size="18" text-anchor="start" font-weight="650"><tspan x="602" dy="0">Runtime SQ：Doorbell SQE</tspan></text>
+<text x="602" y="477" font-size="16" text-anchor="start"><tspan x="602" dy="0">UBDMA + Doorbell mode</tspan><tspan x="602" dy="23">dieId / functionId / jettyId / PI</tspan><tspan x="602" dy="23">触发已填好的 Jetty 工作队列</tspan><tspan x="602" dy="23">此模式无需把 WQE 附在下一槽</tspan></text>
+<polyline points="285,577 285,635" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="835,577 835,635" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="635" width="1048" height="111" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="664" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">设备调度与搬运</tspan></text>
+<text x="52" y="691" font-size="16" text-anchor="start"><tspan x="52" dy="0">前置依赖满足 → 消费 Runtime SQE → 执行 Direct / Doorbell 路径 → UB 引擎搬运。</tspan><tspan x="52" dy="23">JFC 通信完成与 Runtime 任务进度的映射由后端确定；不能直接等同两层完成。</tspan><tspan x="52" dy="23">Runtime SQ 是队列，SQE 是条目；一个 Copy Task 的物理条目数取决于所选模式。</tspan></text>
+<text x="36" y="809" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">模式分支与字段依据固定版本源码，不代表所有产品、软件版本或跨服务器路径都适用。</tspan></text>
+</svg>

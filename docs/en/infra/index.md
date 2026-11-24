@@ -12,7 +12,8 @@ An accelerator does useful work only when the right data reaches the right memor
 | Global addressing | How does GVA locate DRAM and HBM across processes, devices, and nodes? | [How GVA unified addressing works](gva-unified-addressing.md) |
 | Serving | How do vLLM and SGLang budget HBM, reuse KV, and hand work from prefill to decode? | [Serving frameworks](serving-frameworks.md) |
 | Movement | Who copies the bytes, in which direction, and when are they ready? | [Data movement](data-movement.md) |
-| Work queues | How do WQEs, SQEs, CQEs, and doorbells connect submission to completion? | [Work queues and doorbells](work-queues.md) |
+| Work queues | How does one 64 KiB write pass through RQ, WQE, doorbell, DMA, both CQs, and buffer handoff? | [Complete transfer and queue walkthrough](work-queues.md) |
+| UB and scheduling | How do Jetty, JFS/JFR/JFC, WQEs, and Runtime SQEs connect? | [Jetty and Runtime copy](jetty-runtime-copy.md) |
 | Device initiation | How does a GPU/NPU request work, submit it, and enable safe remote consumption? | [Device-initiated transfer](device-initiated-transfer.md) |
 | Interconnect | Which path and transport can reach the destination? | [Interconnects](interconnects.md) |
 | Organization | Which network carries which traffic? | [Network planes](network-planes.md) |

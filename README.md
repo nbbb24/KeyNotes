@@ -5,9 +5,8 @@
 
 KeyNotes is a bilingual learning guide to **machine learning** and the **infrastructure behind it**. It connects first principles, worked examples, diagrams, and engineering trade-offs so newcomers can build intuition and experienced readers can trace how systems work.
 
-- **ML:** foundations, language and multimodal models, training, inference, and data tools.
+- **ML:** foundations, language and multimodal models, training, inference, and data tools. The LLM section includes model guides and pinned GLM/DeepSeek structure references with per-layer shapes and KV ownership.
 - **Infra:** accelerators, memory, communication, data movement, and performance.
-- **Model structures:** pinned GLM and DeepSeek configs, per-layer shapes, experts, KV ownership, and vision modules.
 
 Read the [English documentation](https://infra-knowledge.readthedocs.io/en/latest/) or switch to 简体中文 with the language icon on any page. The two editions share the same topic structure.
 
@@ -20,6 +19,7 @@ Corrections, clearer examples, diagrams, and new topics are welcome. Open an iss
 3. Update `mkdocs.yml` when adding a topic. Keep shared images in `docs/assets/` and preserve the original imported figures.
    For model-structure references, preserve upstream config bytes and provenance under `docs/assets/model-specs/`, then run `python scripts/model_shapes.py --check` to verify generated layer maps.
    Generate bilingual SVG explanations with `python scripts/model_diagrams.py --write`; run `--check` to confirm they match the generator. Keep captions, alt text, and diagram assumptions aligned with the model pages.
+   Transfer sequence and SQE/WQE diagrams use `python scripts/transfer_diagrams.py --write` and `--check` in the same way.
 4. In the pull request, describe what changed and how you checked the affected pages. Read the Docs provides a preview for pull requests.
 
 The original Notion material and image checksums are recorded in [`migration/`](migration/).

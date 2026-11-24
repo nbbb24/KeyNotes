@@ -1,92 +1,96 @@
-# 🧠 GLM-5.2: shared top-k selection with the same backbone widths
+# 🧠 GLM-5.2：相同主干宽度，跨层复用 Indexer
 
-GLM-5.2 retains GLM-5.1’s backbone widths and introduces **IndexShare**: selected layers compute top-k and others reuse their selection. Compare the configs, then follow index and cache ownership.
+GLM-5.2 保留 GLM-5.1 的主干宽度，重点变化是 **IndexShare**：部分层重算 Top-k，其余层复用选中位置。下面先对照配置，再跟踪索引和缓存的归属。
 
-??? note "Pinned configuration, implementation, and scope"
+??? note "配置、实现与适用范围"
 
-    This page pins the [official config](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/config.json) at `zai-org/GLM-5.2@cf457fa734ab`. The important structural changes from GLM-5.1 are **IndexShare** and context settings, rather than new main-attention widths. Interpretation follows pinned [attention code](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py) and its [configuration class](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py).
+    本页绑定 `zai-org/GLM-5.2@cf457fa734ab` 的 [官方配置](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/config.json)。与 GLM-5.1 比较时，最重要的结构差异是 **IndexShare** 与上下文配置，而不是另造一组 Attention 宽度。
 
-## 🗺️ Comparison with GLM-5.1
+    实现依据固定版本的 [Attention](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py)与[配置类](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py)。
 
-| Setting | GLM-5.1 | GLM-5.2 |
+## 🗺️ 配置与 GLM-5.1 的关系
+
+| 项目 | GLM-5.1 | GLM-5.2 |
 | --- | --- | --- |
-| Backbone layers / hidden width / vocabulary | 78 / 6144 / 154880 | Same |
-| Dense / MoE layers | 0–2 / 3–77 | Same, explicitly listed in `mlp_layer_types` |
-| Experts / top-k / shared experts / expert F | 256 / 8 / 1 / 2048 | Same |
-| Q heads / main QK width / V width | 64 / 256 / 256 | Same |
-| Q rank / KV latent / RoPE width | 2048 / 512 / 64 | Same |
-| Index heads / width / top-k | 32 / 128 / 2048 | Same |
-| Independent indexer layers in these configs | 78 | 21; 57 layers reuse selected positions |
-| Maximum positions / RoPE theta | 202752 / 1000000 | 1048576 / 8000000 |
-| MTP layers | 1 | 1; acceptance and unrolling are separate quantities |
+| 主干层 / 隐藏宽度 / 词表 | 78 / 6144 / 154880 | 相同 |
+| Dense 层 / MoE 层 | 0–2 / 3–77 | 相同；配置显式列出 `mlp_layer_types` |
+| 专家数 / top-k / 共享专家 / 单专家 F | 256 / 8 / 1 / 2048 | 相同 |
+| Q 头 / 主 QK 维度 / V 维度 | 64 / 256 / 256 | 相同 |
+| Q 低秩 / KV 潜在维度 / RoPE 维度 | 2048 / 512 / 64 | 相同 |
+| Indexer 头 / 头宽 / top-k | 32 / 128 / 2048 | 相同 |
+| 本次配置中的独立 Indexer 层 | 78 | 21，其余 57 层复用选中位置 |
+| 最大位置数 / RoPE theta | 202752 / 1000000 | 1048576 / 8000000 |
+| MTP 层数 | 1 | 1；预测效果/展开步数不由这个字段单独决定 |
 
-The [official model card](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/README.md) calls this IndexShare; see the [original paper](https://arxiv.org/abs/2603.12201). The layer map below records the config's 78 backbone layers and selection-reuse relationships.
+模型卡将此改动称为 [IndexShare](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/README.md)，相应方法见[原始论文](https://arxiv.org/abs/2603.12201)。下面的逐层表直接记录配置中的 78 层及其索引复用关系。
 
-## 📐 Main per-layer projections
+## 📐 一层的主投影 Shape
 
 <figure class="model-figure" markdown="1">
 
-[![The main MLA projection dimensions shared by GLM-5.1 and GLM-5.2](../../assets/model-diagrams/en/glm-mla.svg)](../../assets/model-diagrams/en/glm-mla.svg)
+[![GLM-5.2 与 GLM-5.1 相同的主 MLA 投影维度](../../../../assets/model-diagrams/zh/glm-mla.svg)](../../../../assets/model-diagrams/zh/glm-mla.svg)
 
 </figure>
 
-| Module | Logical weight `[out,in]` | Output |
+| 模块 | 逻辑权重 `[out,in]` | 输出 |
 | --- | --- | --- |
-| Embedding / untied LM head | Each `[154880,6144]` | Hidden `[B,S,6144]` / logits `[B,S,154880]` |
-| `q_a` → Q norm | `[2048,6144]`, norm `[2048]` | `[B,S,2048]` |
+| Embedding / 未绑定 LM Head | 各 `[154880,6144]` | 隐藏 `[B,S,6144]` / logits `[B,S,154880]` |
+| `q_a` → Q norm | `[2048,6144]`，norm `[2048]` | `[B,S,2048]` |
 | `q_b` | `[16384,2048]` | `[B,S,64,256]` |
-| `kv_a` → KV norm | `[576,6144]`, norm `[512]` | Latent 512 + RoPE 64 |
-| `kv_b` | `[28672,512]` | K-NoPE `[B,S,64,192]`, V `[B,S,64,256]` |
+| `kv_a` → KV norm | `[576,6144]`，norm `[512]` | 潜在 512 + RoPE 64 |
+| `kv_b` | `[28672,512]` | K-NoPE `[B,S,64,192]`，V `[B,S,64,256]` |
 | `o_proj` | `[6144,16384]` | `[B,S,6144]` |
-| Dense gate/up → down | Each `[12288,6144]` → `[6144,12288]` | 12288 → 6144 |
-| Router / expert gate/up → down | `[256,6144]` / each `[2048,6144]` → `[6144,2048]` | Top-8 routing plus shared expert |
+| Dense gate/up → down | 各 `[12288,6144]` → `[6144,12288]` | 12288 → 6144 |
+| Router / 单专家 gate/up → down | `[256,6144]` / 各 `[2048,6144]` → `[6144,2048]` | top-8 路由与共享专家 |
 
-As in [GLM-5.1](glm-5-1.md), full K combines 192 NoPE and 64 RoPE dimensions. The JSON `head_dim=192` is not total main Q/K width; it must not turn `q_b` into a `64×192` output.
+与 [GLM-5.1 模块表](glm-5-1.md)相同，完整 K 仍是 NoPE 192 与 RoPE 64 拼接。配置中的 `head_dim=192` 不是主 Q/K 的总宽度，不能据此把 `q_b` 写成 `64×192`。
 
-## 🔎 IndexShare reuses top-k positions, not main KV
+## 🔎 IndexShare 逐层复用的是 Top-k，不是主 KV
 
 <figure class="model-figure" markdown="1">
 
-[![GLM-5.1 versus GLM-5.2 index computation, selection reuse, and separate main KV](../../assets/model-diagrams/en/index-share.svg)](../../assets/model-diagrams/en/index-share.svg)
+[![GLM-5.1 与 GLM-5.2 的逐层索引计算、复用与独立主 KV 对比](../../../../assets/model-diagrams/zh/index-share.svg)](../../../../assets/model-diagrams/zh/index-share.svg)
 
-<figcaption markdown="span">Figure: dashed orange arrows carry selected positions only. Each green KV box remains owned by its layer.</figcaption>
+<figcaption markdown="span">图：橙色虚线只传选中位置。每个绿色 KV 框仍归相应层自己所有。</figcaption>
 
 </figure>
 
-The explicit `indexer_types` lists layers 0, 1, 2 and `6,10,14,…,74` as `full`, with the rest `shared`:
+本次配置显式给出 `indexer_types`：层 0、1、2，以及 `6,10,14,…,74` 是 `full`；其余层为 `shared`。例如：
 
-| Layers | Selection behavior | Main MLA KV |
+| 层 | 索引行为 | 主 MLA KV |
 | --- | --- | --- |
-| 2 | Compute and publish top-k | Its own latent KV |
-| 3, 4, 5 | Reuse layer 2's selection | Separate latents in each layer |
-| 6 | Recompute top-k | Its own latent KV |
-| 7, 8, 9 | Reuse layer 6's selection | Separate latents in each layer |
-| 74 → 75, 76, 77 | 74 computes, the next three reuse | Separate main KV |
+| 2 | 自己计算 Top-k，发布选中位置 | 自己的潜在 KV |
+| 3、4、5 | 复用层 2 的选中位置 | 每层仍有自己的潜在 KV |
+| 6 | 重新计算 Top-k | 自己的潜在 KV |
+| 7、8、9 | 复用层 6 的选中位置 | 每层仍有自己的潜在 KV |
+| 74 → 75、76、77 | 74 计算，后 3 层复用 | 各自的主 KV |
 
-- **`full`:** run an independent indexer and publish selected positions; this does not mean dense full attention.
+- **`full`：**该层运行自己的 Indexer，并发布选中位置；这里的 Full 不是 Dense Full Attention。
 
-- **`shared`:** reuse the preceding Full layer's top-k, without reusing its complete attention output or hidden state.
+- **`shared`：**复用前一个 Full 层的 Top-k，不复用整个 Attention 输出或隐藏状态。
 
-The implementation instantiates indexers only where required and carries `prev_topk_indices`. Independent indexer projections are:
+参考实现仅在需要时实例化 Indexer，并通过 `prev_topk_indices` 传递索引。独立 Indexer 的投影维度为：
 
-| Projection | Weight shape |
+| 投影 | 权重 shape |
 | --- | --- |
 | `wq_b` | `[4096,2048]` |
 | `wk` | `[128,6144]` |
 | `weights_proj` | `[32,6144]` |
 
-## 🧠 Cache implications of a longer context
+## 🧠 缓存与扩上下文的实际影响
 
-Main MLA latent width remains 512+64 per layer. Having 21 indexers does not reduce 78 main-cache owners to 21. Indexer-key and selection storage follow the sharing strategy and backend implementation. A larger configured maximum does not mean every deployment has already allocated a full 1M-token cache.
+主 MLA 缓存的每层潜在维度仍为 512+64；不能因为只有 21 个独立 Indexer 就把 78 层主缓存也缩成 21 层。Indexer Key 与 Top-k 中间结果则由索引复用策略和后端缓存实现决定。
 
-Under the same BF16 main-cache-only assumptions, B=1 and T=4096 still cost 351 MiB. Growing T increases the capacity requirement. Actual supported lengths depend on memory, sparse kernels, and configuration. See [shape conventions](shape-conventions.md) and [KV budgets](../infra/serving-frameworks.md).
+最大位置数增加，也不意味着部署时已经预分配了 1M Token 的全部缓存。
 
-## 🪜 Complete backbone map
+相同 BF16 主缓存假设下，B=1、T=4096 的载荷仍为 351 MiB；T 增长时需要增加容量预算。实际支持长度还受内存、稀疏注意力内核和配置限制。参见[Shape 约定](shape-conventions.md)和[KV 内存预算](../../../infra/serving-frameworks.md)。
+
+## 🪜 完整主干层表
 
 <!-- BEGIN GENERATED LAYERS glm-5-2 -->
-??? info "GLM-5.2 · 78 backbone layers"
+??? info "GLM-5.2 · 78 主干层"
 
-    | Layer | Hidden in/out | FFN | Indexer / selection source | Main KV (owned per layer) |
+    | 层 | 层间输入/输出 | FFN | Indexer / 索引来源 | 主 KV（每层自有） |
     | --- | --- | --- | --- | --- |
     | 0 | `[B,S,6144]` | Dense F=12288 | full; L0 | own L0: `[B,T,512]` + `[B,T,64]` |
     | 1 | `[B,S,6144]` | Dense F=12288 | full; L1 | own L1: `[B,T,512]` + `[B,T,64]` |

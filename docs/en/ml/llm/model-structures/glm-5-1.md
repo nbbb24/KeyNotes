@@ -25,7 +25,7 @@ Each layer applies normalization, MLA/DSA attention and a residual, then normali
 
 <figure class="model-figure" markdown="1">
 
-[![GLM backbone attention, FFN, and two residual paths](../../assets/model-diagrams/en/glm-block.svg)](../../assets/model-diagrams/en/glm-block.svg)
+[![GLM backbone attention, FFN, and two residual paths](../../../../assets/model-diagrams/en/glm-block.svg)](../../../../assets/model-diagrams/en/glm-block.svg)
 
 <figcaption markdown="span">Figure: attention is followed by the FFN. Gray bypasses preserve the input to each corresponding sublayer.</figcaption>
 
@@ -33,7 +33,7 @@ Each layer applies normalization, MLA/DSA attention and a residual, then normali
 
 <figure class="model-figure" markdown="1">
 
-[![GLM MLA hidden state, query, latent KV, RoPE, and output projection](../../assets/model-diagrams/en/glm-mla.svg)](../../assets/model-diagrams/en/glm-mla.svg)
+[![GLM MLA hidden state, query, latent KV, RoPE, and output projection](../../../../assets/model-diagrams/en/glm-mla.svg)](../../../../assets/model-diagrams/en/glm-mla.svg)
 
 </figure>
 
@@ -74,7 +74,7 @@ A simple reference may materialize full scores; optimized sparse kernels can use
 
 <figure class="model-figure" markdown="1">
 
-[![GLM top-8 expert routing, shared expert, and output combination](../../assets/model-diagrams/en/glm-moe.svg)](../../assets/model-diagrams/en/glm-moe.svg)
+[![GLM top-8 expert routing, shared expert, and output combination](../../../../assets/model-diagrams/en/glm-moe.svg)](../../../../assets/model-diagrams/en/glm-moe.svg)
 
 </figure>
 
@@ -185,4 +185,4 @@ The common module tables define repeated shapes; the map below enumerates owners
     | 77 | `[B,S,6144]` | MoE E=256, k=8, F=2048 | full; L77 | own L77: `[B,T,512]` + `[B,T,64]` |
 <!-- END GENERATED LAYERS glm-5-1 -->
 
-Compare [GLM-5.2 IndexShare](glm-5-2.md), then map shapes through [TP/EP](../ml/llm/inference/parallelism.md) and [layerwise KV movement](../ml/llm/inference/layerwise-inference.md).
+Compare [GLM-5.2 IndexShare](glm-5-2.md), then map shapes through [TP/EP](../inference/parallelism.md) and [layerwise KV movement](../inference/layerwise-inference.md).
