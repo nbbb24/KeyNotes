@@ -1,6 +1,10 @@
 # 🧠 DeepSeek-V4 Flash / Pro: mHC, compressed attention, and expert shapes
 
-This page separately pins the official [Flash config](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/config.json) and [Pro config](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/b5968e9190ef611bbf34a7229255be88a0e937c1/config.json). Module shapes are derived from the corresponding [official reference code](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/inference/model.py). Flash-0731, Pro-0813, and moving API aliases require separate verification.
+V4 Flash and Pro combine **four-stream mHC, compressed attention, and MoE**. Track inter-layer residuals, attention branches, and global caches separately: they have different shapes.
+
+??? note "Pinned configuration, implementation, and scope"
+
+    This page separately pins the official [Flash config](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/config.json) and [Pro config](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/b5968e9190ef611bbf34a7229255be88a0e937c1/config.json). Module shapes are derived from the corresponding [official reference code](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/inference/model.py). Flash-0731, Pro-0813, and moving API aliases require separate verification.
 
 ## 🗺️ Global dimensions
 
@@ -23,7 +27,11 @@ The model card reports Flash backbone parameters as 284B with 13B active per tok
 
 ## 🪜 Residual streams versus sublayer input
 
+<figure class="model-figure" markdown="1">
+
 [![DeepSeek mHC residual collapse, sublayer computation, and four-stream merge](../../assets/model-diagrams/en/mhc.svg)](../../assets/model-diagrams/en/mhc.svg)
+
+</figure>
 
 Embedding produces `[B,S,H]`, expanded into `[B,S,4,H]` before the backbone. mHC collapses the streams into `[B,S,H]` for attention/FFN, then merges the result into four-stream residuals. Inter-layer shapes are `[B,S,4,4096]` for Flash and `[B,S,4,7168]` for Pro.
 
@@ -31,7 +39,11 @@ Each `hc_attn_fn` and `hc_ffn_fn` has shape `[24,4H]`, since `(2+4)×4=24`: `[24
 
 ## 📐 Main attention projections
 
+<figure class="model-figure" markdown="1">
+
 [![DeepSeek V4 low-rank query, window and compressed caches, and grouped O projection](../../assets/model-diagrams/en/v4-attention.svg)](../../assets/model-diagrams/en/v4-attention.svg)
+
+</figure>
 
 | Module | Flash weight `[out,in]` | Pro weight `[out,in]` | Logical output |
 | --- | --- | --- | --- |
@@ -46,6 +58,8 @@ Each `hc_attn_fn` and `hc_ffn_fn` has shape `[24,4H]`, since `(2+4)×4=24`: `[24
 `wo_a` is grouped/block-diagonal, **not an arbitrary dense `[G×1024,A×512]` matrix**. Each group's input width is `A×512/G=4096`. Q norm has width Rq, KV norm 512, and layer norms H. Reference attention also inverse-rotates the output's RoPE slice before O projection.
 
 ## 🔄 Layer placement of SWA, CSA, and HCA
+
+See [compressed attention and indexers](compressed-attention.md) for mechanisms and worked examples. This section maps them onto V4 layer indices and cache shapes.
 
 Every layer has a local SWA path. `compress_ratios[l]` determines the extra global path:
 

@@ -16,7 +16,17 @@ See [vLLM parallel deployment](https://docs.vllm.ai/en/stable/serving/parallelis
 
 ## 🧮 TP: several ranks compute one layer
 
-Consider a simplified FFN $Y=\phi(XW_1)W_2$, with $X\in\mathbb{R}^{N\times H}$, $W_1\in\mathbb{R}^{H\times F}$, and $W_2\in\mathbb{R}^{F\times H}$. Split $W_1$ by output columns and $W_2$ by matching input rows across $p$ ranks:
+Consider a simplified FFN:
+
+$$Y=\phi(XW_1)W_2$$
+
+| Tensor | Shape |
+| --- | --- |
+| Input $X$ | $N\times H$ |
+| Expansion weight $W_1$ | $H\times F$ |
+| Projection weight $W_2$ | $F\times H$ |
+
+Split $W_1$ by output columns and $W_2$ by matching input rows across $p$ ranks:
 
 $$Z_i=\phi(XW_{1,i}),\qquad Y=\sum_{i=0}^{p-1}Z_iW_{2,i}.$$
 
@@ -39,7 +49,9 @@ flowchart LR
     S3 --> O[Output and sampling]
 ```
 
-An autoregressive request's next token normally depends on the current token reaching the last stage and being sampled, followed by feedback to the first stage. PP=4 therefore does not divide single-request latency by four. Different requests/microbatches can occupy different stages to increase throughput. [GPipe](https://arxiv.org/abs/1811.06965) supplies the training background for layer/microbatch pipelining; inference adds autoregressive feedback and online scheduling.
+An autoregressive request's next token normally depends on the current token reaching the last stage and being sampled, followed by feedback to the first stage. PP=4 therefore does not divide single-request latency by four.
+
+Different requests/microbatches can occupy different stages to increase throughput. [GPipe](https://arxiv.org/abs/1811.06965) supplies the training background for layer/microbatch pipelining; inference adds autoregressive feedback and online scheduling.
 
 In an ideal **single forward sweep** with equal stage time, no communication or feedback overhead, and $m$ independent microbatches across $p$ stages, execution takes $m+p-1$ slots. Average utilization is:
 
@@ -82,14 +94,28 @@ A request on DP 0 first uses ranks 0–3, then 4–7. Which ranks send across th
 
 For evenly partitioned dense weights, start with $M_W\approx P_{param}b_W/(TP\times PP)$ per device. DP replicates the logical model rather than further dividing each replica's per-device weights. Add quantization scales, replicated layers, workspaces, graph capture, and allocator reservations. Separate shared and expert weights for MoE.
 
-Ordinary KV payload is $L\times2\times H_{KV}\times D_{head}\times T\times b_{KV}$. With 32 layers, 8 KV heads, head dimension 128, 2048 tokens, and BF16, a sequence uses 256 MiB across the full model. PP=2 and fully head-sharded TP=4 yield about 32 MiB per rank for that sequence. DP=2 normally assigns the sequence to one replica, so do not divide again by two. See [KV size](kv-cache.md) and [physical layouts](layers-pages.md).
+Ordinary KV payload is $L\times2\times H_{KV}\times D_{head}\times T\times b_{KV}$. With 32 layers, 8 KV heads, head dimension 128, 2048 tokens, and BF16, a sequence uses 256 MiB across the full model. PP=2 and fully head-sharded TP=4 yield about 32 MiB per rank for that sequence.
+
+DP=2 normally assigns the sequence to one replica, so do not divide again by two. See [KV size](kv-cache.md) and [physical layouts](layers-pages.md).
 
 ## 📏 CP, SP, and P/D disaggregation
 
-CP partitions one sequence's context across ranks while attention combines information across partitions. Prefill and decode can use different algorithms. SP is framework-specific: classic Megatron SP partitions sequence activations for selected operations, rather than providing full CP or a universal division of KV memory. The [Megatron CP description](https://docs.nvidia.com/megatron-core/developer-guide/latest/user-guide/features/context_parallel.html) defines this in a training context; inference support must be checked separately.
+### CP: partition one sequence
+
+CP partitions one sequence's context across ranks while attention combines information across partitions. Prefill and decode can use different algorithms.
+
+### SP: check the framework definition
+
+SP is framework-specific: classic Megatron SP partitions sequence activations for selected operations, rather than providing full CP or a universal division of KV memory.
+
+The [Megatron CP description](https://docs.nvidia.com/megatron-core/developer-guide/latest/user-guide/features/context_parallel.html) defines this in a training context; inference support must be checked separately.
+
+### P/D: separate serving phases
 
 P/D disaggregation separates serving phases, while PP separates model layers. Each P or D worker can independently use TP/PP/DP/EP. Different P/D partitions may require KV aggregation, resharding, or layout conversion, if supported by the connector. [Layerwise execution and transfer](layerwise-inference.md) define granularity rather than another necessarily independent device-count dimension.
 
 ## 📊 Choose and validate
 
-Measure one replica's weight/KV/activation peaks, TTFT, and ITL. Then evaluate TP/PP for capacity, DP for throughput, EP for expert placement, or CP for long contexts. Time TP reductions, PP activations, EP dispatch/combine, and P/D KV migration separately, and inspect [interconnect contention](../../../infra/interconnects.md). Record model, hardware, rank groups, request lengths, and concurrency: “16 devices” alone does not explain the result.
+Measure one replica's weight/KV/activation peaks, TTFT, and ITL. Then evaluate TP/PP for capacity, DP for throughput, EP for expert placement, or CP for long contexts. Time TP reductions, PP activations, EP dispatch/combine, and P/D KV migration separately, and inspect [interconnect contention](../../../infra/interconnects.md).
+
+Record model, hardware, rank groups, request lengths, and concurrency: “16 devices” alone does not explain the result.

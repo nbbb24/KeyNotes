@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650" role="img" aria-labelledby="title desc">
+<title id="title">SWA、CSA、HCA：比较访问路径</title><desc id="desc">V4 的 CSA / HCA 层也有 SWA 分支；下面分别追踪局部与全局路径。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="650" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">SWA、CSA、HCA：比较访问路径</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">V4 的 CSA / HCA 层也有 SWA 分支；下面分别追踪局部与全局路径。</tspan></text>
+<text x="36" y="125" font-size="23" text-anchor="start" font-weight="650"><tspan x="36" dy="0">SWA</tspan></text>
+<rect x="36" y="155" width="328" height="105" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="184" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">最近原始位置</tspan></text>
+<text x="52" y="211" font-size="16" text-anchor="start"><tspan x="52" dy="0">[B,128,512]</tspan><tspan x="52" dy="23">最多 min(128,T) 个位置</tspan></text>
+<rect x="36" y="300" width="328" height="105" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="329" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">按窗口规则读取</tspan></text>
+<text x="52" y="356" font-size="16" text-anchor="start"><tspan x="52" dy="0">只保留因果可见的最近位置</tspan><tspan x="52" dy="23">无需学习式 Top-k</tspan></text>
+<rect x="36" y="445" width="328" height="105" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="474" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">主注意力的局部分支</tspan></text>
+<text x="52" y="501" font-size="16" text-anchor="start"><tspan x="52" dy="0">保持近期信息的细节</tspan></text>
+<polyline points="200,260 200,300" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="200,405 200,445" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="396" y="125" font-size="23" text-anchor="start" font-weight="650"><tspan x="396" dy="0">CSA</tspan></text>
+<rect x="396" y="155" width="328" height="105" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="412" y="184" font-size="18" text-anchor="start" font-weight="650"><tspan x="412" dy="0">全局历史压缩 4 倍</tspan></text>
+<text x="412" y="211" font-size="16" text-anchor="start"><tspan x="412" dy="0">[B,floor(T/4),512]</tspan><tspan x="412" dy="23">Indexer K: 128 dimensions</tspan></text>
+<rect x="396" y="300" width="328" height="105" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="412" y="329" font-size="18" text-anchor="start" font-weight="650"><tspan x="412" dy="0">Indexer 评分 → Top-k</tspan></text>
+<text x="412" y="356" font-size="16" text-anchor="start"><tspan x="412" dy="0">Flash: k ≤ 512</tspan><tspan x="412" dy="23">Pro: k ≤ 1024</tspan></text>
+<rect x="396" y="445" width="328" height="105" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="412" y="474" font-size="18" text-anchor="start" font-weight="650"><tspan x="412" dy="0">选中的全局位置 + SWA</tspan></text>
+<text x="412" y="501" font-size="16" text-anchor="start"><tspan x="412" dy="0">较细压缩；稀疏访问</tspan></text>
+<polyline points="560,260 560,300" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="560,405 560,445" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="756" y="125" font-size="23" text-anchor="start" font-weight="650"><tspan x="756" dy="0">HCA</tspan></text>
+<rect x="756" y="155" width="328" height="105" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="772" y="184" font-size="18" text-anchor="start" font-weight="650"><tspan x="772" dy="0">全局历史压缩 128 倍</tspan></text>
+<text x="772" y="211" font-size="16" text-anchor="start"><tspan x="772" dy="0">[B,floor(T/128),512]</tspan></text>
+<rect x="756" y="300" width="328" height="105" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="772" y="329" font-size="18" text-anchor="start" font-weight="650"><tspan x="772" dy="0">读取全部有效压缩条目</tspan></text>
+<text x="772" y="356" font-size="16" text-anchor="start"><tspan x="772" dy="0">不实例化 CSA Indexer</tspan></text>
+<rect x="756" y="445" width="328" height="105" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="772" y="474" font-size="18" text-anchor="start" font-weight="650"><tspan x="772" dy="0">全部全局压缩条目 + SWA</tspan></text>
+<text x="772" y="501" font-size="16" text-anchor="start"><tspan x="772" dy="0">更粗压缩；保留全局覆盖</tspan></text>
+<polyline points="920,260 920,300" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="920,405 920,445" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="609" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Indexer 决定“去哪里读”；主注意力负责读取主 KV 并完成最终内容加权。</tspan></text>
+</svg>

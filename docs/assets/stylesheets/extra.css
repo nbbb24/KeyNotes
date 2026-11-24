@@ -62,6 +62,46 @@
     line-height: 1.75;
 }
 
+/* Keep prose readable while allowing diagrams and reference tables to stay wide. */
+.md-typeset > p:not(:has(img)),
+.md-typeset > ul,
+.md-typeset > ol {
+    max-width: 78ch;
+}
+
+.md-typeset > p {
+    margin-block: 1.1em;
+}
+
+.md-typeset > ul > li,
+.md-typeset > ol > li {
+    margin-block: 0.7em;
+}
+
+.md-typeset .model-figure {
+    border: 1px solid var(--ik-border);
+    border-radius: 0.75rem;
+    margin: 1.6rem 0;
+    padding: 0.75rem;
+}
+
+.md-typeset .model-figure > p {
+    margin: 0;
+}
+
+.md-typeset .model-figure img {
+    display: block;
+    width: 100%;
+}
+
+.md-typeset .model-figure figcaption {
+    color: var(--ik-muted);
+    font-size: 0.74rem;
+    line-height: 1.65;
+    margin-top: 0.75rem;
+    text-align: left;
+}
+
 .md-typeset h1 {
     color: var(--md-default-fg-color);
     font-size: 2rem;

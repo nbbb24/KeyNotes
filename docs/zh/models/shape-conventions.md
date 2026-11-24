@@ -15,15 +15,25 @@
 | E / k | 路由专家总数 / 每 Token 选中的路由专家数 |
 | r | 序列压缩比例；r=0 在本栏 DeepSeek 配置中表示只有滑动窗口路径 |
 
-对线性层 `Linear(in, out)`，本栏权重写成 **`[out, in]`**，与 PyTorch `weight` 一致。输入 `[B,S,in]` 输出 `[B,S,out]`，数学上是 $Y=XW^T$。有些论文将矩阵写成 `[in,out]`；比较前先转置约定。[PyTorch Linear 定义](https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html)说明了这一布局。
+对线性层 `Linear(in, out)`，本栏权重写成 **`[out, in]`**，与 PyTorch `weight` 一致。输入 `[B,S,in]` 输出 `[B,S,out]`，数学上是 $Y=XW^T$。
 
-例如 GLM 的 `q_b_proj.weight=[16384,2048]`，输入 `[B,S,2048]`，输出 `[B,S,16384]`，随后重排成 `[B,S,64,256]`。运行时也可能使用 `[B,64,S,256]`，数值个数相同，但 stride 和内核接口不同。
+有些论文将矩阵写成 `[in,out]`；比较前先转置约定。[PyTorch Linear 定义](https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html)说明了这一布局。
 
-取 B=2、S=128 的 Prefill，GLM 层输入是 `[2,128,6144]`，Q 为 `[2,128,64,256]`；V4.1 的层间残差是 `[2,128,4,5120]`，主 Q 为 `[2,128,64,512]`。普通单步 Decode 将 S 换为 1，但历史缓存的 T 不会跟着变成 1。
+例如 GLM 的 `q_b_proj.weight=[16384,2048]`，输入 `[B,S,2048]`，输出 `[B,S,16384]`，随后重排成 `[B,S,64,256]`。
+
+运行时也可能使用 `[B,64,S,256]`，数值个数相同，但 stride 和内核接口不同。
+
+取 B=2、S=128 的 Prefill，GLM 层输入是 `[2,128,6144]`，Q 为 `[2,128,64,256]`；V4.1 的层间残差是 `[2,128,4,5120]`，主 Q 为 `[2,128,64,512]`。
+
+普通单步 Decode 将 S 换为 1，但历史缓存的 T 不会跟着变成 1。
 
 ## 🧠 四种不能混用的 Shape
 
+<figure class="model-figure" markdown="1">
+
 [![GLM 投影、Q 重排与量化权重打包的 shape 流程](../../assets/model-diagrams/zh/shape-flow.svg)](../../assets/model-diagrams/zh/shape-flow.svg)
+
+</figure>
 
 | 对象 | 例子 | 用途 |
 | --- | --- | --- |
@@ -36,7 +46,9 @@
 
 ## 🪜 Layer、Head 与残差流
 
-GLM 页的层间隐藏状态为 `[B,S,6144]`。DeepSeek V4/V4.1 的 mHC 维护 `[B,S,4,H]` 残差流，合并后才形成 Attention/FFN 的 `[B,S,H]` 输入。`hc_mult=4` 没有把每个专家的输入矩阵改为 `4H`，也不表示每个子层执行四次独立 Transformer。
+GLM 页的层间隐藏状态为 `[B,S,6144]`。DeepSeek V4/V4.1 的 mHC 维护 `[B,S,4,H]` 残差流，合并后才形成 Attention/FFN 的 `[B,S,H]` 输入。
+
+`hc_mult=4` 没有把每个专家的输入矩阵改为 `4H`，也不表示每个子层执行四次独立 Transformer。
 
 MLA、单共享潜在 KV、滑动窗口和跨层缓存共享，都不能直接套用 `2 × 层数 × KV头数 × 头宽 × T`。必须先确认保留了什么、由哪一层拥有，以及其他层是否引用同一缓冲区。参见[KV Cache 基础](../ml/llm/inference/kv-cache.md)。
 
@@ -44,6 +56,10 @@ MLA、单共享潜在 KV、滑动窗口和跨层缓存共享，都不能直接�
 
 TP 按列切分一个投影时，逻辑权重的 `out` 维可能分片；按行切分时，`in` 维可能分片，并需相应归约。EP 主要分专家集合，PP 主要分层。RMSNorm、共享潜在 KV、Engram 表和分组输出投影未必采用相同切法。
 
-例如 GLM `q_b` 做 TP=4 且按 64 个头均分，可得到每卡 `[4096,2048]` 权重和 `[B,S,16,256]` Q；这不授权把 `kv_a`、所有 norm 和所有缓存也除以 4。DeepSeek 分组 O 投影还需满足头组与 TP 的兼容条件。具体检查[并行组](../ml/llm/inference/parallelism.md)和所用后端。
+例如 GLM `q_b` 做 TP=4 且按 64 个头均分，可得到每卡 `[4096,2048]` 权重和 `[B,S,16,256]` Q；这不授权把 `kv_a`、所有 norm 和所有缓存也除以 4。
 
-参数量为权重维度乘积，而存储字节还依赖 dtype、scale、复制和分片。例如 `[2304,5120]` 有 11,796,480 个逻辑参数；FP4 载荷下限为 5,898,240 字节，实际还需 scale 等开销。所有此类数值都是明确假设下的计算，不是测量值。
+DeepSeek 分组 O 投影还需满足头组与 TP 的兼容条件。具体检查[并行组](../ml/llm/inference/parallelism.md)和所用后端。
+
+参数量为权重维度乘积，而存储字节还依赖 dtype、scale、复制和分片。例如 `[2304,5120]` 有 11,796,480 个逻辑参数；FP4 载荷下限为 5,898,240 字节，实际还需 scale 等开销。
+
+所有此类数值都是明确假设下的计算，不是测量值。

@@ -42,7 +42,9 @@ flowchart TD
     E --> F[Supported hardware paths and protocols]
 ```
 
-This is a responsibility map. It does not require every deployment to use every component or impose a fixed dependency chain. HCCL supplies collective communication such as AllReduce and AllGather. HCOMM exposes communication resources and operations in supported software stacks. MemFabric manages memory resources and transfers; a cache layer manages reusable objects and their lifetime. Backend selection determines the concrete path.
+This is a responsibility map. It does not require every deployment to use every component or impose a fixed dependency chain. HCCL supplies collective communication such as AllReduce and AllGather. HCOMM exposes communication resources and operations in supported software stacks.
+
+MemFabric manages memory resources and transfers; a cache layer manages reusable objects and their lifetime. Backend selection determines the concrete path.
 
 An endpoint identifies a communication participant. Initialization discovers peers and capabilities, prepares queues, and exchanges access descriptions. The data path then submits transfers and observes completion. Registering memory prepares access; it does not send the tensor.
 
@@ -55,9 +57,13 @@ The same symptom, “decode is waiting,” can arise from an oversized cache, fa
 ## 🔄 A learning sequence and self-check
 
 1. Draw devices, dies, NUMA nodes, and interconnects.
+
 2. Label H2D, D2H, and device transfers; add address spaces and registrations.
+
 3. Separate traffic-purpose networks from control/data roles.
+
 4. Trace initialization, submission, completion, and consumption; distinguish host, proxy, and direct device submission.
+
 5. Measure latency, bandwidth, concurrency, and overlap.
 
 Connect movement to model execution with [TP, PP, DP, EP, and CP](../ml/llm/inference/parallelism.md), followed by [layerwise KV transfer and pipelining](../ml/llm/inference/layerwise-inference.md). The former explains partitioning; the latter explains when data is produced, moved, and consumed.

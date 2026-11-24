@@ -1,6 +1,12 @@
 # 🧠 GLM-5.2：相同主干宽度，跨层复用 Indexer
 
-本页绑定 `zai-org/GLM-5.2@cf457fa734ab` 的 [官方配置](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/config.json)。与 GLM-5.1 比较时，最重要的结构差异是 **IndexShare** 与上下文配置，而不是另造一组 Attention 宽度。实现依据固定版本的 [Attention](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py)与[配置类](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py)。
+GLM-5.2 保留 GLM-5.1 的主干宽度，重点变化是 **IndexShare**：部分层重算 Top-k，其余层复用选中位置。下面先对照配置，再跟踪索引和缓存的归属。
+
+??? note "配置、实现与适用范围"
+
+    本页绑定 `zai-org/GLM-5.2@cf457fa734ab` 的 [官方配置](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/config.json)。与 GLM-5.1 比较时，最重要的结构差异是 **IndexShare** 与上下文配置，而不是另造一组 Attention 宽度。
+
+    实现依据固定版本的 [Attention](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py)与[配置类](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py)。
 
 ## 🗺️ 配置与 GLM-5.1 的关系
 
@@ -20,7 +26,11 @@
 
 ## 📐 一层的主投影 Shape
 
+<figure class="model-figure" markdown="1">
+
 [![GLM-5.2 与 GLM-5.1 相同的主 MLA 投影维度](../../assets/model-diagrams/zh/glm-mla.svg)](../../assets/model-diagrams/zh/glm-mla.svg)
+
+</figure>
 
 | 模块 | 逻辑权重 `[out,in]` | 输出 |
 | --- | --- | --- |
@@ -37,9 +47,13 @@
 
 ## 🔎 IndexShare 逐层复用的是 Top-k，不是主 KV
 
+<figure class="model-figure" markdown="1">
+
 [![GLM-5.1 与 GLM-5.2 的逐层索引计算、复用与独立主 KV 对比](../../assets/model-diagrams/zh/index-share.svg)](../../assets/model-diagrams/zh/index-share.svg)
 
-*图：橙色虚线只传选中位置。每个绿色 KV 框仍归相应层自己所有。*
+<figcaption markdown="span">图：橙色虚线只传选中位置。每个绿色 KV 框仍归相应层自己所有。</figcaption>
+
+</figure>
 
 本次配置显式给出 `indexer_types`：层 0、1、2，以及 `6,10,14,…,74` 是 `full`；其余层为 `shared`。例如：
 
@@ -51,11 +65,23 @@
 | 7、8、9 | 复用层 6 的选中位置 | 每层仍有自己的潜在 KV |
 | 74 → 75、76、77 | 74 计算，后 3 层复用 | 各自的主 KV |
 
-`full` 表示该层运行 Indexer，不表示主注意力变成 Dense Full Attention；`shared` 也不表示复用整个 Attention 输出或隐藏状态。参考实现仅在需要时实例化 Indexer，并通过 `prev_topk_indices` 传递索引。独立 Indexer 的投影维度仍为 `wq_b=[4096,2048]`、`wk=[128,6144]`、`weights_proj=[32,6144]`。
+- **`full`：**该层运行自己的 Indexer，并发布选中位置；这里的 Full 不是 Dense Full Attention。
+
+- **`shared`：**复用前一个 Full 层的 Top-k，不复用整个 Attention 输出或隐藏状态。
+
+参考实现仅在需要时实例化 Indexer，并通过 `prev_topk_indices` 传递索引。独立 Indexer 的投影维度为：
+
+| 投影 | 权重 shape |
+| --- | --- |
+| `wq_b` | `[4096,2048]` |
+| `wk` | `[128,6144]` |
+| `weights_proj` | `[32,6144]` |
 
 ## 🧠 缓存与扩上下文的实际影响
 
-主 MLA 缓存的每层潜在维度仍为 512+64；不能因为只有 21 个独立 Indexer 就把 78 层主缓存也缩成 21 层。Indexer Key 与 Top-k 中间结果则由索引复用策略和后端缓存实现决定。最大位置数增加，也不意味着部署时已经预分配了 1M Token 的全部缓存。
+主 MLA 缓存的每层潜在维度仍为 512+64；不能因为只有 21 个独立 Indexer 就把 78 层主缓存也缩成 21 层。Indexer Key 与 Top-k 中间结果则由索引复用策略和后端缓存实现决定。
+
+最大位置数增加，也不意味着部署时已经预分配了 1M Token 的全部缓存。
 
 相同 BF16 主缓存假设下，B=1、T=4096 的载荷仍为 351 MiB；T 增长时需要增加容量预算。实际支持长度还受内存、稀疏注意力内核和配置限制。参见[Shape 约定](shape-conventions.md)和[KV 内存预算](../infra/serving-frameworks.md)。
 

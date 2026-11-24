@@ -18,7 +18,9 @@ A layer-specific attention kernel often benefits from layer-oriented access. Off
 
 ## ⚖️ MLA uses different stored components
 
-An MLA cache can store a compressed latent state and a separate rotary-key component rather than full per-head K/V tensors. For an illustrative latent width 512 and rotary width 64, two buffers might have shapes `[pages, layers, page_size, 1, 512]` and `[pages, layers, page_size, 1, 64]`. Names such as `k_buffer` and `v_buffer` in an implementation do not prove that their contents are ordinary attention keys and values.
+An MLA cache can store a compressed latent state and a separate rotary-key component rather than full per-head K/V tensors. For an illustrative latent width 512 and rotary width 64, two buffers might have shapes `[pages, layers, page_size, 1, 512]` and `[pages, layers, page_size, 1, 64]`.
+
+Names such as `k_buffer` and `v_buffer` in an implementation do not prove that their contents are ordinary attention keys and values.
 
 Terms such as `page_first_direct` or `page_first_kv_split` are framework/version-specific identifiers. Verify the actual strides, data type, allocation, and kernel contract in the version being used. A system's “L3 cache tier” may mean remote/storage-backed KV cache, not the CPU's hardware L3 cache.
 

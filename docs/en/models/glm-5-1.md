@@ -1,6 +1,10 @@
 # 🧠 GLM-5.1: shapes across 78 MLA, DSA, and MoE layers
 
-This page pins the [official config](https://huggingface.co/zai-org/GLM-5.1/blob/26e1bd6e011feb778d25ae34b09b07074139d92d/config.json) at `zai-org/GLM-5.1@26e1bd6e011f`, with modules interpreted through a pinned [Transformers implementation](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py). Shapes are logical and unpartitioned by TP/EP; weights use `[out,in]`.
+GLM-5.1 has a **78-layer backbone**: three dense-FFN layers followed by 75 MoE layers. Follow one layer through its Q/K/V projections, then inspect experts and the KV cache.
+
+??? note "Pinned configuration, implementation, and scope"
+
+    This page pins the [official config](https://huggingface.co/zai-org/GLM-5.1/blob/26e1bd6e011feb778d25ae34b09b07074139d92d/config.json) at `zai-org/GLM-5.1@26e1bd6e011f`, with modules interpreted through a pinned [Transformers implementation](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py). Shapes are logical and unpartitioned by TP/EP; weights use `[out,in]`.
 
 ## 🗺️ Configuration and layer organization
 
@@ -19,11 +23,19 @@ Each layer applies normalization, MLA/DSA attention and a residual, then normali
 
 ## 📐 Per-layer attention projections
 
+<figure class="model-figure" markdown="1">
+
 [![GLM backbone attention, FFN, and two residual paths](../../assets/model-diagrams/en/glm-block.svg)](../../assets/model-diagrams/en/glm-block.svg)
 
-*Figure: attention is followed by the FFN. Gray bypasses preserve the input to each corresponding sublayer.*
+<figcaption markdown="span">Figure: attention is followed by the FFN. Gray bypasses preserve the input to each corresponding sublayer.</figcaption>
+
+</figure>
+
+<figure class="model-figure" markdown="1">
 
 [![GLM MLA hidden state, query, latent KV, RoPE, and output projection](../../assets/model-diagrams/en/glm-mla.svg)](../../assets/model-diagrams/en/glm-mla.svg)
+
+</figure>
 
 | Module | Logical weight | Output activation |
 | --- | --- | --- |
@@ -42,13 +54,29 @@ Each layer applies normalization, MLA/DSA attention and a residual, then normali
 
 ## 🔎 DSA index heads are a side path
 
-The indexer projects the Q latent into `[B,S,32,128]` using `wq_b=[4096,2048]`. `wk=[128,6144]` produces one 128-dimensional key per position, followed by LayerNorm; `weights_proj=[32,6144]` supplies head weights. Selected indices have shape `[B,S,min(2048,T)]`, then main attention accesses the selected KV.
+Read the indexer's three projections separately:
 
-All 78 layers run their own indexer in this snapshot. Its 32 heads do not replace the main 64 heads, and top-k does not mean retaining only 2048 historical tokens. A simple reference may materialize full scores; optimized sparse kernels can use different intermediate storage.
+1. **Query:** `wq_b=[4096,2048]` projects the Q latent into `[B,S,32,128]`.
+
+2. **Key:** `wk=[128,6144]` produces one 128-dimensional key per position, followed by LayerNorm.
+
+3. **Head weights:** `weights_proj=[32,6144]` supplies the index-head combination weights.
+
+Selected indices have shape `[B,S,min(2048,T)]`; main attention then accesses those KV positions. **All 78 layers own an indexer** in this snapshot.
+
+!!! note "Index heads and retained history"
+
+    The indexer's 32 heads do not replace the main 64 heads. Top-k does not mean retaining only 2048 historical tokens.
+
+A simple reference may materialize full scores; optimized sparse kernels can use different intermediate storage.
 
 ## 🧩 Dense and MoE FFNs
 
+<figure class="model-figure" markdown="1">
+
 [![GLM top-8 expert routing, shared expert, and output combination](../../assets/model-diagrams/en/glm-moe.svg)](../../assets/model-diagrams/en/glm-moe.svg)
+
+</figure>
 
 | Layer/module | Logical weight | Main activation |
 | --- | --- | --- |

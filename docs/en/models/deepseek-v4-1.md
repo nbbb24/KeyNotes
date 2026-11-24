@@ -1,6 +1,10 @@
 # 🧠 DeepSeek-V4.1 Flash: CED, shared KV, Engram, and vision shapes
 
-This page pins the [official V4.1-Flash config](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/config.json) and matching [text reference implementation](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/model.py). The checked Flash-1017 config is equal, without establishing equal weights. No guessed V4.1-Pro dimensions are supplied.
+V4.1 Flash centers on **CED and cross-layer KV sharing**. Start with its 40-layer text backbone, then inspect Engram, the vision encoder, and DSpark separately.
+
+??? note "Pinned configuration, implementation, and scope"
+
+    This page pins the [official V4.1-Flash config](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/config.json) and matching [text reference implementation](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/model.py). The checked Flash-1017 config is equal, without establishing equal weights. No guessed V4.1-Pro dimensions are supplied.
 
 ## 🗺️ More than a width change from V4
 
@@ -32,7 +36,11 @@ flowchart LR
 
 ## 📐 Main projections in each text layer
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 four-stream mHC residuals and single-stream attention and FFN inputs](../../assets/model-diagrams/en/mhc.svg)](../../assets/model-diagrams/en/mhc.svg)
+
+</figure>
 
 Inter-layer residuals are `[B,S,4,5120]`, while sublayer input/output is `[B,S,5120]`. Attention/FFN mHC projections each have shape `[24,20480]`. Single-Pass mHC uses computed mixing coefficients in subsequent sublayers; do not copy V4's execution order unchanged.
 
@@ -52,9 +60,13 @@ Every layer retains its own recent SWA KV, while only a few layers own **global*
 
 ## 🔎 CSA2: Full, Reindex, and Reuse
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 global KV owners, consuming layer ranges, and reindexing layers](../../assets/model-diagrams/en/v41-kv.svg)](../../assets/model-diagrams/en/v41-kv.svg)
 
-*Figure: layers 20–39 share one global KV group; layers 24, 28, 32, and 36 only reselect positions. Per-layer SWA windows remain separate.*
+<figcaption markdown="span">Figure: layers 20–39 share one global KV group; layers 24, 28, 32, and 36 only reselect positions. Per-layer SWA windows remain separate.</figcaption>
+
+</figure>
 
 | Layers / mode | Produce global KV / index keys? | Recompute top-k? | Global KV used |
 | --- | --- | --- | --- |
@@ -70,7 +82,11 @@ Layer 20 selects at most 2048 candidate blocks of 8 positions. Deeper Reindex la
 
 ## 🧮 Deriving 890 bytes per token
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 global cache split into 720 bytes of main KV and 170 bytes of index keys](../../assets/model-diagrams/en/v41-cache.svg)](../../assets/model-diagrams/en/v41-cache.svg)
+
+</figure>
 
 In the documented packed format, main KV uses one byte of scale per 16 FP4 values, and index keys use one per 32 FP4 values. Four cache groups contribute `3/2+1=2.5` vectors per original token:
 
@@ -83,17 +99,50 @@ If all 40 backbone `[B,128,512]` SWA windows remain BF16-resident, B=1 uses **5 
 
 ## 🗃️ Engram conditional memory at layers 1 and 14
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 Engram n-gram hashes, 24 lookups, keys, values, and residual gating](../../assets/model-diagrams/en/v41-engram.svg)](../../assets/model-diagrams/en/v41-engram.svg)
 
-Two embedding tables are `[384006168,256]` and `[384016682,256]`, totaling 196,613,849,600 logical parameters. Eight Engram heads are distinct from the 384 MoE experts. Hashing 2/3/4-grams across 8 heads yields 24 addresses, producing `[B,S,24,256]`, flattened to `[B,S,6144]`.
+</figure>
 
-`wkv=[25600,6144]` creates key `[B,S,4,5120]` and value `[B,S,5120]`, gated against the residual stream and merged into `[B,S,4,5120]`. Each token does not traverse all 196.6B table elements. The [official Engram implementation](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/engram.py) defines hashing/layout; text model code defines projections and gating.
+### Start with the two tables
 
-The model card's **552B backbone** and roughly 196B Engram are separate counts. Weight-file totals can also include auxiliary modules. Backbone, stored parameters, active parameters, and quantized bytes are different quantities. The card's 8B prefill / 16B decode counts follow its CED execution model; a reference script's scheduling is not automatically the production optimum.
+| Layer | Embedding shape |
+| --- | --- |
+| 1 | `[384006168,256]` |
+| 14 | `[384016682,256]` |
+
+Together they hold **196,613,849,600 logical parameters**. Eight Engram heads are distinct from the 384 MoE experts.
+
+### Follow one lookup
+
+1. **Hash addresses:** hash 2/3/4-grams across eight heads, giving 24 addresses.
+
+2. **Read and flatten:** `[B,S,24,256]` becomes `[B,S,6144]`.
+
+3. **Project keys and values:** `wkv=[25600,6144]` produces key `[B,S,4,5120]` and value `[B,S,5120]`.
+
+4. **Gate the update:** matching against the residual stream updates `[B,S,4,5120]`.
+
+A token accesses selected rows rather than traversing all 196.6B table elements. The [official Engram implementation](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/engram.py) defines hashing/layout; text model code defines projections and gating.
+
+### Keep parameter counts separate
+
+- **Backbone:** the model card's 552B backbone count.
+
+- **Conditional memory:** roughly 196B Engram parameters; weight-file totals can include auxiliary modules.
+
+- **Per-token activity:** the card reports 8B prefill / 16B decode under its CED execution model.
+
+These counts differ from quantized storage bytes. A reference script's scheduling is not automatically the production optimum.
 
 ## 🖼️ Per-layer vision shapes
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 patches, 32-layer ViT, 3×3 downsampling, and language aligner shapes](../../assets/model-diagrams/en/v41-vision.svg)](../../assets/model-diagrams/en/v41-vision.svg)
+
+</figure>
 
 For one image with `n_h×n_w` 14×14 patches, let P be patch count and `P'=ceil(n_h/3)×ceil(n_w/3)`. Resizing and resolution make P dynamic; a fixed visual-token count does not describe every image.
 
@@ -110,11 +159,31 @@ ViT uses image-local bidirectional attention and 2D RoPE. Visual embeddings repl
 
 ## ⏩ Three DSpark layers are auxiliary
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 DSpark target layers, draft block, three-stage draft network, and verification](../../assets/model-diagrams/en/v41-dspark.svg)](../../assets/model-diagrams/en/v41-dspark.svg)
 
-The config specifies prediction layers 40–42, draft block size 5, and target layers `[37,38,39]`. Their hidden states concatenate to width 15360, with `main_proj=[5120,15360]`; draft hidden states can be `[B,5,4,5120]`. Draft routing uses 128 experts and top-3, versus backbone 384/top-6. Draft logits can be `[B,5,129280]`, followed by verification and acceptance.
+</figure>
 
-The final three zero ratios describe these prediction layers, outside the 40-layer backbone. Backbone depth, draft-network depth, draft block size, and accepted-token count are separate. See [speculative decoding](../ml/llm/inference/multi-token-prediction.md).
+Separate three configuration quantities:
+
+- **Draft depth:** prediction layers 40–42, or three extra stages.
+
+- **Draft block size:** five positions.
+
+- **Backbone taps:** target layers `[37,38,39]`.
+
+Follow the draft shapes in order:
+
+1. Concatenate the three tapped hidden states to width **15360**.
+
+2. Apply `main_proj=[5120,15360]`; draft hidden states can be `[B,5,4,5120]`.
+
+3. Use **128 experts with top-3** in the draft network, versus backbone 384/top-6.
+
+4. Produce `[B,5,129280]` logits, then verify and accept drafts.
+
+The final three zero compression ratios belong to prediction stages, outside the 40-layer backbone. **Accepted-token count** follows verification rather than draft depth or block size. See [speculative decoding](../ml/llm/inference/multi-token-prediction.md).
 
 ## 🪜 Complete text backbone map
 

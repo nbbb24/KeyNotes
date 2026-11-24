@@ -326,6 +326,33 @@ def diagrams(lang, configs):
     f.note(tr('890 已经合计四组全局缓存，不再乘 40 层；常驻 BF16 主干 SWA 窗口另约 5 MiB / 序列。',
               '890 already sums the four global groups: do not multiply by 40. BF16 backbone SWA adds about 5 MiB/sequence.'))
     result['v41-cache'] = f.render()
+
+    f = Figure(tr('SWA、CSA、HCA：比较访问路径', 'SWA, CSA, HCA: compare access paths'),
+               tr('V4 的 CSA / HCA 层也有 SWA 分支；下面分别追踪局部与全局路径。',
+                  'V4 CSA/HCA layers also retain SWA. Trace local and global paths separately.'), 650)
+    columns = [
+        ('SWA', 'cache',
+         (tr('最近原始位置', 'Recent raw positions'), ['[B,128,512]', tr('最多 min(128,T) 个位置', 'At most min(128,T) positions')]),
+         (tr('按窗口规则读取', 'Read by window rule'), [tr('只保留因果可见的最近位置', 'Recent causally visible positions'), tr('无需学习式 Top-k', 'No learned top-k selection')]),
+         (tr('主注意力的局部分支', 'Local main-attention branch'), [tr('保持近期信息的细节', 'Preserves recent detail')])),
+        ('CSA', 'compute',
+         (tr('全局历史压缩 4 倍', 'Compress global history by 4'), ['[B,floor(T/4),512]', 'Indexer K: 128 dimensions']),
+         (tr('Indexer 评分 → Top-k', 'Indexer scores → top-k'), ['Flash: k ≤ 512', 'Pro: k ≤ 1024']),
+         (tr('选中的全局位置 + SWA', 'Selected global entries + SWA'), [tr('较细压缩；稀疏访问', 'Finer compression; sparse reads')])),
+        ('HCA', 'index',
+         (tr('全局历史压缩 128 倍', 'Compress global history by 128'), ['[B,floor(T/128),512]']),
+         (tr('读取全部有效压缩条目', 'Read all valid compressed entries'), [tr('不实例化 CSA Indexer', 'No CSA indexer instance')]),
+         (tr('全部全局压缩条目 + SWA', 'All compressed entries + SWA'), [tr('更粗压缩；保留全局覆盖', 'Coarser global representation')])),
+    ]
+    for i,(name,kind,*stages) in enumerate(columns):
+        x=36+i*360;f.text(x,125,name,23,bold=True)
+        for y,(title,lines) in zip((155,300,445),stages,strict=True):
+            f.box(x,y,328,105,title,lines,kind)
+        f.arrow([(x+164,260),(x+164,300)],kind)
+        f.arrow([(x+164,405),(x+164,445)],kind)
+    f.note(tr('Indexer 决定“去哪里读”；主注意力负责读取主 KV 并完成最终内容加权。',
+              'The indexer chooses where to read. Main attention reads main KV and computes the final weighted result.'))
+    result['attention-paths'] = f.render()
     return result
 
 

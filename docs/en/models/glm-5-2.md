@@ -1,6 +1,10 @@
 # 🧠 GLM-5.2: shared top-k selection with the same backbone widths
 
-This page pins the [official config](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/config.json) at `zai-org/GLM-5.2@cf457fa734ab`. The important structural changes from GLM-5.1 are **IndexShare** and context settings, rather than new main-attention widths. Interpretation follows pinned [attention code](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py) and its [configuration class](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py).
+GLM-5.2 retains GLM-5.1’s backbone widths and introduces **IndexShare**: selected layers compute top-k and others reuse their selection. Compare the configs, then follow index and cache ownership.
+
+??? note "Pinned configuration, implementation, and scope"
+
+    This page pins the [official config](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/config.json) at `zai-org/GLM-5.2@cf457fa734ab`. The important structural changes from GLM-5.1 are **IndexShare** and context settings, rather than new main-attention widths. Interpretation follows pinned [attention code](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py) and its [configuration class](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py).
 
 ## 🗺️ Comparison with GLM-5.1
 
@@ -20,7 +24,11 @@ The [official model card](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734
 
 ## 📐 Main per-layer projections
 
+<figure class="model-figure" markdown="1">
+
 [![The main MLA projection dimensions shared by GLM-5.1 and GLM-5.2](../../assets/model-diagrams/en/glm-mla.svg)](../../assets/model-diagrams/en/glm-mla.svg)
+
+</figure>
 
 | Module | Logical weight `[out,in]` | Output |
 | --- | --- | --- |
@@ -37,9 +45,13 @@ As in [GLM-5.1](glm-5-1.md), full K combines 192 NoPE and 64 RoPE dimensions. Th
 
 ## 🔎 IndexShare reuses top-k positions, not main KV
 
+<figure class="model-figure" markdown="1">
+
 [![GLM-5.1 versus GLM-5.2 index computation, selection reuse, and separate main KV](../../assets/model-diagrams/en/index-share.svg)](../../assets/model-diagrams/en/index-share.svg)
 
-*Figure: dashed orange arrows carry selected positions only. Each green KV box remains owned by its layer.*
+<figcaption markdown="span">Figure: dashed orange arrows carry selected positions only. Each green KV box remains owned by its layer.</figcaption>
+
+</figure>
 
 The explicit `indexer_types` lists layers 0, 1, 2 and `6,10,14,…,74` as `full`, with the rest `shared`:
 
@@ -51,7 +63,17 @@ The explicit `indexer_types` lists layers 0, 1, 2 and `6,10,14,…,74` as `full`
 | 7, 8, 9 | Reuse layer 6's selection | Separate latents in each layer |
 | 74 → 75, 76, 77 | 74 computes, the next three reuse | Separate main KV |
 
-`full` means running an indexer, not dense full attention. `shared` does not reuse the complete attention output or hidden state. The implementation instantiates indexers only where required and carries `prev_topk_indices`. Independent indexers retain `wq_b=[4096,2048]`, `wk=[128,6144]`, and `weights_proj=[32,6144]`.
+- **`full`:** run an independent indexer and publish selected positions; this does not mean dense full attention.
+
+- **`shared`:** reuse the preceding Full layer's top-k, without reusing its complete attention output or hidden state.
+
+The implementation instantiates indexers only where required and carries `prev_topk_indices`. Independent indexer projections are:
+
+| Projection | Weight shape |
+| --- | --- |
+| `wq_b` | `[4096,2048]` |
+| `wk` | `[128,6144]` |
+| `weights_proj` | `[32,6144]` |
 
 ## 🧠 Cache implications of a longer context
 

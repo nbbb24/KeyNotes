@@ -52,6 +52,7 @@ plugins:
             🏗️ Infra: 🏗️ 基础设施
             🧬 Model structures: 🧬 模型结构
             📐 Shape conventions: 📐 Shape 阅读约定
+            🔎 Compressed attention and indexers: 🔎 压缩注意力与 Indexer
             🧠 GLM family: 🧠 GLM 系列
             🧠 DeepSeek family: 🧠 DeepSeek 系列
             🧠 GLM-5.1: 🧠 GLM-5.1
@@ -248,6 +249,7 @@ nav:
 - 🧬 Model structures:
   - 🗺️ Learning map: models/index.md
   - 📐 Shape conventions: models/shape-conventions.md
+  - 🔎 Compressed attention and indexers: models/compressed-attention.md
   - 🧠 GLM family:
     - 🧠 GLM-5.1: models/glm-5-1.md
     - 🧠 GLM-5.2: models/glm-5-2.md

@@ -62,7 +62,9 @@ A doorbell commonly identifies a queue and its new producer position. The engine
 
 Conventional Send/Recv and Write with Immediate require attention to receive resources; ordinary RDMA Write does not consume one remote RQ entry per write. With [GPUDirect RDMA](https://docs.nvidia.com/cuda/gpudirect-rdma/), obey GPU memory ordering as well: a host notification alone does not authorize an arbitrary running GPU kernel to read incoming bytes without synchronization. See the [RDMA programming interfaces](https://docs.nvidia.com/networking/display/rdmaawareprogrammingv17/rdma+verbs+api) for operation semantics.
 
-Not every WQE produces an individual successful CQE. Selective signaling reduces CQ pressure; where the same SQ's operation-ordering and completion guarantees permit it, a later successful signaled completion can retire an earlier batch. Do not extend this inference across QPs or ignore error handling. CQ event notifications wake software; software must still retrieve and check WCs. Polling consumes a completion, and [CQ overrun makes the CQ unusable](https://github.com/linux-rdma/rdma-core/blob/master/libibverbs/man/ibv_poll_cq.3).
+Not every WQE produces an individual successful CQE. Selective signaling reduces CQ pressure; where the same SQ's operation-ordering and completion guarantees permit it, a later successful signaled completion can retire an earlier batch. Do not extend this inference across QPs or ignore error handling.
+
+CQ event notifications wake software; software must still retrieve and check WCs. Polling consumes a completion, and [CQ overrun makes the CQ unusable](https://github.com/linux-rdma/rdma-core/blob/master/libibverbs/man/ibv_poll_cq.3).
 
 ## 🧮 Depth, wraparound, and backpressure
 

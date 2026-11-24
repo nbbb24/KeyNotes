@@ -1,6 +1,10 @@
 # 🧠 DeepSeek-V4.1 Flash：CED、共享 KV、Engram 与视觉 Shape
 
-本页绑定 [V4.1-Flash 官方配置](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/config.json)及同版[文本参考实现](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/model.py)。本次核对的 Flash-1017 配置与它相同；不据此推断两个 checkpoint 的权重相同。这里不为未取得配置的 V4.1-Pro 填入推测值。
+V4.1 Flash 的核心是 **CED 与跨层 KV 共享**。本页先讲 40 层文本主干，再分别拆解 Engram、视觉编码器和 DSpark。
+
+??? note "配置、实现与适用范围"
+
+    本页绑定 [V4.1-Flash 官方配置](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/config.json)及同版[文本参考实现](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/model.py)。本次核对的 Flash-1017 配置与它相同；不据此推断两个 checkpoint 的权重相同。这里不为未取得配置的 V4.1-Pro 填入推测值。
 
 ## 🗺️ 这不是只给 V4 增加几个参数
 
@@ -18,7 +22,9 @@
 | Engram 所在层 / 额外 DSpark 层 | 1、14 / 3 |
 | 视觉主干 | 32 层，H=1024，16 头，FFN=2816，Patch=14 |
 
-官方将模型定义为 **Causal Encoder–Decoder（CED）**：Decoder 的全局 KV 由最终 Encoder 状态提供，而非每个 Decoder 层各自产生一套全局 KV。它不是把原来的 Decoder-only 换个名称，也不是直接照搬双向 Encoder 的经典翻译模型。[官方模型卡](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/README.md)说明了该区别。
+官方将模型定义为 **Causal Encoder–Decoder（CED）**：Decoder 的全局 KV 由最终 Encoder 状态提供，而非每个 Decoder 层各自产生一套全局 KV。
+
+它不是把原来的 Decoder-only 换个名称，也不是直接照搬双向 Encoder 的经典翻译模型。[官方模型卡](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/README.md)说明了该区别。
 
 ```mermaid
 flowchart LR
@@ -32,7 +38,11 @@ flowchart LR
 
 ## 📐 文本每层主投影
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 mHC 的四流残差和单流 Attention、FFN 输入](../../assets/model-diagrams/zh/mhc.svg)](../../assets/model-diagrams/zh/mhc.svg)
+
+</figure>
 
 层间四流残差为 `[B,S,4,5120]`，子层输入/输出为 `[B,S,5120]`。每层 Attention/FFN 的 mHC 混合投影各 `[24,20480]`；V4.1 的 Single-Pass mHC 把计算出的混合系数用于后续子层，不能把 V4 的执行顺序原样套入。
 
@@ -52,9 +62,13 @@ flowchart LR
 
 ## 🔎 CSA2：Full、Reindex、Reuse
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 的四个全局 KV 所有者、使用层范围和 Indexer 重新选择层](../../assets/model-diagrams/zh/v41-kv.svg)](../../assets/model-diagrams/zh/v41-kv.svg)
 
-*图：层 20–39 使用同一组全局 KV；24、28、32、36 仅重新选择位置。每层独立 SWA 窗口另行保留。*
+<figcaption markdown="span">图：层 20–39 使用同一组全局 KV；24、28、32、36 仅重新选择位置。每层独立 SWA 窗口另行保留。</figcaption>
+
+</figure>
 
 | 层 / 模式 | 生成全局 KV / Indexer K | 重算 Top-k | 使用哪套全局 KV |
 | --- | --- | --- | --- |
@@ -64,38 +78,83 @@ flowchart LR
 | 24、28、32、36：Reindex | 不重新生成共享 Key | 是 | 层 20 缓存组 |
 | 其他层：Reuse | 否 | 复用最近 Indexer 层的结果 | 最近 Full 层的缓存组 |
 
-主全局 KV 的逻辑存储分别是层 2、8、14 的 `[B,floor(T/2),512]`，以及层 20 的 `[B,T,512]`。对应 Indexer Key 为同样序列长度、最后一维 128；只有四个所有者持有它们。Indexer Query 为 `[B,S,32,128]`，`wq_b=[4096,1280]`；所有者将 512 维潜在 KV 用 `wk=[128,512]` 转为 Indexer K。
+主全局 KV 的逻辑存储分别是层 2、8、14 的 `[B,floor(T/2),512]`，以及层 20 的 `[B,T,512]`。对应 Indexer Key 为同样序列长度、最后一维 128；只有四个所有者持有它们。
+
+Indexer Query 为 `[B,S,32,128]`，`wq_b=[4096,1280]`；所有者将 512 维潜在 KV 用 `wk=[128,512]` 转为 Indexer K。
 
 层 20 的候选选择最多取 2048 个块，每块 8 个位置；较深 Reindex 层在候选池内重新选 Top-512。`Full` 指该层拥有并发布共享资源，不表示对全部历史做 Dense Attention；`Reuse` 不跳过该层的 Q、SWA 或 FFN。
 
 ## 🧮 890 字节 / Token 怎样算出来
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 全局主 KV 的 720 字节与索引 Key 的 170 字节拆解](../../assets/model-diagrams/zh/v41-cache.svg)](../../assets/model-diagrams/zh/v41-cache.svg)
+
+</figure>
 
 按官方描述的打包格式：主 KV 每 16 个 FP4 元素配一个单字节 scale，Indexer K 每 32 个 FP4 元素配一个单字节 scale。四组缓存折算到原始 Token 的密度为 `3/2+1=2.5`：
 
 $$b_{main}=(512/2+512/16)\times2.5=720,$$
 $$b_{index}=(128/2+128/32)\times2.5=170.$$
 
-全局缓存合计 **890 字节 / 原始 Token**。这里不包括 SWA 窗口、压缩器状态、分配舍入、路由/页元数据和 DSpark 状态；不能再将 890 乘以 40。公式是从配置与量化格式推导的载荷模型，实际代码还可能采用未打包的数值仿真缓冲区。[官方模型卡](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/README.md)报告了相同全局载荷口径。
+全局缓存合计 **890 字节 / 原始 Token**。这里不包括 SWA 窗口、压缩器状态、分配舍入、路由/页元数据和 DSpark 状态；不能再将 890 乘以 40。
 
-若仅把 40 个主干层的 `[B,128,512]` SWA 窗口按 BF16 常驻计算，B=1 为 **5 MiB**，不随长历史线性增长。SWA bounded replay 可以重建近期窗口，是否保留、卸载或重放由执行路径决定，不能把窗口状态当作不存在。
+公式是从配置与量化格式推导的载荷模型，实际代码还可能采用未打包的数值仿真缓冲区。[官方模型卡](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/README.md)报告了相同全局载荷口径。
+
+若仅把 40 个主干层的 `[B,128,512]` SWA 窗口按 BF16 常驻计算，B=1 为 **5 MiB**，不随长历史线性增长。
+
+SWA bounded replay 可以重建近期窗口，是否保留、卸载或重放由执行路径决定，不能把窗口状态当作不存在。
 
 ## 🗃️ Engram：层 1 与层 14 的条件查表
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 Engram 从 n-gram 哈希、24 路查表到 Key、Value 和四流门控](../../assets/model-diagrams/zh/v41-engram.svg)](../../assets/model-diagrams/zh/v41-engram.svg)
 
-配置中的两个 Embedding 表分别为 `[384006168,256]` 和 `[384016682,256]`，逻辑参数合计 196,613,849,600。这里的 8 个 Engram 头与 384 个 MoE 专家不是同一套分组。对 2/3/4-gram 各做 8 路哈希，共 24 个地址，得到 `[B,S,24,256]`，拼成 `[B,S,6144]`。
+</figure>
 
-`wkv=[25600,6144]` 将结果投影为 Key `[B,S,4,5120]` 与 Value `[B,S,5120]`，经与当前残差流的匹配门控写回 `[B,S,4,5120]`。这不是每个 Token 遍历全部约 196.6B 表项。[官方 Engram 实现](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/engram.py)定义哈希表组织，文本模型代码定义投影和门控。
+### 先看两张表
 
-模型卡的 **552B backbone** 与 Engram 约 196B 是分开的口径；Hugging Face 按权重文件统计的总参数还可能包含额外模块。不要把 552B、存储总参数、每 Token 激活参数和量化字节互相替代。模型卡给出的 8B Prefill / 16B Decode 是其 CED 执行口径；参考脚本的具体执行调度不应自动视作生产最优路径。
+| 所在层 | Embedding shape |
+| --- | --- |
+| 层 1 | `[384006168,256]` |
+| 层 14 | `[384016682,256]` |
+
+两表合计 **196,613,849,600 个逻辑参数**。这里的 8 个 Engram 头与 384 个 MoE 专家是不同的分组。
+
+### 再沿一次查表读 Shape
+
+1. **哈希地址：**对 2/3/4-gram 各做 8 路哈希，共得到 24 个地址。
+
+2. **读取并拼接：**查表结果为 `[B,S,24,256]`，拼成 `[B,S,6144]`。
+
+3. **生成 Key / Value：**`wkv=[25600,6144]` 投影出 Key `[B,S,4,5120]` 与 Value `[B,S,5120]`。
+
+4. **门控写回：**与当前残差流匹配后，更新 `[B,S,4,5120]`。
+
+每个 Token 只访问选中的表项，不遍历全部约 196.6B 参数。[官方 Engram 实现](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/engram.py)定义哈希表组织，文本模型代码定义投影和门控。
+
+### 参数口径分开看
+
+- **主干：**模型卡的 552B backbone。
+
+- **条件存储：**Engram 约 196B；权重文件总数还可能包含额外模块。
+
+- **逐 Token 激活：**模型卡按其 CED 执行口径给出 Prefill 8B、Decode 16B。
+
+上述计数与量化存储字节不同；参考脚本的具体调度也不应自动视为生产最优路径。
 
 ## 🖼️ 视觉的每层 Shape
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 视觉 Patch、32 层 ViT、3×3 下采样和语言 Aligner 的 shape](../../assets/model-diagrams/zh/v41-vision.svg)](../../assets/model-diagrams/zh/v41-vision.svg)
 
-以一张图片产生 `n_h×n_w` 个 14×14 Patch 为例，令 P 为 Patch 数、`P'=ceil(n_h/3)×ceil(n_w/3)`。裁剪、缩放和分辨率使 P 动态变化，不能给所有图片写一个固定 Token 数。
+</figure>
+
+以一张图片产生 `n_h×n_w` 个 14×14 Patch 为例，令 P 为 Patch 数、`P'=ceil(n_h/3)×ceil(n_w/3)`。
+
+裁剪、缩放和分辨率使 P 动态变化，不能给所有图片写一个固定 Token 数。
 
 | 视觉模块 | 权重 / 输出 |
 | --- | --- |
@@ -110,11 +169,31 @@ ViT 使用图像内双向 Attention 与 2D RoPE；视觉 Embedding 替换语言�
 
 ## ⏩ DSpark 的 3 层不是 3 个普通主干层
 
+<figure class="model-figure" markdown="1">
+
 [![V4.1 DSpark 的目标层、草稿块、三层草稿网络和主干验证](../../assets/model-diagrams/zh/v41-dspark.svg)](../../assets/model-diagrams/zh/v41-dspark.svg)
 
-配置给出额外预测层 40–42、草稿块大小 5、目标层 `[37,38,39]`。从这三个层取得的隐藏状态合并为末维 15360，`main_proj=[5120,15360]`；草稿隐藏可为 `[B,5,4,5120]`。草稿专家为 128 个、top-3，与主干 384/top-6 不同。最终草稿 logits 可为 `[B,5,129280]`，后续还需要验证与接受策略。
+</figure>
 
-`compress_ratios` 的末 3 项是这三个预测层的 0，不属于 40 层主干。主干层数、草稿网络深度、草稿块大小、实际接受 Token 数是四个不同数量。参见[推测解码](../ml/llm/inference/multi-token-prediction.md)。
+先区分三个配置量：
+
+- **草稿网络深度：**额外预测层 40–42，共 3 层。
+
+- **草稿块大小：**5 个位置。
+
+- **主干取值位置：**目标层 `[37,38,39]`。
+
+一次草稿执行可按下面的 shape 流程阅读：
+
+1. 合并三个目标层的隐藏状态，末维为 **15360**。
+
+2. 经过 `main_proj=[5120,15360]`；草稿隐藏可为 `[B,5,4,5120]`。
+
+3. 在草稿网络中使用 **128 个专家、top-3**；主干采用 384/top-6。
+
+4. 产生 `[B,5,129280]` 草稿 logits，再执行验证与接受策略。
+
+`compress_ratios` 的末 3 个 0 属于预测层，不计入 40 层主干。**实际接受 Token 数**由验证决定，不能用草稿深度或块大小代替。参见[推测解码](../ml/llm/inference/multi-token-prediction.md)。
 
 ## 🪜 完整文本主干层表
 

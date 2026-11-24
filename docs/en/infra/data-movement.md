@@ -66,7 +66,9 @@ The pinned H2D lifetime is `aclrtMallocHost → fill → aclrtMemcpyAsync → co
 
 **Being non-swappable at the OS level does not mean CANN Runtime recognizes and prepares a buffer for its pinned asynchronous host-copy path.** HugeTLB supplies huge-page and residency semantics; `aclrtMallocHost` supplies Runtime-managed pinned host allocations. HugeTLB alone does not establish the same asynchronous return behavior.
 
-The note contributor reported the following approximate measurements. The **call phase** measures the host-side copy API calls; **synchronization** measures the subsequent stream wait. The individual-copy path retains the reported call-phase scope; it is not interpreted as the duration of each small copy. Complete software/hardware versions, byte counts, batch counts, and timing boundaries were not supplied with this note, so these values describe this observation rather than a general bandwidth benchmark.
+The note contributor reported the following approximate measurements. The **call phase** measures the host-side copy API calls; **synchronization** measures the subsequent stream wait. The individual-copy path retains the reported call-phase scope; it is not interpreted as the duration of each small copy.
+
+Complete software/hardware versions, byte counts, batch counts, and timing boundaries were not supplied with this note, so these values describe this observation rather than a general bandwidth benchmark.
 
 | Host buffer source | Copy path | API call phase | Subsequent stream synchronization |
 | --- | --- | --- | --- |
@@ -76,13 +78,25 @@ The note contributor reported the following approximate measurements. The **call
 
 Interpret the distribution as follows:
 
-1. **HugeTLB with BatchAsync:** most waiting occurs inside the API call, followed by about 6 µs of synchronization. This is consistent with the copy completing before API return, leaving almost none of this copy work for the later stream wait.
-2. **`aclrtMallocHost` with BatchAsync:** about 0.33 ms in the call and 2.67 ms in synchronization is consistent with submission followed by asynchronous stream progress, with synchronization waiting for the remaining work. Transfers can begin after submission; they do not wait for the synchronization call to start.
-3. **HugeTLB with individual MemcpyAsync calls:** about 3.5 ms in the call phase and 9 µs in synchronization shows a similar distribution. The observation is not confined to the batch interface.
+1. **HugeTLB with BatchAsync:**
 
-Thus, **the tested HugeTLB buffer did not exhibit the Runtime-pinned asynchronous behavior of the `aclrtMallocHost` buffer; non-swappability alone does not make them equivalent.** This interpretation agrees with the earlier official `aclrtMemcpyAsync` distinction between non-pinned and pinned host return behavior; the batch-path conclusion here relies on the reported measurement. Timing alone cannot establish Runtime registration internals, use of a particular staging buffer, or the exact execution path.
+    most waiting occurs inside the API call, followed by about 6 µs of synchronization. This is consistent with the copy completing before API return, leaving almost none of this copy work for the later stream wait.
 
-Evaluate **call time together with subsequent synchronization**, rather than treating a 0.33 ms return as completed-transfer bandwidth. A repeatable comparison also fixes bytes, copy count, initial stream state, and placement; checks copy/synchronization results and destination contents; and uses Runtime logs or a device timeline to identify internal paths. Any additional Host registration of HugeTLB memory needs separate version-specific support checks; non-swappability does not guarantee registration succeeds.
+2. **`aclrtMallocHost` with BatchAsync:**
+
+    about 0.33 ms in the call and 2.67 ms in synchronization is consistent with submission followed by asynchronous stream progress, with synchronization waiting for the remaining work. Transfers can begin after submission; they do not wait for the synchronization call to start.
+
+3. **HugeTLB with individual MemcpyAsync calls:**
+
+    about 3.5 ms in the call phase and 9 µs in synchronization shows a similar distribution. The observation is not confined to the batch interface.
+
+Thus, **the tested HugeTLB buffer did not exhibit the Runtime-pinned asynchronous behavior of the `aclrtMallocHost` buffer; non-swappability alone does not make them equivalent.** This interpretation agrees with the earlier official `aclrtMemcpyAsync` distinction between non-pinned and pinned host return behavior; the batch-path conclusion here relies on the reported measurement.
+
+Timing alone cannot establish Runtime registration internals, use of a particular staging buffer, or the exact execution path.
+
+Evaluate **call time together with subsequent synchronization**, rather than treating a 0.33 ms return as completed-transfer bandwidth. A repeatable comparison also fixes bytes, copy count, initial stream state, and placement; checks copy/synchronization results and destination contents; and uses Runtime logs or a device timeline to identify internal paths.
+
+Any additional Host registration of HugeTLB memory needs separate version-specific support checks; non-swappability does not guarantee registration succeeds.
 
 Related concepts: [Linux HugeTLB](page-tables-huge-pages.md#linux-hugetlb) and [host pinning and registration](memory-addressing.md#host-pinned-memory).
 
@@ -98,7 +112,18 @@ Pinned host memory can reduce preparation costs and enable efficient DMA paths. 
 
 To trace who submits a copy, read [work queues and doorbells](work-queues.md) and [device-initiated transfer](device-initiated-transfer.md): they explain hardware descriptors and the control responsibilities of hosts, proxies, and GPU/NPU kernels.
 
-A first-order model is $T(S)=L+S/B$, where $L$ is fixed overhead, $S$ bytes, and $B$ sustained bytes/s. For $L=10\,\mu s$ and $B=20$ GB/s, a 4 KB copy takes about $10.2\,\mu s$, while a 20 MB copy takes about $1.01$ ms. Small transfers benefit from batching; large transfers expose bandwidth limits.
+A first-order model is:
+
+$$T(S)=L+S/B$$
+
+Here $L$ is fixed overhead, $S$ bytes, and $B$ sustained bytes/s. For $L=10\,\mu s$ and $B=20$ GB/s:
+
+| Copy size | Estimated time |
+| --- | --- |
+| 4 KB | About $10.2\,\mu s$ |
+| 20 MB | About $1.01$ ms |
+
+Small transfers benefit from batching; large transfers expose bandwidth limits.
 
 The effective bandwidth cannot exceed the slowest participating memory, link, or engine, and contention lowers it further. NUMA placement, shared PCIe uplinks, registration, and synchronization all contribute.
 

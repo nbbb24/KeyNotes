@@ -10,14 +10,28 @@
 | Device-initiated, host-proxied | GPU/NPU kernel publishes a request | CPU proxy reads and submits it | Yes; proxy control does not imply CPU payload copying |
 | Direct device submission | Supported device kernel | Device communication library operates engine queues | Yes, subject to device/backend support |
 
-The CPU can submit control information while the NIC DMA-reads HBM, without D2H staging. A device-originated request can still require a CPU proxy. Direct submission shortens the per-operation control path; setup, registration, connection management, and recovery may still involve the host. **GPUDirect RDMA provides device-memory access, not automatically GPU control of NIC submission.** See [GPUDirect RDMA](https://docs.nvidia.com/cuda/gpudirect-rdma/) and the [NVSHMEM IBGDA mechanism](https://developer.nvidia.com/blog/improving-network-performance-of-hpc-systems-using-nvidia-magnum-io-nvshmem-and-gpudirect-async/).
+- **Host-initiated:** the CPU submits control information while the NIC DMA-reads HBM; D2H staging is not required.
+
+- **Device-initiated, host-proxied:** the request originates on the device, while a CPU proxy handles submission.
+
+- **Direct device submission:** the per-operation control path is shorter; setup, registration, connection management, and recovery may still involve the host.
+
+!!! note "Payload access and task submission are separate"
+
+    **GPUDirect RDMA provides device-memory access, not automatically GPU control of NIC submission.**
+
+    See [GPUDirect RDMA](https://docs.nvidia.com/cuda/gpudirect-rdma/) and the [NVSHMEM IBGDA mechanism](https://developer.nvidia.com/blog/improving-network-performance-of-hpc-systems-using-nvidia-magnum-io-nvshmem-and-gpudirect-async/).
 
 ## 🛠️ Initialize an environment that can accept work
 
 1. Bind processes, devices, ranks, and NICs; discover peers and supported paths.
+
 2. Allocate source/destination buffers and perform required mapping, registration, or symmetric allocation.
+
 3. Establish endpoints, work/completion resources, and exchange address descriptions, permissions, bounds, and lifetimes.
+
 4. For device initiation, prepare device-accessible context, queues, or proxy request storage, and start required progress workers.
+
 5. Assign request, layer, block, generation, and completion identities; reserve bounded queue capacity.
 
 This is a logical checklist, not a mandatory set of public objects. Use remote pointers through the library's addressing rules: a symmetric address commonly needs a target PE/rank as well. A local numeric pointer alone is not a valid remote address. See [memory and registration](memory-addressing.md) and [GVA](gva-unified-addressing.md).
@@ -51,7 +65,9 @@ Local `cudaMemcpyAsync` / `aclrtMemcpyAsync` calls do not provide arbitrary remo
 
 ## 🟩 GPU example: NVSHMEM and IBGDA
 
-NVSHMEM exposes communication inside GPU kernels. On a supported IBGDA path, SMs can create NIC WQEs, update queue records, and notify the NIC; the NIC fetches descriptors/payload and writes completion information back. A proxy path instead delegates device requests to CPU threads. This mechanism follows [NVIDIA's IBGDA article](https://developer.nvidia.com/blog/improving-network-performance-of-hpc-systems-using-nvidia-magnum-io-nvshmem-and-gpudirect-async/). Check the [NVSHMEM prerequisites](https://docs.nvidia.com/nvshmem/api/latest/using.html) for actual devices, drivers, and transports rather than assuming every GPU/NIC pair supports it.
+NVSHMEM exposes communication inside GPU kernels. On a supported IBGDA path, SMs can create NIC WQEs, update queue records, and notify the NIC; the NIC fetches descriptors/payload and writes completion information back. A proxy path instead delegates device requests to CPU threads.
+
+This mechanism follows [NVIDIA's IBGDA article](https://developer.nvidia.com/blog/improving-network-performance-of-hpc-systems-using-nvidia-magnum-io-nvshmem-and-gpudirect-async/). Check the [NVSHMEM prerequisites](https://docs.nvidia.com/nvshmem/api/latest/using.html) for actual devices, drivers, and transports rather than assuming every GPU/NIC pair supports it.
 
 The following is protocol pseudocode, not a compilable program. Initialization, thread participation, synchronization scope, and error handling depend on the library:
 

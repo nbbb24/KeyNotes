@@ -1,6 +1,10 @@
 # 🧠 DeepSeek-V4 Flash / Pro：mHC、压缩注意力与专家 Shape
 
-本页分别绑定官方 [Flash 配置](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/config.json)与 [Pro 配置](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/b5968e9190ef611bbf34a7229255be88a0e937c1/config.json)，模块 shape 由相同快照的[官方参考代码](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/inference/model.py)推导。这里不是 Flash-0731、Pro-0813 或 API 动态别名的规格表；其他 checkpoint 需重新核对。
+V4 Flash 与 Pro 都结合 **四流 mHC、压缩注意力和 MoE**。阅读时分别跟踪层间残差、Attention 分支和全局缓存；三者的 shape 不相同。
+
+??? note "配置、实现与适用范围"
+
+    本页分别绑定官方 [Flash 配置](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/config.json)与 [Pro 配置](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/b5968e9190ef611bbf34a7229255be88a0e937c1/config.json)，模块 shape 由相同快照的[官方参考代码](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/inference/model.py)推导。这里不是 Flash-0731、Pro-0813 或 API 动态别名的规格表；其他 checkpoint 需重新核对。
 
 ## 🗺️ 全局维度
 
@@ -23,15 +27,27 @@
 
 ## 🪜 层间残差与分支输入不是同一个 Shape
 
+<figure class="model-figure" markdown="1">
+
 [![DeepSeek mHC 四流残差合并、子层计算与混合回写](../../assets/model-diagrams/zh/mhc.svg)](../../assets/model-diagrams/zh/mhc.svg)
 
-Embedding 输出 `[B,S,H]`，进入主干前扩展为 `[B,S,4,H]`。mHC 把四份流混合成 Attention/FFN 的 `[B,S,H]` 输入，子层输出再合回四流残差。因此层间 shape 分别为 Flash `[B,S,4,4096]`、Pro `[B,S,4,7168]`。
+</figure>
 
-mHC 的 `hc_attn_fn` 和 `hc_ffn_fn` 各为 `[24,4H]`，因为 `(2+4)×4=24`；Flash 为 `[24,16384]`，Pro 为 `[24,28672]`。混合结果分为 pre/post 各 4 个系数与 4×4 组合矩阵。这些控制维度不改变单专家的输入宽度 H。
+Embedding 输出 `[B,S,H]`，进入主干前扩展为 `[B,S,4,H]`。mHC 把四份流混合成 Attention/FFN 的 `[B,S,H]` 输入，子层输出再合回四流残差。
+
+因此层间 shape 分别为 Flash `[B,S,4,4096]`、Pro `[B,S,4,7168]`。
+
+mHC 的 `hc_attn_fn` 和 `hc_ffn_fn` 各为 `[24,4H]`，因为 `(2+4)×4=24`；Flash 为 `[24,16384]`，Pro 为 `[24,28672]`。
+
+混合结果分为 pre/post 各 4 个系数与 4×4 组合矩阵。这些控制维度不改变单专家的输入宽度 H。
 
 ## 📐 主注意力的投影
 
+<figure class="model-figure" markdown="1">
+
 [![DeepSeek V4 的低秩 Query、窗口与压缩缓存、分组 O 投影](../../assets/model-diagrams/zh/v4-attention.svg)](../../assets/model-diagrams/zh/v4-attention.svg)
+
+</figure>
 
 | 模块 | Flash 权重 `[out,in]` | Pro 权重 `[out,in]` | 逻辑输出 |
 | --- | --- | --- | --- |
@@ -43,9 +59,13 @@ mHC 的 `hc_attn_fn` 和 `hc_ffn_fn` 各为 `[24,4H]`，因为 `(2+4)×4=24`；F
 | `wo_b` | `[4096,8192]` | `[7168,16384]` | `[B,S,H]` |
 | Embedding / 未绑定 Head | 各 `[129280,4096]` | 各 `[129280,7168]` | `[B,S,H]` / 所需位置 logits |
 
-`wo_a` 是分组块对角投影，**不能将其解释为一个任意稠密的 `[G×1024,A×512]` 权重**。每组的输入宽度都是 `A×512/G=4096`。Q norm 宽度为 Rq，KV norm 为 512，层 norm 为 H。参考代码对输出的 RoPE 分量还做逆旋转，再进入 O 投影。
+`wo_a` 是分组块对角投影，**不能将其解释为一个任意稠密的 `[G×1024,A×512]` 权重**。每组的输入宽度都是 `A×512/G=4096`。
+
+Q norm 宽度为 Rq，KV norm 为 512，层 norm 为 H。参考代码对输出的 RoPE 分量还做逆旋转，再进入 O 投影。
 
 ## 🔄 SWA、CSA 与 HCA 如何分到每层
+
+原理和算例见[压缩注意力与 Indexer](compressed-attention.md)；本节聚焦它们在 V4 中的具体层号和缓存 shape。
 
 每层有局部 SWA 路径；`compress_ratios[l]` 决定是否额外读取全局压缩路径：
 
@@ -59,9 +79,13 @@ mHC 的 `hc_attn_fn` 和 `hc_ffn_fn` 各为 `[24,4H]`，因为 `(2+4)×4=24`；F
 
 Flash 主干为 2 层纯 SWA、21 层 CSA、20 层 HCA；Pro 为 30 层 CSA、31 层 HCA。JSON 的比例数组还包含一个 MTP 项：Flash 第 43 项、Pro 第 61 项为 0，不能将其多算为主干层。
 
-压缩层的主缓存逻辑容量可以写为 `[B,128+floor(T_max/r),512]`，r=0 则只有窗口 `[B,128,512]`；当前有效压缩长度取决于已完成的压缩组。CSA 还持有 128 维压缩 Indexer Key，逻辑容量 `[B,floor(T_max/4),128]`。Top-k 限制读取位置，不等于删掉所有未选中的历史缓存。
+压缩层的主缓存逻辑容量可以写为 `[B,128+floor(T_max/r),512]`，r=0 则只有窗口 `[B,128,512]`；当前有效压缩长度取决于已完成的压缩组。
 
-比例 4 的主 Compressor 使用带重叠的 gated pooling：参考实现中 `wkv/wgate` 输出宽度 1024；比例 128 时输出宽度为 512。它们与每层局部 `wkv` 是不同模块，不能只看到相同名称就合并为一个权重。
+CSA 还持有 128 维压缩 Indexer Key，逻辑容量 `[B,floor(T_max/4),128]`。Top-k 限制读取位置，不等于删掉所有未选中的历史缓存。
+
+比例 4 的主 Compressor 使用带重叠的 gated pooling：参考实现中 `wkv/wgate` 输出宽度 1024；比例 128 时输出宽度为 512。
+
+它们与每层局部 `wkv` 是不同模块，不能只看到相同名称就合并为一个权重。
 
 ## 🧩 FFN：第一批 Hash 层仍然是 MoE
 

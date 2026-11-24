@@ -79,11 +79,17 @@ Budget weight and KV offloading separately. If a pass must serially load 40 GB o
 
 ## 📅 Continuous batching, chunked prefill, and layerwise work
 
-**Continuous batching** updates active requests at iteration boundaries, admitting new work and retiring completed requests. It reduces static-batch waiting but remains constrained by KV capacity and token budgets; it does not permit arbitrary insertion into a running kernel. [Orca](https://www.usenix.org/conference/osdi22/presentation/yu) provides the iteration-level scheduling foundation.
+### Continuous batching
 
-**Chunked prefill** splits a long prompt along the token dimension; each chunk still traverses the necessary model layers. Interleaving chunks with decode can reduce long-prefill interference with ITL, while chunk size affects TTFT, throughput, and scheduling overhead. [SARATHI](https://arxiv.org/abs/2308.16369) discusses this design and microbatch balance.
+Continuous batching updates active requests at iteration boundaries, admitting new work and retiring completed requests. It reduces static-batch waiting but remains constrained by KV capacity and token budgets; it does not permit arbitrary insertion into a running kernel. [Orca](https://www.usenix.org/conference/osdi22/presentation/yu) provides the iteration-level scheduling foundation.
 
-**Layerwise work** establishes readiness and transfer dependencies along model depth. Token chunks, layers, TP shards, and KV pages are different dimensions. A combined progress identity should cover at least `request / chunk / layer / shard / generation`, with execution still respecting causal attention dependencies.
+### Chunked prefill
+
+Chunked prefill splits a long prompt along the token dimension; each chunk still traverses the necessary model layers. Interleaving chunks with decode can reduce long-prefill interference with ITL, while chunk size affects TTFT, throughput, and scheduling overhead. [SARATHI](https://arxiv.org/abs/2308.16369) discusses this design and microbatch balance.
+
+### Layerwise work
+
+Layerwise work establishes readiness and transfer dependencies along model depth. Token chunks, layers, TP shards, and KV pages are different dimensions. A combined progress identity should cover at least `request / chunk / layer / shard / generation`, with execution still respecting causal attention dependencies.
 
 ## 📊 Evidence to collect
 

@@ -66,6 +66,8 @@ See [work queues and doorbells](work-queues.md) for completion boundaries and [d
 
 Control and data planes describe responsibilities: establishing/managing communication versus moving payloads. Parameter, storage, business, and out-of-band networks describe traffic purposes. An external enclosure port describes a physical boundary, not a protocol.
 
-Bandwidth measures bytes or bits per second; latency measures elapsed time; throughput measures useful work per time. IOPS counts operations, and P50/P99 describe latency quantiles. Chunk size is bytes per piece, batch size counts grouped work, and queue depth counts outstanding work. Full duplex permits simultaneous traffic in both directions; bidirectional aggregate bandwidth must not be reported as one-way bandwidth.
+Bandwidth measures bytes or bits per second; latency measures elapsed time; throughput measures useful work per time. IOPS counts operations, and P50/P99 describe latency quantiles. Chunk size is bytes per piece, batch size counts grouped work, and queue depth counts outstanding work.
+
+Full duplex permits simultaneous traffic in both directions; bidirectional aggregate bandwidth must not be reported as one-way bandwidth.
 
 Try classifying “rank 3 sends H2D over RDMA.” Which parts require clarification? Rank 3 identifies a participant, H2D describes memory endpoints, and RDMA describes access semantics; only the actual topology and API tell whether that combination is supported. See [the learning map](index.md) for detailed chapters and sources.

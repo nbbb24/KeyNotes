@@ -1,6 +1,10 @@
 # 🧠 GLM-5.1：78 层 MLA、DSA 与 MoE 的 Shape
 
-本页绑定 `zai-org/GLM-5.1@26e1bd6e011f` 的 [官方配置](https://huggingface.co/zai-org/GLM-5.1/blob/26e1bd6e011feb778d25ae34b09b07074139d92d/config.json)，模块解释依据固定版本的 [Transformers 实现](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py)。以下是未做 TP/EP 切分的逻辑 shape；权重采用 `[out,in]`。
+GLM-5.1 的主干由 **78 层**组成：前 3 层用 Dense FFN，后 75 层用 MoE。先沿一层的 Q/K/V 投影读 shape，再看专家和 KV 缓存。
+
+??? note "配置、实现与适用范围"
+
+    本页绑定 `zai-org/GLM-5.1@26e1bd6e011f` 的 [官方配置](https://huggingface.co/zai-org/GLM-5.1/blob/26e1bd6e011feb778d25ae34b09b07074139d92d/config.json)，模块解释依据固定版本的 [Transformers 实现](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py)。以下是未做 TP/EP 切分的逻辑 shape；权重采用 `[out,in]`。
 
 ## 🗺️ 全局配置与层次
 
@@ -15,15 +19,25 @@
 | DSA Indexer | 32 头 × 128，最多选择 2048 个位置 |
 | 最大位置数 / MTP 层数 | 202752 / 1（不包含在 78 层内） |
 
-每层执行归一化、MLA/DSA 注意力、残差，再执行归一化、Dense FFN 或 MoE、残差。主干层间输入/输出均为 `[B,S,6144]`，最后归一化并进入词表输出头。Embedding 和未绑定的 LM Head 权重分别为 `[154880,6144]`；保留全部位置 logits 时输出为 `[B,S,154880]`，服务端常只计算所需位置。
+每层执行归一化、MLA/DSA 注意力、残差，再执行归一化、Dense FFN 或 MoE、残差。主干层间输入/输出均为 `[B,S,6144]`，最后归一化并进入词表输出头。
+
+Embedding 和未绑定的 LM Head 权重分别为 `[154880,6144]`；保留全部位置 logits 时输出为 `[B,S,154880]`，服务端常只计算所需位置。
 
 ## 📐 每层 Attention：沿投影读 Shape
 
+<figure class="model-figure" markdown="1">
+
 [![GLM 主干层的 Attention、FFN 与两条残差路径](../../assets/model-diagrams/zh/glm-block.svg)](../../assets/model-diagrams/zh/glm-block.svg)
 
-*图：横向经过 Attention，随后经过 FFN；两条灰色旁路分别保留相应子层的输入。*
+<figcaption markdown="span">图：横向经过 Attention，随后经过 FFN；两条灰色旁路分别保留相应子层的输入。</figcaption>
+
+</figure>
+
+<figure class="model-figure" markdown="1">
 
 [![GLM MLA 从隐藏状态分解为 Query、潜在 KV、RoPE 与输出投影](../../assets/model-diagrams/zh/glm-mla.svg)](../../assets/model-diagrams/zh/glm-mla.svg)
+
+</figure>
 
 | 模块 | 逻辑权重 shape | 输出激活 shape |
 | --- | --- | --- |
@@ -38,17 +52,35 @@
 | Attention 输出拼头 | 无新增权重 | `[B,S,16384]` |
 | `o_proj` | `[6144,16384]` | `[B,S,6144]` |
 
-`64×(192+256)=28672`，不是 `64×256×2`。Q/K 用于打分的 256 维与 KV 潜在的 512 维也不是同一个轴。JSON 的 `head_dim=64` 不能替代这里主注意力的 256；参考配置类会为 RoPE 处理设置相应字段。参见[官方配置类](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py)。
+`64×(192+256)=28672`，不是 `64×256×2`。Q/K 用于打分的 256 维与 KV 潜在的 512 维也不是同一个轴。
+
+JSON 的 `head_dim=64` 不能替代这里主注意力的 256；参考配置类会为 RoPE 处理设置相应字段。参见[官方配置类](https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py)。
 
 ## 🔎 DSA Indexer 是旁路，不是主注意力的头
 
-Indexer 使用 Q 低秩状态产生 `[B,S,32,128]` Query：`wq_b=[4096,2048]`；`wk=[128,6144]` 产生每位置一个 128 维 Key，并做 LayerNorm；`weights_proj=[32,6144]` 生成头权重。选中位置的索引可写为 `[B,S,min(2048,T)]`，之后主注意力访问所选 KV。
+沿 Indexer 的三条投影分别看：
 
-该快照的所有 78 层都运行各自 Indexer。Indexer 的 32 个头不表示把主注意力从 64 头改成 32 头；Top-k 也不等于只缓存 2048 个历史 Token。朴素实现可以形成完整评分矩阵，生产稀疏内核则可采用不同物化策略。
+1. **Query：**`wq_b=[4096,2048]` 把 Q 低秩状态投影为 `[B,S,32,128]`。
+
+2. **Key：**`wk=[128,6144]` 为每个位置生成一个 128 维 Key，再做 LayerNorm。
+
+3. **头权重：**`weights_proj=[32,6144]` 生成各索引头的组合权重。
+
+选中位置的索引为 `[B,S,min(2048,T)]`，主注意力随后访问这些位置的 KV。该快照的 **78 层都有自己的 Indexer**。
+
+!!! note "Indexer 头数与缓存长度"
+
+    Indexer 的 32 个头不会把主注意力从 64 头改成 32 头；Top-k 也不表示只缓存 2048 个历史 Token。
+
+朴素实现可以形成完整评分矩阵，生产稀疏内核可采用不同的物化策略。
 
 ## 🧩 Dense 与 MoE 的逐层 FFN
 
+<figure class="model-figure" markdown="1">
+
 [![GLM top-8 路由专家、共享专家与输出合并](../../assets/model-diagrams/zh/glm-moe.svg)](../../assets/model-diagrams/zh/glm-moe.svg)
+
+</figure>
 
 | 层/模块 | 逻辑权重 shape | 主要激活 |
 | --- | --- | --- |
@@ -60,13 +92,19 @@ Indexer 使用 Q 低秩状态产生 `[B,S,32,128]` Query：`wq_b=[4096,2048]`；
 | 共享专家 | 与单路由专家相同 | 对该层所有 Token 计算 |
 | 融合路由专家 gate+up / down | `[256,4096,6144]` / `[256,6144,2048]` | 实现可采用 grouped GEMM |
 
-每个 Token 选择 8 个路由专家并计算共享专家；不是计算全部 256 个。`N_e` 受实际路由负载影响，不能用 `N/256` 当作每次执行的固定 shape。融合权重形状来自所引参考实现，checkpoint 或其他后端可采用独立专家键名。
+每个 Token 选择 8 个路由专家并计算共享专家；不是计算全部 256 个。`N_e` 受实际路由负载影响，不能用 `N/256` 当作每次执行的固定 shape。
+
+融合权重形状来自所引参考实现，checkpoint 或其他后端可采用独立专家键名。
 
 ## 🧠 KV 缓存怎么记账
 
-MLA 的主缓存可表达为每层 `[B,T,512]` 潜在状态与 `[B,T,64]` RoPE K；参考接口可能保留一个 singleton 头轴。展开的 `[B,T,64,256]` K/V 是逻辑注意力视图，不意味着必须持久保存全部展开值。Indexer Key、索引结果、页与工作区另算。
+MLA 的主缓存可表达为每层 `[B,T,512]` 潜在状态与 `[B,T,64]` RoPE K；参考接口可能保留一个 singleton 头轴。
 
-若仅按 BF16 计算未分片主潜在缓存，则每 Token 每层为 `(512+64)×2=1152` 字节；78 层、4096 Token、B=1 为 **351 MiB**。这是主缓存载荷算例，不包含 Indexer、量化元数据、分配舍入及并行复制。要看实际后端的缓存格式，不能把该数值当总显存。
+展开的 `[B,T,64,256]` K/V 是逻辑注意力视图，不意味着必须持久保存全部展开值。Indexer Key、索引结果、页与工作区另算。
+
+若仅按 BF16 计算未分片主潜在缓存，则每 Token 每层为 `(512+64)×2=1152` 字节；78 层、4096 Token、B=1 为 **351 MiB**。
+
+这是主缓存载荷算例，不包含 Indexer、量化元数据、分配舍入及并行复制。要看实际后端的缓存格式，不能把该数值当总显存。
 
 ## 🪜 完整主干层表
 

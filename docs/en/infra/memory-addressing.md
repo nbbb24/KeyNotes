@@ -28,7 +28,9 @@ In a distributed memory manager, **unified addressing** means that a resource ca
 | HVA (host virtual address) | An address in a particular process's CPU virtual address space | That process, if the region is mapped and accessible |
 | DVA (device virtual address) | An address in a particular device context | The device/runtime when the backing and mapping are valid |
 
-For example, a cache slice might be named by GVA `G+0x2000` while process A sees HVA `H_A+0x2000` and device B sees DVA `D_B+0x2000`. Their numerical values need not match. A lookup or mapping connects them; exporting the GVA alone does not grant access to the bytes. Different backends can represent these relationships differently, so inspect the API and memory type before assuming a conversion exists. In the MemFabric source, host-transfer and device-transfer paths explicitly translate GVA to HVA or DVA where needed.
+For example, a cache slice might be named by GVA `G+0x2000` while process A sees HVA `H_A+0x2000` and device B sees DVA `D_B+0x2000`. Their numerical values need not match. A lookup or mapping connects them; exporting the GVA alone does not grant access to the bytes.
+
+Different backends can represent these relationships differently, so inspect the API and memory type before assuming a conversion exists. In the MemFabric source, host-transfer and device-transfer paths explicitly translate GVA to HVA or DVA where needed.
 
 For how GVA brings DRAM and HBM across processes, devices, and nodes into one logical address space, locates resources, and selects an access path, see [How GVA unified addressing works](gva-unified-addressing.md). That chapter also explains how GVA differs from, and can interact with, hardware page tables.
 
@@ -36,12 +38,27 @@ For how GVA brings DRAM and HBM across processes, devices, and nodes into one lo
 
 The word “allocate” often hides several independent steps. Keeping them separate explains why a large address range can be reserved even when the device has far less physical memory.
 
-1. **Reserve a virtual range.** Choose a suitably sized, aligned region in an address space. This claims *addresses*, not necessarily HBM or DRAM pages. A failed reservation can mean address-space exhaustion, fragmentation, or alignment constraints.
-2. **Create or obtain backing storage.** A runtime allocates physical device memory or host pages, or obtains a shareable allocation handle. The exact point where physical pages are committed depends on the allocator and backend; “reserve” alone is not proof of commitment.
-3. **Map backing into the range.** Associate pages or a handle with the chosen DVA/HVA range, with a device/context and access permissions. A mapped address is meaningful only while this mapping and its backing remain alive.
-4. **Register or export when another engine needs access.** DMA/RDMA or a peer device may require registration, pinning, import, or an access descriptor. Registration is an access preparation step, not a copy. A host allocation used for DMA may need different handling from an ordinary pageable `malloc` buffer.
+1. **Reserve a virtual range.**
+
+    Choose a suitably sized, aligned region in an address space. This claims *addresses*, not necessarily HBM or DRAM pages. A failed reservation can mean address-space exhaustion, fragmentation, or alignment constraints.
+
+2. **Create or obtain backing storage.**
+
+    A runtime allocates physical device memory or host pages, or obtains a shareable allocation handle. The exact point where physical pages are committed depends on the allocator and backend; “reserve” alone is not proof of commitment.
+
+3. **Map backing into the range.**
+
+    Associate pages or a handle with the chosen DVA/HVA range, with a device/context and access permissions. A mapped address is meaningful only while this mapping and its backing remain alive.
+
+4. **Register or export when another engine needs access.**
+
+    DMA/RDMA or a peer device may require registration, pinning, import, or an access descriptor. Registration is an access preparation step, not a copy. A host allocation used for DMA may need different handling from an ordinary pageable `malloc` buffer.
+
 5. **Use and synchronize.** Submit work, wait for the relevant completion, and establish required visibility before a different stream, device, or process consumes the bytes.
-6. **Retire in reverse dependency order.** Stop new users; wait for in-flight work; release imported mappings/registrations; unmap; free backing; finally release reserved VA. The owner of each handle must be explicit.
+
+6. **Retire in reverse dependency order.**
+
+    Stop new users; wait for in-flight work; release imported mappings/registrations; unmap; free backing; finally release reserved VA. The owner of each handle must be explicit.
 
 ```mermaid
 flowchart LR
@@ -53,11 +70,17 @@ flowchart LR
     F --> G[Free backing and VA]
 ```
 
-This is a conceptual lifecycle, not a mandatory call order for every backend: some allocators combine steps, and some imports map memory that another participant allocated. The [MemFabric Hybrid API](https://gitcode.com/Ascend/memfabric_hybrid) exposes virtual-space reservation separately from slice allocation and GVA-to-VA conversion. Its internal VA manager records GVA, DVA, HVA, size, and memory type for a slice. That record is metadata; actual access still needs the corresponding mapping and permissions.
+This is a conceptual lifecycle, not a mandatory call order for every backend: some allocators combine steps, and some imports map memory that another participant allocated. The [MemFabric Hybrid API](https://gitcode.com/Ascend/memfabric_hybrid) exposes virtual-space reservation separately from slice allocation and GVA-to-VA conversion.
+
+Its internal VA manager records GVA, DVA, HVA, size, and memory type for a slice. That record is metadata; actual access still needs the corresponding mapping and permissions.
 
 ### A concrete reservation example
 
-Suppose a service reserves a **64 GiB** device VA window for a cache pool, then backs only **8 GiB** with HBM. It can hand out logical locations within the backed portion, but accessing an unbacked address in the remaining 56 GiB is invalid. Later growth requires more backing and mappings, subject to free HBM and runtime limits. Releasing the 8 GiB backing does not automatically make the virtual window available to another allocator; the reservation must also be released. Conversely, freeing the reservation while DMA still refers to its mapped slices is unsafe. The numbers illustrate the distinction; they are not a recommendation for any device.
+Suppose a service reserves a **64 GiB** device VA window for a cache pool, then backs only **8 GiB** with HBM. It can hand out logical locations within the backed portion, but accessing an unbacked address in the remaining 56 GiB is invalid.
+
+Later growth requires more backing and mappings, subject to free HBM and runtime limits. Releasing the 8 GiB backing does not automatically make the virtual window available to another allocator; the reservation must also be released.
+
+Conversely, freeing the reservation while DMA still refers to its mapped slices is unsafe. The numbers illustrate the distinction; they are not a recommendation for any device.
 
 ## 🧷 Pageable and pinned host memory {#host-pinned-memory}
 
@@ -80,6 +103,7 @@ The table does not classify every non-swappable host allocation as Runtime-pinne
 For supported memory and products, `aclrtHostRegisterV2` prepares an existing host region:
 
 - `ACL_HOST_REG_PINNED` registers suitable ordinary host memory as pinned.
+
 - `ACL_HOST_REG_MAPPED` establishes device access; `aclrtHostGetDevicePointer` retrieves the device-side address. Combine flags as supported. Pinning and device mapping have separate responsibilities.
 
 ```text
