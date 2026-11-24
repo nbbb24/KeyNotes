@@ -7,6 +7,7 @@ KeyNotes is a bilingual learning guide to **machine learning** and the **infrast
 
 - **ML:** foundations, language and multimodal models, training, inference, and data tools.
 - **Infra:** accelerators, memory, communication, data movement, and performance.
+- **Model structures:** pinned GLM and DeepSeek configs, per-layer shapes, experts, KV ownership, and vision modules.
 
 Read the [English documentation](https://infra-knowledge.readthedocs.io/en/latest/) or switch to 简体中文 with the language icon on any page. The two editions share the same topic structure.
 
@@ -17,6 +18,7 @@ Corrections, clearer examples, diagrams, and new topics are welcome. Open an iss
 1. Keep the English and Chinese versions of a topic at matching paths under `docs/en/` and `docs/zh/`.
 2. Explain the motivation, mechanism, assumptions, and a concrete example where useful. Cite primary sources for implementation-specific claims.
 3. Update `mkdocs.yml` when adding a topic. Keep shared images in `docs/assets/` and preserve the original imported figures.
+   For model-structure references, preserve upstream config bytes and provenance under `docs/assets/model-specs/`, then run `python scripts/model_shapes.py --check` to verify generated layer maps.
 4. In the pull request, describe what changed and how you checked the affected pages. Read the Docs provides a preview for pull requests.
 
 The original Notion material and image checksums are recorded in [`migration/`](migration/).

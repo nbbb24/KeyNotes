@@ -1,0 +1,96 @@
+{
+  "checked_at": "2026-11-24",
+  "models": {
+    "glm-5-1": {
+      "repo": "zai-org/GLM-5.1",
+      "revision": "26e1bd6e011feb778d25ae34b09b07074139d92d",
+      "config_file": "glm-5-1.config.json",
+      "sha256": "726e45e28d1be1636a5834048a4101a2cfe384819ad2ebe08d41f6fe04656526",
+      "config_url": "https://huggingface.co/zai-org/GLM-5.1/blob/26e1bd6e011feb778d25ae34b09b07074139d92d/config.json",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/zai-org/GLM-5.1/blob/26e1bd6e011feb778d25ae34b09b07074139d92d/LICENSE"
+    },
+    "glm-5-2": {
+      "repo": "zai-org/GLM-5.2",
+      "revision": "cf457fa734ab149ffef225f80893eb38c6ff5cdc",
+      "config_file": "glm-5-2.config.json",
+      "sha256": "185f93ee6d12548e16a847e279dc0c3c90b1524c970b0866b42fb545747d859a",
+      "config_url": "https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/config.json",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734ab149ffef225f80893eb38c6ff5cdc/LICENSE"
+    },
+    "deepseek-v4-flash": {
+      "repo": "deepseek-ai/DeepSeek-V4-Flash",
+      "revision": "60d8d70770c6776ff598c94bb586a859a38244f1",
+      "config_file": "deepseek-v4-flash.config.json",
+      "sha256": "b628e63398a645abc711d92207f8737dd8140f7a4ef1e0a5b3616019e0ddd818",
+      "config_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/config.json",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/LICENSE"
+    },
+    "deepseek-v4-pro": {
+      "repo": "deepseek-ai/DeepSeek-V4-Pro",
+      "revision": "b5968e9190ef611bbf34a7229255be88a0e937c1",
+      "config_file": "deepseek-v4-pro.config.json",
+      "sha256": "5fe4568daee51c208cb8a79538eaeda090ae011ade1dee2c386aa95f569c810e",
+      "config_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/b5968e9190ef611bbf34a7229255be88a0e937c1/config.json",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/b5968e9190ef611bbf34a7229255be88a0e937c1/LICENSE"
+    },
+    "deepseek-v4-1-flash": {
+      "repo": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "revision": "314113f8a7dadb388215396ba5fbee2c610a04d6",
+      "config_file": "deepseek-v4-1-flash.config.json",
+      "sha256": "8be45ce0476004a3f529fd896115a4a2e800a129ad2d3ec05b16050f52e21879",
+      "config_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/config.json",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/LICENSE"
+    },
+    "deepseek-v4-1-flash-1017": {
+      "repo": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
+      "revision": "08c8657f02291e11b6f6b63e0e16014f8e748518",
+      "config_file": "deepseek-v4-1-flash-1017.config.json",
+      "sha256": "8be45ce0476004a3f529fd896115a4a2e800a129ad2d3ec05b16050f52e21879",
+      "config_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017/blob/08c8657f02291e11b6f6b63e0e16014f8e748518/config.json",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017/blob/08c8657f02291e11b6f6b63e0e16014f8e748518/LICENSE"
+    }
+  },
+  "implementation_sources": [
+    {
+      "model": "deepseek-v4-flash",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash/blob/60d8d70770c6776ff598c94bb586a859a38244f1/inference/model.py",
+      "sha256": "ce962f1face79d4f633d36436576214057a7e11443c9789935e1deb5c6cd1d71"
+    },
+    {
+      "model": "deepseek-v4-pro",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/b5968e9190ef611bbf34a7229255be88a0e937c1/inference/model.py",
+      "sha256": "ce962f1face79d4f633d36436576214057a7e11443c9789935e1deb5c6cd1d71"
+    },
+    {
+      "model": "deepseek-v4-1-flash",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/model.py",
+      "sha256": "e5decd76fe70fd56ef2f10124d245c6f64fb6a0003cc9068a1d3182a168b8d2d"
+    },
+    {
+      "model": "deepseek-v4-1-flash",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/vision.py",
+      "sha256": "5d49edc196a4ef22384abe76d35a40098cbe1e74b586c8f66a2edff4f076b26c"
+    },
+    {
+      "model": "deepseek-v4-1-flash",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/engram.py",
+      "sha256": "11f35ecbead8150c35aa002b3d180ef290b05a25afe883a11884f94d476d3897"
+    },
+    {
+      "model": "glm-5-1 / glm-5-2",
+      "url": "https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/modeling_glm_moe_dsa.py",
+      "sha256": "c3ac1a779ca8266a272e262f230a643c4dbbc1e2a8d9e04da4a115132915262b"
+    },
+    {
+      "model": "glm-5-1 / glm-5-2",
+      "url": "https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py",
+      "sha256": "ff49e9624a09252773341a5bd5dee373bd94595295f22b9d0d936feb2e779f9b"
+    }
+  ]
+}

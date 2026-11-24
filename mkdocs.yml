@@ -50,6 +50,14 @@ plugins:
           nav_translations:
             🏠 Home: 🏠 首页
             🏗️ Infra: 🏗️ 基础设施
+            🧬 Model structures: 🧬 模型结构
+            📐 Shape conventions: 📐 Shape 阅读约定
+            🧠 GLM family: 🧠 GLM 系列
+            🧠 DeepSeek family: 🧠 DeepSeek 系列
+            🧠 GLM-5.1: 🧠 GLM-5.1
+            🧠 GLM-5.2: 🧠 GLM-5.2
+            🧠 DeepSeek-V4 Flash and Pro: 🧠 DeepSeek-V4 Flash 与 Pro
+            🧠 DeepSeek-V4.1 Flash: 🧠 DeepSeek-V4.1 Flash
             🧠 ML: 🧠 机器学习
             📐 MLE: 📐 机器学习基础
             🤖 LLM: 🤖 大语言模型
@@ -237,6 +245,15 @@ nav:
   - 🛠️ Practice and reference:
     - 📊 Performance tools: infra/performance-tools.md
     - 📖 Glossary: infra/glossary.md
+- 🧬 Model structures:
+  - 🗺️ Learning map: models/index.md
+  - 📐 Shape conventions: models/shape-conventions.md
+  - 🧠 GLM family:
+    - 🧠 GLM-5.1: models/glm-5-1.md
+    - 🧠 GLM-5.2: models/glm-5-2.md
+  - 🧠 DeepSeek family:
+    - 🧠 DeepSeek-V4 Flash and Pro: models/deepseek-v4.md
+    - 🧠 DeepSeek-V4.1 Flash: models/deepseek-v4-1.md
 - 🧠 ML:
   - 🗺️ Learning map: ml/index.md
   - 📐 MLE:

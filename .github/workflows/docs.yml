@@ -19,3 +19,4 @@ jobs:
       - run: mkdocs build --strict
       - run: python scripts/verify_migration.py
       - run: python scripts/verify_examples.py
+      - run: python scripts/model_shapes.py --check

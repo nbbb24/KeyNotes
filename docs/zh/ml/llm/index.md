@@ -19,6 +19,8 @@ flowchart LR
 
 ## 🏗️ 架构和模型家族
 
+需要按具体 checkpoint 查每一层的 shape 时，前往顶层[模型结构专栏](../../models/index.md)：目前包括 GLM-5.1/5.2、DeepSeek-V4 Flash/Pro 和 V4.1 Flash，配有权重/激活/KV 表与完整层号映射。下表保留模型原理和历史家族的阅读路径。
+
 | 问题 | 章节 |
 | --- | --- |
 | 序列和图像表示是如何发展的？ | [RNN](models/rnn.md)，[树RNN](models/tree-rnn.md)，[CNN](models/cnn.md)，[ELMo](models/elmo.md)，[ViT](models/vit.md) |
