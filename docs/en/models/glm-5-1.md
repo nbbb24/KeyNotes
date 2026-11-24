@@ -19,6 +19,12 @@ Each layer applies normalization, MLA/DSA attention and a residual, then normali
 
 ## 📐 Per-layer attention projections
 
+[![GLM backbone attention, FFN, and two residual paths](../../assets/model-diagrams/en/glm-block.svg)](../../assets/model-diagrams/en/glm-block.svg)
+
+*Figure: attention is followed by the FFN. Gray bypasses preserve the input to each corresponding sublayer.*
+
+[![GLM MLA hidden state, query, latent KV, RoPE, and output projection](../../assets/model-diagrams/en/glm-mla.svg)](../../assets/model-diagrams/en/glm-mla.svg)
+
 | Module | Logical weight | Output activation |
 | --- | --- | --- |
 | `q_a_proj` | `[2048,6144]` | `[B,S,2048]` |
@@ -41,6 +47,8 @@ The indexer projects the Q latent into `[B,S,32,128]` using `wq_b=[4096,2048]`. 
 All 78 layers run their own indexer in this snapshot. Its 32 heads do not replace the main 64 heads, and top-k does not mean retaining only 2048 historical tokens. A simple reference may materialize full scores; optimized sparse kernels can use different intermediate storage.
 
 ## 🧩 Dense and MoE FFNs
+
+[![GLM top-8 expert routing, shared expert, and output combination](../../assets/model-diagrams/en/glm-moe.svg)](../../assets/model-diagrams/en/glm-moe.svg)
 
 | Layer/module | Logical weight | Main activation |
 | --- | --- | --- |

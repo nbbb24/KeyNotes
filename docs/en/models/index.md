@@ -2,6 +2,10 @@
 
 This reference complements the [LLM learning map](../ml/llm/index.md). Each entry follows **checkpoint → global dimensions → layer responsibilities → weights and activations → KV cache → deployment boundaries**. Numbers come from official configs and reference implementations; calculated shapes are deductions, not device measurements.
 
+[![Compute and cache overview for five backbone configurations](../../assets/model-diagrams/en/model-map.svg)](../../assets/model-diagrams/en/model-map.svg)
+
+*Figure: distinguish depth, compute width, and cache ownership. Click a figure to open its original vector image.*
+
 ## 🗺️ Models and reading paths
 
 | Model | Backbone layers | Hidden width H | Main query heads × head width | Routed experts / selected per token | Structure |
@@ -32,6 +36,10 @@ The [source manifest](../../assets/model-specs/sources.json) records full revisi
 Here, “DSV4.1” means the verified **V4.1-Flash / Flash-1017** checkpoints. No official V4.1-Pro structure config was obtained for this reference, so it has no guessed layer counts. An API name such as `deepseek-v4-pro` is also distinct from a particular downloadable checkpoint. Bind structural analysis to a repository and revision. Consult the [official DeepSeek model directory](https://huggingface.co/deepseek-ai/models) for names.
 
 ## 🔎 Inspect a particular layer
+
+[![Dense, MoE, indexer, and compressed-attention placement over 300 backbone layers](../../assets/model-diagrams/en/layer-map.svg)](../../assets/model-diagrams/en/layer-map.svg)
+
+*Figure: one tile per layer. Categories differ between rows; read each row label with the legend.*
 
 Each model page has expandable, complete backbone maps with **zero-based layer indices**. They enumerate GLM dense/MoE and IndexShare placement, V4 compression and hash routing, and V4.1 KV/index ownership. Repeated modules use the common shape tables in the chapter. MTP, vision, and Engram are documented separately so their counts are not silently added to backbone depth.
 

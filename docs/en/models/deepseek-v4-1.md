@@ -32,6 +32,8 @@ flowchart LR
 
 ## 📐 Main projections in each text layer
 
+[![V4.1 four-stream mHC residuals and single-stream attention and FFN inputs](../../assets/model-diagrams/en/mhc.svg)](../../assets/model-diagrams/en/mhc.svg)
+
 Inter-layer residuals are `[B,S,4,5120]`, while sublayer input/output is `[B,S,5120]`. Attention/FFN mHC projections each have shape `[24,20480]`. Single-Pass mHC uses computed mixing coefficients in subsequent sublayers; do not copy V4's execution order unchanged.
 
 | Module | Logical weight / activation |
@@ -50,6 +52,10 @@ Every layer retains its own recent SWA KV, while only a few layers own **global*
 
 ## 🔎 CSA2: Full, Reindex, and Reuse
 
+[![V4.1 global KV owners, consuming layer ranges, and reindexing layers](../../assets/model-diagrams/en/v41-kv.svg)](../../assets/model-diagrams/en/v41-kv.svg)
+
+*Figure: layers 20–39 share one global KV group; layers 24, 28, 32, and 36 only reselect positions. Per-layer SWA windows remain separate.*
+
 | Layers / mode | Produce global KV / index keys? | Recompute top-k? | Global KV used |
 | --- | --- | --- | --- |
 | 0, 1: SWA | No global path | No | None |
@@ -64,6 +70,8 @@ Layer 20 selects at most 2048 candidate blocks of 8 positions. Deeper Reindex la
 
 ## 🧮 Deriving 890 bytes per token
 
+[![V4.1 global cache split into 720 bytes of main KV and 170 bytes of index keys](../../assets/model-diagrams/en/v41-cache.svg)](../../assets/model-diagrams/en/v41-cache.svg)
+
 In the documented packed format, main KV uses one byte of scale per 16 FP4 values, and index keys use one per 32 FP4 values. Four cache groups contribute `3/2+1=2.5` vectors per original token:
 
 $$b_{main}=(512/2+512/16)\times2.5=720,$$
@@ -75,6 +83,8 @@ If all 40 backbone `[B,128,512]` SWA windows remain BF16-resident, B=1 uses **5 
 
 ## 🗃️ Engram conditional memory at layers 1 and 14
 
+[![V4.1 Engram n-gram hashes, 24 lookups, keys, values, and residual gating](../../assets/model-diagrams/en/v41-engram.svg)](../../assets/model-diagrams/en/v41-engram.svg)
+
 Two embedding tables are `[384006168,256]` and `[384016682,256]`, totaling 196,613,849,600 logical parameters. Eight Engram heads are distinct from the 384 MoE experts. Hashing 2/3/4-grams across 8 heads yields 24 addresses, producing `[B,S,24,256]`, flattened to `[B,S,6144]`.
 
 `wkv=[25600,6144]` creates key `[B,S,4,5120]` and value `[B,S,5120]`, gated against the residual stream and merged into `[B,S,4,5120]`. Each token does not traverse all 196.6B table elements. The [official Engram implementation](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/engram.py) defines hashing/layout; text model code defines projections and gating.
@@ -82,6 +92,8 @@ Two embedding tables are `[384006168,256]` and `[384016682,256]`, totaling 196,6
 The model card's **552B backbone** and roughly 196B Engram are separate counts. Weight-file totals can also include auxiliary modules. Backbone, stored parameters, active parameters, and quantized bytes are different quantities. The card's 8B prefill / 16B decode counts follow its CED execution model; a reference script's scheduling is not automatically the production optimum.
 
 ## 🖼️ Per-layer vision shapes
+
+[![V4.1 patches, 32-layer ViT, 3×3 downsampling, and language aligner shapes](../../assets/model-diagrams/en/v41-vision.svg)](../../assets/model-diagrams/en/v41-vision.svg)
 
 For one image with `n_h×n_w` 14×14 patches, let P be patch count and `P'=ceil(n_h/3)×ceil(n_w/3)`. Resizing and resolution make P dynamic; a fixed visual-token count does not describe every image.
 
@@ -97,6 +109,8 @@ For one image with `n_h×n_w` 14×14 patches, let P be patch count and `P'=ceil(
 ViT uses image-local bidirectional attention and 2D RoPE. Visual embeddings replace image positions in the language sequence before the backbone. This table uses single-image reference views; a batched backend may add B. See [official vision code](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/inference/vision.py).
 
 ## ⏩ Three DSpark layers are auxiliary
+
+[![V4.1 DSpark target layers, draft block, three-stage draft network, and verification](../../assets/model-diagrams/en/v41-dspark.svg)](../../assets/model-diagrams/en/v41-dspark.svg)
 
 The config specifies prediction layers 40–42, draft block size 5, and target layers `[37,38,39]`. Their hidden states concatenate to width 15360, with `main_proj=[5120,15360]`; draft hidden states can be `[B,5,4,5120]`. Draft routing uses 128 experts and top-3, versus backbone 384/top-6. Draft logits can be `[B,5,129280]`, followed by verification and acceptance.
 

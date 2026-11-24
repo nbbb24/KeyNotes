@@ -1,0 +1,360 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="640" viewBox="0 0 1120 640" role="img" aria-labelledby="title desc">
+<title id="title">A structural map of 300 backbone layers</title><desc id="desc">Open the image to inspect layer-index tooltips. Categories are labeled below each strip.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="640" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">A structural map of 300 backbone layers</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Open the image to inspect layer-index tooltips. Categories are labeled below each strip.</tspan></text>
+<text x="36" y="145" font-size="18" text-anchor="start" font-weight="650"><tspan x="36" dy="0">GLM-5.1</tspan></text>
+<text x="36" y="170" font-size="15" text-anchor="start"><tspan x="36" dy="0">78 layers</tspan></text>
+<rect x="250.000" y="127" width="9.256" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 0: Dense FFN</title></rect>
+<text x="255.12820512820514" y="178" font-size="12" text-anchor="middle"><tspan x="255.12820512820514" dy="0">0</tspan></text>
+<rect x="260.256" y="127" width="9.256" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 1: Dense FFN</title></rect>
+<rect x="270.513" y="127" width="9.256" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 2: Dense FFN</title></rect>
+<rect x="280.769" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 3: MoE FFN</title></rect>
+<rect x="291.026" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 4: MoE FFN</title></rect>
+<rect x="301.282" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 5: MoE FFN</title></rect>
+<rect x="311.538" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 6: MoE FFN</title></rect>
+<rect x="321.795" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 7: MoE FFN</title></rect>
+<rect x="332.051" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 8: MoE FFN</title></rect>
+<rect x="342.308" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 9: MoE FFN</title></rect>
+<rect x="352.564" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 10: MoE FFN</title></rect>
+<text x="357.6923076923077" y="178" font-size="12" text-anchor="middle"><tspan x="357.6923076923077" dy="0">10</tspan></text>
+<rect x="362.821" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 11: MoE FFN</title></rect>
+<rect x="373.077" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 12: MoE FFN</title></rect>
+<rect x="383.333" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 13: MoE FFN</title></rect>
+<rect x="393.590" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 14: MoE FFN</title></rect>
+<rect x="403.846" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 15: MoE FFN</title></rect>
+<rect x="414.103" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 16: MoE FFN</title></rect>
+<rect x="424.359" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 17: MoE FFN</title></rect>
+<rect x="434.615" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 18: MoE FFN</title></rect>
+<rect x="444.872" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 19: MoE FFN</title></rect>
+<rect x="455.128" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 20: MoE FFN</title></rect>
+<text x="460.2564102564103" y="178" font-size="12" text-anchor="middle"><tspan x="460.2564102564103" dy="0">20</tspan></text>
+<rect x="465.385" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 21: MoE FFN</title></rect>
+<rect x="475.641" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 22: MoE FFN</title></rect>
+<rect x="485.897" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 23: MoE FFN</title></rect>
+<rect x="496.154" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 24: MoE FFN</title></rect>
+<rect x="506.410" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 25: MoE FFN</title></rect>
+<rect x="516.667" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 26: MoE FFN</title></rect>
+<rect x="526.923" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 27: MoE FFN</title></rect>
+<rect x="537.179" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 28: MoE FFN</title></rect>
+<rect x="547.436" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 29: MoE FFN</title></rect>
+<rect x="557.692" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 30: MoE FFN</title></rect>
+<text x="562.8205128205128" y="178" font-size="12" text-anchor="middle"><tspan x="562.8205128205128" dy="0">30</tspan></text>
+<rect x="567.949" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 31: MoE FFN</title></rect>
+<rect x="578.205" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 32: MoE FFN</title></rect>
+<rect x="588.462" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 33: MoE FFN</title></rect>
+<rect x="598.718" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 34: MoE FFN</title></rect>
+<rect x="608.974" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 35: MoE FFN</title></rect>
+<rect x="619.231" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 36: MoE FFN</title></rect>
+<rect x="629.487" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 37: MoE FFN</title></rect>
+<rect x="639.744" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 38: MoE FFN</title></rect>
+<rect x="650.000" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 39: MoE FFN</title></rect>
+<rect x="660.256" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 40: MoE FFN</title></rect>
+<text x="665.3846153846154" y="178" font-size="12" text-anchor="middle"><tspan x="665.3846153846154" dy="0">40</tspan></text>
+<rect x="670.513" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 41: MoE FFN</title></rect>
+<rect x="680.769" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 42: MoE FFN</title></rect>
+<rect x="691.026" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 43: MoE FFN</title></rect>
+<rect x="701.282" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 44: MoE FFN</title></rect>
+<rect x="711.538" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 45: MoE FFN</title></rect>
+<rect x="721.795" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 46: MoE FFN</title></rect>
+<rect x="732.051" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 47: MoE FFN</title></rect>
+<rect x="742.308" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 48: MoE FFN</title></rect>
+<rect x="752.564" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 49: MoE FFN</title></rect>
+<rect x="762.821" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 50: MoE FFN</title></rect>
+<text x="767.9487179487179" y="178" font-size="12" text-anchor="middle"><tspan x="767.9487179487179" dy="0">50</tspan></text>
+<rect x="773.077" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 51: MoE FFN</title></rect>
+<rect x="783.333" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 52: MoE FFN</title></rect>
+<rect x="793.590" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 53: MoE FFN</title></rect>
+<rect x="803.846" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 54: MoE FFN</title></rect>
+<rect x="814.103" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 55: MoE FFN</title></rect>
+<rect x="824.359" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 56: MoE FFN</title></rect>
+<rect x="834.615" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 57: MoE FFN</title></rect>
+<rect x="844.872" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 58: MoE FFN</title></rect>
+<rect x="855.128" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 59: MoE FFN</title></rect>
+<rect x="865.385" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 60: MoE FFN</title></rect>
+<text x="870.5128205128206" y="178" font-size="12" text-anchor="middle"><tspan x="870.5128205128206" dy="0">60</tspan></text>
+<rect x="875.641" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 61: MoE FFN</title></rect>
+<rect x="885.897" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 62: MoE FFN</title></rect>
+<rect x="896.154" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 63: MoE FFN</title></rect>
+<rect x="906.410" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 64: MoE FFN</title></rect>
+<rect x="916.667" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 65: MoE FFN</title></rect>
+<rect x="926.923" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 66: MoE FFN</title></rect>
+<rect x="937.179" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 67: MoE FFN</title></rect>
+<rect x="947.436" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 68: MoE FFN</title></rect>
+<rect x="957.692" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 69: MoE FFN</title></rect>
+<rect x="967.949" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 70: MoE FFN</title></rect>
+<text x="973.0769230769231" y="178" font-size="12" text-anchor="middle"><tspan x="973.0769230769231" dy="0">70</tspan></text>
+<rect x="978.205" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 71: MoE FFN</title></rect>
+<rect x="988.462" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 72: MoE FFN</title></rect>
+<rect x="998.718" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 73: MoE FFN</title></rect>
+<rect x="1008.974" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 74: MoE FFN</title></rect>
+<rect x="1019.231" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 75: MoE FFN</title></rect>
+<rect x="1029.487" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 76: MoE FFN</title></rect>
+<rect x="1039.744" y="127" width="9.256" height="31" rx="2" fill="#f0eafd" stroke="#8051bd"><title>Layer 77: MoE FFN</title></rect>
+<text x="1044.871794871795" y="178" font-size="12" text-anchor="middle"><tspan x="1044.871794871795" dy="0">77</tspan></text>
+<text x="250" y="202" font-size="14" text-anchor="start" style="fill:#586c84"><tspan x="250" dy="0">Dense / MoE</tspan></text>
+<text x="36" y="230" font-size="18" text-anchor="start" font-weight="650"><tspan x="36" dy="0">GLM-5.2</tspan></text>
+<text x="36" y="255" font-size="15" text-anchor="start"><tspan x="36" dy="0">78 layers</tspan></text>
+<rect x="250.000" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 0: Full indexer</title></rect>
+<text x="255.12820512820514" y="263" font-size="12" text-anchor="middle"><tspan x="255.12820512820514" dy="0">0</tspan></text>
+<rect x="260.256" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 1: Full indexer</title></rect>
+<rect x="270.513" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 2: Full indexer</title></rect>
+<rect x="280.769" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 3: Shared top-k</title></rect>
+<rect x="291.026" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 4: Shared top-k</title></rect>
+<rect x="301.282" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 5: Shared top-k</title></rect>
+<rect x="311.538" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 6: Full indexer</title></rect>
+<rect x="321.795" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 7: Shared top-k</title></rect>
+<rect x="332.051" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 8: Shared top-k</title></rect>
+<rect x="342.308" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 9: Shared top-k</title></rect>
+<rect x="352.564" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 10: Full indexer</title></rect>
+<text x="357.6923076923077" y="263" font-size="12" text-anchor="middle"><tspan x="357.6923076923077" dy="0">10</tspan></text>
+<rect x="362.821" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 11: Shared top-k</title></rect>
+<rect x="373.077" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 12: Shared top-k</title></rect>
+<rect x="383.333" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 13: Shared top-k</title></rect>
+<rect x="393.590" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 14: Full indexer</title></rect>
+<rect x="403.846" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 15: Shared top-k</title></rect>
+<rect x="414.103" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 16: Shared top-k</title></rect>
+<rect x="424.359" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 17: Shared top-k</title></rect>
+<rect x="434.615" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 18: Full indexer</title></rect>
+<rect x="444.872" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 19: Shared top-k</title></rect>
+<rect x="455.128" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 20: Shared top-k</title></rect>
+<text x="460.2564102564103" y="263" font-size="12" text-anchor="middle"><tspan x="460.2564102564103" dy="0">20</tspan></text>
+<rect x="465.385" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 21: Shared top-k</title></rect>
+<rect x="475.641" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 22: Full indexer</title></rect>
+<rect x="485.897" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 23: Shared top-k</title></rect>
+<rect x="496.154" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 24: Shared top-k</title></rect>
+<rect x="506.410" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 25: Shared top-k</title></rect>
+<rect x="516.667" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 26: Full indexer</title></rect>
+<rect x="526.923" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 27: Shared top-k</title></rect>
+<rect x="537.179" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 28: Shared top-k</title></rect>
+<rect x="547.436" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 29: Shared top-k</title></rect>
+<rect x="557.692" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 30: Full indexer</title></rect>
+<text x="562.8205128205128" y="263" font-size="12" text-anchor="middle"><tspan x="562.8205128205128" dy="0">30</tspan></text>
+<rect x="567.949" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 31: Shared top-k</title></rect>
+<rect x="578.205" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 32: Shared top-k</title></rect>
+<rect x="588.462" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 33: Shared top-k</title></rect>
+<rect x="598.718" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 34: Full indexer</title></rect>
+<rect x="608.974" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 35: Shared top-k</title></rect>
+<rect x="619.231" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 36: Shared top-k</title></rect>
+<rect x="629.487" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 37: Shared top-k</title></rect>
+<rect x="639.744" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 38: Full indexer</title></rect>
+<rect x="650.000" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 39: Shared top-k</title></rect>
+<rect x="660.256" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 40: Shared top-k</title></rect>
+<text x="665.3846153846154" y="263" font-size="12" text-anchor="middle"><tspan x="665.3846153846154" dy="0">40</tspan></text>
+<rect x="670.513" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 41: Shared top-k</title></rect>
+<rect x="680.769" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 42: Full indexer</title></rect>
+<rect x="691.026" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 43: Shared top-k</title></rect>
+<rect x="701.282" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 44: Shared top-k</title></rect>
+<rect x="711.538" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 45: Shared top-k</title></rect>
+<rect x="721.795" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 46: Full indexer</title></rect>
+<rect x="732.051" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 47: Shared top-k</title></rect>
+<rect x="742.308" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 48: Shared top-k</title></rect>
+<rect x="752.564" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 49: Shared top-k</title></rect>
+<rect x="762.821" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 50: Full indexer</title></rect>
+<text x="767.9487179487179" y="263" font-size="12" text-anchor="middle"><tspan x="767.9487179487179" dy="0">50</tspan></text>
+<rect x="773.077" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 51: Shared top-k</title></rect>
+<rect x="783.333" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 52: Shared top-k</title></rect>
+<rect x="793.590" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 53: Shared top-k</title></rect>
+<rect x="803.846" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 54: Full indexer</title></rect>
+<rect x="814.103" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 55: Shared top-k</title></rect>
+<rect x="824.359" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 56: Shared top-k</title></rect>
+<rect x="834.615" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 57: Shared top-k</title></rect>
+<rect x="844.872" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 58: Full indexer</title></rect>
+<rect x="855.128" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 59: Shared top-k</title></rect>
+<rect x="865.385" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 60: Shared top-k</title></rect>
+<text x="870.5128205128206" y="263" font-size="12" text-anchor="middle"><tspan x="870.5128205128206" dy="0">60</tspan></text>
+<rect x="875.641" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 61: Shared top-k</title></rect>
+<rect x="885.897" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 62: Full indexer</title></rect>
+<rect x="896.154" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 63: Shared top-k</title></rect>
+<rect x="906.410" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 64: Shared top-k</title></rect>
+<rect x="916.667" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 65: Shared top-k</title></rect>
+<rect x="926.923" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 66: Full indexer</title></rect>
+<rect x="937.179" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 67: Shared top-k</title></rect>
+<rect x="947.436" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 68: Shared top-k</title></rect>
+<rect x="957.692" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 69: Shared top-k</title></rect>
+<rect x="967.949" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 70: Full indexer</title></rect>
+<text x="973.0769230769231" y="263" font-size="12" text-anchor="middle"><tspan x="973.0769230769231" dy="0">70</tspan></text>
+<rect x="978.205" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 71: Shared top-k</title></rect>
+<rect x="988.462" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 72: Shared top-k</title></rect>
+<rect x="998.718" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 73: Shared top-k</title></rect>
+<rect x="1008.974" y="212" width="9.256" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 74: Full indexer</title></rect>
+<rect x="1019.231" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 75: Shared top-k</title></rect>
+<rect x="1029.487" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 76: Shared top-k</title></rect>
+<rect x="1039.744" y="212" width="9.256" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 77: Shared top-k</title></rect>
+<text x="1044.871794871795" y="263" font-size="12" text-anchor="middle"><tspan x="1044.871794871795" dy="0">77</tspan></text>
+<text x="250" y="287" font-size="14" text-anchor="start" style="fill:#586c84"><tspan x="250" dy="0">Full / Shared</tspan></text>
+<text x="36" y="315" font-size="18" text-anchor="start" font-weight="650"><tspan x="36" dy="0">V4-FLASH</tspan></text>
+<text x="36" y="340" font-size="15" text-anchor="start"><tspan x="36" dy="0">43 layers</tspan></text>
+<rect x="250.000" y="297" width="17.605" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 0: SWA only</title></rect>
+<text x="259.30232558139534" y="348" font-size="12" text-anchor="middle"><tspan x="259.30232558139534" dy="0">0</tspan></text>
+<rect x="268.605" y="297" width="17.605" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 1: SWA only</title></rect>
+<rect x="287.209" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 2: SWA + CSA (r=4)</title></rect>
+<rect x="305.814" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 3: SWA + HCA (r=128)</title></rect>
+<rect x="324.419" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 4: SWA + CSA (r=4)</title></rect>
+<rect x="343.023" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 5: SWA + HCA (r=128)</title></rect>
+<rect x="361.628" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 6: SWA + CSA (r=4)</title></rect>
+<rect x="380.233" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 7: SWA + HCA (r=128)</title></rect>
+<rect x="398.837" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 8: SWA + CSA (r=4)</title></rect>
+<rect x="417.442" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 9: SWA + HCA (r=128)</title></rect>
+<rect x="436.047" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 10: SWA + CSA (r=4)</title></rect>
+<text x="445.3488372093023" y="348" font-size="12" text-anchor="middle"><tspan x="445.3488372093023" dy="0">10</tspan></text>
+<rect x="454.651" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 11: SWA + HCA (r=128)</title></rect>
+<rect x="473.256" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 12: SWA + CSA (r=4)</title></rect>
+<rect x="491.860" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 13: SWA + HCA (r=128)</title></rect>
+<rect x="510.465" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 14: SWA + CSA (r=4)</title></rect>
+<rect x="529.070" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 15: SWA + HCA (r=128)</title></rect>
+<rect x="547.674" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 16: SWA + CSA (r=4)</title></rect>
+<rect x="566.279" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 17: SWA + HCA (r=128)</title></rect>
+<rect x="584.884" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 18: SWA + CSA (r=4)</title></rect>
+<rect x="603.488" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 19: SWA + HCA (r=128)</title></rect>
+<rect x="622.093" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 20: SWA + CSA (r=4)</title></rect>
+<text x="631.3953488372093" y="348" font-size="12" text-anchor="middle"><tspan x="631.3953488372093" dy="0">20</tspan></text>
+<rect x="640.698" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 21: SWA + HCA (r=128)</title></rect>
+<rect x="659.302" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 22: SWA + CSA (r=4)</title></rect>
+<rect x="677.907" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 23: SWA + HCA (r=128)</title></rect>
+<rect x="696.512" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 24: SWA + CSA (r=4)</title></rect>
+<rect x="715.116" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 25: SWA + HCA (r=128)</title></rect>
+<rect x="733.721" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 26: SWA + CSA (r=4)</title></rect>
+<rect x="752.326" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 27: SWA + HCA (r=128)</title></rect>
+<rect x="770.930" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 28: SWA + CSA (r=4)</title></rect>
+<rect x="789.535" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 29: SWA + HCA (r=128)</title></rect>
+<rect x="808.140" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 30: SWA + CSA (r=4)</title></rect>
+<text x="817.4418604651164" y="348" font-size="12" text-anchor="middle"><tspan x="817.4418604651164" dy="0">30</tspan></text>
+<rect x="826.744" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 31: SWA + HCA (r=128)</title></rect>
+<rect x="845.349" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 32: SWA + CSA (r=4)</title></rect>
+<rect x="863.953" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 33: SWA + HCA (r=128)</title></rect>
+<rect x="882.558" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 34: SWA + CSA (r=4)</title></rect>
+<rect x="901.163" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 35: SWA + HCA (r=128)</title></rect>
+<rect x="919.767" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 36: SWA + CSA (r=4)</title></rect>
+<rect x="938.372" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 37: SWA + HCA (r=128)</title></rect>
+<rect x="956.977" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 38: SWA + CSA (r=4)</title></rect>
+<rect x="975.581" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 39: SWA + HCA (r=128)</title></rect>
+<rect x="994.186" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 40: SWA + CSA (r=4)</title></rect>
+<text x="1003.4883720930234" y="348" font-size="12" text-anchor="middle"><tspan x="1003.4883720930234" dy="0">40</tspan></text>
+<rect x="1012.791" y="297" width="17.605" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 41: SWA + HCA (r=128)</title></rect>
+<rect x="1031.395" y="297" width="17.605" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 42: SWA + CSA (r=4)</title></rect>
+<text x="1040.6976744186047" y="348" font-size="12" text-anchor="middle"><tspan x="1040.6976744186047" dy="0">42</tspan></text>
+<text x="250" y="372" font-size="14" text-anchor="start" style="fill:#586c84"><tspan x="250" dy="0">SWA / CSA / HCA</tspan></text>
+<text x="36" y="400" font-size="18" text-anchor="start" font-weight="650"><tspan x="36" dy="0">V4-PRO</tspan></text>
+<text x="36" y="425" font-size="15" text-anchor="start"><tspan x="36" dy="0">61 layers</tspan></text>
+<rect x="250.000" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 0: SWA + HCA (r=128)</title></rect>
+<text x="256.55737704918033" y="433" font-size="12" text-anchor="middle"><tspan x="256.55737704918033" dy="0">0</tspan></text>
+<rect x="263.115" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 1: SWA + HCA (r=128)</title></rect>
+<rect x="276.230" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 2: SWA + CSA (r=4)</title></rect>
+<rect x="289.344" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 3: SWA + HCA (r=128)</title></rect>
+<rect x="302.459" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 4: SWA + CSA (r=4)</title></rect>
+<rect x="315.574" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 5: SWA + HCA (r=128)</title></rect>
+<rect x="328.689" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 6: SWA + CSA (r=4)</title></rect>
+<rect x="341.803" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 7: SWA + HCA (r=128)</title></rect>
+<rect x="354.918" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 8: SWA + CSA (r=4)</title></rect>
+<rect x="368.033" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 9: SWA + HCA (r=128)</title></rect>
+<rect x="381.148" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 10: SWA + CSA (r=4)</title></rect>
+<text x="387.7049180327869" y="433" font-size="12" text-anchor="middle"><tspan x="387.7049180327869" dy="0">10</tspan></text>
+<rect x="394.262" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 11: SWA + HCA (r=128)</title></rect>
+<rect x="407.377" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 12: SWA + CSA (r=4)</title></rect>
+<rect x="420.492" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 13: SWA + HCA (r=128)</title></rect>
+<rect x="433.607" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 14: SWA + CSA (r=4)</title></rect>
+<rect x="446.721" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 15: SWA + HCA (r=128)</title></rect>
+<rect x="459.836" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 16: SWA + CSA (r=4)</title></rect>
+<rect x="472.951" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 17: SWA + HCA (r=128)</title></rect>
+<rect x="486.066" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 18: SWA + CSA (r=4)</title></rect>
+<rect x="499.180" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 19: SWA + HCA (r=128)</title></rect>
+<rect x="512.295" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 20: SWA + CSA (r=4)</title></rect>
+<text x="518.8524590163935" y="433" font-size="12" text-anchor="middle"><tspan x="518.8524590163935" dy="0">20</tspan></text>
+<rect x="525.410" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 21: SWA + HCA (r=128)</title></rect>
+<rect x="538.525" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 22: SWA + CSA (r=4)</title></rect>
+<rect x="551.639" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 23: SWA + HCA (r=128)</title></rect>
+<rect x="564.754" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 24: SWA + CSA (r=4)</title></rect>
+<rect x="577.869" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 25: SWA + HCA (r=128)</title></rect>
+<rect x="590.984" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 26: SWA + CSA (r=4)</title></rect>
+<rect x="604.098" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 27: SWA + HCA (r=128)</title></rect>
+<rect x="617.213" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 28: SWA + CSA (r=4)</title></rect>
+<rect x="630.328" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 29: SWA + HCA (r=128)</title></rect>
+<rect x="643.443" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 30: SWA + CSA (r=4)</title></rect>
+<text x="650.0" y="433" font-size="12" text-anchor="middle"><tspan x="650.0" dy="0">30</tspan></text>
+<rect x="656.557" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 31: SWA + HCA (r=128)</title></rect>
+<rect x="669.672" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 32: SWA + CSA (r=4)</title></rect>
+<rect x="682.787" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 33: SWA + HCA (r=128)</title></rect>
+<rect x="695.902" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 34: SWA + CSA (r=4)</title></rect>
+<rect x="709.016" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 35: SWA + HCA (r=128)</title></rect>
+<rect x="722.131" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 36: SWA + CSA (r=4)</title></rect>
+<rect x="735.246" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 37: SWA + HCA (r=128)</title></rect>
+<rect x="748.361" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 38: SWA + CSA (r=4)</title></rect>
+<rect x="761.475" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 39: SWA + HCA (r=128)</title></rect>
+<rect x="774.590" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 40: SWA + CSA (r=4)</title></rect>
+<text x="781.1475409836066" y="433" font-size="12" text-anchor="middle"><tspan x="781.1475409836066" dy="0">40</tspan></text>
+<rect x="787.705" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 41: SWA + HCA (r=128)</title></rect>
+<rect x="800.820" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 42: SWA + CSA (r=4)</title></rect>
+<rect x="813.934" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 43: SWA + HCA (r=128)</title></rect>
+<rect x="827.049" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 44: SWA + CSA (r=4)</title></rect>
+<rect x="840.164" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 45: SWA + HCA (r=128)</title></rect>
+<rect x="853.279" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 46: SWA + CSA (r=4)</title></rect>
+<rect x="866.393" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 47: SWA + HCA (r=128)</title></rect>
+<rect x="879.508" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 48: SWA + CSA (r=4)</title></rect>
+<rect x="892.623" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 49: SWA + HCA (r=128)</title></rect>
+<rect x="905.738" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 50: SWA + CSA (r=4)</title></rect>
+<text x="912.2950819672132" y="433" font-size="12" text-anchor="middle"><tspan x="912.2950819672132" dy="0">50</tspan></text>
+<rect x="918.852" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 51: SWA + HCA (r=128)</title></rect>
+<rect x="931.967" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 52: SWA + CSA (r=4)</title></rect>
+<rect x="945.082" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 53: SWA + HCA (r=128)</title></rect>
+<rect x="958.197" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 54: SWA + CSA (r=4)</title></rect>
+<rect x="971.311" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 55: SWA + HCA (r=128)</title></rect>
+<rect x="984.426" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 56: SWA + CSA (r=4)</title></rect>
+<rect x="997.541" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 57: SWA + HCA (r=128)</title></rect>
+<rect x="1010.656" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 58: SWA + CSA (r=4)</title></rect>
+<rect x="1023.770" y="382" width="12.115" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 59: SWA + HCA (r=128)</title></rect>
+<rect x="1036.885" y="382" width="12.115" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 60: SWA + CSA (r=4)</title></rect>
+<text x="1043.4426229508197" y="433" font-size="12" text-anchor="middle"><tspan x="1043.4426229508197" dy="0">60</tspan></text>
+<text x="250" y="457" font-size="14" text-anchor="start" style="fill:#586c84"><tspan x="250" dy="0">SWA / CSA / HCA</tspan></text>
+<text x="36" y="485" font-size="18" text-anchor="start" font-weight="650"><tspan x="36" dy="0">V4-1-FLASH</tspan></text>
+<text x="36" y="510" font-size="15" text-anchor="start"><tspan x="36" dy="0">40 layers</tspan></text>
+<rect x="250.000" y="467" width="19.000" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 0: SWA only</title></rect>
+<text x="260.0" y="518" font-size="12" text-anchor="middle"><tspan x="260.0" dy="0">0</tspan></text>
+<rect x="270.000" y="467" width="19.000" height="31" rx="2" fill="#f0f3f8" stroke="#718198"><title>Layer 1: SWA only</title></rect>
+<rect x="290.000" y="467" width="19.000" height="31" rx="2" fill="#e5f6f2" stroke="#20816f"><title>Layer 2: Full KV source</title></rect>
+<rect x="310.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 3: Reuse</title></rect>
+<rect x="330.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 4: Reuse</title></rect>
+<rect x="350.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 5: Reuse</title></rect>
+<rect x="370.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 6: Reuse</title></rect>
+<rect x="390.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 7: Reuse</title></rect>
+<rect x="410.000" y="467" width="19.000" height="31" rx="2" fill="#e5f6f2" stroke="#20816f"><title>Layer 8: Full KV source</title></rect>
+<rect x="430.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 9: Reuse</title></rect>
+<rect x="450.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 10: Reuse</title></rect>
+<text x="460.0" y="518" font-size="12" text-anchor="middle"><tspan x="460.0" dy="0">10</tspan></text>
+<rect x="470.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 11: Reuse</title></rect>
+<rect x="490.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 12: Reuse</title></rect>
+<rect x="510.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 13: Reuse</title></rect>
+<rect x="530.000" y="467" width="19.000" height="31" rx="2" fill="#e5f6f2" stroke="#20816f"><title>Layer 14: Full KV source</title></rect>
+<rect x="550.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 15: Reuse</title></rect>
+<rect x="570.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 16: Reuse</title></rect>
+<rect x="590.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 17: Reuse</title></rect>
+<rect x="610.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 18: Reuse</title></rect>
+<rect x="630.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 19: Reuse</title></rect>
+<rect x="650.000" y="467" width="19.000" height="31" rx="2" fill="#e5f6f2" stroke="#20816f"><title>Layer 20: Full KV source</title></rect>
+<text x="660.0" y="518" font-size="12" text-anchor="middle"><tspan x="660.0" dy="0">20</tspan></text>
+<rect x="670.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 21: Reuse</title></rect>
+<rect x="690.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 22: Reuse</title></rect>
+<rect x="710.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 23: Reuse</title></rect>
+<rect x="730.000" y="467" width="19.000" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 24: Reindex</title></rect>
+<rect x="750.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 25: Reuse</title></rect>
+<rect x="770.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 26: Reuse</title></rect>
+<rect x="790.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 27: Reuse</title></rect>
+<rect x="810.000" y="467" width="19.000" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 28: Reindex</title></rect>
+<rect x="830.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 29: Reuse</title></rect>
+<rect x="850.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 30: Reuse</title></rect>
+<text x="860.0" y="518" font-size="12" text-anchor="middle"><tspan x="860.0" dy="0">30</tspan></text>
+<rect x="870.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 31: Reuse</title></rect>
+<rect x="890.000" y="467" width="19.000" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 32: Reindex</title></rect>
+<rect x="910.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 33: Reuse</title></rect>
+<rect x="930.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 34: Reuse</title></rect>
+<rect x="950.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 35: Reuse</title></rect>
+<rect x="970.000" y="467" width="19.000" height="31" rx="2" fill="#fff3d9" stroke="#bc7b12"><title>Layer 36: Reindex</title></rect>
+<rect x="990.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 37: Reuse</title></rect>
+<rect x="1010.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 38: Reuse</title></rect>
+<rect x="1030.000" y="467" width="19.000" height="31" rx="2" fill="#e9f0ff" stroke="#3970ce"><title>Layer 39: Reuse</title></rect>
+<text x="1040.0" y="518" font-size="12" text-anchor="middle"><tspan x="1040.0" dy="0">39</tspan></text>
+<text x="250" y="542" font-size="14" text-anchor="start" style="fill:#586c84"><tspan x="250" dy="0">SWA / Full / Reindex / Reuse</tspan></text>
+<text x="36" y="599" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Blue: Dense/CSA/Reuse; purple: MoE; amber: Full indexer/HCA/Reindex; green: KV Full; gray: Shared/SWA.</tspan></text>
+</svg>

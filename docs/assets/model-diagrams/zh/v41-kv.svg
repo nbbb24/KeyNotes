@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="690" viewBox="0 0 1120 690" role="img" aria-labelledby="title desc">
+<title id="title">V4.1 全局 KV：4 个所有者，多层使用</title><desc id="desc">每个层仍有自己的 SWA 窗口；此图只画全局 KV 和 Indexer 的共享。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="690" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">V4.1 全局 KV：4 个所有者，多层使用</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">每个层仍有自己的 SWA 窗口；此图只画全局 KV 和 Indexer 的共享。</tspan></text>
+<rect x="36" y="115" width="207" height="91" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="144" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Full: L2</tspan></text>
+<text x="52" y="171" font-size="16" text-anchor="start"><tspan x="52" dy="0">r=2</tspan></text>
+<rect x="290" y="115" width="365" height="91" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="306" y="144" font-size="18" text-anchor="start" font-weight="650"><tspan x="306" dy="0">同一组主 KV + Indexer Key</tspan></text>
+<text x="306" y="171" font-size="16" text-anchor="start"><tspan x="306" dy="0">[B,floor(T/2),512] + 128-d K</tspan></text>
+<rect x="705" y="115" width="379" height="91" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="721" y="144" font-size="18" text-anchor="start" font-weight="650"><tspan x="721" dy="0">使用层 2–7</tspan></text>
+<text x="721" y="171" font-size="16" text-anchor="start"><tspan x="721" dy="0">Indexer: L2</tspan></text>
+<polyline points="243,160 290,160" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="655,160 705,160" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="233" width="207" height="91" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="262" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Full: L8</tspan></text>
+<text x="52" y="289" font-size="16" text-anchor="start"><tspan x="52" dy="0">r=2</tspan></text>
+<rect x="290" y="233" width="365" height="91" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="306" y="262" font-size="18" text-anchor="start" font-weight="650"><tspan x="306" dy="0">同一组主 KV + Indexer Key</tspan></text>
+<text x="306" y="289" font-size="16" text-anchor="start"><tspan x="306" dy="0">[B,floor(T/2),512] + 128-d K</tspan></text>
+<rect x="705" y="233" width="379" height="91" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="721" y="262" font-size="18" text-anchor="start" font-weight="650"><tspan x="721" dy="0">使用层 8–13</tspan></text>
+<text x="721" y="289" font-size="16" text-anchor="start"><tspan x="721" dy="0">Indexer: L8</tspan></text>
+<polyline points="243,278 290,278" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="655,278 705,278" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="351" width="207" height="91" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="380" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Full: L14</tspan></text>
+<text x="52" y="407" font-size="16" text-anchor="start"><tspan x="52" dy="0">r=2</tspan></text>
+<rect x="290" y="351" width="365" height="91" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="306" y="380" font-size="18" text-anchor="start" font-weight="650"><tspan x="306" dy="0">同一组主 KV + Indexer Key</tspan></text>
+<text x="306" y="407" font-size="16" text-anchor="start"><tspan x="306" dy="0">[B,floor(T/2),512] + 128-d K</tspan></text>
+<rect x="705" y="351" width="379" height="91" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="721" y="380" font-size="18" text-anchor="start" font-weight="650"><tspan x="721" dy="0">使用层 14–19</tspan></text>
+<text x="721" y="407" font-size="16" text-anchor="start"><tspan x="721" dy="0">Indexer: L14</tspan></text>
+<polyline points="243,396 290,396" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="655,396 705,396" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="469" width="207" height="91" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="498" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Full: L20</tspan></text>
+<text x="52" y="525" font-size="16" text-anchor="start"><tspan x="52" dy="0">r=1</tspan></text>
+<rect x="290" y="469" width="365" height="91" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="306" y="498" font-size="18" text-anchor="start" font-weight="650"><tspan x="306" dy="0">同一组主 KV + Indexer Key</tspan></text>
+<text x="306" y="525" font-size="16" text-anchor="start"><tspan x="306" dy="0">[B,T,512] + 128-d K</tspan></text>
+<rect x="705" y="469" width="379" height="91" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="721" y="498" font-size="18" text-anchor="start" font-weight="650"><tspan x="721" dy="0">使用层 20–39</tspan></text>
+<text x="721" y="525" font-size="16" text-anchor="start"><tspan x="721" dy="0">Indexer: L20,24,28,32,36</tspan></text>
+<polyline points="243,514 290,514" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="655,514 705,514" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="603" width="1048" height="45" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="632" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">层 0–1：仅 SWA；层 20 来源于 Encoder 输出；24/28/32/36 重新选择位置，但不新建全局 KV。</tspan></text>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="590" viewBox="0 0 1120 590" role="img" aria-labelledby="title desc">
+<title id="title">V4.1 DSpark: drafting and backbone verification</title><desc id="desc">Three draft stages are outside the 40-layer backbone. Block size 5 does not imply 5 accepted tokens.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="590" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">V4.1 DSpark: drafting and backbone verification</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Three draft stages are outside the 40-layer backbone. Block size 5 does not imply 5 accepted tokens.</tspan></text>
+<rect x="36" y="135" width="260" height="110" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="164" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Target layers 37 / 38 / 39</tspan></text>
+<text x="52" y="191" font-size="16" text-anchor="start"><tspan x="52" dy="0">concat: [B,S,15360]</tspan><tspan x="52" dy="23">main_proj: 15360 → 5120</tspan></text>
+<rect x="36" y="335" width="260" height="110" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="364" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Draft-block embedding</tspan></text>
+<text x="52" y="391" font-size="16" text-anchor="start"><tspan x="52" dy="0">[B,5,5120]</tspan><tspan x="52" dy="23">→ [B,5,4,5120]</tspan></text>
+<rect x="370" y="335" width="270" height="110" rx="12" fill="#f0eafd" stroke="#8051bd" stroke-width="1.5"/>
+<text x="386" y="364" font-size="18" text-anchor="start" font-weight="650"><tspan x="386" dy="0">DSpark 40 / 41 / 42</tspan></text>
+<text x="386" y="391" font-size="16" text-anchor="start"><tspan x="386" dy="0">128 experts · top-3</tspan><tspan x="386" dy="23">Conditioned on main_x</tspan></text>
+<rect x="714" y="335" width="370" height="110" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="730" y="364" font-size="18" text-anchor="start" font-weight="650"><tspan x="730" dy="0">Draft head → backbone verification</tspan></text>
+<text x="730" y="391" font-size="16" text-anchor="start"><tspan x="730" dy="0">logits: [B,5,129280]</tspan><tspan x="730" dy="23">Accepted prefix follows verification</tspan></text>
+<polyline points="296,390 370,390" fill="none" stroke="#8051bd" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="296,190 505,190 505,335" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="640,390 714,390" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="549" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Backbone depth 40, draft depth 3, block size 5 and accepted count are distinct quantities.</tspan></text>
+</svg>

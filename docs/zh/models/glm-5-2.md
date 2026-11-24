@@ -20,6 +20,8 @@
 
 ## 📐 一层的主投影 Shape
 
+[![GLM-5.2 与 GLM-5.1 相同的主 MLA 投影维度](../../assets/model-diagrams/zh/glm-mla.svg)](../../assets/model-diagrams/zh/glm-mla.svg)
+
 | 模块 | 逻辑权重 `[out,in]` | 输出 |
 | --- | --- | --- |
 | Embedding / 未绑定 LM Head | 各 `[154880,6144]` | 隐藏 `[B,S,6144]` / logits `[B,S,154880]` |
@@ -34,6 +36,10 @@
 与 [GLM-5.1 模块表](glm-5-1.md)相同，完整 K 仍是 NoPE 192 与 RoPE 64 拼接。配置中的 `head_dim=192` 不是主 Q/K 的总宽度，不能据此把 `q_b` 写成 `64×192`。
 
 ## 🔎 IndexShare 逐层复用的是 Top-k，不是主 KV
+
+[![GLM-5.1 与 GLM-5.2 的逐层索引计算、复用与独立主 KV 对比](../../assets/model-diagrams/zh/index-share.svg)](../../assets/model-diagrams/zh/index-share.svg)
+
+*图：橙色虚线只传选中位置。每个绿色 KV 框仍归相应层自己所有。*
 
 本次配置显式给出 `indexer_types`：层 0、1、2，以及 `6,10,14,…,74` 是 `full`；其余层为 `shared`。例如：
 

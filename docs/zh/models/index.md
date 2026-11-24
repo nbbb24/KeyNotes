@@ -2,6 +2,10 @@
 
 本栏是模型结构参考，与 [LLM 模型家族导读](../ml/llm/index.md)互补。每篇按 **checkpoint → 全局维度 → 逐层分工 → 模块权重与激活 → KV Cache → 并行部署边界**展开。数字以官方配置和参考代码为依据，shape 计算是据此作出的推导，不是设备实测。
 
+[![五个主体型号的计算与缓存结构总览](../../assets/model-diagrams/zh/model-map.svg)](../../assets/model-diagrams/zh/model-map.svg)
+
+*图：先分清模型深度、计算宽度与缓存所有权。点击图可打开原始矢量图。*
+
 ## 🗺️ 型号与阅读入口
 
 | 模型 | 主干层数 | 隐藏宽度 H | 主注意力 Q 头数 × 每头宽度 | 路由专家 / 每 Token 选中 | 结构入口 |
@@ -32,6 +36,10 @@ GLM 的主注意力 Q/K 头宽为 `qk_nope_head_dim + qk_rope_head_dim = 192 + 6
 这里把“DSV4.1”落实为已核实的 **V4.1-Flash / Flash-1017**。本次未取得 V4.1-Pro 的官方结构配置，因此不为它填入推测层数。`deepseek-v4-pro` 等 API 名称与一个具体开源 checkpoint 也不是同一种身份；结构分析应绑定上表仓库与 revision。[DeepSeek 官方模型目录](https://huggingface.co/deepseek-ai/models)可用于核对名称。
 
 ## 🔎 怎样查某一层
+
+[![300 个主干层的 Dense、MoE、Indexer 与压缩注意力分布](../../assets/model-diagrams/zh/layer-map.svg)](../../assets/model-diagrams/zh/layer-map.svg)
+
+*图：一个小格对应一层；各行分类不同，图例与行标签一起阅读。*
 
 模型页底部有可展开的完整主干层表，**层号从 0 开始**。GLM 的 Dense/MoE、IndexShare，V4 的压缩比例和 Hash-MoE，V4.1 的 KV/Indexer 所有权都逐层列出。重复层的模块 shape 由正文中的公共模块表定义；MTP、视觉层和 Engram 单独列出，避免把它们误加进主干层数。
 

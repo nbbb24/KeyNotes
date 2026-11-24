@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="590" viewBox="0 0 1120 590" role="img" aria-labelledby="title desc">
+<title id="title">One GLM backbone layer: attention and FFN residuals</title><desc id="desc">Layer input/output: [B,S,6144]. Dense FFN at 0–2, MoE at 3–77.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="590" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">One GLM backbone layer: attention and FFN residuals</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Layer input/output: [B,S,6144]. Dense FFN at 0–2, MoE at 3–77.</tspan></text>
+<rect x="36" y="140" width="160" height="104" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="169" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">h_l</tspan></text>
+<text x="52" y="196" font-size="16" text-anchor="start"><tspan x="52" dy="0">[B,S,6144]</tspan></text>
+<rect x="220" y="140" width="160" height="104" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="236" y="169" font-size="18" text-anchor="start" font-weight="650"><tspan x="236" dy="0">RMSNorm</tspan></text>
+<text x="236" y="196" font-size="16" text-anchor="start"><tspan x="236" dy="0">H=6144</tspan></text>
+<rect x="404" y="140" width="160" height="104" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="420" y="169" font-size="18" text-anchor="start" font-weight="650"><tspan x="420" dy="0">MLA + DSA</tspan></text>
+<text x="420" y="196" font-size="16" text-anchor="start"><tspan x="420" dy="0">Q: 64 × 256</tspan></text>
+<rect x="588" y="140" width="160" height="104" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="604" y="169" font-size="18" text-anchor="start" font-weight="650"><tspan x="604" dy="0">Residual add</tspan></text>
+<text x="604" y="196" font-size="16" text-anchor="start"><tspan x="604" dy="0">+ h_l</tspan></text>
+<polyline points="196,192 220,192" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="380,192 404,192" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="564,192 588,192" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="116,140 116,111 668,111 668,140" fill="none" stroke="#718198" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="588" y="330" width="160" height="104" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="604" y="359" font-size="18" text-anchor="start" font-weight="650"><tspan x="604" dy="0">RMSNorm</tspan></text>
+<text x="604" y="386" font-size="16" text-anchor="start"><tspan x="604" dy="0">H=6144</tspan></text>
+<rect x="370" y="330" width="194" height="104" rx="12" fill="#f0eafd" stroke="#8051bd" stroke-width="1.5"/>
+<text x="386" y="359" font-size="18" text-anchor="start" font-weight="650"><tspan x="386" dy="0">Dense / MoE</tspan></text>
+<text x="386" y="386" font-size="16" text-anchor="start"><tspan x="386" dy="0">F=12288 / 2048</tspan></text>
+<rect x="152" y="330" width="194" height="104" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="168" y="359" font-size="18" text-anchor="start" font-weight="650"><tspan x="168" dy="0">Residual add</tspan></text>
+<text x="168" y="386" font-size="16" text-anchor="start"><tspan x="168" dy="0">[B,S,6144]</tspan></text>
+<polyline points="668,244 668,330" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="588,382 564,382" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="370,382 346,382" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="748,192 800,192 800,476 249,476 249,434" fill="none" stroke="#718198" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="856" y="330" width="228" height="104" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="872" y="359" font-size="18" text-anchor="start" font-weight="650"><tspan x="872" dy="0">h_(l+1)</tspan></text>
+<text x="872" y="386" font-size="16" text-anchor="start"><tspan x="872" dy="0">[B,S,6144]</tspan></text>
+<polyline points="249,434 249,500 970,500 970,434" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="549" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Colored arrows carry computed states; gray bypasses carry residuals. Shapes precede TP/EP partitioning.</tspan></text>
+</svg>

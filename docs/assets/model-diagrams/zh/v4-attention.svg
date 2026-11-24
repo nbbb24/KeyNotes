@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650" role="img" aria-labelledby="title desc">
+<title id="title">DeepSeek V4 注意力：窗口 + 全局路径 + 分组 O</title><desc id="desc">图中 Q 按全局头数 A 表示；缓存是所有头共享的 512 维潜在向量。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="650" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">DeepSeek V4 注意力：窗口 + 全局路径 + 分组 O</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">图中 Q 按全局头数 A 表示；缓存是所有头共享的 512 维潜在向量。</tspan></text>
+<rect x="36" y="245" width="184" height="100" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="274" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">X</tspan></text>
+<text x="52" y="301" font-size="16" text-anchor="start"><tspan x="52" dy="0">[B,S,H]</tspan></text>
+<rect x="274" y="125" width="245" height="110" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="290" y="154" font-size="18" text-anchor="start" font-weight="650"><tspan x="290" dy="0">wq_a → norm → wq_b</tspan></text>
+<text x="290" y="181" font-size="16" text-anchor="start"><tspan x="290" dy="0">H → Rq → A×512</tspan><tspan x="290" dy="23">Q: [B,S,A,512]</tspan></text>
+<rect x="274" y="340" width="245" height="110" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="290" y="369" font-size="18" text-anchor="start" font-weight="650"><tspan x="290" dy="0">wkv / compressor</tspan></text>
+<text x="290" y="396" font-size="16" text-anchor="start"><tspan x="290" dy="0">window: [B,128,512]</tspan><tspan x="290" dy="23">global: [B,T/r,512]</tspan></text>
+<rect x="575" y="340" width="245" height="110" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="591" y="369" font-size="18" text-anchor="start" font-weight="650"><tspan x="591" dy="0">SWA + CSA / HCA</tspan></text>
+<text x="591" y="396" font-size="16" text-anchor="start"><tspan x="591" dy="0">r=4: sparse top-k</tspan><tspan x="591" dy="23">r=128: compressed</tspan></text>
+<rect x="875" y="125" width="209" height="110" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="891" y="154" font-size="18" text-anchor="start" font-weight="650"><tspan x="891" dy="0">Attention</tspan></text>
+<text x="891" y="181" font-size="16" text-anchor="start"><tspan x="891" dy="0">[B,S,A,512]</tspan></text>
+<rect x="875" y="340" width="209" height="140" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="891" y="369" font-size="18" text-anchor="start" font-weight="650"><tspan x="891" dy="0">分组 O 投影</tspan></text>
+<text x="891" y="396" font-size="16" text-anchor="start"><tspan x="891" dy="0">[B,S,G,4096]</tspan><tspan x="891" dy="23">→ [B,S,G,1024]</tspan><tspan x="891" dy="23">→ [B,S,H]</tspan></text>
+<polyline points="220,270 245,270 245,180 274,180" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="220,320 245,320 245,395 274,395" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="519,395 575,395" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="519,180 875,180" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="820,395 846,395 846,206 875,206" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="979,235 979,340" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="609" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Flash: H4096 / A64 / Rq1024 / G8；Pro: H7168 / A128 / Rq1536 / G16。</tspan><tspan x="36" dy="22">r=0 的层只有 SWA；T/r 表示完成压缩组数，精确长度取 floor(T/r)。</tspan></text>
+</svg>

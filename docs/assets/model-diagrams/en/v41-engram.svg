@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620" role="img" aria-labelledby="title desc">
+<title id="title">V4.1 Engram: 24 sparse lookups feed the residual stream</title><desc id="desc">At layers 1 and 14 only. Lookup dimensions do not imply scanning every table entry.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="620" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">V4.1 Engram: 24 sparse lookups feed the residual stream</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">At layers 1 and 14 only. Lookup dimensions do not imply scanning every table entry.</tspan></text>
+<rect x="36" y="140" width="230" height="110" rx="12" fill="#fceaf2" stroke="#b94f80" stroke-width="1.5"/>
+<text x="52" y="169" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">2 / 3 / 4-gram</tspan></text>
+<text x="52" y="196" font-size="16" text-anchor="start"><tspan x="52" dy="0">3 lengths × 8 heads</tspan><tspan x="52" dy="23">hash IDs: [B,S,24]</tspan></text>
+<rect x="320" y="140" width="230" height="110" rx="12" fill="#fceaf2" stroke="#b94f80" stroke-width="1.5"/>
+<text x="336" y="169" font-size="18" text-anchor="start" font-weight="650"><tspan x="336" dy="0">Embedding lookup</tspan></text>
+<text x="336" y="196" font-size="16" text-anchor="start"><tspan x="336" dy="0">[B,S,24,256]</tspan><tspan x="336" dy="23">→ [B,S,6144]</tspan></text>
+<rect x="604" y="140" width="230" height="110" rx="12" fill="#fceaf2" stroke="#b94f80" stroke-width="1.5"/>
+<text x="620" y="169" font-size="18" text-anchor="start" font-weight="650"><tspan x="620" dy="0">wkv</tspan></text>
+<text x="620" y="196" font-size="16" text-anchor="start"><tspan x="620" dy="0">W: [25600,6144]</tspan><tspan x="620" dy="23">out: [B,S,25600]</tspan></text>
+<polyline points="266,195 320,195" fill="none" stroke="#b94f80" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="550,195 604,195" fill="none" stroke="#b94f80" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="320" y="355" width="230" height="110" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="336" y="384" font-size="18" text-anchor="start" font-weight="650"><tspan x="336" dy="0">Key</tspan></text>
+<text x="336" y="411" font-size="16" text-anchor="start"><tspan x="336" dy="0">[B,S,4,5120]</tspan></text>
+<rect x="604" y="355" width="230" height="110" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="620" y="384" font-size="18" text-anchor="start" font-weight="650"><tspan x="620" dy="0">Value</tspan></text>
+<text x="620" y="411" font-size="16" text-anchor="start"><tspan x="620" dy="0">[B,S,5120]</tspan></text>
+<polyline points="719,250 719,300 435,300 435,355" fill="none" stroke="#b94f80" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="719,250 719,355" fill="none" stroke="#b94f80" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="888" y="355" width="196" height="110" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="904" y="384" font-size="18" text-anchor="start" font-weight="650"><tspan x="904" dy="0">Gated merge</tspan></text>
+<text x="904" y="411" font-size="16" text-anchor="start"><tspan x="904" dy="0">[B,S,4,5120]</tspan></text>
+<polyline points="834,410 888,410" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="550,410 576,410 576,500 986,500 986,465" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="355" width="230" height="110" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="384" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Current residual</tspan></text>
+<text x="52" y="411" font-size="16" text-anchor="start"><tspan x="52" dy="0">[B,S,4,5120]</tspan></text>
+<polyline points="151,465 151,535 1030,535 1030,465" fill="none" stroke="#718198" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="579" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Key/residual matching determines gates; a shared value updates four streams. Stored and active parameters differ.</tspan></text>
+</svg>

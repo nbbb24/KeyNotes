@@ -23,6 +23,8 @@
 
 ## 🧠 四种不能混用的 Shape
 
+[![GLM 投影、Q 重排与量化权重打包的 shape 流程](../../assets/model-diagrams/zh/shape-flow.svg)](../../assets/model-diagrams/zh/shape-flow.svg)
+
 | 对象 | 例子 | 用途 |
 | --- | --- | --- |
 | 逻辑权重 | 某专家 gate 为 `[2304,5120]` | 推导投影与参数量 |

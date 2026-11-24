@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="550" viewBox="0 0 1120 550" role="img" aria-labelledby="title desc">
+<title id="title">V4.1 vision: patches to the language embedding space</title><desc id="desc">Single-image logical shapes. P=n_h×n_w; P′=ceil(n_h/3)×ceil(n_w/3).</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="550" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">V4.1 vision: patches to the language embedding space</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Single-image logical shapes. P=n_h×n_w; P′=ceil(n_h/3)×ceil(n_w/3).</tspan></text>
+<rect x="36" y="145" width="226" height="120" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="174" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">14×14 RGB patch</tspan></text>
+<text x="52" y="201" font-size="16" text-anchor="start"><tspan x="52" dy="0">[P,588]</tspan><tspan x="52" dy="23">588 = 3×14×14</tspan></text>
+<rect x="310" y="145" width="226" height="120" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="326" y="174" font-size="18" text-anchor="start" font-weight="650"><tspan x="326" dy="0">Patch projection</tspan></text>
+<text x="326" y="201" font-size="16" text-anchor="start"><tspan x="326" dy="0">W: [1024,588]</tspan><tspan x="326" dy="23">[P,1024]</tspan></text>
+<rect x="584" y="145" width="226" height="120" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="600" y="174" font-size="18" text-anchor="start" font-weight="650"><tspan x="600" dy="0">32 × ViT</tspan></text>
+<text x="600" y="201" font-size="16" text-anchor="start"><tspan x="600" dy="0">Q/K/V: [P,16,64]</tspan><tspan x="600" dy="23">FFN F=2816</tspan></text>
+<rect x="858" y="145" width="226" height="120" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="874" y="174" font-size="18" text-anchor="start" font-weight="650"><tspan x="874" dy="0">3×3 downsample</tspan></text>
+<text x="874" y="201" font-size="16" text-anchor="start"><tspan x="874" dy="0">[P′,9216]</tspan><tspan x="874" dy="23">9216 = 9×1024</tspan></text>
+<polyline points="262,205 310,205" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="536,205 584,205" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="810,205 858,205" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="584" y="345" width="500" height="108" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="600" y="374" font-size="18" text-anchor="start" font-weight="650"><tspan x="600" dy="0">Two-layer aligner → image positions in language input</tspan></text>
+<text x="600" y="401" font-size="16" text-anchor="start"><tspan x="600" dy="0">9216 → 5120 → 5120</tspan><tspan x="600" dy="23">[P′,5120]</tspan></text>
+<polyline points="971,265 971,345" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="345" width="500" height="108" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="374" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Width preserved by every ViT layer</tspan></text>
+<text x="52" y="401" font-size="16" text-anchor="start"><tspan x="52" dy="0">[P,1024] → Attention + FFN → [P,1024]</tspan><tspan x="52" dy="23">Bidirectional image attention + 2D RoPE</tspan></text>
+<text x="36" y="509" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Visual token counts depend on resolution, resizing and padding; P is not constant across images.</tspan></text>
+</svg>

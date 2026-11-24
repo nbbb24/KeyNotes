@@ -19,6 +19,12 @@
 
 ## 📐 每层 Attention：沿投影读 Shape
 
+[![GLM 主干层的 Attention、FFN 与两条残差路径](../../assets/model-diagrams/zh/glm-block.svg)](../../assets/model-diagrams/zh/glm-block.svg)
+
+*图：横向经过 Attention，随后经过 FFN；两条灰色旁路分别保留相应子层的输入。*
+
+[![GLM MLA 从隐藏状态分解为 Query、潜在 KV、RoPE 与输出投影](../../assets/model-diagrams/zh/glm-mla.svg)](../../assets/model-diagrams/zh/glm-mla.svg)
+
 | 模块 | 逻辑权重 shape | 输出激活 shape |
 | --- | --- | --- |
 | `q_a_proj` | `[2048,6144]` | `[B,S,2048]` |
@@ -41,6 +47,8 @@ Indexer 使用 Q 低秩状态产生 `[B,S,32,128]` Query：`wq_b=[4096,2048]`；
 该快照的所有 78 层都运行各自 Indexer。Indexer 的 32 个头不表示把主注意力从 64 头改成 32 头；Top-k 也不等于只缓存 2048 个历史 Token。朴素实现可以形成完整评分矩阵，生产稀疏内核则可采用不同物化策略。
 
 ## 🧩 Dense 与 MoE 的逐层 FFN
+
+[![GLM top-8 路由专家、共享专家与输出合并](../../assets/model-diagrams/zh/glm-moe.svg)](../../assets/model-diagrams/zh/glm-moe.svg)
 
 | 层/模块 | 逻辑权重 shape | 主要激活 |
 | --- | --- | --- |

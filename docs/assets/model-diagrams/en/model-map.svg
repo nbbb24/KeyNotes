@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="610" viewBox="0 0 1120 610" role="img" aria-labelledby="title desc">
+<title id="title">Model map: hidden states, attention, and cache</title><desc id="desc">Five pinned backbone configurations; extra prediction/vision modules are counted separately.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="610" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">Model map: hidden states, attention, and cache</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Five pinned backbone configurations; extra prediction/vision modules are counted separately.</tspan></text>
+<rect x="36" y="112" width="175" height="66" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="141" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">GLM-5.1</tspan></text>
+<text x="52" y="168" font-size="16" text-anchor="start"><tspan x="52" dy="0">78 × H6144</tspan></text>
+<rect x="238" y="112" width="278" height="66" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="254" y="141" font-size="18" text-anchor="start" font-weight="650"><tspan x="254" dy="0">MLA + DSA</tspan></text>
+<text x="254" y="168" font-size="16" text-anchor="start"><tspan x="254" dy="0">3 dense + 75 MoE</tspan></text>
+<rect x="544" y="112" width="540" height="66" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="560" y="141" font-size="18" text-anchor="start" font-weight="650"><tspan x="560" dy="0">Main KV owned by every layer</tspan></text>
+<text x="560" y="168" font-size="16" text-anchor="start"><tspan x="560" dy="0">Read residual, attention, FFN and cache shapes separately</tspan></text>
+<polyline points="211,145 238,145" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="516,145 544,145" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="194" width="175" height="66" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="223" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">GLM-5.2</tspan></text>
+<text x="52" y="250" font-size="16" text-anchor="start"><tspan x="52" dy="0">78 × H6144</tspan></text>
+<rect x="238" y="194" width="278" height="66" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="254" y="223" font-size="18" text-anchor="start" font-weight="650"><tspan x="254" dy="0">MLA + IndexShare</tspan></text>
+<text x="254" y="250" font-size="16" text-anchor="start"><tspan x="254" dy="0">21 Full + 57 Shared</tspan></text>
+<rect x="544" y="194" width="540" height="66" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="560" y="223" font-size="18" text-anchor="start" font-weight="650"><tspan x="560" dy="0">Shared indices; separate main KV</tspan></text>
+<text x="560" y="250" font-size="16" text-anchor="start"><tspan x="560" dy="0">Read residual, attention, FFN and cache shapes separately</tspan></text>
+<polyline points="211,227 238,227" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="516,227 544,227" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="276" width="175" height="66" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="305" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">V4-Flash</tspan></text>
+<text x="52" y="332" font-size="16" text-anchor="start"><tspan x="52" dy="0">43 × H4096</tspan></text>
+<rect x="238" y="276" width="278" height="66" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="254" y="305" font-size="18" text-anchor="start" font-weight="650"><tspan x="254" dy="0">SWA + CSA / HCA</tspan></text>
+<text x="254" y="332" font-size="16" text-anchor="start"><tspan x="254" dy="0">256 experts · top-6</tspan></text>
+<rect x="544" y="276" width="540" height="66" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="560" y="305" font-size="18" text-anchor="start" font-weight="650"><tspan x="560" dy="0">Four-stream mHC; per-layer KV</tspan></text>
+<text x="560" y="332" font-size="16" text-anchor="start"><tspan x="560" dy="0">Read residual, attention, FFN and cache shapes separately</tspan></text>
+<polyline points="211,309 238,309" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="516,309 544,309" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="358" width="175" height="66" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="387" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">V4-Pro</tspan></text>
+<text x="52" y="414" font-size="16" text-anchor="start"><tspan x="52" dy="0">61 × H7168</tspan></text>
+<rect x="238" y="358" width="278" height="66" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="254" y="387" font-size="18" text-anchor="start" font-weight="650"><tspan x="254" dy="0">SWA + CSA / HCA</tspan></text>
+<text x="254" y="414" font-size="16" text-anchor="start"><tspan x="254" dy="0">384 experts · top-6</tspan></text>
+<rect x="544" y="358" width="540" height="66" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="560" y="387" font-size="18" text-anchor="start" font-weight="650"><tspan x="560" dy="0">Four-stream mHC; per-layer KV</tspan></text>
+<text x="560" y="414" font-size="16" text-anchor="start"><tspan x="560" dy="0">Read residual, attention, FFN and cache shapes separately</tspan></text>
+<polyline points="211,391 238,391" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="516,391 544,391" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="440" width="175" height="66" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="469" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">V4.1-Flash</tspan></text>
+<text x="52" y="496" font-size="16" text-anchor="start"><tspan x="52" dy="0">40 × H5120</tspan></text>
+<rect x="238" y="440" width="278" height="66" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="254" y="469" font-size="18" text-anchor="start" font-weight="650"><tspan x="254" dy="0">CED + CSA2</tspan></text>
+<text x="254" y="496" font-size="16" text-anchor="start"><tspan x="254" dy="0">384 experts · top-6</tspan></text>
+<rect x="544" y="440" width="540" height="66" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="560" y="469" font-size="18" text-anchor="start" font-weight="650"><tspan x="560" dy="0">4 global KV source layers</tspan></text>
+<text x="560" y="496" font-size="16" text-anchor="start"><tspan x="560" dy="0">Read residual, attention, FFN and cache shapes separately</tspan></text>
+<polyline points="211,473 238,473" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="516,473 544,473" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="569" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Auxiliary modules: GLM/V4 each have 1 MTP layer; V4.1 has 3 DSpark stages and a 32-layer ViT.</tspan></text>
+</svg>

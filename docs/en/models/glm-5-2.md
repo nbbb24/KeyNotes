@@ -20,6 +20,8 @@ The [official model card](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734
 
 ## 📐 Main per-layer projections
 
+[![The main MLA projection dimensions shared by GLM-5.1 and GLM-5.2](../../assets/model-diagrams/en/glm-mla.svg)](../../assets/model-diagrams/en/glm-mla.svg)
+
 | Module | Logical weight `[out,in]` | Output |
 | --- | --- | --- |
 | Embedding / untied LM head | Each `[154880,6144]` | Hidden `[B,S,6144]` / logits `[B,S,154880]` |
@@ -34,6 +36,10 @@ The [official model card](https://huggingface.co/zai-org/GLM-5.2/blob/cf457fa734
 As in [GLM-5.1](glm-5-1.md), full K combines 192 NoPE and 64 RoPE dimensions. The JSON `head_dim=192` is not total main Q/K width; it must not turn `q_b` into a `64×192` output.
 
 ## 🔎 IndexShare reuses top-k positions, not main KV
+
+[![GLM-5.1 versus GLM-5.2 index computation, selection reuse, and separate main KV](../../assets/model-diagrams/en/index-share.svg)](../../assets/model-diagrams/en/index-share.svg)
+
+*Figure: dashed orange arrows carry selected positions only. Each green KV box remains owned by its layer.*
 
 The explicit `indexer_types` lists layers 0, 1, 2 and `6,10,14,…,74` as `full`, with the rest `shared`:
 

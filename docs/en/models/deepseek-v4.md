@@ -23,11 +23,15 @@ The model card reports Flash backbone parameters as 284B with 13B active per tok
 
 ## 🪜 Residual streams versus sublayer input
 
+[![DeepSeek mHC residual collapse, sublayer computation, and four-stream merge](../../assets/model-diagrams/en/mhc.svg)](../../assets/model-diagrams/en/mhc.svg)
+
 Embedding produces `[B,S,H]`, expanded into `[B,S,4,H]` before the backbone. mHC collapses the streams into `[B,S,H]` for attention/FFN, then merges the result into four-stream residuals. Inter-layer shapes are `[B,S,4,4096]` for Flash and `[B,S,4,7168]` for Pro.
 
 Each `hc_attn_fn` and `hc_ffn_fn` has shape `[24,4H]`, since `(2+4)×4=24`: `[24,16384]` for Flash and `[24,28672]` for Pro. Coefficients split into four pre-weights, four post-weights, and a 4×4 combination matrix. These control dimensions do not change expert input width H.
 
 ## 📐 Main attention projections
+
+[![DeepSeek V4 low-rank query, window and compressed caches, and grouped O projection](../../assets/model-diagrams/en/v4-attention.svg)](../../assets/model-diagrams/en/v4-attention.svg)
 
 | Module | Flash weight `[out,in]` | Pro weight `[out,in]` | Logical output |
 | --- | --- | --- | --- |

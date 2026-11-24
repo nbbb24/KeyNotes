@@ -19,6 +19,7 @@ Corrections, clearer examples, diagrams, and new topics are welcome. Open an iss
 2. Explain the motivation, mechanism, assumptions, and a concrete example where useful. Cite primary sources for implementation-specific claims.
 3. Update `mkdocs.yml` when adding a topic. Keep shared images in `docs/assets/` and preserve the original imported figures.
    For model-structure references, preserve upstream config bytes and provenance under `docs/assets/model-specs/`, then run `python scripts/model_shapes.py --check` to verify generated layer maps.
+   Generate bilingual SVG explanations with `python scripts/model_diagrams.py --write`; run `--check` to confirm they match the generator. Keep captions, alt text, and diagram assumptions aligned with the model pages.
 4. In the pull request, describe what changed and how you checked the affected pages. Read the Docs provides a preview for pull requests.
 
 The original Notion material and image checksums are recorded in [`migration/`](migration/).

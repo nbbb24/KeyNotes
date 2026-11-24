@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="590" viewBox="0 0 1120 590" role="img" aria-labelledby="title desc">
+<title id="title">GLM MoE：选 8 个路由专家，同时计算共享专家</title><desc id="desc">所有专家输入宽度都是 6144；N_e 取决于本批实际路由。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="590" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">GLM MoE：选 8 个路由专家，同时计算共享专家</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">所有专家输入宽度都是 6144；N_e 取决于本批实际路由。</tspan></text>
+<rect x="36" y="220" width="205" height="115" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="249" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Tokens</tspan></text>
+<text x="52" y="276" font-size="16" text-anchor="start"><tspan x="52" dy="0">[N,6144]</tspan><tspan x="52" dy="23">N = B × S</tspan></text>
+<rect x="295" y="125" width="225" height="110" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="311" y="154" font-size="18" text-anchor="start" font-weight="650"><tspan x="311" dy="0">Router</tspan></text>
+<text x="311" y="181" font-size="16" text-anchor="start"><tspan x="311" dy="0">scores: [N,256]</tspan><tspan x="311" dy="23">ids / weights: [N,8]</tspan></text>
+<rect x="575" y="125" width="250" height="110" rx="12" fill="#f0eafd" stroke="#8051bd" stroke-width="1.5"/>
+<text x="591" y="154" font-size="18" text-anchor="start" font-weight="650"><tspan x="591" dy="0">256 中选 8</tspan></text>
+<text x="591" y="181" font-size="16" text-anchor="start"><tspan x="591" dy="0">6144 → 2048 → 6144</tspan><tspan x="591" dy="23">[N_e,6144]</tspan></text>
+<rect x="575" y="330" width="250" height="110" rx="12" fill="#f0eafd" stroke="#8051bd" stroke-width="1.5"/>
+<text x="591" y="359" font-size="18" text-anchor="start" font-weight="650"><tspan x="591" dy="0">1 个共享专家</tspan></text>
+<text x="591" y="386" font-size="16" text-anchor="start"><tspan x="591" dy="0">6144 → 2048 → 6144</tspan><tspan x="591" dy="23">[N,6144]</tspan></text>
+<rect x="879" y="220" width="205" height="115" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="895" y="249" font-size="18" text-anchor="start" font-weight="650"><tspan x="895" dy="0">加权合并 + 相加</tspan></text>
+<text x="895" y="276" font-size="16" text-anchor="start"><tspan x="895" dy="0">[N,6144]</tspan><tspan x="895" dy="23">→ [B,S,6144]</tspan></text>
+<polyline points="241,250 267,250 267,180 295,180" fill="none" stroke="#bc7b12" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="520,180 575,180" fill="none" stroke="#8051bd" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="241,300 267,300 267,385 575,385" fill="none" stroke="#8051bd" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="825,180 850,180 850,250 879,250" fill="none" stroke="#8051bd" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="825,385 850,385 850,305 879,305" fill="none" stroke="#8051bd" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="549" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">仅层 3–77 用此 MoE；层 0–2 使用 F=12288 的 Dense FFN。</tspan></text>
+</svg>

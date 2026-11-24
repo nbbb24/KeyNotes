@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="540" viewBox="0 0 1120 540" role="img" aria-labelledby="title desc">
+<title id="title">V4.1 全局 KV：890 字节 / 原始 Token 的来源</title><desc id="desc">仅打包后的全局载荷；不包括 SWA、页元数据、缓冲区和工作区。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="540" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">V4.1 全局 KV：890 字节 / 原始 Token 的来源</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">仅打包后的全局载荷；不包括 SWA、页元数据、缓冲区和工作区。</tspan></text>
+<rect x="36" y="132" width="1048" height="78" rx="12" fill="#f0f3f8" stroke="#718198" stroke-width="1.5"/>
+<text x="52" y="161" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">缓存密度：层 2 / 8 / 14 各压缩 2 倍，层 20 比例为 1</tspan></text>
+<text x="52" y="188" font-size="16" text-anchor="start"><tspan x="52" dy="0">3 × (1/2) + 1 = 2.5 vectors / original token</tspan></text>
+<rect x="36" y="260" width="630" height="120" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="52" y="289" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">主 KV = 720 bytes</tspan></text>
+<text x="52" y="316" font-size="16" text-anchor="start"><tspan x="52" dy="0">(512/2 + 512/16) × 2.5</tspan><tspan x="52" dy="23">FP4 payload + 1-byte scale / 16 values</tspan></text>
+<rect x="690" y="260" width="394" height="120" rx="12" fill="#fff3d9" stroke="#bc7b12" stroke-width="1.5"/>
+<text x="706" y="289" font-size="18" text-anchor="start" font-weight="650"><tspan x="706" dy="0">Indexer K = 170 bytes</tspan></text>
+<text x="706" y="316" font-size="16" text-anchor="start"><tspan x="706" dy="0">(128/2 + 128/32) × 2.5</tspan><tspan x="706" dy="23">1-byte scale / 32 values</tspan></text>
+<text x="560" y="447" font-size="28" text-anchor="middle" font-weight="650"><tspan x="560" dy="0">720 + 170 = 890 bytes / token</tspan></text>
+<text x="36" y="499" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">890 已经合计四组全局缓存，不再乘 40 层；常驻 BF16 主干 SWA 窗口另约 5 MiB / 序列。</tspan></text>
+</svg>

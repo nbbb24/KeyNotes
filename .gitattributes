@@ -1,5 +1,6 @@
 # Preserve original SVG bytes used by migration/image-manifest.json.
 docs/assets/diagrams/*.svg -text
+docs/assets/model-diagrams/**/*.svg -text
 # Config snapshots are checked against hashes of the original upstream bytes.
 docs/assets/model-specs/*.json -text
 docs/assets/model-specs/*.txt -text

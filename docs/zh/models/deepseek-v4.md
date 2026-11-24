@@ -23,11 +23,15 @@
 
 ## 🪜 层间残差与分支输入不是同一个 Shape
 
+[![DeepSeek mHC 四流残差合并、子层计算与混合回写](../../assets/model-diagrams/zh/mhc.svg)](../../assets/model-diagrams/zh/mhc.svg)
+
 Embedding 输出 `[B,S,H]`，进入主干前扩展为 `[B,S,4,H]`。mHC 把四份流混合成 Attention/FFN 的 `[B,S,H]` 输入，子层输出再合回四流残差。因此层间 shape 分别为 Flash `[B,S,4,4096]`、Pro `[B,S,4,7168]`。
 
 mHC 的 `hc_attn_fn` 和 `hc_ffn_fn` 各为 `[24,4H]`，因为 `(2+4)×4=24`；Flash 为 `[24,16384]`，Pro 为 `[24,28672]`。混合结果分为 pre/post 各 4 个系数与 4×4 组合矩阵。这些控制维度不改变单专家的输入宽度 H。
 
 ## 📐 主注意力的投影
+
+[![DeepSeek V4 的低秩 Query、窗口与压缩缓存、分组 O 投影](../../assets/model-diagrams/zh/v4-attention.svg)](../../assets/model-diagrams/zh/v4-attention.svg)
 
 | 模块 | Flash 权重 `[out,in]` | Pro 权重 `[out,in]` | 逻辑输出 |
 | --- | --- | --- | --- |

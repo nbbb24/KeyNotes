@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="700" viewBox="0 0 1120 700" role="img" aria-labelledby="title desc">
+<title id="title">GLM MLA: hidden state to Q, K, and V</title><desc id="desc">Logical projections. Expanded K/V need not be stored persistently for all history.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="700" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">GLM MLA: hidden state to Q, K, and V</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Logical projections. Expanded K/V need not be stored persistently for all history.</tspan></text>
+<rect x="36" y="255" width="180" height="106" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="284" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">X</tspan></text>
+<text x="52" y="311" font-size="16" text-anchor="start"><tspan x="52" dy="0">[B,S,6144]</tspan></text>
+<rect x="274" y="128" width="242" height="104" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="290" y="157" font-size="18" text-anchor="start" font-weight="650"><tspan x="290" dy="0">q_a → norm → q_b</tspan></text>
+<text x="290" y="184" font-size="16" text-anchor="start"><tspan x="290" dy="0">6144 → 2048 → 16384</tspan><tspan x="290" dy="23">Q: [B,S,64,256]</tspan></text>
+<rect x="274" y="330" width="242" height="104" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="290" y="359" font-size="18" text-anchor="start" font-weight="650"><tspan x="290" dy="0">kv_a</tspan></text>
+<text x="290" y="386" font-size="16" text-anchor="start"><tspan x="290" dy="0">6144 → 576</tspan><tspan x="290" dy="23">512 latent + 64 RoPE</tspan></text>
+<polyline points="216,290 242,290 242,180 274,180" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="216,330 242,330 242,382 274,382" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="575" y="285" width="242" height="114" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="591" y="314" font-size="18" text-anchor="start" font-weight="650"><tspan x="591" dy="0">kv_b + RoPE</tspan></text>
+<text x="591" y="341" font-size="16" text-anchor="start"><tspan x="591" dy="0">512 → 28672</tspan><tspan x="591" dy="23">K: [B,S,64,256]</tspan><tspan x="591" dy="23">V: [B,S,64,256]</tspan></text>
+<polyline points="516,382 545,382 545,342 575,342" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="873" y="128" width="211" height="104" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="889" y="157" font-size="18" text-anchor="start" font-weight="650"><tspan x="889" dy="0">Attention</tspan></text>
+<text x="889" y="184" font-size="16" text-anchor="start"><tspan x="889" dy="0">Q × K → weights</tspan><tspan x="889" dy="23">weights × V</tspan></text>
+<polyline points="516,180 873,180" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="817,342 846,342 846,205 873,205" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="575" y="490" width="242" height="104" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="591" y="519" font-size="18" text-anchor="start" font-weight="650"><tspan x="591" dy="0">Main latent cache</tspan></text>
+<text x="591" y="546" font-size="16" text-anchor="start"><tspan x="591" dy="0">[B,T,512]</tspan><tspan x="591" dy="23">+ [B,T,64]</tspan></text>
+<polyline points="395,434 395,542 575,542" fill="none" stroke="#20816f" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<rect x="873" y="490" width="211" height="104" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="889" y="519" font-size="18" text-anchor="start" font-weight="650"><tspan x="889" dy="0">o_proj</tspan></text>
+<text x="889" y="546" font-size="16" text-anchor="start"><tspan x="889" dy="0">16384 → 6144</tspan><tspan x="889" dy="23">[B,S,6144]</tspan></text>
+<polyline points="978,232 978,490" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="36" y="659" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Main Q/K width = 192 NoPE + 64 RoPE. The 32×128 indexer is a separate side path.</tspan></text>
+</svg>

@@ -23,6 +23,8 @@ For prefill with B=2 and S=128, GLM layer input is `[2,128,6144]` and Q is `[2,1
 
 ## 🧠 Four different shape questions
 
+[![GLM projection, Q reshaping, and packed quantized-weight shapes](../../assets/model-diagrams/en/shape-flow.svg)](../../assets/model-diagrams/en/shape-flow.svg)
+
 | Object | Example | Purpose |
 | --- | --- | --- |
 | Logical weight | Expert gate `[2304,5120]` | Projection and parameter count |

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="510" viewBox="0 0 1120 510" role="img" aria-labelledby="title desc">
+<title id="title">Reading shapes: projection, head layout, and packed storage</title><desc id="desc">GLM example. Weights below are unpartitioned logical [out,in] matrices.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+<style>text{font-family:Segoe UI,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif;fill:#20324b} .shape{font-family:Consolas,Microsoft YaHei,monospace}</style>
+<rect width="1120" height="510" rx="18" fill="#fff"/>
+<text x="36" y="47" font-size="28" text-anchor="start" font-weight="650"><tspan x="36" dy="0">Reading shapes: projection, head layout, and packed storage</tspan></text>
+<text x="36" y="79" font-size="16" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">GLM example. Weights below are unpartitioned logical [out,in] matrices.</tspan></text>
+<rect x="36" y="130" width="245" height="120" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="52" y="159" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Current hidden state</tspan></text>
+<text x="52" y="186" font-size="16" text-anchor="start"><tspan x="52" dy="0">[B,S,6144]</tspan><tspan x="52" dy="23">B=2, S=128: [2,128,6144]</tspan></text>
+<rect x="335" y="130" width="246" height="120" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="351" y="159" font-size="18" text-anchor="start" font-weight="650"><tspan x="351" dy="0">q_a → RMSNorm</tspan></text>
+<text x="351" y="186" font-size="16" text-anchor="start"><tspan x="351" dy="0">W: [2048,6144]</tspan><tspan x="351" dy="23">out: [B,S,2048]</tspan></text>
+<rect x="635" y="130" width="246" height="120" rx="12" fill="#e9f0ff" stroke="#3970ce" stroke-width="1.5"/>
+<text x="651" y="159" font-size="18" text-anchor="start" font-weight="650"><tspan x="651" dy="0">q_b</tspan></text>
+<text x="651" y="186" font-size="16" text-anchor="start"><tspan x="651" dy="0">W: [16384,2048]</tspan><tspan x="651" dy="23">out: [B,S,16384]</tspan></text>
+<polyline points="281,190 335,190" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<polyline points="581,190 635,190" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="635" y="305" width="449" height="96" rx="12" fill="#e5f6f2" stroke="#20816f" stroke-width="1.5"/>
+<text x="651" y="334" font-size="18" text-anchor="start" font-weight="650"><tspan x="651" dy="0">Reshape the axes, preserve element count</tspan></text>
+<text x="651" y="361" font-size="16" text-anchor="start"><tspan x="651" dy="0">[B,S,64,256] ↔ [B,64,S,256]</tspan></text>
+<polyline points="881,190 1000,190 1000,305" fill="none" stroke="#3970ce" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="36" y="305" width="545" height="96" rx="12" fill="#f0eafd" stroke="#8051bd" stroke-width="1.5"/>
+<text x="52" y="334" font-size="18" text-anchor="start" font-weight="650"><tspan x="52" dy="0">Logical weights and packed storage differ</tspan></text>
+<text x="52" y="361" font-size="16" text-anchor="start"><tspan x="52" dy="0">[2304,5120] → FP4 payload [2304,2560]</tspan><tspan x="52" dy="23">Two values per byte; scales and padding are extra</tspan></text>
+<text x="36" y="469" font-size="15" text-anchor="start" style="fill:#586c84"><tspan x="36" dy="0">Ordinary decode often sets S=1; retained history length T does not become 1.</tspan></text>
+</svg>
