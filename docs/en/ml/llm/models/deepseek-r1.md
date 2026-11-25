@@ -1,5 +1,7 @@
 # 🧠 DeepSeek-R1: reasoning training and distillation
 
+For the 61-layer MLA structure, per-layer shapes, and `61 × (128k + 16k)` cache model, read the [DeepSeek-R1 structure reference](../model-structures/deepseek-r1.md).
+
 DeepSeek-R1 studies how reinforcement learning and curated training stages can improve reasoning-oriented behavior. Distinguish R1-Zero, the full R1 pipeline, and distilled models: they are different experiments and checkpoints.
 
 ## ⚖️ R1-Zero versus R1

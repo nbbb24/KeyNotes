@@ -321,6 +321,7 @@ nav:
     - 🧬 Model structures:
       - 🗺️ Learning map: ml/llm/model-structures/index.md
       - 📐 Shape conventions: ml/llm/model-structures/shape-conventions.md
+      - 🧠 DeepSeek-R1: ml/llm/model-structures/deepseek-r1.md
       - 🧠 GLM-5.1: ml/llm/model-structures/glm-5-1.md
       - 🧠 GLM-5.2: ml/llm/model-structures/glm-5-2.md
       - 🧠 DeepSeek-V4 Flash and Pro: ml/llm/model-structures/deepseek-v4.md

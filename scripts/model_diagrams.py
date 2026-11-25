@@ -74,9 +74,10 @@ def diagrams(lang, configs):
         return cn if zh else en
     result = {}
     f = Figure(tr('模型结构地图：先看切分轴，再看缓存', 'Model map: hidden states, attention, and cache'),
-               tr('同一张图比较五个主体型号；数字来自本栏固定配置。',
-                  'Five pinned backbone configurations; extra prediction/vision modules are counted separately.'), 610)
+               tr('同一张图比较六个主体型号；数字来自本栏固定配置。',
+                  'Six pinned backbone configurations; extra prediction/vision modules are counted separately.'), 692)
     cards = [
+        ('DeepSeek-R1', '61 × H7168', 'MLA', tr('3 Dense + 58 MoE', '3 dense + 58 MoE'), tr('每层 512 维 KV + 64 维 RoPE', 'Per layer: 512 KV + 64 RoPE dimensions')),
         ('GLM-5.1', '78 × H6144', 'MLA + DSA', tr('3 Dense + 75 MoE', '3 dense + 75 MoE'), tr('每层自有主 KV', 'Main KV owned by every layer')),
         ('GLM-5.2', '78 × H6144', 'MLA + IndexShare', tr('21 Full + 57 Shared', '21 Full + 57 Shared'), tr('共享索引；主 KV 仍自有', 'Shared indices; separate main KV')),
         ('V4-Flash', '43 × H4096', 'SWA + CSA / HCA', '256 experts · top-6', tr('四流 mHC；逐层缓存', 'Four-stream mHC; per-layer KV')),
@@ -91,8 +92,8 @@ def diagrams(lang, configs):
               [tr('残差 / Attention / FFN / KV 必须分别读 shape', 'Read residual, attention, FFN and cache shapes separately')], 'cache')
         f.arrow([(211,y+33),(238,y+33)])
         f.arrow([(516,y+33),(544,y+33)], 'cache')
-    f.note(tr('额外模块：GLM / V4 各 1 层 MTP；V4.1 有 3 层 DSpark 与 32 层 ViT。',
-              'Auxiliary modules: GLM/V4 each have 1 MTP layer; V4.1 has 3 DSpark stages and a 32-layer ViT.'))
+    f.note(tr('额外模块：R1 / GLM / V4 各 1 层 MTP；V4.1 有 3 层 DSpark 与 32 层 ViT。',
+              'Auxiliary modules: R1/GLM/V4 each have 1 MTP layer; V4.1 has 3 DSpark stages and a 32-layer ViT.'))
     result['model-map'] = f.render()
 
     f = Figure(tr('Shape 怎么读：投影、拼头与量化存储', 'Reading shapes: projection, head layout, and packed storage'),
@@ -181,13 +182,13 @@ def diagrams(lang, configs):
               'GLM-5.2: 21 Full indexers + 57 Shared layers; all 78 layers retain their own main latent KV.'))
     result['index-share'] = f.render()
 
-    f = Figure(tr('300 个主干层的结构色带', 'A structural map of 300 backbone layers'),
+    f = Figure(tr('361 个主干层的结构色带', 'A structural map of 361 backbone layers'),
                tr('每个小格是一层；打开原图后悬停查看层号。分类标在各色带下方。',
-                  'Open the image to inspect layer-index tooltips. Categories are labeled below each strip.'), 640)
+                  'Open the image to inspect layer-index tooltips. Categories are labeled below each strip.'), 725)
     rows=[]
-    for slug in ('glm-5-1','glm-5-2','deepseek-v4-flash','deepseek-v4-pro','deepseek-v4-1-flash'):
+    for slug in ('deepseek-r1','glm-5-1','glm-5-2','deepseek-v4-flash','deepseek-v4-pro','deepseek-v4-1-flash'):
         raw=configs[slug];c=raw.get('text_config',raw);n=c['num_hidden_layers']
-        if slug=='glm-5-1':kinds=['compute']*3+['expert']*(n-3);label='Dense / MoE'
+        if slug in ('deepseek-r1','glm-5-1'):kinds=['compute']*c['first_k_dense_replace']+['expert']*(n-c['first_k_dense_replace']);label='Dense / MoE'
         elif slug=='glm-5-2':kinds=['index' if v=='full' else 'neutral' for v in c['indexer_types']];label='Full / Shared'
         elif slug.startswith('deepseek-v4-1'):
             kinds=['neutral' if c['compress_ratios'][i]==0 else 'cache' if i in c['kv_source_layer_ids'] else 'index' if i in c['index_source_layer_ids'] else 'compute' for i in range(n)];label='SWA / Full / Reindex / Reuse'
@@ -199,7 +200,7 @@ def diagrams(lang, configs):
         cell=800/n
         for i,kind in enumerate(kinds):
             bg,stroke=COLORS[kind];x=250+i*cell
-            if slug=='glm-5-1':
+            if slug in ('deepseek-r1','glm-5-1'):
                 mode='Dense FFN' if i<3 else 'MoE FFN'
             elif slug=='glm-5-2':
                 mode='Full indexer' if kind=='index' else 'Shared top-k'
@@ -365,8 +366,13 @@ def main():
     configs = load_configs()
     # Numeric annotations are deliberately authored for these pinned structures.
     # Reject incompatible updates rather than silently publishing stale shapes.
-    for slug in ('glm-5-1','glm-5-2'):
-        expected = dict(num_hidden_layers=78, hidden_size=6144, num_attention_heads=64,
+    for slug in ('deepseek-r1','glm-5-1','glm-5-2'):
+        expected = dict(num_hidden_layers=61, hidden_size=7168, num_attention_heads=128,
+                        q_lora_rank=1536, kv_lora_rank=512, qk_nope_head_dim=128,
+                        qk_rope_head_dim=64, v_head_dim=128, n_routed_experts=256,
+                        num_experts_per_tok=8, moe_intermediate_size=2048, intermediate_size=18432,
+                        first_k_dense_replace=3) if slug == 'deepseek-r1' else dict(
+                        num_hidden_layers=78, hidden_size=6144, num_attention_heads=64,
                         q_lora_rank=2048, kv_lora_rank=512, qk_nope_head_dim=192,
                         qk_rope_head_dim=64, v_head_dim=256, n_routed_experts=256,
                         num_experts_per_tok=8, moe_intermediate_size=2048, intermediate_size=12288)

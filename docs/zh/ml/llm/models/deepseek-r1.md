@@ -1,5 +1,7 @@
 # 🧠 DeepSeek-R1：推理强化学习与蒸馏
 
+61 层 MLA、逐层 shape 与 `61 × (128k + 16k)` 缓存建模见 [DeepSeek-R1 结构参考](../model-structures/deepseek-r1.md)。
+
 DeepSeek-R1 研究了如何通过强化学习和精心设计的训练阶段来提高面向推理的行为。区分 R1-Zero、完整的 R1 管道和精炼模型：它们是不同的实验和检查点。
 
 ## ⚖️ R1-Zero 与 R1 的区别

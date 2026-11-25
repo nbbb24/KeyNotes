@@ -1,6 +1,16 @@
 {
   "checked_at": "2026-11-24",
   "models": {
+    "deepseek-r1": {
+      "repo": "deepseek-ai/DeepSeek-R1",
+      "revision": "56d4cbbb4d29f4355bab4b9a39ccb717a14ad5ad",
+      "checked_at": "2026-11-26",
+      "config_file": "deepseek-r1.config.json",
+      "sha256": "79ddea672a62e95d3f0be27be434375538e1988975971cffcf87c96c1de84a65",
+      "config_url": "https://huggingface.co/deepseek-ai/DeepSeek-R1/blob/56d4cbbb4d29f4355bab4b9a39ccb717a14ad5ad/config.json",
+      "license": "MIT",
+      "license_url": "https://huggingface.co/deepseek-ai/DeepSeek-R1/blob/56d4cbbb4d29f4355bab4b9a39ccb717a14ad5ad/LICENSE"
+    },
     "glm-5-1": {
       "repo": "zai-org/GLM-5.1",
       "revision": "26e1bd6e011feb778d25ae34b09b07074139d92d",
@@ -91,6 +101,11 @@
       "model": "glm-5-1 / glm-5-2",
       "url": "https://github.com/huggingface/transformers/blob/d8f10a82213a3a9db48385aba3a4b57ab535de50/src/transformers/models/glm_moe_dsa/configuration_glm_moe_dsa.py",
       "sha256": "ff49e9624a09252773341a5bd5dee373bd94595295f22b9d0d936feb2e779f9b"
+    },
+    {
+      "model": "deepseek-r1 (DeepSeek-V3 MLA reference)",
+      "url": "https://github.com/deepseek-ai/DeepSeek-V3/blob/b15f0dbbbe6a4bc403306175698439ef380f5fb5/inference/model.py",
+      "sha256": "fdb7995bc234badbf0011b5af8cf391be94343abc51305428cb9a04452116f02"
     }
   ]
 }

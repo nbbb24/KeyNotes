@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SPECS = ROOT / 'docs/assets/model-specs'
 PAGES = {
+    'deepseek-r1': 'deepseek-r1.md',
     'glm-5-1': 'glm-5-1.md',
     'glm-5-2': 'glm-5-2.md',
     'deepseek-v4-flash': 'deepseek-v4.md',
@@ -14,6 +15,7 @@ PAGES = {
     'deepseek-v4-1-flash': 'deepseek-v4-1.md',
 }
 TITLES = {
+    'deepseek-r1': 'DeepSeek-R1',
     'glm-5-1': 'GLM-5.1',
     'glm-5-2': 'GLM-5.2',
     'deepseek-v4-flash': 'DeepSeek-V4-Flash',
@@ -35,6 +37,18 @@ def load_configs():
     if configs['deepseek-v4-1-flash'] != configs['deepseek-v4-1-flash-1017']:
         raise ValueError('V4.1/1017 configs diverged: revise the comparison prose')
     return configs
+
+
+def r1_rows(config):
+    rows = []
+    for i in range(config['num_hidden_layers']):
+        ffn = f"Dense F={config['intermediate_size']}" if i < config['first_k_dense_replace'] else (
+            f"MoE E={config['n_routed_experts']}, k={config['num_experts_per_tok']}, "
+            f"F={config['moe_intermediate_size']}"
+        )
+        rows.append([str(i), f"`[B,S,{config['hidden_size']}]`", ffn,
+                     f"own L{i}: `[B,T,{config['kv_lora_rank']}]` + `[B,T,{config['qk_rope_head_dim']}]`"])
+    return rows
 
 
 def glm_rows(config):
@@ -107,10 +121,14 @@ def deepseek_rows(raw):
 
 def block(slug, config, lang):
     glm = slug.startswith('glm')
-    rows = glm_rows(config) if glm else deepseek_rows(config)
+    r1 = slug == 'deepseek-r1'
+    rows = r1_rows(config) if r1 else glm_rows(config) if glm else deepseek_rows(config)
     title = TITLES[slug]
     title += f' · {len(rows)} ' + ('主干层' if lang == 'zh' else 'backbone layers')
-    if glm:
+    if r1:
+        headers = (['层', '层间输入/输出', 'FFN', '主 KV（每层自有）'] if lang == 'zh'
+                   else ['Layer', 'Hidden in/out', 'FFN', 'Main KV (owned per layer)'])
+    elif glm:
         headers = (['层', '层间输入/输出', 'FFN', 'Indexer / 索引来源', '主 KV（每层自有）'] if lang == 'zh'
                    else ['Layer', 'Hidden in/out', 'FFN', 'Indexer / selection source', 'Main KV (owned per layer)'])
     else:
@@ -148,11 +166,17 @@ def main():
                     mismatches.append(str(page.relative_to(ROOT)))
     # Independent arithmetic checks for the documented cache and module examples.
     assert 78 * 4096 * (512 + 64) * 2 == 351 * 1024**2
+    r1 = configs['deepseek-r1']
+    assert r1['num_hidden_layers'] * 128 * (r1['kv_lora_rank'] + r1['qk_rope_head_dim']) * 2 == 8_994_816
     assert (512//2 + 512//16) * 5//2 + (128//2 + 128//32) * 5//2 == 890
     assert 40 * 128 * 512 * 2 == 5 * 1024**2
     if mismatches:
         raise SystemExit('Outdated layer tables; run --write:\n' + '\n'.join(mismatches))
-    print('PASS: 6 pinned configs; 300 backbone layers in each language; shape/cache arithmetic.')
+    layer_count = sum(len(r1_rows(configs[slug])) if slug == 'deepseek-r1' else
+                      len(glm_rows(configs[slug])) if slug.startswith('glm') else
+                      len(deepseek_rows(configs[slug])) for slug in PAGES)
+    print(f'PASS: {len(configs)} pinned configs; {layer_count} backbone layers in each language; '
+          'shape/cache arithmetic.')
 
 
 if __name__ == '__main__':
