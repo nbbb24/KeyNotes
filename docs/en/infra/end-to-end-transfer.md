@@ -40,6 +40,8 @@ For a 1 GB cache, sequential stages sustaining 20, 10, and 20 GB/s need at least
 
 ## 📌 Where MemFabric fits
 
+For a concrete API walkthrough, read [vLLM Ascend KV pool: keys to MemFabric copy addresses](kv-pool-call-chain.md). It connects `batch_put_from_layers` / `batch_get_into_layers` arguments, MetaService allocation and lookup, GVA offset expansion, and batch copy into one source-level call chain.
+
 Memory pools and handles provide resources; discovery and connection setup provide control; read/write operations perform movement; completion handling manages success, errors, and timeout. Actual module boundaries and APIs depend on the backend and release. Inspect the [MemFabric source](https://gitcode.com/Ascend/memfabric_hybrid) alongside its API documentation.
 
 For a cache application, also validate token count, tensor layout, dtype, layer identity, and model revision. A byte-perfect transfer of an incompatible cache is still an application error.

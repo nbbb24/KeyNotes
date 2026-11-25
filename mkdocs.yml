@@ -90,6 +90,7 @@ plugins:
             🛶 Jetty and Runtime copy: 🛶 Jetty 与 Runtime 拷贝
             🚦 Device-initiated transfer: 🚦 设备发起传输
             📦 End-to-end transfer: 📦 端到端传输
+            🗝️ KV pool keys to copy addresses: 🗝️ KV 池：从 key 到拷贝地址
             📖 Glossary: 📖 术语表
             🔌 Interconnects: 🔌 互联与通信
             🧠 Memory and addresses: 🧠 内存与地址
@@ -245,6 +246,7 @@ nav:
     - 🔌 Interconnects: infra/interconnects.md
     - 🌐 Network planes: infra/network-planes.md
     - 📦 End-to-end transfer: infra/end-to-end-transfer.md
+    - 🗝️ KV pool keys to copy addresses: infra/kv-pool-call-chain.md
   - 🛠️ Practice and reference:
     - 📊 Performance tools: infra/performance-tools.md
     - 📖 Glossary: infra/glossary.md

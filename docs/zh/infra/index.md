@@ -14,6 +14,7 @@ A2、A3、A5 表示产品背景，并不意味着拓扑、地址映射和协议�
 | 全局寻址 | 如何通过 GVA 统一定位跨进程、跨设备、跨节点的 DRAM 与 HBM？ | [GVA 统一编址原理](gva-unified-addressing.md) |
 | 推理服务 | vLLM、SGLang 如何规划 HBM、复用 KV，并完成 Prefill 到 Decode 的交接？ | [推理框架](serving-frameworks.md) |
 | 搬运 | 谁搬数据？方向是什么？何时才能使用？ | [数据搬运](data-movement.md) |
+| KV 池调用链 | vLLM Ascend 如何把 key 和各层 KV 地址展开成 MemFabric batch copy？ | [从 key 到拷贝地址](kv-pool-call-chain.md) |
 | 任务队列 | 一笔 64 KiB 写如何经过 RQ、WQE、Doorbell、DMA 和双方 CQ，再交接缓冲区？ | [完整传输流程与队列](work-queues.md) |
 | UB 与任务调度 | Jetty、JFS/JFR/JFC 如何配合？WQE 怎样和 Runtime SQE 关联？ | [Jetty 与 Runtime 拷贝](jetty-runtime-copy.md) |
 | 设备发起 | GPU/NPU 如何提出请求、提交任务并让远端安全消费？ | [设备发起传输](device-initiated-transfer.md) |

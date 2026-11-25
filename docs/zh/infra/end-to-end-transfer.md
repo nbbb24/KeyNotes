@@ -46,6 +46,8 @@ Host 中转路径为 `HBM A → DRAM A → 网络 → DRAM B → HBM B`。它可
 
 ## 📌 MemFabric 在其中承担什么职责
 
+跟踪真实接口时，继续看 [vLLM Ascend KV 池：从 key 到 MemFabric 拷贝地址](kv-pool-call-chain.md)：它把 `batch_put_from_layers`／`batch_get_into_layers` 的参数、MetaService 分配与查询、GVA 偏移展开和 batch copy 串成一条源码调用链。
+
 内存池和句柄提供资源；发现、建链构成控制流程；读写操作执行搬运；完成处理负责成功、错误和超时。具体模块边界及 API 随后端和版本变化。结合 [MemFabric 源码](https://gitcode.com/Ascend/memfabric_hybrid)及其接口文档分析。
 
 对于缓存应用，还要校验词元数、张量布局、数据类型、层编号和模型版本。即便每个字节都传输正确，模型不兼容的缓存仍然是应用错误。
