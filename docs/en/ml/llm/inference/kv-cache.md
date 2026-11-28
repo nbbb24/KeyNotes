@@ -40,3 +40,6 @@ A sliding window bounds storage but changes accessible context unless it is part
 **Exercise.** Replacing 40 KV heads with 8 at the same other dimensions reduces this standard cache by what factor? Five. Query-head count alone does not determine cache size.
 
 References: [multi-query attention](https://arxiv.org/abs/1911.02150), [PagedAttention](https://arxiv.org/abs/2309.06180). Continue with [cache layouts](layers-pages.md).
+
+For cross-worker access, study [shared inference state](shared-state-pools.md): prefix reuse, P/D handoff,
+authoritative main KV, dense/sparse fetches, and lifetime management.

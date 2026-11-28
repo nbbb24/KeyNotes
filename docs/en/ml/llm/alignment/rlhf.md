@@ -43,3 +43,6 @@ Hold out preference data, inspect reward hacking, and test task correctness, cal
 **Exercise.** Why keep an independent evaluation set when the reward model already scores outputs? Optimization can exploit the scorer's errors. Independent evaluation measures whether the intended behavior improved.
 
 Reference: [InstructGPT](https://arxiv.org/abs/2203.02155). Continue with [PPO](ppo.md), [DPO](dpo.md), and [GRPO](grpo.md).
+
+When sampling and training use separate resources, follow [actor/learner dataflow](actor-learner-dataflow.md)
+through trajectory handoff, weight refresh, resharding, and policy versions.

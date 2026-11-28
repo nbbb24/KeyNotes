@@ -43,3 +43,6 @@ $$
 **练习。** 为什么在奖励模型已经对输出进行评分时还需要保持一个独立的评估集？优化可能会利用评分者的错误。独立评估可以测量预期行为是否有所改善。
 
 参考：[InstructGPT](https://arxiv.org/abs/2203.02155)。继续阅读 [PPO](ppo.md)，[DPO](dpo.md)，和 [GRPO](grpo.md)。
+
+训练与采样使用不同资源时，继续阅读[Actor/Learner 数据流](actor-learner-dataflow.md)，
+区分轨迹交接、权重刷新、Reshard 与策略版本。

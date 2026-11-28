@@ -96,6 +96,9 @@ plugins:
             🧠 Memory and addresses: 🧠 内存与地址
             🗂️ Page tables and huge pages: 🗂️ 页表与大页
             🌐 GVA unified addressing: 🌐 GVA 统一编址
+            🧵 Memory-fabric patterns: 🧵 内存 Fabric 五种模式
+            🔁 Actor/learner dataflow: 🔁 Actor/Learner 数据流
+            🗃️ Shared inference state: 🗃️ 共享推理状态
             🚀 Serving frameworks: 🚀 推理框架
             🖥️ Hardware: 🖥️ 硬件层级
             🌐 Network planes: 🌐 网络平面
@@ -237,6 +240,7 @@ nav:
     - 🧠 Memory and addresses: infra/memory-addressing.md
     - 🗂️ Page tables and huge pages: infra/page-tables-huge-pages.md
     - 🌐 GVA unified addressing: infra/gva-unified-addressing.md
+    - 🧵 Memory-fabric patterns: infra/memory-fabric-patterns.md
     - 🚀 Serving frameworks: infra/serving-frameworks.md
   - 🔄 Communication and transfer:
     - 🔄 Data movement: infra/data-movement.md
@@ -356,6 +360,7 @@ nav:
       - 🫖 Knowledge distillation: ml/llm/adaptation/distillation.md
     - 🎯 Alignment and RL:
       - 👍 RLHF: ml/llm/alignment/rlhf.md
+      - 🔁 Actor/learner dataflow: ml/llm/alignment/actor-learner-dataflow.md
       - 🎲 Importance sampling: ml/llm/alignment/importance-sampling.md
       - ⚖️ PPO: ml/llm/alignment/ppo.md
       - 🗳️ Direct Preference Optimization: ml/llm/alignment/dpo.md
@@ -363,6 +368,7 @@ nav:
     - ⚙️ Inference and systems:
       - ✍️ Decoding: ml/llm/inference/decoding.md
       - 🧠 KV cache: ml/llm/inference/kv-cache.md
+      - 🗃️ Shared inference state: ml/llm/inference/shared-state-pools.md
       - 🧭 Inference parallelism: ml/llm/inference/parallelism.md
       - 🪜 Layerwise inference: ml/llm/inference/layerwise-inference.md
       - 📊 FLOPs, memory & latency: ml/llm/inference/flops.md

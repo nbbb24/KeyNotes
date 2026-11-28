@@ -10,6 +10,7 @@ An accelerator does useful work only when the right data reaches the right memor
 | Memory | Where are bytes stored? Which address space names them? | [Memory and addresses](memory-addressing.md) |
 | Paging and translation | How do page tables, PTEs, the MMU, and the TLB work together? Why do huge pages need fewer mappings? | [Page tables, PTEs, huge pages, and address translation](page-tables-huge-pages.md) |
 | Global addressing | How does GVA locate DRAM and HBM across processes, devices, and nodes? | [How GVA unified addressing works](gva-unified-addressing.md) |
+| Application patterns | How do sharing and tiering compose? | [Five patterns](memory-fabric-patterns.md) |
 | Serving | How do vLLM and SGLang budget HBM, reuse KV, and hand work from prefill to decode? | [Serving frameworks](serving-frameworks.md) |
 | Movement | Who copies the bytes, in which direction, and when are they ready? | [Data movement](data-movement.md) |
 | KV pool call chain | How does vLLM Ascend expand keys and layer buffers into MemFabric batch copies? | [Keys to copy addresses](kv-pool-call-chain.md) |

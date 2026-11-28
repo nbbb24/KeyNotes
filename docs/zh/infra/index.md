@@ -12,6 +12,7 @@ A2、A3、A5 表示产品背景，并不意味着拓扑、地址映射和协议�
 | 内存 | 字节放在哪里？哪个地址空间能够描述它们？ | [内存与地址](memory-addressing.md) |
 | 分页与转换 | 页表、PTE、MMU、TLB 如何配合？大页为何能减少映射数量？ | [页表、PTE、大页与地址转换](page-tables-huge-pages.md) |
 | 全局寻址 | 如何通过 GVA 统一定位跨进程、跨设备、跨节点的 DRAM 与 HBM？ | [GVA 统一编址原理](gva-unified-addressing.md) |
+| 应用模式 | 共享、生产消费、分层、迁移与通算流水怎样组合？ | [内存 Fabric 五种模式](memory-fabric-patterns.md) |
 | 推理服务 | vLLM、SGLang 如何规划 HBM、复用 KV，并完成 Prefill 到 Decode 的交接？ | [推理框架](serving-frameworks.md) |
 | 搬运 | 谁搬数据？方向是什么？何时才能使用？ | [数据搬运](data-movement.md) |
 | KV 池调用链 | vLLM Ascend 如何把 key 和各层 KV 地址展开成 MemFabric batch copy？ | [从 key 到拷贝地址](kv-pool-call-chain.md) |

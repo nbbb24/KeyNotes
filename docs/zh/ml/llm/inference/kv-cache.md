@@ -40,3 +40,6 @@ FP16 和 BF16 都占用每个元素两个字节，尽管它们的数值范围不
 **练习。** 将 40 个 KV 头替换为相同其他维度下的 8 个会减少这个标准缓存多少倍？五倍。查询头的数量本身并不决定缓存大小。
 
 参考文献：[多查询注意力](https://arxiv.org/abs/1911.02150)，[PagedAttention](https://arxiv.org/abs/2309.06180)。继续阅读 [缓存布局](layers-pages.md)。
+
+跨 Worker 使用缓存时，继续阅读[共享推理状态池](shared-state-pools.md)，
+区分前缀复用、P/D 交接、权威 Main KV、Dense/Sparse 取数与生命周期。

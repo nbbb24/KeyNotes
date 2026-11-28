@@ -131,3 +131,6 @@ Understand it at three levels:
 **GVA unifies address representation and resource addressing, rather than the physical location of memory, and it cannot be equated directly with a hardware page table.**
 
 Continue with [Memory and addresses](memory-addressing.md) to connect these ideas with virtual-range reservation, physical allocation, mapping, registration, and reclamation.
+
+Apply addressing to training and inference with [memory-fabric patterns](memory-fabric-patterns.md),
+following object versions, sharing, tiering, migration, and compute/transfer overlap.
